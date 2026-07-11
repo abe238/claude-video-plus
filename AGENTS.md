@@ -48,3 +48,17 @@ bash skills/watch/scripts/build-skill.sh   # → dist/watch.skill
 - Keep the version in sync across `skills/watch/SKILL.md` (frontmatter), `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` when cutting a release.
 - Releasing: tag `vX.Y.Z` and push the tag; `.github/workflows/release.yml` builds `dist/watch.skill` and attaches it to the GitHub release.
 - Never commit real API keys or `.env` contents; keys live in `~/.config/watch/.env` (mode `0600`) at runtime.
+
+## Agent skills
+
+### Issue tracker
+
+Work is tracked in GitHub Issues for `abe238/claude-video-plus`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This repository uses a single-context layout with `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.
