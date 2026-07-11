@@ -2,7 +2,35 @@
 
 All notable changes to `/watch` are documented here.
 
-## [0.2.0] — 2026-06-29
+## [0.3.0] — 2026-07-11
+
+First release under the `abe238/claude-video-plus` derivative identity (fork of
+Bradley Bonanno's `bradautomates/claude-video`; upstream history, license, and
+attribution preserved).
+
+### Added
+- **`--detail evidence` + `--question`** — question-aware evidence retrieval
+  (`scripts/evidence.py`, pure stdlib): whole-chapter roll-up (YouTube chapters,
+  pause-gap fallback), tf-idf span retrieval with facet expansion, a numeric guard
+  that rescues pricing/benchmark lines from unselected chapters (with a frame at
+  each, since numbers are usually on-screen), per-facet sufficiency expansion,
+  span rescue, deictic-cue frames, rolling-caption transcript dedup, a reader
+  token-budget governor, and an evidence manifest recording timestamps, reasons,
+  and scores for every selection. Falls back to `balanced` automatically on any
+  failure (no captions, local file, compile error).
+- SKILL.md reader guidance proven out in blind-judged benchmarking: mine on-screen
+  tables/pages from frames; reconcile conflicting spoken claims against the
+  primary evidence instead of repeating either.
+- 22 new tests (`tests/test_evidence.py`); suite now 93.
+
+### Measured (single-video paired benchmark; multi-video battery in docs/benchmarks/)
+- 60-79% fewer evidence tokens than `balanced` on the same questions, with
+  equal-or-better answers from a 3-judge blind panel (wins on coverage + targeted,
+  tie on the cost question).
+
+### Changed
+- Distribution identity: manifests, marketplace name (`claude-video-plus`), and
+  URLs now identify the derivative; install commands mirror upstream's.
 
 ### Added
 - **`--detail` dial** with four modes — `transcript` (captions only, no frames), `efficient` (fast keyframe pass, cap 50), `balanced` (scene-aware, cap 100, default), and `token-burner` (scene-aware, uncapped). Set the default with `WATCH_DETAIL` in `~/.config/watch/.env`.

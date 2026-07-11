@@ -1,5 +1,5 @@
 {
-  "name": "claude-video",
+  "name": "claude-video-plus",
   "interface": {
     "displayName": "watch"
   },
@@ -8,7 +8,7 @@
       "name": "watch",
       "source": {
         "source": "url",
-        "url": "https://github.com/bradautomates/claude-video.git"
+        "url": "https://github.com/abe238/claude-video-plus.git"
       },
       "policy": {
         "installation": "AVAILABLE",
