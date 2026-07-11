@@ -1,0 +1,62 @@
+{
+  "Q1": [
+    {
+      "judge": 1,
+      "control": 9,
+      "candidate": 8,
+      "winner": "control"
+    },
+    {
+      "judge": 2,
+      "control": 9,
+      "candidate": 8,
+      "winner": "control"
+    },
+    {
+      "judge": 3,
+      "control": 9,
+      "candidate": 8,
+      "winner": "control"
+    }
+  ],
+  "Q2": [
+    {
+      "judge": 1,
+      "control": 9,
+      "candidate": 5,
+      "winner": "control"
+    },
+    {
+      "judge": 2,
+      "control": 9,
+      "candidate": 6,
+      "winner": "control"
+    },
+    {
+      "judge": 3,
+      "control": 9,
+      "candidate": 5,
+      "winner": "control"
+    }
+  ],
+  "Q3": [
+    {
+      "judge": 1,
+      "control": 9,
+      "candidate": 6,
+      "winner": "control"
+    },
+    {
+      "judge": 2,
+      "control": 9,
+      "candidate": 6,
+      "winner": "control"
+    },
+    {
+      "judge": 3,
+      "control": 9,
+      "candidate": 6,
+      "winner": "control"
+    }
+  ]
+}

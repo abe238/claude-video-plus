@@ -1,0 +1,462 @@
+{
+  "schema_version": 1,
+  "policy": "targeted",
+  "question": "What's actually new with GPT-5.6 - capabilities, speed, cost - skip the hype?",
+  "chapters": [
+    {
+      "title": "Intro",
+      "start": 0.0,
+      "end": 12.0,
+      "selected": false
+    },
+    {
+      "title": "GPT-5.6",
+      "start": 12.0,
+      "end": 216.0,
+      "selected": true
+    },
+    {
+      "title": "OpenAI SuperApp",
+      "start": 216.0,
+      "end": 774.0,
+      "selected": false
+    },
+    {
+      "title": "HyperAgent",
+      "start": 774.0,
+      "end": 972.0,
+      "selected": false
+    },
+    {
+      "title": "GPT-Live",
+      "start": 972.0,
+      "end": 1124.0,
+      "selected": true
+    },
+    {
+      "title": "Grok 4.5",
+      "start": 1124.0,
+      "end": 1407.0,
+      "selected": true
+    },
+    {
+      "title": "Muse Spark 1.1",
+      "start": 1407.0,
+      "end": 1575.0,
+      "selected": true
+    },
+    {
+      "title": "Fable Comparison",
+      "start": 1575.0,
+      "end": 1659.0,
+      "selected": false
+    },
+    {
+      "title": "Muse Image",
+      "start": 1659.0,
+      "end": 1744.0,
+      "selected": false
+    },
+    {
+      "title": "New Future Tools",
+      "start": 1744.0,
+      "end": 1767.0,
+      "selected": true
+    },
+    {
+      "title": "More Fable Access",
+      "start": 1767.0,
+      "end": 1824.0,
+      "selected": false
+    },
+    {
+      "title": "Claude Cowork Mobile",
+      "start": 1824.0,
+      "end": 1872.0,
+      "selected": true
+    },
+    {
+      "title": "Claude Reflect",
+      "start": 1872.0,
+      "end": 1897.0,
+      "selected": false
+    },
+    {
+      "title": "J-Space",
+      "start": 1897.0,
+      "end": 1964.0,
+      "selected": false
+    },
+    {
+      "title": "Google Photos Video Update",
+      "start": 1964.0,
+      "end": 1983.0,
+      "selected": false
+    },
+    {
+      "title": "Seedream 5.0 Pro",
+      "start": 1983.0,
+      "end": 2042.0,
+      "selected": false
+    },
+    {
+      "title": "GPT-5.6 vs. Fable",
+      "start": 2042.0,
+      "end": 2296.0,
+      "selected": true
+    },
+    {
+      "title": "WTF?",
+      "start": 2296.0,
+      "end": 2320.0,
+      "selected": true
+    }
+  ],
+  "evidence": [
+    {
+      "t_start": "00:12",
+      "t_end": "03:36",
+      "chapter": "GPT-5.6",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 13.206,
+      "frame": null
+    },
+    {
+      "t_start": "23:27",
+      "t_end": "26:15",
+      "chapter": "Muse Spark 1.1",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 7.403,
+      "frame": null
+    },
+    {
+      "t_start": "18:44",
+      "t_end": "23:27",
+      "chapter": "Grok 4.5",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 5.07,
+      "frame": null
+    },
+    {
+      "t_start": "30:24",
+      "t_end": "31:12",
+      "chapter": "Claude Cowork Mobile",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 4.733,
+      "frame": null
+    },
+    {
+      "t_start": "16:12",
+      "t_end": "18:44",
+      "chapter": "GPT-Live",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 4.271,
+      "frame": null
+    },
+    {
+      "t_start": "34:02",
+      "t_end": "38:16",
+      "chapter": "GPT-5.6 vs. Fable",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 3.626,
+      "frame": null
+    },
+    {
+      "t_start": "38:16",
+      "t_end": "38:40",
+      "chapter": "WTF?",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 2.387,
+      "frame": null
+    },
+    {
+      "t_start": "29:04",
+      "t_end": "29:27",
+      "chapter": "New Future Tools",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "chapter-rollup",
+      "score": 1.312,
+      "frame": null
+    },
+    {
+      "t_start": "06:13",
+      "t_end": "06:53",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": null
+    },
+    {
+      "t_start": "07:50",
+      "t_end": "08:27",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": null
+    },
+    {
+      "t_start": "13:22",
+      "t_end": "14:00",
+      "chapter": "HyperAgent",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": null
+    },
+    {
+      "t_start": "09:23",
+      "t_end": "09:59",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 4.544,
+      "frame": null
+    },
+    {
+      "t_start": "03:32",
+      "t_end": "04:13",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 4.208,
+      "frame": null
+    },
+    {
+      "t_start": "26:14",
+      "t_end": "26:50",
+      "chapter": "Fable Comparison",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.755,
+      "frame": null
+    },
+    {
+      "t_start": "29:57",
+      "t_end": "30:28",
+      "chapter": "More Fable Access",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.644,
+      "frame": null
+    },
+    {
+      "t_start": "26:46",
+      "t_end": "27:21",
+      "chapter": "Fable Comparison",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.399,
+      "frame": null
+    },
+    {
+      "t_start": "31:11",
+      "t_end": "31:38",
+      "chapter": "Claude Reflect",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.342,
+      "frame": null
+    },
+    {
+      "t_start": "27:37",
+      "t_end": "28:17",
+      "chapter": "Muse Image",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.226,
+      "frame": null
+    },
+    {
+      "t_start": "12:52",
+      "t_end": "13:27",
+      "chapter": "HyperAgent",
+      "modalities": [
+        "transcript"
+      ],
+      "reason": "span-rescue",
+      "score": 1.198,
+      "frame": null
+    },
+    {
+      "t_start": "00:22",
+      "t_end": "00:22",
+      "chapter": "GPT-5.6",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t00m22s.jpg"
+    },
+    {
+      "t_start": "06:33",
+      "t_end": "06:33",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t06m33s.jpg"
+    },
+    {
+      "t_start": "08:08",
+      "t_end": "08:08",
+      "chapter": "OpenAI SuperApp",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t08m08s.jpg"
+    },
+    {
+      "t_start": "13:41",
+      "t_end": "13:41",
+      "chapter": "HyperAgent",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "numeric-guard",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t13m41s.jpg"
+    },
+    {
+      "t_start": "16:22",
+      "t_end": "16:22",
+      "chapter": "GPT-Live",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t16m22s.jpg"
+    },
+    {
+      "t_start": "17:04",
+      "t_end": "17:04",
+      "chapter": "GPT-Live",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "deictic-cue",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t17m04s.jpg"
+    },
+    {
+      "t_start": "18:54",
+      "t_end": "18:54",
+      "chapter": "Grok 4.5",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t18m54s.jpg"
+    },
+    {
+      "t_start": "23:37",
+      "t_end": "23:37",
+      "chapter": "Muse Spark 1.1",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t23m37s.jpg"
+    },
+    {
+      "t_start": "29:14",
+      "t_end": "29:14",
+      "chapter": "New Future Tools",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t29m14s.jpg"
+    },
+    {
+      "t_start": "30:34",
+      "t_end": "30:34",
+      "chapter": "Claude Cowork Mobile",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t30m34s.jpg"
+    },
+    {
+      "t_start": "34:12",
+      "t_end": "34:12",
+      "chapter": "GPT-5.6 vs. Fable",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t34m12s.jpg"
+    },
+    {
+      "t_start": "38:26",
+      "t_end": "38:26",
+      "chapter": "WTF?",
+      "modalities": [
+        "frame"
+      ],
+      "reason": "chapter-start",
+      "score": null,
+      "frame": "v2-r3/q2_targeted_hype/frames/t38m26s.jpg"
+    }
+  ],
+  "reader_cost": {
+    "transcript_chars": 32908,
+    "frames": 12
+  }
+}
