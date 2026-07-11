@@ -22,6 +22,44 @@ from transcribe import filter_range, format_transcript, parse_vtt  # noqa: E402
 from whisper import load_api_key, transcribe_video  # noqa: E402
 
 
+def run_evidence(args) -> int:
+    """--detail evidence: question-aware evidence compilation (chapter roll-up,
+    numeric guard, facet sufficiency, deictic/guard frames). Raises on any
+    missing prerequisite so main() can fall back to the balanced sampler."""
+    if not args.question:
+        raise ValueError("--detail evidence requires --question")
+    if not is_url(args.source):
+        raise ValueError("evidence mode currently supports URL sources with captions")
+
+    if args.out_dir:
+        work = Path(args.out_dir).expanduser().resolve()
+    else:
+        work = Path(tempfile.mkdtemp(prefix="watch-"))
+    work.mkdir(parents=True, exist_ok=True)
+    print(f"[watch] working dir: {work}", file=sys.stderr)
+
+    print("[watch] checking metadata/captions via yt-dlp…", file=sys.stderr)
+    dl = fetch_captions(args.source, work / "download")
+    if not dl.get("subtitle_path"):
+        raise ValueError("no caption track (evidence mode needs a transcript)")
+    print("[watch] downloading video via yt-dlp…", file=sys.stderr)
+    dl = download(args.source, work / "download")
+
+    from evidence import compile_evidence  # noqa: E402 — same-dir sibling
+
+    compile_evidence(
+        dl["subtitle_path"],
+        dl["video_path"],
+        str(work / "download" / "video.info.json"),
+        args.question,
+        work / "evidence",
+        max_frames=args.max_frames,
+    )
+    print((work / "evidence" / "report.txt").read_text(encoding="utf-8"))
+    print(f"\n---\n_Work dir: `{work}` — delete when done._")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         prog="watch",
@@ -33,10 +71,18 @@ def main() -> int:
     ap.add_argument("--fps", type=float, default=None, help="Override auto-fps")
     ap.add_argument(
         "--detail",
-        choices=["transcript", "efficient", "balanced", "token-burner"],
+        choices=["transcript", "efficient", "balanced", "token-burner", "evidence"],
         default=None,
         help="Fidelity/speed dial: transcript (no frames), efficient (fast keyframes, cap 50), "
-             "balanced (scene, cap 100), token-burner (scene, uncapped).",
+             "balanced (scene, cap 100), token-burner (scene, uncapped), "
+             "evidence (question-aware chapter/span retrieval; requires --question, "
+             "falls back to balanced on any failure).",
+    )
+    ap.add_argument(
+        "--question",
+        type=str,
+        default=None,
+        help="The user's question about the video; drives --detail evidence selection.",
     )
     ap.add_argument(
         "--timestamps",
@@ -70,6 +116,16 @@ def main() -> int:
 
     config = get_config()
     detail = args.detail or str(config["detail"])
+
+    if detail == "evidence":
+        try:
+            return run_evidence(args)
+        except Exception as exc:
+            # Fail open to the deterministic control sampler (plan v2 requirement 6).
+            print(f"[watch] evidence mode failed ({exc}) — falling back to balanced",
+                  file=sys.stderr)
+            detail = "balanced"
+
     configured_cap = frame_cap(detail)
     if args.max_frames is not None:
         max_frames = args.max_frames
