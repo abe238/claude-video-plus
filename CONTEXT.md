@@ -48,6 +48,18 @@ _Avoid_: old version, original mode
 The proposed behavior compared with the **Control pipeline** under the same case and environment.
 _Avoid_: new version, optimized mode
 
+**Reader-model epoch**:
+A tag identifying the hosted reader-model version window in which a full-gate benchmark run was measured; **Control pipeline** and **Candidate pipeline** results are comparable only within one epoch.
+_Avoid_: model version note
+
+**Development slice**:
+The Tier 2 benchmark items reusable at every milestone-boundary full gate.
+_Avoid_: dev set, training split
+
+**Confirmatory slice**:
+The Tier 2 benchmark items untouched until the final confirmatory gate and spent exactly once at the release decision.
+_Avoid_: holdout, test split
+
 ## Relationships
 
 - An **Evidence compiler** receives exactly one **Video source**, one **Question**, and one **Evidence budget** per run.

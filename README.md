@@ -273,7 +273,7 @@ Research and implementation ideas being evaluated—not claims that their code h
 - GitHub [@thu-nics](https://github.com/thu-nics) — [thu-nics/FrameFusion](https://github.com/thu-nics/FrameFusion)
 - GitHub [@EvolvingLMMs-Lab](https://github.com/EvolvingLMMs-Lab) — [EvolvingLMMs-Lab/lmms-eval](https://github.com/EvolvingLMMs-Lab/lmms-eval)
 
-See the [evidence-backed improvement plan](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md) for academic paper citations, specific ideas under evaluation, transferability cautions, and the requirement to verify licenses before incorporating code or datasets.
+See the [evidence-backed improvement plan](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md) and its [adversarially reviewed v2 revision](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md) for academic paper citations, specific ideas under evaluation, transferability cautions, and the requirement to verify licenses before incorporating code or datasets.
 
 ## Open source
 
