@@ -1,0 +1,44 @@
+{
+  "control_transcript": {
+    "text_tok": 26364,
+    "frames": 0,
+    "img_tok": 0,
+    "cold_s": 8.4,
+    "evidence_total": 26364
+  },
+  "control_efficient": {
+    "text_tok": 31241,
+    "frames": 50,
+    "img_tok": 9850,
+    "cold_s": 19.9,
+    "evidence_total": 41091
+  },
+  "control_balanced": {
+    "text_tok": 31241,
+    "frames": 100,
+    "img_tok": 19700,
+    "cold_s": 37.6,
+    "evidence_total": 50941
+  },
+  "candidate_q1_coverage": {
+    "text_tok": 20195,
+    "frames": 16,
+    "img_tok": 3152,
+    "warm_s": 0.81,
+    "evidence_total": 23347
+  },
+  "candidate_q2_targeted_hype": {
+    "text_tok": 2874,
+    "frames": 8,
+    "img_tok": 1576,
+    "warm_s": 0.41000000000000003,
+    "evidence_total": 4450
+  },
+  "candidate_q3_targeted_superapp": {
+    "text_tok": 2726,
+    "frames": 8,
+    "img_tok": 1576,
+    "warm_s": 0.41000000000000003,
+    "evidence_total": 4302
+  }
+}

@@ -1,0 +1,40 @@
+# Benchmarks — supplemental evidence data
+
+Raw data behind the claims in the top-level README. This folder is **not** part of the
+install package (`.skillignore` excludes `docs/`; the claude.ai bundle archives only
+`skills/watch/`).
+
+## Methodology (applies to every entry)
+
+- **Paired design**: the original pipeline (control, `balanced` mode at commit-equivalent
+  behavior) and the evidence pipeline run against the *same* video and the *same*
+  questions.
+- **Symmetric answering**: one answering agent per pipeline, identical instructions,
+  each sees only its own pipeline's evidence.
+- **Blind judging**: 3 LLM judges per round grade both answer sets 1–10 on correctness
+  vs the transcript, completeness, citation accuracy (spot-checked ≥3 citations per
+  answer), and hype-exclusion where asked. Judges don't know which pipeline is which;
+  at least one judge per panel sees the labels position-swapped.
+- **Token accounting**: text tokens ≈ chars/3.6; image tokens = (w×h)/750 at the actual
+  512×288 frame size (197/frame), per Anthropic's published formula.
+
+## Honest limitations
+
+LLM judges are a measured-but-imperfect instrument (panel-to-panel variance is visible
+in the raw scores — the *paired per-round* comparison is the meaningful number). This is
+measurement with auditable raw data, not a preregistered statistical trial; the full
+statistical protocol (preregistered margins, stratified bootstrap, dev/confirmatory
+corpus split) is specified in [../plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](../plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md)
+and gates any stronger public claim. Where the evidence pipeline loses, the loss ships
+here unedited.
+
+## Entries
+
+- [2026-07-11-single-video-deep-dive/](2026-07-11-single-video-deep-dive/) — 38-min
+  launch video ("AI News: GPT-5.6…", Matt Wolfe), 3 question classes, 5 iteration
+  rounds. Final: coverage **win** (9.33 vs 8.33) at −60% tokens, targeted-cost **tie**
+  (9.00) at −77%, targeted-feature **win** (9.33 vs 8.33) at −79%. Includes the round-0
+  result where a naive retrieval candidate *lost* 3–0 — kept because it shows what the
+  shipped mechanisms (numeric guard, chapter roll-up, frame-mining, reconciliation)
+  actually fix.
+- Multi-video battery — in progress; lands as its own dated folder.
