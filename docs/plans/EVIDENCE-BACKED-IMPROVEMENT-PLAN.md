@@ -1,7 +1,9 @@
 # Evidence-backed improvement plan
 
-Status: Independently reviewed; ready for Phase 0 benchmark implementation  
-Control: unmodified upstream commit `83da59f`  
+Status: Independently reviewed; ready for Phase 0 benchmark implementation
+
+Control: unmodified upstream commit `83da59f`
+
 Candidate: commits derived from the control in `abe238/claude-video-plus`
 
 ## Objective
