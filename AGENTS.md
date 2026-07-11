@@ -36,12 +36,22 @@ Agent Skills package that gives an agent a video input. Installable across Claud
 # Tests (stdlib + pytest; ffmpeg required for frame tests)
 .venv/bin/pytest -q                # or: python3 -m pytest -q
 
+# Single test file / test function
+python3 -m pytest -q tests/test_frames.py
+python3 -m pytest -q tests/test_frames.py::test_dedup_drops_near_identical_frames
+
 # Build the claude.ai upload bundle (archives skills/watch/ as the bundle root)
 bash skills/watch/scripts/build-skill.sh   # → dist/watch.skill
 
 # Dev: mirror the working tree into the installed Claude Code plugin cache
 ./dev-sync.sh                       # --dry-run to preview
 ```
+
+No lint/type-check config exists (pure-stdlib Python, no pyproject.toml) — pytest is the only gate.
+
+## Architecture note
+
+`watch.py` is a linear orchestrator today (download → frames → transcript → report), with `SKILL.md` carrying most of the intelligence as agent instructions. `docs/ARCHITECTURE.md` describes an in-progress, benchmark-gated redesign toward a query-aware "Scout → Retrieve → Verify" evidence compiler. Two plan docs cover it: `docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md` (v1 — hypotheses, research foundations, algorithm design) and `docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md` (an adversarial-review revision that supersedes v1's *sequencing, gating, and module scope* — read v2 first for "what order do we build this in," fall back to v1 for anything v2 is silent on). Changes to selection/scoring code must be measured against the frozen control commit `83da59f`, not merged on intuition. `CONTEXT.md` defines the domain vocabulary (**Evidence span**, **Evidence budget**, **Evidence manifest**, etc.) used across those docs — read it before naming new concepts in this area.
 
 ## Rules
 
