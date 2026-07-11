@@ -1,12 +1,12 @@
 ---
 name: watch
-version: "0.2.0"
-description: Watch a video (URL or local path). Downloads with yt-dlp, extracts auto-scaled frames with ffmpeg, pulls the transcript from captions (or Whisper API fallback), and hands the result to Claude so it can answer questions about what's in the video.
+version: "0.3.0"
+description: Watch a video (URL or local path). Downloads with yt-dlp, extracts auto-scaled frames with ffmpeg, pulls the transcript from captions (or Whisper API fallback), and hands the result to Claude so it can answer questions about what's in the video. With a question, evidence mode retrieves only the relevant chapters, numeric facts, and on-screen moments instead of sampling the whole timeline.
 argument-hint: "<video-url-or-path> [question]"
 allowed-tools: Bash, Read, AskUserQuestion
-homepage: https://github.com/bradautomates/claude-video
-repository: https://github.com/bradautomates/claude-video
-author: bradautomates
+homepage: https://abe238.github.io/claude-video-plus/
+repository: https://github.com/abe238/claude-video-plus
+author: abe238
 license: MIT
 user-invocable: true
 ---
@@ -140,7 +140,8 @@ python3 "${SKILL_DIR}/scripts/watch.py" "<source>"
 ```
 
 Optional flags:
-- `--detail transcript|efficient|balanced|token-burner` — fidelity/speed dial. `transcript` = no frames (transcript only, skips video download when captions exist); `efficient` = fast keyframes (cap 50); `balanced` = scene-aware frames (cap 100); `token-burner` = scene-aware, uncapped.
+- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial. `transcript` = no frames (transcript only, skips video download when captions exist); `efficient` = fast keyframes (cap 50); `balanced` = scene-aware frames (cap 100); `token-burner` = scene-aware, uncapped; `evidence` = question-aware retrieval (see below).
+- `--question "…"` — the user's question, verbatim. Required by `--detail evidence`: the script selects whole topical chapters relevant to the question (plus a numeric guard that rescues pricing/benchmark lines from unselected chapters, and frames at chapter starts, "as you can see" cue moments, and numeric-guard spans) instead of sampling the full timeline. Typically 80–90% fewer evidence tokens than `balanced` on targeted questions. Only for **targeted** questions — for summaries/overviews it automatically keeps the full transcript, and on any failure (no captions, local file, compile error) it falls back to `balanced` on its own.
 - `--start T` / `--end T` — focus on a section. Accepts `SS`, `MM:SS`, or `HH:MM:SS`. When either is set, fps auto-scales denser (see "Focusing on a section" below).
 - `--timestamps T1,T2,…` — grab a frame at each of these absolute timestamps (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
 - `--max-frames N` — override the preset cap for tighter token budget (e.g. `--max-frames 40`)
@@ -181,6 +182,10 @@ python3 "${SKILL_DIR}/scripts/watch.py" "$URL" --start 1:12:00
 ```
 
 **Step 3 — Read every frame path the script lists.** The Read tool renders JPEGs directly as images for you. Read all frames in a single message (parallel tool calls) so you see them together. The frames are in chronological order with a `t=MM:SS` timestamp so you can align them to the transcript.
+
+**Mine the frames, not just the transcript.** Frames frequently show on-screen pages, tables, and UI the speaker never reads aloud — API pricing tables, availability tiers, benchmark leaderboards, settings pages. Extract those concrete on-screen specifics and use them in your answer, labeled as on-screen content with the frame's timestamp. In `evidence` mode, frames tagged `numeric-guard` almost certainly contain a table or pricing page — read those with extra care.
+
+**Reconcile conflicting claims.** Presenters misspeak. When two moments in your evidence state conflicting facts (two different prices for the same tier, a "cheapest model" claim that contradicts the pricing list), do not repeat either one uncritically: state the figure the primary evidence supports, and flag the conflicting statement as a likely misstatement with both timestamps.
 
 **Step 4 — answer the user.** You now have two streams of evidence:
 - **Frames** — what's on screen at each timestamp
