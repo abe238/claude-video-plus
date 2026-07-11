@@ -1,5 +1,7 @@
 # Query-Adaptive Video Evidence Compiler
 
+The detailed, benchmark-first implementation and review plan lives in [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md). Treat this document as the concise architecture overview and the plan as the source of truth for control comparisons, research foundations, acceptance gates, sequencing, installation, and public claims.
+
 ## Goal
 
 Answer questions about video with less model context than `/watch` while preserving its speed and reliability. Keep the existing caption, download, transcription, and deterministic frame-sampling paths as the compatibility fallback.

@@ -48,6 +48,12 @@ bash skills/watch/scripts/build-skill.sh   # → dist/watch.skill
 - Keep the version in sync across `skills/watch/SKILL.md` (frontmatter), `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` when cutting a release.
 - Releasing: tag `vX.Y.Z` and push the tag; `.github/workflows/release.yml` builds `dist/watch.skill` and attaches it to the GitHub release.
 - Never commit real API keys or `.env` contents; keys live in `~/.config/watch/.env` (mode `0600`) at runtime.
+- Preserve the easy install surfaces: Claude Code marketplace/plugin, `npx skills add <owner>/<repo> -g`, the release `watch.skill`, and the manual `skills/watch` symlink.
+- Keep `skills/watch/` self-contained. New large runtimes or models must remain optional unless reproducible benchmarks justify making them required.
+- Offer OpenCV as an informed, explicit installer choice. The default path must remain FFmpeg plus standard-library Python, and declining OpenCV must not reduce baseline compatibility.
+- Measure optimization claims against the untouched upstream control commit `83da59f`; do not claim an improvement from intuition or proxy metrics alone.
+- Owner-directed work may commit directly to `main` for now. Future outside contributions should use a branch and pull request.
+- Preserve prominent, appreciative attribution to Brad Bonanno and `bradautomates/claude-video` in public-facing repository material.
 
 ## Agent skills
 
