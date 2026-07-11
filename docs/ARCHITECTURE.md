@@ -1,6 +1,6 @@
 # Query-Adaptive Video Evidence Compiler
 
-The detailed, benchmark-first implementation and review plan lives in [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md). Treat this document as the concise architecture overview and the plan as the source of truth for control comparisons, research foundations, acceptance gates, sequencing, installation, and public claims.
+The detailed, benchmark-first implementation and review plan lives in two documents: [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md) is the source of truth for sequencing, gating, and module scope (it supersedes v1's decisions on those axes after an adversarial review), and [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md) remains authoritative for everything v2 is silent on. Treat this document as the concise architecture overview and those plans as the source of truth for control comparisons, research foundations, acceptance gates, sequencing, installation, and public claims.
 
 ## Goal
 
@@ -60,7 +60,7 @@ This is not merely scene detection with a lower cap. It makes the evidence unit 
 - [Rethinking RAG in Long Videos](https://arxiv.org/abs/2606.13141) argues for chunk-adaptive modality and granularity rather than one configuration for an entire query.
 - [MARQUIS](https://arxiv.org/abs/2605.17640) supports query expansion, reranking, and structured evidence extraction for complex multi-faceted requests.
 
-PixelRAG itself should not be a mandatory runtime dependency. Its Qwen3-VL embedding and FAISS pipeline are designed for large document collections, while this skill needs a lightweight per-video temporal index. Borrow the representation and compression ideas; do not import the infrastructure cost.
+PixelRAG itself should not be a mandatory runtime dependency. Its Qwen3-VL embedding and FAISS pipeline are designed for large document collections, while this skill needs a lightweight per-video temporal index. Borrow the representation and compression ideas; do not import the infrastructure cost. The same caution applies to VideoTree and LongVU: both report results from inside video-language models this skill does not control, so they are design evidence for the hierarchy and redundancy-removal ideas, not transferable performance claims for selecting external JPEG evidence.
 
 ## Reliability contract
 
@@ -99,10 +99,11 @@ Do not claim "no compromise" until the candidate meets or exceeds upstream accur
 
 ## Implementation order
 
-1. Shrink `SKILL.md` and move deterministic orchestration into scripts.
-2. Add transcript chunking, local lexical retrieval, and evidence manifests.
-3. Add hierarchical interval expansion and neighbor-frame verification.
-4. Add OCR as an optional local retriever.
-5. Benchmark compact visual embeddings behind an optional interface.
-6. Add adaptive resolution and region crops.
-7. Make query-adaptive mode the default only after the evaluation gates pass.
+The sequence is owned by the milestone structure in [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md):
+
+1. **Milestone A** — benchmark module, shrink the skill interface, question seam, transcript retrieval.
+2. **Milestone B** — acquisition/transcription/extraction efficiency, minimal evidence store.
+3. **Milestone C** — scout separation, coarse-to-fine selection, adaptive resolution and crops.
+4. **Milestone D** — optional adapters (OCR, embeddings, local ASR), distribution identity, final confirmatory gate.
+
+Query-adaptive mode becomes the default only after every gate passes.
