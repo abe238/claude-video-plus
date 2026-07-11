@@ -1,7 +1,7 @@
 # /watch
 
 > [!NOTE]
-> This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), originally created by Brad Bonanno and distributed under the MIT License. The full upstream Git history and license are preserved. This derivative is maintained independently and is not an official upstream release.
+> This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), originally created by Brad Bonanno and distributed under the MIT License. We are grateful to Brad for designing and openly sharing the reliable foundation this work builds upon. The full upstream Git history and license are preserved. This derivative is maintained independently and is not an official upstream release.
 
 **Give Claude the ability to watch any video.**
 
