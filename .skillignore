@@ -20,12 +20,14 @@ dist/
 hooks/
 dev-sync.sh
 
-# Non-runtime docs, plans, and tests
+# Non-runtime docs, plans, benchmarks, and tests
 tests/
+docs/
 README.md
 CHANGELOG.md
 AGENTS.md
 CLAUDE.md
+CONTEXT.md
 V2_PLAN.md
 V2_CONCERNS.md
 

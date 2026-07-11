@@ -1,12 +1,12 @@
 {
   "name": "watch",
-  "version": "0.2.0",
-  "description": "Let Claude watch a video. Downloads with yt-dlp, extracts auto-scaled frames with ffmpeg, pulls captions or falls back to Whisper, and hands frames + transcript to Claude so it can answer questions about the video.",
+  "version": "0.3.0",
+  "description": "Let Claude watch a video — and fetch only the evidence your question needs. Ask a question and /watch retrieves the relevant chapters, pricing/benchmark lines, and on-screen moments instead of sampling the whole timeline: 60-80% fewer tokens with equal-or-better answers in blind paired judging. Fork of Bradley Bonanno's claude-video; same install, same defaults, evidence mode is opt-in.",
   "author": {
-    "name": "Bradley Bonanno"
+    "name": "Abe Diaz"
   },
-  "homepage": "https://github.com/bradautomates/claude-video",
-  "repository": "https://github.com/bradautomates/claude-video",
+  "homepage": "https://abe238.github.io/claude-video-plus/",
+  "repository": "https://github.com/abe238/claude-video-plus",
   "license": "MIT",
-  "keywords": ["video", "watch", "youtube", "vimeo", "tiktok", "transcription", "whisper", "yt-dlp", "ffmpeg", "multimodal", "frames"]
+  "keywords": ["video", "watch", "youtube", "vimeo", "tiktok", "transcription", "whisper", "yt-dlp", "ffmpeg", "multimodal", "frames", "evidence", "retrieval"]
 }
