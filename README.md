@@ -246,6 +246,35 @@ Releasing: tag `vX.Y.Z`, push the tag. The workflow builds `dist/watch.skill` an
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
+## Gratitude and attribution
+
+This derivative exists because Brad Bonanno chose to build and openly share a strong, practical foundation. Thank you to **Brad Bonanno**, GitHub [@bradautomates](https://github.com/bradautomates), creator of [bradautomates/claude-video](https://github.com/bradautomates/claude-video). The upstream Git history, MIT license, original authorship, and repository links are intentionally preserved.
+
+This derivative is maintained by **Abe Diaz**, GitHub [@abe238](https://github.com/abe238), in [abe238/claude-video-plus](https://github.com/abe238/claude-video-plus). It is an independent derivative and not an official release from `bradautomates/claude-video`.
+
+We also appreciate the maintainers whose tools make the original runtime possible:
+
+- GitHub [@FFmpeg](https://github.com/FFmpeg) — [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg)
+- GitHub [@yt-dlp](https://github.com/yt-dlp) — [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
+
+Research and implementation ideas being evaluated—not claims that their code has been incorporated—are credited to:
+
+- GitHub [@StarTrail-org](https://github.com/StarTrail-org) — [StarTrail-org/PixelRAG](https://github.com/StarTrail-org/PixelRAG)
+- GitHub [@opencv](https://github.com/opencv) — [opencv/opencv](https://github.com/opencv/opencv)
+- GitHub [@Breakthrough](https://github.com/Breakthrough) — [Breakthrough/PySceneDetect](https://github.com/Breakthrough/PySceneDetect)
+- GitHub [@dmlc](https://github.com/dmlc) — [dmlc/decord](https://github.com/dmlc/decord)
+- GitHub [@iejMac](https://github.com/iejMac) — [iejMac/video2dataset](https://github.com/iejMac/video2dataset)
+- GitHub [@SYSTRAN](https://github.com/SYSTRAN) — [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper)
+- GitHub [@m-bain](https://github.com/m-bain) — [m-bain/whisperX](https://github.com/m-bain/whisperX)
+- GitHub [@ggml-org](https://github.com/ggml-org) — [ggml-org/whisper.cpp](https://github.com/ggml-org/whisper.cpp)
+- GitHub [@mlfoundations](https://github.com/mlfoundations) — [mlfoundations/open_clip](https://github.com/mlfoundations/open_clip)
+- GitHub [@ncTimTang](https://github.com/ncTimTang) — [ncTimTang/AKS](https://github.com/ncTimTang/AKS)
+- GitHub [@shaoguangwang](https://github.com/shaoguangwang) — [shaoguangwang/Adaptive-Frame-Pruning](https://github.com/shaoguangwang/Adaptive-Frame-Pruning)
+- GitHub [@thu-nics](https://github.com/thu-nics) — [thu-nics/FrameFusion](https://github.com/thu-nics/FrameFusion)
+- GitHub [@EvolvingLMMs-Lab](https://github.com/EvolvingLMMs-Lab) — [EvolvingLMMs-Lab/lmms-eval](https://github.com/EvolvingLMMs-Lab/lmms-eval)
+
+See the [evidence-backed improvement plan](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md) for academic paper citations, specific ideas under evaluation, transferability cautions, and the requirement to verify licenses before incorporating code or datasets.
+
 ## Open source
 
 MIT license.
