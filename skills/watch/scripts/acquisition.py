@@ -319,7 +319,7 @@ def acquire_url(
     strategies: list[tuple[str, str | None, bool]] = [("default", None, False)]
     if is_youtube_url(url):
         strategies += [(f"youtube-client:{client}", client, False) for client in player_clients]
-        if not audio_only:
+        if not audio_only and not captions_only:
             strategies.append(("youtube-format-final:18", None, True))
 
     selected: str | None = None

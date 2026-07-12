@@ -30,7 +30,10 @@ LOCK_WAIT_SECONDS = 5.0
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 _SENSITIVE_KINDS = {"transcript", "ocr", "embedding", "scout_index"}
 _MEDIA_KINDS = {"audio", "video", "image", "frame", "frames", "crop", "media", "source_media"}
-_SECRET_KEY = re.compile(r"(?:api[_-]?key|authorization|cookie|secret|password|token)", re.I)
+_SECRET_KEY = re.compile(
+    r"(?:api[_-]?key|authorization|cookie|secret|password|access[_-]?token|refresh[_-]?token|bearer[_-]?token)",
+    re.I,
+)
 _SECRET_TEXT = re.compile(
     r"(?:authorization\s*:\s*\S+|(?:api[_-]?key|cookie|password|secret)\s*[=:]\s*\S+)",
     re.I,
@@ -176,8 +179,12 @@ class EvidenceState:
             if not _owner_only(self.root, directory=True):
                 raise StateUnavailable("unsafe state directory permissions or type")
             return
-        self.root.mkdir(parents=True, mode=0o700)
-        os.chmod(self.root, 0o700)
+        try:
+            self.root.mkdir(parents=True, mode=0o700)
+            os.chmod(self.root, 0o700)
+        except FileExistsError:
+            # Another writer may create the root between the existence check and mkdir.
+            pass
         if not _owner_only(self.root, directory=True):
             raise StateUnavailable("could not create an owner-only state directory")
 

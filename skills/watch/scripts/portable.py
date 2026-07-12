@@ -22,7 +22,10 @@ _MEDIA_SUFFIXES = {
     ".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v", ".mp3", ".wav", ".m4a",
     ".aac", ".flac", ".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp",
 }
-_SECRET_KEY = re.compile(r"(?:api[_-]?key|authorization|cookie|secret|password|token)", re.I)
+_SECRET_KEY = re.compile(
+    r"(?:api[_-]?key|authorization|cookie|secret|password|access[_-]?token|refresh[_-]?token|bearer[_-]?token)",
+    re.I,
+)
 _SECRET_TEXT = re.compile(
     r"(?:authorization\s*:\s*\S+|(?:api[_-]?key|cookie|password|secret)\s*[=:]\s*\S+)",
     re.I,

@@ -105,10 +105,11 @@ def test_missing_packet_traceability_field_is_rejected():
 def test_fake_complete_packet_is_rejected():
     data = load_registry()
     packet = next(packet for packet in data["packets"] if packet["id"] == "P04")
-    packet.update(state="complete", issue="not-an-issue", tests=["tests/does_not_exist.py"])
+    packet.update(state="complete", issue="not-an-issue", tests=["tests/does_not_exist.py"], commits=[])
     next(
         requirement for requirement in data["requirements"] if requirement["packet"] == "P04"
     )["status"] = "complete"
+    next(packet for packet in data["packets"] if packet["id"] == "P02")["state"] = "planned"
     errors = validate(data)
     assert any("positive GitHub issue" in error for error in errors)
     assert any("missing tests" in error for error in errors)
