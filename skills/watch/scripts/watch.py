@@ -48,6 +48,12 @@ def _portable_evidence_files(summary: dict, work: Path) -> dict[str, Path]:
     return {"manifest.json": manifest_path, "report.txt": report_path}
 
 
+# Benchmarked cutoff: in the 2026-07-12 development battery, evidence mode lost
+# every question on the one video under 9 minutes — short videos are already cheap
+# to read in full, so trimming only costs quality. Route them to the original modes.
+MIN_EVIDENCE_SECONDS = 540
+
+
 def run_evidence(args) -> int:
     """--detail evidence: question-aware evidence compilation (chapter roll-up,
     numeric guard, facet sufficiency, deictic/guard frames). Raises on any
@@ -68,6 +74,12 @@ def run_evidence(args) -> int:
     dl = fetch_captions(args.source, work / "download")
     if not dl.get("subtitle_path"):
         raise ValueError("no caption track (evidence mode needs a transcript)")
+    duration = float((dl.get("info") or {}).get("duration") or 0)
+    if 0 < duration < MIN_EVIDENCE_SECONDS:
+        raise ValueError(
+            f"video is {duration:.0f}s, under the {MIN_EVIDENCE_SECONDS}s evidence-mode "
+            "cutoff — short videos are already cheap to read in full"
+        )
     print("[watch] downloading video via yt-dlp…", file=sys.stderr)
     dl = download(args.source, work / "download")
 

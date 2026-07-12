@@ -306,7 +306,7 @@
     <ul class="trade">
       <li><b>You need to ask a question.</b> Without one, /watch runs the original method, unchanged. Evidence mode is pure opt-in.</li>
       <li><b>When anything goes wrong, it reverts by itself.</b> No captions, a local file, or any internal error → the original pipeline runs and you get the original result. There is no failure mode where you get less than the original.</li>
-      <li><b>Short videos: just use the original modes.</b> Development testing lost all three questions on the one video under 8 minutes — short videos are already cheap to read in full. The savings are for longer videos.</li>
+      <li><b>Short videos are handled for you.</b> Development testing showed evidence mode is not worth it under ~9 minutes, so videos shorter than that now use the original method automatically. You don't have to think about it.</li>
       <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
       <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video; summary savings come from smarter screenshot selection instead.</li>
       <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required — and the fallback still catches the rest.</li>

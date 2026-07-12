@@ -102,3 +102,22 @@ def test_diagnostics_does_not_require_source():
     payload = __import__("json").loads(proc.stdout)
     assert payload["local_http"]["loopback_required"] is True
     assert payload["yap"]["auto_install"] is False
+
+
+def test_evidence_mode_short_video_falls_back(tmp_path: Path, monkeypatch):
+    """Videos under MIN_EVIDENCE_SECONDS raise before download so main() falls
+    back to the original sampler (2026-07-12 battery: short videos lost 0W/3L)."""
+    import argparse
+    sys.path.insert(0, str(WATCH.parent))
+    import watch as watch_mod
+    import pytest
+
+    monkeypatch.setattr(watch_mod, "is_url", lambda s: True)
+    monkeypatch.setattr(
+        watch_mod, "fetch_captions",
+        lambda src, out: {"subtitle_path": str(tmp_path / "v.vtt"), "info": {"duration": 300}},
+    )
+    args = argparse.Namespace(question="what changed?", source="https://example.com/v",
+                              out_dir=str(tmp_path))
+    with pytest.raises(ValueError, match="under the 540s evidence-mode cutoff"):
+        watch_mod.run_evidence(args)
