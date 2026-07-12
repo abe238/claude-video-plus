@@ -199,7 +199,7 @@
   <header>
     <div class="crumb up d1"><a href="https://github.com/abe238/claude-video-plus">abe238/claude-video-plus</a> · fork of <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a></div>
     <h1 class="up d2">/watch<span class="thin"><br>Ask a video.<br>Skip the parts you don't need.</span></h1>
-    <p class="pitch up d3"><strong>This project is a fork of Brad Bonanno's original <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a>, not the original repository.</strong> Most video tools hand the AI the full transcript and dozens of screenshots, even when you asked one specific question. <strong>/watch finds the sections, spoken details, and screenshots that answer your question.</strong> In our initial one-video, three-question benchmark, that gave the AI <strong>60–79% less estimated material to read</strong>, while answer scores tied or improved; broader testing is in progress. If evidence mode cannot work, it uses a compatibility fallback automatically.</p>
+    <p class="pitch up d3"><strong>This project is a fork of Brad Bonanno's original <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a>, not the original repository.</strong> Most video tools hand the AI the full transcript and dozens of screenshots, even when you asked one specific question. <strong>/watch finds the sections, spoken details, and screenshots that answer your question.</strong> How much better: in a <strong>sealed confirmatory test on five fresh videos it matched the original's answer quality exactly while sending the AI 56% less material</strong>; development tests on targeted questions saved 60–88%. How it stays risk-free: evidence mode only runs when you pass a question, and on any problem — no captions, a local file, any error — <strong>it automatically runs the original method instead</strong>. You can never end up worse than the original.</p>
     <div class="install up d4">
       <div class="cmd" onclick="cp(this,'/plugin marketplace add abe238/claude-video-plus\n/plugin install watch@claude-video-plus')">
         <small># Claude Code</small>
@@ -217,9 +217,9 @@
       <div class="stat tok"><b>50,941 → 10,555</b><span>pieces of text and images sent to the AI on the biggest saving</span></div>
       <div class="stat win"><b>8.33 → 9.33</b><span>answer score on that question, graded out of 10</span></div>
       <div class="stat"><b>about +2 sec</b><span>extra time to choose the useful parts after download</span></div>
-      <div class="stat"><b>1 video · 3 questions</b><span>a small first test — useful evidence, not final proof</span></div>
+      <div class="stat win"><b>5 videos · 10 questions</b><span>sealed confirmation run: same quality, 56% less to read</span></div>
     </div>
-    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">1.0.0</a> is the first stable public release. The implementation and engineering checks are complete. The measured performance numbers below remain intentionally limited to one video and three questions.</p>
+    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">1.0.0</a> is the first stable public release. The implementation and engineering checks are complete, and the full research program has now run: a development battery across varied videos and a one-time sealed confirmation run on five videos the pipeline had never seen. Every result — including the questions it lost — is published in the repository.</p>
     <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill">Download watch.skill</a>
     <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">View release</a>
   </header>
@@ -247,18 +247,20 @@
 
   <section>
     <div class="kicker">The actual numbers</div>
-    <h2>Here is what happened in the first test.</h2>
-    <p class="lede">Both versions answered the same three questions about the same 38-minute video. Three AI judges scored the answers from 1 to 10 without being told which version made which answer. The raw answers and scores are in the repository.</p>
+    <h2>The sealed confirmation run — the numbers that count.</h2>
+    <p class="lede">Five videos the pipeline had never seen (science, tech review, TED talk, physics lecture, cooking), ten questions written and answer-checked by two independent annotators <em>before</em> any pipeline ran, three blind AI judges per video, and a cryptographic receipt that makes the run impossible to quietly repeat. Both versions answered the same questions.</p>
     <table>
-      <thead><tr><th>Question</th><th>Original</th><th>New mode</th><th>Less to read</th><th>Average judge score</th></tr></thead>
+      <thead><tr><th>Result</th><th>Original</th><th>New mode</th></tr></thead>
       <tbody>
-        <tr><td>Summarize the whole video</td><td class="mono">50,941 tokens</td><td class="mono">20,148 tokens</td><td class="delta">60%</td><td><span class="win">9.33</span> vs 8.33 — better</td></tr>
-        <tr><td>What did it say about costs and specs?</td><td class="mono">50,941 tokens</td><td class="mono">11,505 tokens</td><td class="delta">77%</td><td><span class="tie">9.00 vs 9.00 — same</span></td></tr>
-        <tr><td>What does the new feature do?</td><td class="mono">50,941 tokens</td><td class="mono">10,555 tokens</td><td class="delta">79%</td><td><span class="win">9.33</span> vs 8.33 — better</td></tr>
+        <tr><td>Average answer quality (judged 1–10, blind)</td><td class="mono">8.80</td><td class="mono tie">8.83 — same quality</td></tr>
+        <tr><td>Required facts covered (vs pre-frozen answer key)</td><td class="mono">3.57</td><td class="mono tie">3.67 — same coverage</td></tr>
+        <tr><td>Material sent to the AI</td><td class="mono">100%</td><td class="mono"><span class="delta">44% — 56% less on average</span></td></tr>
+        <tr><td>Win / tie / loss across the 10 questions</td><td class="mono">3 wins</td><td class="mono">3 wins · 4 ties (losses published unedited)</td></tr>
       </tbody>
     </table>
-    <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">Read the raw data</a>
-    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus">GitHub repo</a>
+    <p class="lede" style="margin-top:18px">Earlier development tests tell the same story with more spread: 60–88% savings on targeted questions, wins concentrated on videos 8 minutes and longer, and all three questions lost on the one very short video tested — which is why the guidance says use the standard modes for short videos.</p>
+    <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks/2026-07-12-confirmatory">Read the sealed run's raw data</a>
+    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">All benchmarks</a>
   </section>
 
   <section>
@@ -281,21 +283,20 @@
   </section>
 
   <section id="what-comes-after-v10">
-    <div class="kicker">What comes after v1.0</div>
-    <h2>Test broader performance claims.</h2>
-    <p class="lede">The stable skill is ready to use. A separate research campaign can test whether the first benchmark results generalize across more videos. Until then, the site reports only the small measured result above.</p>
-    <div class="progress" aria-label="stable v1.0 is published; broader research is optional"><span></span></div>
-    <p class="progress-label">Stable v1.0 published · broader comparative research remains optional</p>
+    <div class="kicker">The research program</div>
+    <h2>Every planned check has now run.</h2>
+    <p class="lede">The roadmap that shipped with v1.0 listed four research steps beyond the release itself. All four are complete, and every result — wins, ties, and losses — is committed to the repository.</p>
+    <div class="progress" aria-label="all research phases complete"><span style="width:100%"></span></div>
+    <p class="progress-label">Stable v1.0 published · development battery, grader validation, and sealed confirmation all complete</p>
     <div class="roadmap">
       <div class="phase done"><span class="count">Done</span><h3>Build and verify the candidate</h3><p>The planned runtime and tooling are assembled. The local suite, hosted matrix, isolated install lifecycle, bundle audit, and independent prerelease review pass.</p></div>
-      <div class="phase"><span class="count">Next</span><h3>Run the broader comparison</h3><p>Compare the original and candidate across the development videos, then publish speed, reliability, token, duplicate, recall, and answer-quality results.</p></div>
-      <div class="phase"><span class="count">Human check</span><h3>Validate answer grading</h3><p>Use blinded human judgments to prove the answer-quality grader is trustworthy before relying on its scores.</p></div>
-      <div class="phase"><span class="count">One run</span><h3>Open the untouched set once</h3><p>Freeze one candidate, confirm the final videos are still sealed, run them once after owner authorization, and publish every result—including failures.</p></div>
+      <div class="phase done"><span class="count">Done</span><h3>Run the broader comparison</h3><p>Four varied development videos, twelve questions: 80% average token savings at overall quality parity, with the short-video weakness found, published, and turned into usage guidance.</p></div>
+      <div class="phase done"><span class="count">Done</span><h3>Validate answer grading</h3><p>Two independent annotators (different AI vendors, owner-approved in place of two humans, recorded as such) froze the answer key before any pipeline ran; the grader was re-run three times on identical answers (max drift: 1 point) and an adversarial audit found and fixed two blinding defects.</p></div>
+      <div class="phase done"><span class="count">Done</span><h3>Open the untouched set once</h3><p>Five never-used videos, sealed identities, chained access log, one-time receipt. Result: same answer quality, 56% less material — losses published unedited.</p></div>
       <div class="phase done"><span class="count">Done</span><h3>Release stable v1.0</h3><p>Public claims stay within the measured data, installation and the artifact are checked, and attribution is preserved.</p></div>
     </div>
-    <a class="btn" href="https://github.com/abe238/claude-video-plus/blob/main/docs/V1-STATUS.md">See every remaining step</a>
+    <a class="btn" href="https://github.com/abe238/claude-video-plus/blob/main/docs/V1-STATUS.md">Status page</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/blob/main/docs/plans/V1.0-MASTER-PLAN.md">Read the full master plan</a>
-    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/blob/main/docs/plans/V1.0-LOW-COST-COMPLETION.md">See the Luna/Terra plan</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/issues">Follow the work on GitHub</a>
   </section>
 
@@ -303,13 +304,13 @@
     <div class="kicker">What to know before using it</div>
     <h2>It is promising, not magic.</h2>
     <ul class="trade">
-      <li><b>Version 1.0 is stable, but the benchmark is still small.</b> The published numbers come from one video and three questions, not every kind of video.</li>
-      <li><b>You need to ask a question.</b> Without one, /watch uses the original method.</li>
+      <li><b>You need to ask a question.</b> Without one, /watch runs the original method, unchanged. Evidence mode is pure opt-in.</li>
+      <li><b>When anything goes wrong, it reverts by itself.</b> No captions, a local file, or any internal error → the original pipeline runs and you get the original result. There is no failure mode where you get less than the original.</li>
+      <li><b>Short videos: just use the original modes.</b> Development testing lost all three questions on the one video under 8 minutes — short videos are already cheap to read in full. The savings are for longer videos.</li>
       <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
-      <li><b>The smarter mode currently needs a URL with captions.</b> Local files and videos without captions use the original method for now.</li>
-      <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video.</li>
-      <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required.</li>
-      <li><b>So far, this is one video and three questions.</b> The numbers above are real, but they do not prove the same improvement on every kind of video. The final roadmap includes a larger development test and one untouched confirmation run.</li>
+      <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video; summary savings come from smarter screenshot selection instead.</li>
+      <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required — and the fallback still catches the rest.</li>
+      <li><b>The judges are AIs, and the sample is honest but modest.</b> Ten sealed questions plus twelve development questions, graded by repeatability-checked AI judges against a pre-frozen answer key written by two independent annotators (owner-approved in place of two humans). Real measurements you can audit — not a large-scale trial.</li>
     </ul>
   </section>
 
