@@ -30,13 +30,8 @@ jobs:
 
       - name: Verify release tag and repository
         run: |
-          test "${GITHUB_REF_NAME}" = "v$(python - <<'PY'
-          from pathlib import Path
-          import re
-          text = Path('skills/watch/SKILL.md').read_text(encoding='utf-8')
-          print(re.search(r'^\s*version: ["'\'']?([^"'\'']+)', text, re.MULTILINE).group(1))
-          PY
-          )"
+          VERSION="$(python -c 'import re; from pathlib import Path; text = Path("skills/watch/SKILL.md").read_text(encoding="utf-8"); print(re.search(r"^\s*version:\s*(\S+)", text, re.MULTILINE).group(1).strip(chr(34)+chr(39)))')"
+          test "${GITHUB_REF_NAME}" = "v${VERSION}"
           python -m pytest -q
           python -m compileall -q skills tools tests
           python tools/validate_v1_execution.py
