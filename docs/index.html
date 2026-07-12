@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>claude-video-plus — ask a video without making AI read the whole thing</title>
-<meta name="description" content="Ask a video a question. In our first three-question test, /watch gave the AI 60–79% less material to read without lowering answer scores.">
+<meta name="description" content="Ask a video a question. See measured token savings, current v1.0 status, completed verification work, and every major step still remaining.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
@@ -79,6 +79,7 @@
     background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
     padding: 16px 18px; font: 500 13.5px/1.8 var(--mono); color: var(--green);
     position: relative; cursor: pointer; transition: border-color .2s;
+    min-width: 0; overflow-wrap: anywhere;
   }
   .cmd:hover { border-color: var(--amber); }
   .cmd small { display: block; color: var(--dim); font-weight: 400; }
@@ -99,6 +100,11 @@
   .stat.win b { color: var(--green); }
   .stat.tok b { color: var(--amber); }
   .stat span { font: 400 11.5px/1.5 var(--mono); color: var(--dim); }
+  .status-note {
+    margin-top: 18px; padding: 16px 18px; border: 1px solid rgba(255,178,36,.38);
+    border-radius: 10px; background: rgba(255,178,36,.055); color: #d7ddce; font-size: 14px;
+  }
+  .status-note b { color: var(--amber); }
 
   section { margin-top: 110px; }
   .kicker { font: 600 12px var(--mono); color: var(--amber); letter-spacing: .2em; text-transform: uppercase; }
@@ -116,7 +122,13 @@
   .manifest .hl { color: var(--paper); font-weight: 600; }
 
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
-  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } main { padding: 0 28px 90px; } .rail { display:none } }
+  @media (max-width: 800px) {
+    .grid2 { grid-template-columns: 1fr; }
+    main { width: 100%; padding: 0 28px 90px; }
+    h1 { font-size: clamp(38px, 11vw, 54px); overflow-wrap: anywhere; }
+    .pitch { overflow-wrap: anywhere; }
+    .rail { display:none }
+  }
   .mech {
     background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px;
     transition: transform .25s, border-color .25s;
@@ -125,6 +137,20 @@
   .mech h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
   .mech h3 code { font: 600 13px var(--mono); color: var(--amber); }
   .mech p { font-size: 14px; color: #b4bca6; }
+  .progress {
+    height: 10px; margin-top: 28px; overflow: hidden; border: 1px solid var(--line);
+    border-radius: 999px; background: var(--panel);
+  }
+  .progress span { display: block; width: 5.714%; height: 100%; background: var(--green); }
+  .progress-label { margin-top: 9px; font: 400 12px var(--mono); color: var(--dim); }
+  .roadmap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 30px; }
+  .phase { padding: 20px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+  .phase h3 { font-size: 16px; margin-bottom: 7px; }
+  .phase p { color: #b4bca6; font-size: 14px; }
+  .phase .count { display: inline-block; margin-bottom: 10px; font: 600 10px var(--mono); color: var(--amber); letter-spacing: .1em; text-transform: uppercase; }
+  .phase.done { border-color: rgba(61,220,132,.35); }
+  .phase.done .count { color: var(--green); }
+  @media (max-width: 700px) { .roadmap { grid-template-columns: 1fr; } }
 
   table { width: 100%; border-collapse: collapse; margin-top: 34px; font-size: 15px; }
   th { font: 600 11px var(--mono); color: var(--dim); text-transform: uppercase; letter-spacing: .14em; text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); }
@@ -147,6 +173,9 @@
   .grat { margin-top: 30px; max-width: 720px; color: #c2c9b6; font-size: 16px; }
   .grat a { color: var(--amber); text-decoration: none; border-bottom: 1px solid rgba(255,178,36,.35); }
   .grat a:hover { border-bottom-color: var(--amber); }
+  .credits { margin-top: 22px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 16px 18px; }
+  .credits summary { cursor: pointer; color: var(--paper); font-weight: 650; }
+  .credits p { margin-top: 12px; color: #aeb7a1; font-size: 14px; }
 
   footer {
     margin-top: 110px; padding-top: 28px; border-top: 1px solid var(--line);
@@ -190,6 +219,7 @@
       <div class="stat"><b>about +2 sec</b><span>extra time to choose the useful parts after download</span></div>
       <div class="stat"><b>1 video · 3 questions</b><span>a small first test — useful evidence, not final proof</span></div>
     </div>
+    <p class="status-note up d5"><b>Current status:</b> the measured prototype is usable, but v1.0 is not finished. We have completed the plan review and the frozen-original test harness. The remaining work below must pass before a v1.0 release or broader performance claim.</p>
   </header>
 
   <section>
@@ -230,15 +260,57 @@
   </section>
 
   <section>
+    <div class="kicker">What just shipped</div>
+    <h2>We made future comparisons hard to fake by accident.</h2>
+    <p class="lede">The latest work does not claim another speedup. It locks the original project to one exact version and records enough detail to prove that future tests compare the same video, captions, tools, settings, and clean code.</p>
+    <div class="stats">
+      <div class="stat win"><b>146</b><span>automated tests passing across the repository</span></div>
+      <div class="stat"><b>19</b><span>focused tests that attack the original-version harness</span></div>
+      <div class="stat"><b>83da59f</b><span>the exact untouched original version used for comparisons</span></div>
+      <div class="stat tok"><b>2 of 35</b><span>planned v1.0 work steps complete; 33 remain</span></div>
+    </div>
+    <div class="grid2">
+      <div class="mech"><h3>Same original every time</h3><p>The harness refuses a modified checkout, changed executable, mismatched source, unsupported setting, or dirty output directory.</p></div>
+      <div class="mech"><h3>Captions cannot quietly change</h3><p>Caption files are copied and hashed immediately after each download call, before the original code continues, so a later overwrite cannot rewrite what the test says the AI read.</p></div>
+      <div class="mech"><h3>Secrets stay outside the test</h3><p>The original runs with an isolated home and configuration. API keys, browser cookies, Git overrides, and unrelated environment variables are not inherited.</p></div>
+      <div class="mech"><h3>Failures leave evidence</h3><p>Commands, versions, hashes, raw output, exit status, timeouts, and integrity failures are kept in machine-readable receipts.</p></div>
+    </div>
+    <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/evidence/v1/P01-control">Inspect the verification evidence</a>
+  </section>
+
+  <section id="what-remains-before-v10">
+    <div class="kicker">What remains before v1.0</div>
+    <h2>33 planned steps are still open.</h2>
+    <p class="lede">This is the complete roadmap in normal language. Each group has its own tests and evidence gate. A feature is not called finished merely because its code exists.</p>
+    <div class="progress" aria-label="2 of 35 v1.0 work packets complete"><span></span></div>
+    <p class="progress-label">2 complete · 33 remaining · status taken from the repository execution registry</p>
+    <div class="roadmap">
+      <div class="phase done"><span class="count">Done · 2 steps</span><h3>Freeze the plan and the original</h3><p>The reviewed plan is locked, and the untouched original now has a strict, independently reviewed comparison harness.</p></div>
+      <div class="phase"><span class="count">Next · 2 steps</span><h3>Prove the backup and measurements</h3><p>Show that the compatibility backup behaves like the original, then seal the scoring rules, timing rules, and development/confirmation video sets.</p></div>
+      <div class="phase"><span class="count">3 steps</span><h3>Make releases boring</h3><p>Keep versions, credits, bundles, installation, updates, rollback, cleanup, and supported operating systems consistent and automatically tested.</p></div>
+      <div class="phase"><span class="count">4 steps</span><h3>Make video fetching resilient</h3><p>Add clear failure categories, bounded YouTube retries, safe optional browser cookies, better caption languages, and anti-rate-limit fallbacks.</p></div>
+      <div class="phase"><span class="count">6 steps</span><h3>Add local-first transcription choices</h3><p>Use nearby subtitle files first, then optional localhost :8082 and YAP, then authorized cloud Whisper—with one consistent result format and privacy rules.</p></div>
+      <div class="phase"><span class="count">7 steps</span><h3>Process less and safely reuse work</h3><p>Transcribe only requested ranges, split audio at sensible pauses, resume interrupted jobs, protect cached evidence, export portable bundles, and expand evidence only when needed.</p></div>
+      <div class="phase"><span class="count">6 steps</span><h3>Understand meaning, not only matching words</h3><p>Keep exact-word and number safeguards while adding measured local semantic search, an optional disclosed remote choice, time/coverage rules, OCR evaluation, and understandable score fusion.</p></div>
+      <div class="phase"><span class="count">1 step</span><h3>Improve visual selection without a heavy default</h3><p>Test better FFmpeg and standard-Python signals for important screen changes and keep them only if answer quality, duplicate removal, tokens, and total runtime improve.</p></div>
+      <div class="phase"><span class="count">4 steps</span><h3>Run the final test and release</h3><p>Validate the answer grader, freeze one candidate, open the untouched confirmation set once, publish raw results, audit installation, and assemble v1.0.</p></div>
+    </div>
+    <a class="btn" href="https://github.com/abe238/claude-video-plus/blob/main/docs/V1-STATUS.md">See every remaining step</a>
+    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/blob/main/docs/plans/V1.0-MASTER-PLAN.md">Read the full master plan</a>
+    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/issues">Follow the work on GitHub</a>
+  </section>
+
+  <section>
     <div class="kicker">What to know before using it</div>
     <h2>It is promising, not magic.</h2>
     <ul class="trade">
+      <li><b>v1.0 is not released yet.</b> The prototype works, but 33 measured and reviewed work steps remain before the release gate.</li>
       <li><b>You need to ask a question.</b> Without one, /watch uses the original method.</li>
       <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
       <li><b>The smarter mode currently needs a URL with captions.</b> Local files and videos without captions use the original method for now.</li>
       <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video.</li>
       <li><b>Today it mostly matches words.</b> A question phrased very differently from the video can miss a section. Hybrid semantic search is planned for v1.0 and will be measured before release.</li>
-      <li><b>So far, this is one video and three questions.</b> The numbers above are real, but they do not prove the same improvement on every kind of video. A larger test is planned.</li>
+      <li><b>So far, this is one video and three questions.</b> The numbers above are real, but they do not prove the same improvement on every kind of video. The final roadmap includes a larger development test and one untouched confirmation run.</li>
     </ul>
   </section>
 
@@ -246,10 +318,14 @@
     <div class="kicker">Gratitude</div>
     <h2>Built on someone else's good decisions.</h2>
     <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a>. Its caption-first design, simple installation, and reliable backup behavior made this project possible. The upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a>, check them out. The media tools are <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>; transcription uses <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>. Research credits and links are in the improvement plan.</p>
+    <details class="credits">
+      <summary>Other projects whose ideas are being evaluated and credited</summary>
+      <p>No credit here implies that code was copied or that a planned feature has shipped. The roadmap records whether each source inspired a design, contributed an adapted mechanism, was deferred, or was rejected after testing: <a href="https://github.com/taeloautomates/claude-video">taeloautomates/claude-video</a>, <a href="https://github.com/thedirektor/claude-video">thedirektor/claude-video</a>, <a href="https://github.com/RadoslavSheytanov/claude-video">RadoslavSheytanov/claude-video</a>, <a href="https://github.com/Tigertycoon/claude-video">Tigertycoon/claude-video</a>, <a href="https://github.com/manojbadam/claude-video">manojbadam/claude-video</a>, <a href="https://github.com/CJNA/claude-video">CJNA/claude-video</a>, <a href="https://github.com/sciencemj/claude-video-local">sciencemj/claude-video-local</a>, <a href="https://github.com/troyshelton/claude-video">troyshelton/claude-video</a>, <a href="https://github.com/jsstn/claude-video">jsstn/claude-video</a>, <a href="https://github.com/joweiser/claude-video">joweiser/claude-video</a>, <a href="https://github.com/JoseBallestas/claude-video">JoseBallestas/claude-video</a>, <a href="https://github.com/danielfrey63/claude-video">danielfrey63/claude-video</a>, <a href="https://github.com/finnvoor/yap">finnvoor/yap</a>, and <a href="https://github.com/miguelrios/unc-skills">miguelrios/unc-skills</a>.</p>
+    </details>
   </section>
 
   <footer>
-    <span>MIT License</span>
+    <span>MIT License · v1.0 in progress · 2/35 steps complete</span>
     <span><a href="https://github.com/abe238/claude-video-plus">github.com/abe238/claude-video-plus</a></span>
   </footer>
 </main>
