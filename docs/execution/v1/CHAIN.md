@@ -17,9 +17,9 @@ bound, and an explicit successor. Inner work follows:
 RE-PLAN -> BUILD -> PIN -> PROVE -> MEASURE -> SOL REVIEW -> COMMIT/PUSH -> EXIT
 ```
 
-P02 through P32 each receive one implementation pass, focused packet tests, deterministic
-validators, and one read-only Sol review. Do not repeatedly run the full suite or start iterative
-packet review loops. P32 runs the full repository suite and one consolidated repair/release audit.
+P02 through P32 each receive one implementation pass. Finish all implementation before running
+the consolidated focused/full tests, benchmarks, install and bundle matrix, or independent review.
+Do not start packet-level test/review loops. P32 owns the single integrated repair/release audit.
 The owner has standing authorization for work after P32; do not ask for per-pass authorization.
 
 ## Chain
