@@ -13,6 +13,17 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
+from acquisition import (
+    AcquisitionAttempt,
+    AcquisitionError,
+    AcquisitionResult,
+    FailureClass,
+    acquisition_config,
+    acquire_url,
+    local_source_identity,
+)
+from config import read_env_file
+
 
 VIDEO_EXTS = {".mp4", ".mkv", ".webm", ".mov", ".m4v", ".avi", ".flv", ".wmv"}
 
@@ -27,29 +38,55 @@ def is_url(source: str) -> bool:
 def resolve_local(path: str) -> dict:
     p = Path(path).expanduser().resolve()
     if not p.exists():
-        raise SystemExit(f"File not found: {p}")
+        result = AcquisitionResult(
+            state="fatal", media_path=None, subtitle_candidates=[],
+            selected_subtitle=None, metadata={},
+            source_identity="0" * 64,
+            attempts=[AcquisitionAttempt(
+                strategy="local", outcome="failed",
+                failure_class=FailureClass.INVALID_SOURCE.value, exit_code=3,
+                detail="local source does not exist",
+            )],
+            failure_class=FailureClass.INVALID_SOURCE.value,
+        )
+        raise AcquisitionError(result)
     if p.suffix.lower() not in VIDEO_EXTS:
         print(
             f"[watch] warning: {p.suffix} is not a known video extension, proceeding anyway",
             file=sys.stderr,
         )
-    return {
-        "video_path": str(p),
-        "subtitle_path": None,
-        "info": {"title": p.name, "url": str(p)},
-        "downloaded": False,
-    }
+    return AcquisitionResult(
+        state="success", media_path=str(p), subtitle_candidates=[],
+        selected_subtitle=None, metadata={"title": p.name, "url": str(p)},
+        source_identity=local_source_identity(p),
+        attempts=[AcquisitionAttempt(
+            strategy="local", outcome="success", failure_class=None, exit_code=0,
+        )],
+        selected_strategy="local", downloaded=False,
+    ).as_dict()
+
+
+def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) -> list[Path]:
+    candidates = sorted(out_dir.glob("video*.vtt"))
+    if not candidates or languages == ("auto",):
+        return candidates
+    ordered: list[Path] = []
+    for language in languages:
+        base = language.split("-", 1)[0].lower()
+        for candidate in candidates:
+            name = candidate.name.lower()
+            if candidate not in ordered and (
+                f".{language.lower()}." in name or f".{base}." in name
+                or f".{base}-orig." in name
+            ):
+                ordered.append(candidate)
+    ordered.extend(candidate for candidate in candidates if candidate not in ordered)
+    return ordered
 
 
 def _pick_subtitle(out_dir: Path) -> Path | None:
-    candidates = sorted(out_dir.glob("video*.vtt"))
-    if not candidates:
-        return None
-    preferred = [
-        c for c in candidates
-        if any(marker in c.name for marker in (".en.", ".en-US.", ".en-GB.", ".en-orig."))
-    ]
-    return preferred[0] if preferred else candidates[0]
+    candidates = _subtitle_candidates(out_dir)
+    return candidates[0] if candidates else None
 
 
 def _pick_video(out_dir: Path) -> Path | None:
@@ -67,32 +104,16 @@ def fetch_captions(url: str, out_dir: Path) -> dict:
     if shutil.which("yt-dlp") is None:
         raise SystemExit("yt-dlp is not installed. Install with: brew install yt-dlp")
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    output_template = str(out_dir / "video.%(ext)s")
-    cmd = [
-        "yt-dlp",
-        "--skip-download",
-        "--write-info-json",
-        "--write-subs",
-        "--write-auto-subs",
-        "--sub-langs", "en.*",
-        "--sub-format", "vtt",
-        "--convert-subs", "vtt",
-        "--no-playlist",
-        "--ignore-errors",
-        "-o", output_template,
-        "--",
-        url,
-    ]
-    subprocess.run(cmd, stdout=sys.stderr, stderr=sys.stderr)
-    subtitle = _pick_subtitle(out_dir)
-    info = _read_info(out_dir / "video.info.json", url)
-    return {
-        "video_path": None,
-        "subtitle_path": str(subtitle) if subtitle else None,
-        "info": info or {"url": url},
-        "downloaded": False,
-    }
+    cfg = acquisition_config(read_env_file())
+    result = acquire_url(
+        url, out_dir, captions_only=True,
+        languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
+        player_clients=cfg["player_clients"], runner=subprocess.run,
+        pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
+        read_metadata=_read_info,
+    )
+    # Caption absence is not fatal: watch.py may continue to media/ASR.
+    return result.as_dict()
 
 
 def _read_info(info_path: Path, url: str) -> dict:
@@ -120,46 +141,17 @@ def download_url(
     if shutil.which("yt-dlp") is None:
         raise SystemExit("yt-dlp is not installed. Install with: brew install yt-dlp")
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    output_template = str(out_dir / "video.%(ext)s")
-
-    fmt = "ba/bestaudio" if audio_only else "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
-    cmd = [
-        "yt-dlp",
-        "-N", "8",
-        "-f", fmt,
-        "--merge-output-format", "mp4",
-        "--write-info-json",
-        "--write-subs",
-        "--write-auto-subs",
-        "--sub-langs", "en.*",
-        "--sub-format", "vtt",
-        "--convert-subs", "vtt",
-        "--no-playlist",
-        "--ignore-errors",
-        "-o", output_template,
-        "--",
-        url,
-    ]
-
-    # yt-dlp may exit non-zero if a subtitle variant fails (e.g. 429) even when
-    # the video itself downloaded fine. Treat "video file present" as success.
-    result = subprocess.run(cmd, stdout=sys.stderr, stderr=sys.stderr)
-    video = _pick_video(out_dir)
-    if video is None:
-        raise SystemExit(
-            f"yt-dlp did not produce a video file in {out_dir} (exit {result.returncode})"
-        )
-
-    subtitle = _pick_subtitle(out_dir)
-    info = _read_info(out_dir / "video.info.json", url)
-
-    return {
-        "video_path": str(video),
-        "subtitle_path": str(subtitle) if subtitle else None,
-        "info": info or {"url": url},
-        "downloaded": True,
-    }
+    cfg = acquisition_config(read_env_file())
+    result = acquire_url(
+        url, out_dir, audio_only=audio_only,
+        languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
+        player_clients=cfg["player_clients"], runner=subprocess.run,
+        pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
+        read_metadata=_read_info,
+    )
+    if result.state == "fatal":
+        raise AcquisitionError(result)
+    return result.as_dict()
 
 
 def download(
