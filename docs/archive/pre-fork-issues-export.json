@@ -1,0 +1,467 @@
+{
+  "exported_from": "abe238/claude-video-plus-archive",
+  "exported_at": "2026-07-12",
+  "note": "Issue/PR history from the pre-fork repository, preserved before archive deletion.",
+  "items": [
+    {
+      "number": 1,
+      "title": "[P01] Build the frozen Control harness",
+      "state": "closed",
+      "is_pr": false,
+      "created_at": "2026-07-11T08:54:49Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nCreate an executable, immutable harness for upstream commit `83da59f`. It must run from a clean detached worktree, freeze commands/environment/retry policy, alternate paired order deterministically, and preserve raw manifests without changing the Control checkout.\n\n## Acceptance criteria\n\n- [ ] CTRL-001 passes the control-harness integrity gate.\n- [ ] Dirty worktrees, changed Control files, unpinned commands, and missing provenance fail closed.\n- [ ] The harness records Control commit, environment, commands, source identity, flags, retries, and raw artifacts.\n- [ ] Focused and full tests pass; Sol reviews the exact staged tree.\n\n## Blocked by\n\n- #3",
+      "comments": [
+        {
+          "created_at": "2026-07-12T06:24:48Z",
+          "body": "P01 is complete and pushed.\\n\\nEvidence:\\n- Sol APPROVE: staged tree \\n- Sol session: \\n- Semantic commit: \\n- Closure commit: \\n- Verification: 19 focused harness tests; 146 full tests; compilation, execution registry (45 requirements / 35 packets), evidence validation, and diff checks all pass.\\n- Live proof: detached clean Control , real pinned tools, hash-recorded yt-dlp caption snapshots, raw output receipts, and post-run clean assertion.\\n\\nThe final remediation also closes the caption timing race, rejects undeclared provenance, and kills SIGTERM-resistant descendant process groups on timeout."
+        },
+        {
+          "created_at": "2026-07-12T06:25:00Z",
+          "body": "Correction \u2014 exact receipts (the previous comment's inline code was stripped by the shell):\n\n- Sol-approved staged tree: 60121e1316cde582fc61f44239e87dc3a17b76e8\n- Sol session: 019f54fb-63e6-7ea2-937a-45f72809a318\n- Semantic commit: a97724f4c0c35ce575ba37aed21a0e7bf5adfcb1\n- Closure commit: b70506b6ef49ec5e5a66c8f0d7e2b40d71e5acd7\n- Frozen Control: 83da59fa78c3eee9e20f515fe75c438bb5166efd\n- Verification: 19 focused tests and 146 full tests passed; compilation, registry, evidence, and diff checks passed."
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "v1.0 master execution tracker",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:19:16Z",
+      "labels": [
+        "enhancement",
+        "ready-for-human"
+      ],
+      "body": "## What to build\n\nExecute the owner-approved v1.0 master plan through the frozen Cascade/Parable protocol: Terra implements bounded packets, deterministic checks run first, and Sol independently reviews the exact staged tree before commits and pushes.\n\nCanonical plan: `docs/plans/V1.0-MASTER-PLAN.md`\nExecution chain: `docs/execution/v1/CHAIN.md`\nTraceability registry: `docs/execution/v1/REQUIREMENTS.json`\nControl commit: `83da59f`\n\n## Acceptance criteria\n\n- [ ] Sol approves and the normative plan tree is cryptographically frozen.\n- [ ] Every child packet has one owner, tests, evidence, issue, Sol verdict, and commits recorded.\n- [ ] Milestones 0\u20137 satisfy their deterministic and measurement gates.\n- [ ] Raw evidence, limitations, attribution, support matrix, tag, and release artifact verify.\n- [ ] Repository visibility remains private unless the owner separately authorizes changing it.\n\n## Blocked by\n\nNone - owner approval has been recorded; Sol plan approval is the first gate.",
+      "comments": [
+        {
+          "created_at": "2026-07-12T18:51:34Z",
+          "body": "Implementation-first v1 work is assembled on `main`, and `0.3.0-rc.1` is approved for a clearly labeled early prerelease.\n\n- Candidate: `a294534` (reviewed implementation commit `c0efe18` plus audit documentation)\n- Local release audit: 327 tests passed\n- Hosted CI: 5/5 macOS/Linux Python 3.11\u20133.14 jobs passed\n- Isolated `npx skills` install/invoke/uninstall lifecycle passed\n- Deterministic `watch.skill`: 81,952 bytes, SHA-256 `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`\n- Independent verdict: `APPROVE_EARLY_PUBLISH`\n- Evidence: `docs/evidence/v1/P32-release/RC-AUDIT.md`\n\nThe repository remains private. No tag or release was created. Stable v1.0 and broad superiority claims remain open until the multi-video Pareto benchmark, human grader validation, and one authorized sealed confirmation run are complete.\n"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "[P00] Freeze the Sol-approved execution plan",
+      "state": "closed",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:19:27Z",
+      "labels": [
+        "documentation",
+        "ready-for-human"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nClose the plan-remediation loop: maintain atomic requirement coverage, machine-readable evidence schemas, deterministic measurement fixtures, complete traceability, and cryptographic integrity from Sol-reviewed tree through mechanical finalization.\n\n## Acceptance criteria\n\n- [ ] GOV-001, GOV-002, and GOV-003 pass their registry gates.\n- [ ] Full tests, compilation, registry validation, evidence-schema validation, and diff checks pass.\n- [ ] Sol returns APPROVE for the exact semantic tree.\n- [ ] The semantic commit tree, master-plan SHA-256, and composite normative manifest are frozen.\n- [ ] The mechanical finalizer changes only whitelisted registry/review/EXIT fields and `--ready` passes.\n\n## Blocked by\n\nNone - can start immediately.",
+      "comments": [
+        {
+          "created_at": "2026-07-12T05:24:25Z",
+          "body": "P00 complete. Sol approved semantic tree `b280c7e82bb045101e44943135f75bb3f546aebd` in session `019f54c5-f5b9-7591-9611-4eb6ad791ade`. Finalizer commit: `15e972ef06b7ca37a531b7de964c772ba97287dd`. Verification: `127 passed`; `python3 tools/validate_v1_execution.py --ready` passes; evidence validator passes."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "[P02] Conform fallback and freeze cheapest-Control routing",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:24Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P02 vertical slice: Conform fallback and freeze cheapest-Control routing. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] CTRL-002: Candidate compatibility fallback conforms behaviorally to frozen Control.\n- [ ] CTRL-003: Cheapest Control mode follows frozen pre-outcome rules.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #1 (P01)"
+    },
+    {
+      "number": 5,
+      "title": "[P03] Freeze measurement evaluator, schemas, jitter, and corpus seal",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:25Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P03 vertical slice: Freeze measurement evaluator, schemas, jitter, and corpus seal. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] MEAS-001: Machine-readable evidence and deterministic evaluation produce every gate.\n- [ ] MEAS-002: Latency/resource gates use frozen repeats and jitter.\n- [ ] MEAS-003: Source families are assigned and sealed before metric-changing work.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #3 (P00)"
+    },
+    {
+      "number": 6,
+      "title": "[P04] Align canonical release integrity and provenance",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:26Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P04 vertical slice: Align canonical release integrity and provenance. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] DIST-001: Canonical docs, metadata, claims, CI, version, and history agree.\n- [ ] ATTR-001: Every shipped mechanism records origin, disposition, license, and credit.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #4 (P02)\n- #5 (P03)"
+    },
+    {
+      "number": 7,
+      "title": "[P05] Build the lean deterministic watch.skill bundle",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:27Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P05 vertical slice: Build the lean deterministic watch.skill bundle. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] DIST-002: Bundle contains only intended runtime files and remains below 250 KB.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #6 (P04)"
+    },
+    {
+      "number": 8,
+      "title": "[P06] Prove the Tier A install lifecycle",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:28Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P06 vertical slice: Prove the Tier A install lifecycle. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] DIST-003: Tier A install, update, invoke, rollback, purge, uninstall, and reinstall pass.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #7 (P05)"
+    },
+    {
+      "number": 9,
+      "title": "[P07] Introduce the Acquisition result and failure contract",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:29Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P07 vertical slice: Introduce the Acquisition result and failure contract. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] ACQ-001: Acquisition exposes the normalized result and failure taxonomy.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #8 (P06)"
+    },
+    {
+      "number": 10,
+      "title": "[P08] Add the bounded YouTube retry ladder",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:30Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P08 vertical slice: Add the bounded YouTube retry ladder. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] ACQ-002: Default acquisition stays first; eligible retries are bounded and itag 18 is last.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #9 (P07)"
+    },
+    {
+      "number": 11,
+      "title": "[P09] Validate and redact browser-cookie acquisition",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:32Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P09 vertical slice: Validate and redact browser-cookie acquisition. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] ACQ-003: Cookie browser/profile use is explicit, validated, and fully redacted.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #9 (P07)"
+    },
+    {
+      "number": 12,
+      "title": "[P10] Expand caption coverage and enforce Fathom deferment",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:33Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P10 vertical slice: Expand caption coverage and enforce Fathom deferment. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] ACQ-004: Caption language/order and JSON3 fallback improve coverage without ordinary regression.\n- [ ] ACQ-005: Fathom remains deferred outside v1.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #9 (P07)"
+    },
+    {
+      "number": 13,
+      "title": "[P11] Introduce the normalized Transcription contract",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:34Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P11 vertical slice: Introduce the normalized Transcription contract. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-001: Every transcript source follows one normalized result/state contract.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #10 (P08)\n- #11 (P09)\n- #12 (P10)"
+    },
+    {
+      "number": 14,
+      "title": "[P12] Use local VTT/SRT sidecars before ASR",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:35Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P12 vertical slice: Use local VTT/SRT sidecars before ASR. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-002: Valid same-basename sidecars precede every ASR call.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #13 (P11)"
+    },
+    {
+      "number": 15,
+      "title": "[P13] Add the loopback OpenAI-compatible transcription Adapter",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:36Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P13 vertical slice: Add the loopback OpenAI-compatible transcription Adapter. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-003: The generic local HTTP Adapter auto-probes loopback only and supports :8082.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #13 (P11)"
+    },
+    {
+      "number": 16,
+      "title": "[P14] Add optional YAP transcription fallback",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:38Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P14 vertical slice: Add optional YAP transcription fallback. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-004: YAP is detected, timestamp-normalized, optional, and never automatically installed.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #13 (P11)"
+    },
+    {
+      "number": 17,
+      "title": "[P15] Unify cloud Whisper Adapters and privacy controls",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:39Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P15 vertical slice: Unify cloud Whisper Adapters and privacy controls. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-005: Cloud ASR is bounded, authorized, redacted, and skipped after earlier success.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #13 (P11)"
+    },
+    {
+      "number": 18,
+      "title": "[P16] Prove cross-host options and diagnostics",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:40Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P16 vertical slice: Prove cross-host options and diagnostics. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STT-006: Slash/config/internal options and diagnostics behave consistently across hosts.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #14 (P12)\n- #15 (P13)\n- #16 (P14)\n- #17 (P15)"
+    },
+    {
+      "number": 19,
+      "title": "[P17] Transcribe only requested audio ranges",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:41Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P17 vertical slice: Transcribe only requested audio ranges. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STATE-001: Focused transcription limits processed audio and restores absolute timestamps.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #18 (P16)"
+    },
+    {
+      "number": 20,
+      "title": "[P18] Add silence-aware chunks and resumable receipts",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:42Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P18 vertical slice: Add silence-aware chunks and resumable receipts. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STATE-002: Chunk boundaries, receipts, and bounded retries avoid successful reprocessing.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #19 (P17)"
+    },
+    {
+      "number": 21,
+      "title": "[P19] Add private, bounded, verifiable Evidence state",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:43Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P19 vertical slice: Add private, bounded, verifiable Evidence state. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STATE-003: Evidence state is atomic, bounded, private, concurrent-safe, and purgeable.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #20 (P18)"
+    },
+    {
+      "number": 22,
+      "title": "[P20] Export, verify, and replay portable Evidence bundles",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:44Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P20 vertical slice: Export, verify, and replay portable Evidence bundles. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] STATE-004: Portable bundles are relative, checksummed, secret-safe, and deterministic.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #21 (P19)"
+    },
+    {
+      "number": 23,
+      "title": "[P21] Transport Question and Evidence budget without ambiguity",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:45Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P21 vertical slice: Transport Question and Evidence budget without ambiguity. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] EVID-001: Question and Evidence budget reach the compiler without quoting loss and retain fallback.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #22 (P20)"
+    },
+    {
+      "number": 24,
+      "title": "[P21A] Add bounded progressive sufficiency expansion",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:46Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P21A vertical slice: Add bounded progressive sufficiency expansion. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] EVID-004: Failed sufficiency expands only affected Evidence spans under a hard bound.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #23 (P21)"
+    },
+    {
+      "number": 25,
+      "title": "[P21B] Preserve Scout reuse and reader-level evidence behavior",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:47Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P21B vertical slice: Preserve Scout reuse and reader-level evidence behavior. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] EVID-005: Frame/table mining remains timestamp-grounded.\n- [ ] EVID-006: Conflicting claims are reconciled with primary evidence and both timestamps.\n- [ ] STATE-005: Follow-up Questions reuse only a verified Scout index.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #24 (P21A)"
+    },
+    {
+      "number": 26,
+      "title": "[P22] Add lexical retrieval with exactness guards",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:49Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P22 vertical slice: Add lexical retrieval with exactness guards. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] EVID-002: Lexical retrieval preserves exact names, numbers, timestamps, and negation.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #25 (P21B)"
+    },
+    {
+      "number": 27,
+      "title": "[P23] Preserve coverage and temporal obligations",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:50Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P23 vertical slice: Preserve coverage and temporal obligations. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] EVID-003: Coverage and before/after Evidence obligations remain complete.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #26 (P22)"
+    },
+    {
+      "number": 28,
+      "title": "[P24] Build semantic fixtures and the uncertainty trigger",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:51Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P24 vertical slice: Build semantic fixtures and the uncertainty trigger. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] SEM-001: Frozen fixtures and a trigger limit semantic work to measured leverage.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #27 (P23)"
+    },
+    {
+      "number": 29,
+      "title": "[P25] Evaluate an isolated local semantic Adapter",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:52Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P25 vertical slice: Evaluate an isolated local semantic Adapter. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] SEM-002: The local semantic Adapter remains optional, isolated, private, and fail-open.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #28 (P24)"
+    },
+    {
+      "number": 30,
+      "title": "[P26] Evaluate an explicit remote semantic Adapter",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:53Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P26 vertical slice: Evaluate an explicit remote semantic Adapter. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] SEM-003: The remote Adapter is explicit and accounts every transmission and cost.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #28 (P24)"
+    },
+    {
+      "number": 31,
+      "title": "[P27] Ablate rank fusion and OCR frame-text retrieval",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:54Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P27 vertical slice: Ablate rank fusion and OCR frame-text retrieval. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] SEM-004: Fusion terms and OCR survive only on the total-system Pareto frontier.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #29 (P25)\n- #30 (P26)"
+    },
+    {
+      "number": 32,
+      "title": "[P28] Improve dependency-free vision selection",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:55Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P28 vertical slice: Improve dependency-free vision selection. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] VIS-001: The FFmpeg/stdlib vision harness covers required event classes.\n- [ ] VIS-002: Vision policies promote only with measured gain and no blocked regression.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #27 (P23)"
+    },
+    {
+      "number": 33,
+      "title": "[P29] Verify the original seal and authorize reserve opening",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:56Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P29 vertical slice: after P30 validates the grader and freezes the Candidate and analysis plan, verify the unchanged pre-development seal and authorize exactly one reserve opening. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] REL-004: The pre-development confirmatory seal verifies after grader validation and Candidate freeze, before one authorized opening.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #5 (P03)\n- #34 (P30)"
+    },
+    {
+      "number": 34,
+      "title": "[P30] Validate grader and freeze the Candidate",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:57Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P30 vertical slice: validate the semantic grader against dual humans, then freeze the Candidate, analysis plan, prompts, epochs, exclusions, supported classes/environments, and sample size before any confirmatory opening. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] REL-001: The grader is validated against dual human judgment before release use.\n- [ ] Candidate and analysis-plan identifiers are frozen before P29 may authorize reserve opening.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #31 (P27)\n- #32 (P28)"
+    },
+    {
+      "number": 35,
+      "title": "[P31] Run the frozen confirmatory evaluation once",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:20:58Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P31 vertical slice: only after P29 verifies the seal and records the authorized opening, run the frozen confirmatory evaluation exactly once. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] REL-002: One frozen Candidate receives exactly one valid sealed confirmation after the authorized opening.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #33 (P29)"
+    },
+    {
+      "number": 36,
+      "title": "[P32] Assemble and audit the v1.0 release",
+      "state": "open",
+      "is_pr": false,
+      "created_at": "2026-07-12T02:21:00Z",
+      "labels": [
+        "enhancement",
+        "ready-for-agent"
+      ],
+      "body": "## Parent\n\n#2\n\n## What to build\n\nDeliver the complete P32 vertical slice: Assemble and audit the v1.0 release. Follow the frozen v1 execution protocol; Terra implements only the bounded packet, deterministic checks run first, and Sol independently reviews the exact staged tree.\n\n## Acceptance criteria\n\n- [ ] REL-003: Artifact, lifecycle, limitations, raw evidence, tag, and rollback all verify.\n- [ ] Focused tests, full tests, compilation, packet evidence, and changed-path checks pass.\n- [ ] Sol has no unresolved P0/P1 finding and the reviewed tree is the committed tree.\n\n## Blocked by\n\n- #8 (P06)\n- #35 (P31)",
+      "comments": [
+        {
+          "created_at": "2026-07-12T18:51:34Z",
+          "body": "Implementation-first v1 work is assembled on `main`, and `0.3.0-rc.1` is approved for a clearly labeled early prerelease.\n\n- Candidate: `a294534` (reviewed implementation commit `c0efe18` plus audit documentation)\n- Local release audit: 327 tests passed\n- Hosted CI: 5/5 macOS/Linux Python 3.11\u20133.14 jobs passed\n- Isolated `npx skills` install/invoke/uninstall lifecycle passed\n- Deterministic `watch.skill`: 81,952 bytes, SHA-256 `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`\n- Independent verdict: `APPROVE_EARLY_PUBLISH`\n- Evidence: `docs/evidence/v1/P32-release/RC-AUDIT.md`\n\nThe repository remains private. No tag or release was created. Stable v1.0 and broad superiority claims remain open until the multi-video Pareto benchmark, human grader validation, and one authorized sealed confirmation run are complete.\n"
+        }
+      ]
+    }
+  ]
+}
