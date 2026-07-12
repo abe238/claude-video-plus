@@ -45,6 +45,7 @@ def test_ci_and_release_workflows_cover_push_and_artifact():
     assert "python -m pytest -q" in tests
     assert "build-skill.sh" in release
     assert "watch.skill" in release
+    assert 'test "${GITHUB_REF_NAME}" = "v${VERSION}"' in release
     assert "prerelease: ${{ contains(github.ref_name, '-') }}" in release
 
 
