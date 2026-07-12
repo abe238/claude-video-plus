@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "github_repo": "abe238/claude-video-plus",
-  "status": "remediating_sol_plan_review",
+  "status": "sol_approved",
   "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
   "candidate_base_commit": "75f318980f84f287611abe7ed034421fb8d44b95",
   "plan_path": "docs/plans/V1.0-MASTER-PLAN.md",
-  "plan_commit": null,
-  "plan_sha256": null,
-  "approved_tree": null,
-  "normative_manifest_sha256": null,
+  "plan_commit": "edc2ce6696a88501f19060cc2000ed4f513c6133",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
+  "approved_tree": "b280c7e82bb045101e44943135f75bb3f546aebd",
+  "normative_manifest_sha256": "148ac5bd32224c9a783e60cd1a77a4966ae7c780f0e7a0346b62054bd97a6115",
   "sol_plan_review": {
     "model": "gpt-5.6-sol",
-    "session": null,
-    "verdict": "CHANGES_REQUIRED",
+    "session": "019f54c5-f5b9-7591-9611-4eb6ad791ade",
+    "verdict": "APPROVE",
     "path": "docs/evidence/v1/L0-plan-review/SOL-REVIEW.md",
-    "blocking": ["SOL-001", "SOL-002", "SOL-003", "SOL-004", "SOL-012"],
-    "required": ["SOL-005", "SOL-006", "SOL-007", "SOL-008", "SOL-009", "SOL-010", "SOL-011", "SOL-013"]
+    "blocking": [],
+    "required": []
   },
   "requirements": [
-    {"id":"GOV-001","expected":"Owner approval and Sol-approved plan hash are frozen before feature work.","failure":"Plan approval, commit, hash, or Sol verdict is missing or drifts.","gate":"registry --ready validation","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-001","disposition":"ship","status":"in_progress"},
-    {"id":"GOV-002","expected":"Every normative requirement has one owner packet and evidence mapping.","failure":"Unknown, duplicate, unowned, or silently excluded requirement.","gate":"registry validation","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-002","disposition":"ship","status":"in_progress"},
-    {"id":"GOV-003","expected":"Exact reviewed tree is pushed; only deterministic identifiers finalize closure.","failure":"Unresolved P0/P1 or semantic post-review change.","gate":"reviewed-tree integrity check","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-003","disposition":"ship","status":"in_progress"},
+    {"id":"GOV-001","expected":"Owner approval and Sol-approved plan hash are frozen before feature work.","failure":"Plan approval, commit, hash, or Sol verdict is missing or drifts.","gate":"registry --ready validation","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-001","disposition":"ship","status":"complete"},
+    {"id":"GOV-002","expected":"Every normative requirement has one owner packet and evidence mapping.","failure":"Unknown, duplicate, unowned, or silently excluded requirement.","gate":"registry validation","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-002","disposition":"ship","status":"complete"},
+    {"id":"GOV-003","expected":"Exact reviewed tree is pushed; only deterministic identifiers finalize closure.","failure":"Unresolved P0/P1 or semantic post-review change.","gate":"reviewed-tree integrity check","packet":"P00","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#GOV-003","disposition":"ship","status":"complete"},
     {"id":"CTRL-001","expected":"Untouched upstream 83da59f runs as the experimental Control.","failure":"Dirty checkout or unpinned command/environment.","gate":"control harness integrity","packet":"P01","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#CTRL-001","disposition":"ship","status":"planned"},
     {"id":"CTRL-002","expected":"Candidate compatibility fallback conforms behaviorally to frozen Control.","failure":"Unexplained output, failure, network, frame, transcript, or latency difference.","gate":"fallback conformance suite","packet":"P02","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#CTRL-002","disposition":"ship","status":"planned"},
     {"id":"CTRL-003","expected":"Cheapest Control mode is selected by frozen pre-outcome rules.","failure":"Gold data or observed outcomes influence routing.","gate":"routing table fixtures","packet":"P02","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#CTRL-003","disposition":"ship","status":"planned"},
@@ -65,7 +65,7 @@
     {"id":"ATTR-001","expected":"Every shipped mechanism records origin, disposition, license, and public credit.","failure":"Missing user/repo attribution or copied code without revision/license record.","gate":"provenance and public-link tests","packet":"P04","source":"docs/execution/v1/REQUIREMENT-CATALOG.md#ATTR-001","disposition":"ship","status":"planned"}
   ],
   "packets": [
-    {"id":"P00","loop":"L0","title":"Plan remediation, traceability, and freeze","depends_on":[],"issue":3,"tests":["tests/test_execution_registry.py","tests/test_v1_evaluator.py","tests/test_v1_evidence_schema.py"],"evidence":"docs/evidence/v1/L0-plan-review","sol_verdict":null,"commits":[],"disposition":"ship","state":"in_progress"},
+    {"id":"P00","loop":"L0","title":"Plan remediation, traceability, and freeze","depends_on":[],"issue":3,"tests":["tests/test_execution_registry.py","tests/test_v1_evaluator.py","tests/test_v1_evidence_schema.py"],"evidence":"docs/evidence/v1/L0-plan-review","sol_verdict":"APPROVE","commits":["edc2ce6696a88501f19060cc2000ed4f513c6133"],"disposition":"ship","state":"complete"},
     {"id":"P01","loop":"L0","title":"Frozen Control harness","depends_on":["P00"],"issue":1,"tests":["tests/test_control_harness.py"],"evidence":"docs/evidence/v1/P01-control","sol_verdict":null,"commits":[],"disposition":"ship","state":"planned"},
     {"id":"P02","loop":"L0","title":"Fallback conformance and cheapest-control routing","depends_on":["P01"],"issue":4,"tests":["tests/test_control_conformance.py"],"evidence":"docs/evidence/v1/P02-conformance","sol_verdict":null,"commits":[],"disposition":"ship","state":"planned"},
     {"id":"P03","loop":"L0","title":"Measurement evaluator, schemas, jitter, and corpus seal","depends_on":["P00"],"issue":5,"tests":["tests/test_v1_evaluator.py","tests/test_v1_evidence_schema.py","tests/test_corpus_registry.py"],"evidence":"docs/evidence/v1/P03-measurement","sol_verdict":null,"commits":[],"disposition":"ship","state":"planned"},
