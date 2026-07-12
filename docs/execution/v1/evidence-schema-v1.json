@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "statuses": ["provisional", "complete", "failed", "partial", "invalid"],
+  "environment_ids": [
+    "macos-arm64-python-3.11", "macos-arm64-python-3.12", "macos-arm64-python-3.14",
+    "macos-arm64-python-3.14.4-local",
+    "ubuntu-x86_64-python-3.11", "ubuntu-x86_64-python-3.12",
+    "claude-ai-bundled-python",
+    "windows-x86_64-python-3.11", "windows-x86_64-python-3.12"
+  ],
+  "canonical_raw_artifacts": {
+    "cases.jsonl": "case",
+    "runs.jsonl": "run",
+    "judgments.jsonl": "judgment",
+    "retrieval.jsonl": "retrieval",
+    "usage.jsonl": "usage",
+    "resources.jsonl": "resource",
+    "failures.jsonl": "failure",
+    "asr.jsonl": "asr",
+    "install-results.jsonl": "install_result",
+    "privacy-scan.jsonl": "privacy_scan",
+    "provenance.jsonl": "provenance"
+  },
+  "failure_classes": ["sabr_client", "http_403", "http_429", "network_timeout", "format_unavailable", "invalid_source", "login_required", "region_locked", "private_or_deleted", "unsupported_source", "cookie_validation", "integrity_refusal", "adapter_unavailable", "incomplete_output", "runtime_error"],
+  "common_required": ["schema_version", "artifact_type", "created_at_utc", "packet_id", "requirement_ids", "control_commit", "candidate_commit", "candidate_config_hash", "plan_sha256", "environment_id", "tool_versions", "command_or_protocol", "status"],
+  "common_fields": {
+    "schema_version": {"types": ["integer"], "example": 1},
+    "artifact_type": {"types": ["string"], "example": "case"},
+    "created_at_utc": {"types": ["string"], "pattern": "utc_timestamp", "example": "2026-07-12T00:00:00Z"},
+    "packet_id": {"types": ["string"], "pattern": "packet_id", "example": "P03"},
+    "requirement_ids": {"types": ["array"], "items": "string", "min_items": 1, "example": ["MEAS-001"]},
+    "control_commit": {"types": ["string", "null"], "pattern": "sha40", "example": "83da59fa78c3eee9e20f515fe75c438bb5166efd"},
+    "candidate_commit": {"types": ["string", "null"], "pattern": "sha40", "example": "75f318980f84f287611abe7ed034421fb8d44b95"},
+    "candidate_config_hash": {"types": ["string", "null"], "pattern": "sha64", "example": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "plan_sha256": {"types": ["string", "null"], "pattern": "sha64", "example": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    "environment_id": {"types": ["string"], "enum_from": "environment_ids", "example": "macos-arm64-python-3.14"},
+    "tool_versions": {"types": ["object"], "example": {"python": "3.14.4"}},
+    "command_or_protocol": {"types": ["string"], "example": "frozen protocol v1"},
+    "status": {"types": ["string"], "enum_from": "statuses", "example": "complete"}
+  },
+  "artifacts": {
+    "baseline": {"required": ["results"], "fields": {"results": {"types": ["object"], "example": {"pytest": {"exit": 0}}}}},
+    "case": {"required": ["case_id", "source_family_id", "split", "question_class", "source_metadata_hash", "explicit_flags", "obligations", "gold_evidence", "gold_unavailable_reason"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "source_family_id": {"types": ["string"], "example": "family-001"}, "split": {"types": ["string"], "enum": ["tier1", "development", "confirmatory", "external"], "example": "development"}, "question_class": {"types": ["string"], "example": "targeted"}, "source_metadata_hash": {"types": ["string"], "pattern": "sha64", "example": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}, "explicit_flags": {"types": ["object"], "example": {}}, "obligations": {"types": ["array"], "min_items": 1, "example": ["answer"]}, "gold_evidence": {"types": ["array", "null"], "example": []}, "gold_unavailable_reason": {"types": ["string", "null"], "example": null}
+    }},
+    "run": {"required": ["case_id", "arm", "attempt", "order", "configuration", "started_at_utc", "ended_at_utc", "result_state", "failure_class", "raw_manifest_path"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "control"}, "attempt": {"types": ["integer"], "example": 1}, "order": {"types": ["integer"], "example": 1}, "configuration": {"types": ["object"], "example": {}}, "started_at_utc": {"types": ["string"], "pattern": "utc_timestamp", "example": "2026-07-12T00:00:00Z"}, "ended_at_utc": {"types": ["string"], "pattern": "utc_timestamp", "example": "2026-07-12T00:00:01Z"}, "result_state": {"types": ["string"], "enum": ["success", "degraded", "partial", "unavailable", "fatal"], "example": "success"}, "failure_class": {"types": ["string", "null"], "enum_from": "failure_classes", "example": null}, "raw_manifest_path": {"types": ["string"], "example": "manifests/case-001.json"}
+    }},
+    "judgment": {"required": ["case_id", "arm", "arm_blinded", "judge_epoch", "scores", "citations_checked", "refused", "position_order"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "control"}, "arm_blinded": {"types": ["string"], "example": "A"}, "judge_epoch": {"types": ["string"], "example": "judge-v1"}, "scores": {"types": ["object"], "example": {"correctness": 8, "completeness": 8, "citation": 8, "adherence": 8}}, "citations_checked": {"types": ["integer"], "unit": "count", "example": 3}, "refused": {"types": ["boolean"], "example": false}, "position_order": {"types": ["integer"], "example": 1}
+    }},
+    "retrieval": {"required": ["case_id", "arm", "selected_evidence", "gold_matches", "temporal_iou", "before_after_match"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "candidate"}, "selected_evidence": {"types": ["array"], "example": []}, "gold_matches": {"types": ["array"], "example": []}, "temporal_iou": {"types": ["number"], "unit": "ratio_0_1", "example": 0.5}, "before_after_match": {"types": ["boolean"], "example": true}
+    }},
+    "usage": {"required": ["case_id", "arm", "reader_text_tokens", "reader_image_tokens", "all_model_input_tokens", "all_model_output_tokens", "calls", "dollars", "measurement_kind", "measurement_source"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "candidate"}, "reader_text_tokens": {"types": ["integer"], "unit": "tokens", "example": 100}, "reader_image_tokens": {"types": ["integer"], "unit": "tokens", "example": 200}, "all_model_input_tokens": {"types": ["integer"], "unit": "tokens", "example": 300}, "all_model_output_tokens": {"types": ["integer"], "unit": "tokens", "example": 50}, "calls": {"types": ["integer"], "unit": "count", "example": 1}, "dollars": {"types": ["number"], "unit": "usd", "example": 0.01}, "measurement_kind": {"types": ["string"], "enum": ["reported", "estimated"], "example": "reported"}, "measurement_source": {"types": ["string"], "example": "provider:openai"}
+    }},
+    "resource": {"required": ["case_id", "arm", "state", "wall_ms", "cpu_ms", "peak_rss_bytes", "disk_bytes", "network_bytes", "process_calls", "initialization_ms"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate", "noop"], "example": "candidate"}, "state": {"types": ["string"], "enum": ["cold", "warm"], "example": "warm"}, "wall_ms": {"types": ["number"], "unit": "milliseconds", "example": 100.0}, "cpu_ms": {"types": ["number"], "unit": "milliseconds", "example": 80.0}, "peak_rss_bytes": {"types": ["integer"], "unit": "bytes", "example": 1000}, "disk_bytes": {"types": ["integer"], "unit": "bytes", "example": 1000}, "network_bytes": {"types": ["integer"], "unit": "bytes", "example": 1000}, "process_calls": {"types": ["integer"], "unit": "count", "example": 2}, "initialization_ms": {"types": ["number"], "unit": "milliseconds", "example": 0.0}
+    }},
+    "asr": {"required": ["case_id", "arm", "language", "comparator", "comparator_available", "substitutions", "deletions", "insertions", "reference_words", "boundary_errors_seconds"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "control"}, "language": {"types": ["string"], "example": "en"}, "comparator": {"types": ["string"], "example": "shipped-groq"}, "comparator_available": {"types": ["boolean"], "example": true}, "substitutions": {"types": ["integer"], "example": 1}, "deletions": {"types": ["integer"], "example": 0}, "insertions": {"types": ["integer"], "example": 0}, "reference_words": {"types": ["integer"], "example": 100}, "boundary_errors_seconds": {"types": ["array"], "items": "number", "min_items": 20, "example": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+    }},
+    "failure": {"required": ["case_id", "arm", "stage", "adapter", "normalized_failure", "retry_eligible", "fallback", "warning", "final_state"], "fields": {
+      "case_id": {"types": ["string"], "example": "case-001"}, "arm": {"types": ["string"], "enum": ["control", "candidate"], "example": "candidate"}, "stage": {"types": ["string"], "example": "acquisition"}, "adapter": {"types": ["string", "null"], "example": null}, "normalized_failure": {"types": ["string"], "enum_from": "failure_classes", "example": "http_403"}, "retry_eligible": {"types": ["boolean"], "example": true}, "fallback": {"types": ["string", "null"], "example": "mweb"}, "warning": {"types": ["string", "null"], "example": null}, "final_state": {"types": ["string"], "enum": ["success", "degraded", "partial", "unavailable", "fatal"], "example": "degraded"}
+    }},
+    "install_result": {"required": ["surface", "operation", "clean_state", "exit_code", "duration_ms", "artifact_sha256", "artifact_bytes", "cleanup_state"], "fields": {
+      "surface": {"types": ["string"], "example": "agent-skills-project"}, "operation": {"types": ["string"], "enum": ["install", "update", "invoke", "rollback", "purge", "uninstall", "reinstall"], "example": "install"}, "clean_state": {"types": ["object"], "example": {}}, "exit_code": {"types": ["integer"], "example": 0}, "duration_ms": {"types": ["number"], "unit": "milliseconds", "example": 100.0}, "artifact_sha256": {"types": ["string"], "pattern": "sha64", "example": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}, "artifact_bytes": {"types": ["integer"], "unit": "bytes", "example": 45144}, "cleanup_state": {"types": ["object"], "example": {}}
+    }},
+    "privacy_scan": {"required": ["secret_class", "artifact_path", "expected_disposition", "observed_matches", "pass"], "fields": {
+      "secret_class": {"types": ["string"], "example": "authorization_header"}, "artifact_path": {"types": ["string"], "example": "manifest.json"}, "expected_disposition": {"types": ["string"], "example": "absent"}, "observed_matches": {"types": ["integer"], "unit": "count", "example": 0}, "pass": {"types": ["boolean"], "example": true}
+    }},
+    "provenance": {"required": ["mechanism", "disposition", "origin_user_repo", "origin_revision", "use_kind", "license", "credit_locations"], "fields": {
+      "mechanism": {"types": ["string"], "example": "sidecar transcripts"}, "disposition": {"types": ["string"], "enum": ["ship", "evaluate-only", "defer", "exclude"], "example": "ship"}, "origin_user_repo": {"types": ["string"], "example": "Tigertycoon/claude-video"}, "origin_revision": {"types": ["string", "null"], "example": null}, "use_kind": {"types": ["string"], "enum": ["inspiration", "adaptation", "code"], "example": "inspiration"}, "license": {"types": ["string"], "example": "MIT"}, "credit_locations": {"types": ["array"], "example": ["README.md"]}
+    }},
+    "gate_result": {"required": ["evaluator_version", "gate_scope", "asr_applicable", "evaluation_split", "bootstrap_seed", "minimum_confirmatory_families", "minimum_confirmatory_families_by_class", "margins", "denominators", "aggregates", "gates", "pareto_promote", "raw_inputs", "raw_input_checksums", "required_classes", "covered_classes", "required_environments", "covered_environments"], "fields": {
+      "evaluator_version": {"types": ["string"], "enum": ["v1"], "example": "v1"}, "gate_scope": {"types": ["string"], "enum": ["measurement", "release"], "example": "measurement"}, "asr_applicable": {"types": ["boolean"], "example": false}, "evaluation_split": {"types": ["string"], "enum": ["development", "confirmatory"], "example": "development"}, "bootstrap_seed": {"types": ["integer"], "example": 17}, "minimum_confirmatory_families": {"types": ["integer"], "example": 5}, "minimum_confirmatory_families_by_class": {"types": ["object"], "example": {"targeted": 3}}, "margins": {"types": ["object"], "example": {}}, "denominators": {"types": ["object"], "example": {"cases": 1, "families": 1}}, "aggregates": {"types": ["object"], "example": {}}, "gates": {"types": ["object"], "example": {"release": false}}, "pareto_promote": {"types": ["boolean"], "example": false}, "raw_inputs": {"types": ["array"], "min_items": 1, "example": ["cases.jsonl"]}, "raw_input_checksums": {"types": ["object"], "example": {"cases.jsonl": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}}, "required_classes": {"types": ["array"], "items": "string", "min_items": 1, "example": ["targeted"]}, "covered_classes": {"types": ["array"], "items": "string", "min_items": 1, "example": ["targeted"]}, "required_environments": {"types": ["array"], "items": "string", "min_items": 1, "example": ["macos-arm64-python-3.14"]}, "covered_environments": {"types": ["array"], "items": "string", "min_items": 1, "example": ["macos-arm64-python-3.14"]}
+    }},
+    "verify": {"required": ["checks", "reviewed_tree", "artifact_checksums"], "fields": {
+      "checks": {"types": ["array"], "min_items": 1, "example": [{"command": "pytest", "exit": 0}]}, "reviewed_tree": {"types": ["string"], "pattern": "sha40", "example": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}, "artifact_checksums": {"types": ["object"], "example": {}}
+    }}
+  }
+}

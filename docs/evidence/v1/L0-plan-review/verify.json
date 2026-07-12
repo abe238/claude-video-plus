@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "artifact_type": "verify",
+  "created_at_utc": "2026-07-12T02:50:00Z",
+  "packet_id": "P00",
+  "requirement_ids": ["GOV-001", "GOV-002", "GOV-003"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": null,
+  "candidate_config_hash": null,
+  "plan_sha256": null,
+  "environment_id": "macos-arm64-python-3.14.4-local",
+  "tool_versions": {"python": "3.14.4", "codex_cli": "0.144.1"},
+  "command_or_protocol": "P00 exact-tree plan verification",
+  "status": "provisional",
+  "checks": [
+    {"command": "python3 -m pytest -q tests/test_execution_registry.py tests/test_v1_evaluator.py tests/test_v1_evidence_schema.py", "exit": 0},
+    {"command": "python3 -m pytest -q", "exit": 0},
+    {"command": "python3 -m compileall -q skills tools tests", "exit": 0},
+    {"command": "python3 tools/validate_v1_execution.py", "exit": 0},
+    {"command": "python3 tools/validate_v1_evidence.py docs/evidence/v1/L0-plan-review/baseline.json", "exit": 0},
+    {"command": "git diff --check", "exit": 0}
+  ],
+  "reviewed_tree": "0000000000000000000000000000000000000000",
+  "artifact_checksums": {
+    "baseline.json": "603513c085a1fe0a2ea6293f51f6bd4d7deb46b3189f158f2d6ed35a2d8049b1",
+    "SOL-REVIEW.md": "41bc04071e5eb09578b48ce0c7805e5d77b3011998dcba0aec9f1f903fb7ea33",
+    "EXIT.md": "201e8c849a3c057e733430a60a954b1af6317a61613a8baa1b56f595eb2ebe9f"
+  }
+}
