@@ -40,7 +40,7 @@ def _manifest(tmp_path: Path, registry: dict, source: Path, config: Path) -> dic
     return {"schema_version": 1, "actor_id": "dev-executor", "registry_seal_sha256": registry["seal_sha256"],
             "candidate_commit": "a" * 40, "candidate_config_path": str(config), "candidate_config_sha256": _sha(config),
             "environment": {"environment_id": "macos-arm64-python-3.14", "tools": {"python": "/fake/python", "ffmpeg": "/fake/ffmpeg", "ffprobe": "/fake/ffprobe", "yt_dlp": "/fake/yt-dlp"}, "locale": "C", "network_policy": "offline", "timeout_seconds": 3, "retry_policy": {"harness_attempts": 1}},
-            "cases": [{"identity_id": "dev-source", "source": str(source), "question": "What synthetic event happens?", "question_class": "targeted", "frozen_flags": {"detail": "balanced", "max_frames": None, "resolution": 320, "fps": None, "timestamps": None, "start": None, "end": None, "no_whisper": True, "whisper": None, "no_dedup": False}, "obligations": ["synthetic event"], "gold_evidence": None, "gold_unavailable_reason": "awaiting independent annotation", "reader": {"model_epoch": "reader", "prompt_sha256": "c" * 64}}]}
+            "cases": [{"identity_id": "dev-source", "source": str(source), "caption_sha256": None, "question": "What synthetic event happens?", "question_class": "targeted", "frozen_flags": {"detail": "balanced", "max_frames": None, "resolution": 320, "fps": None, "timestamps": None, "start": None, "end": None, "no_whisper": True, "whisper": None, "no_dedup": False}, "obligations": ["synthetic event"], "gold_evidence": None, "gold_unavailable_reason": "awaiting independent annotation", "reader": {"model_epoch": "reader", "prompt_sha256": "c" * 64}}]}
 
 
 def test_runner_emits_locator_free_case_and_run_observations(tmp_path: Path, monkeypatch):
@@ -105,5 +105,6 @@ def test_runner_accepts_a_hashed_public_url_only_with_network_enabled(tmp_path: 
     manifest = _manifest(tmp_path, registry, source, config)
     manifest["environment"]["network_policy"] = "enabled"
     manifest["cases"][0]["source"] = url
+    manifest["cases"][0]["caption_sha256"] = "9" * 64
     runner._validate_manifest(manifest, registry, repo=tmp_path)
     assert runner._source_kind_and_hash(url)[0] == "url"

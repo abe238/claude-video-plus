@@ -22,6 +22,7 @@
     {
       "identity_id": "dev-source-placeholder-001",
       "source": "/private/tmp/FAKE-development-media.mp4",
+      "caption_sha256": null,
       "question": "FAKE fixed development question",
       "question_class": "targeted",
       "frozen_flags": {"detail": "balanced", "max_frames": null, "resolution": 512, "fps": null, "timestamps": null, "start": null, "end": null, "no_whisper": true, "whisper": null, "no_dedup": false},

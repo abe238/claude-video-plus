@@ -115,7 +115,7 @@ def _validate_manifest(manifest: dict[str, Any], registry: dict[str, Any], *, re
         raise DevelopmentRunnerRefusal("local manifest requires development cases")
     seen: set[str] = set()
     for item in manifest["cases"]:
-        if not isinstance(item, dict) or set(item) != {"identity_id", "source", "question", "question_class", "frozen_flags", "obligations", "gold_evidence", "gold_unavailable_reason", "reader"}:
+        if not isinstance(item, dict) or set(item) != {"identity_id", "source", "caption_sha256", "question", "question_class", "frozen_flags", "obligations", "gold_evidence", "gold_unavailable_reason", "reader"}:
             raise DevelopmentRunnerRefusal("local manifest case is incomplete")
         identity_id = item["identity_id"]
         if identity_id not in identities:  # includes every confirmatory identity, without exposing one
@@ -135,6 +135,11 @@ def _validate_manifest(manifest: dict[str, Any], registry: dict[str, Any], *, re
         source_kind, source_hash = _source_kind_and_hash(item["source"])
         if source_kind == "url" and environment["network_policy"] != "enabled":
             raise DevelopmentRunnerRefusal("public URL source requires enabled network policy")
+        caption_hash = item["caption_sha256"]
+        if source_kind == "url":
+            _require_sha(caption_hash, "caption_sha256")
+        elif caption_hash is not None:
+            raise DevelopmentRunnerRefusal("local source caption_sha256 must be null")
         if source_hash != identities[identity_id]["identity_sha256"]:
             raise DevelopmentRunnerRefusal("development source identity hash drifted")
     return environment, identities
@@ -147,7 +152,7 @@ def _build_case(item: dict[str, Any], identity: dict[str, Any], environment: dic
     source_kind, _ = _source_kind_and_hash(item["source"])
     return {
         "schema_version": 1, "case_id": _case_id(item["identity_id"], item["question"]), "source": item["source"], "question": item["question"],
-        "source_identity": {"kind": source_kind, "identity_sha256": identity["identity_sha256"], "caption_sha256": None},
+        "source_identity": {"kind": source_kind, "identity_sha256": identity["identity_sha256"], "caption_sha256": item["caption_sha256"]},
         "frozen_flags": item["frozen_flags"],
         "environment": {"tools": tools, "tool_versions": versions, "tool_sha256": hashes, "os": platform.system(),
                         "architecture": platform.machine(), "locale": environment["locale"], "network_policy": environment["network_policy"],
