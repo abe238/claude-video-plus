@@ -130,3 +130,5 @@ def test_sensitive_media_secret_and_private_path_persistence_are_refused(tmp_pat
 
     opted_in = EvidenceState(tmp_path / "sensitive", allow_sensitive=True)
     assert opted_in.put(cache_key, {"text": "private words"}, payload_kind="transcript").stored
+    assert not store.put(cache_key, {"segments": []}, payload_kind="scout").stored
+    assert opted_in.put(cache_key, {"segments": []}, payload_kind="scout").stored

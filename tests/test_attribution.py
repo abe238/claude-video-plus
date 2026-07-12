@@ -43,5 +43,5 @@ def test_every_named_design_source_has_user_and_repo_credit():
 
 def test_provenance_separates_concepts_from_copied_code():
     assert "No source code from the concept-reference forks" in PROVENANCE
-    assert "exact source URL, revision, files, license, modifications, and notices" in PROVENANCE
+    assert "exact source URL, revision, files, license, modifications, and notices" in " ".join(PROVENANCE.split())
     assert "No credit here implies that code was copied" in PAGE

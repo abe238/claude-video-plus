@@ -449,14 +449,16 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
     state = EvidenceState()
     cache_key = CacheKey(source_identity=source_identity, adapter="captions", model="vtt",
                          policy="scout-v1")
-    cached = state.get(cache_key) if os.environ.get("WATCH_STATE", "1") != "0" else None
+    state_enabled = os.environ.get("WATCH_STATE", "0") == "1"
+    cached = state.get(cache_key) if state_enabled else None
     if cached and cached.status == "hit" and isinstance(cached.payload, dict):
         segments = cached.payload.get("segments", [])
         scout_reuse = "verified-hit"
     else:
         segments = dedupe_rolling(parse_vtt(str(vtt_path)))
         scout_reuse = "miss"
-        if segments and os.environ.get("WATCH_STATE", "1") != "0":
+        if segments and state_enabled:
+            state = EvidenceState(allow_sensitive=True)
             state.put(cache_key, {"segments": segments}, payload_kind="scout")
     if not segments:
         raise ValueError(f"no transcript segments parsed from {vtt_path}")

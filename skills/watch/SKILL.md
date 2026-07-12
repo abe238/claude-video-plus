@@ -4,7 +4,7 @@ description: Watch a video (URL or local path). Downloads with yt-dlp, extracts 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "0.3.0"
+  version: "0.3.0-rc.1"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -140,7 +140,7 @@ python3 "${SKILL_DIR}/scripts/watch.py" "<source>"
 
 Optional flags:
 - `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial. `transcript` = no frames (transcript only, skips video download when captions exist); `efficient` = fast keyframes (cap 50); `balanced` = scene-aware frames (cap 100); `token-burner` = scene-aware, uncapped; `evidence` = question-aware retrieval (see below).
-- `--question "…"` — the user's question, verbatim. Required by `--detail evidence`: the script selects whole topical chapters relevant to the question (plus a numeric guard that rescues pricing/benchmark lines from unselected chapters, and frames at chapter starts, "as you can see" cue moments, and numeric-guard spans) instead of sampling the full timeline. Typically 80–90% fewer evidence tokens than `balanced` on targeted questions. Only for **targeted** questions — for summaries/overviews it automatically keeps the full transcript, and on any failure (no captions, local file, compile error) it falls back to `balanced` on its own.
+- `--question "…"` — the user's question, verbatim. Required by `--detail evidence`: the script selects whole topical chapters relevant to the question (plus numeric and visual guards) instead of sampling the full timeline. In the initial one-video, three-question benchmark, targeted questions used 77–79% fewer estimated reader tokens; broader testing is in progress. Summaries keep the full transcript, and failures fall back to `balanced`.
 - `--start T` / `--end T` — focus on a section. Accepts `SS`, `MM:SS`, or `HH:MM:SS`. When either is set, fps auto-scales denser (see "Focusing on a section" below).
 - `--timestamps T1,T2,…` — grab a frame at each of these absolute timestamps (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
 - `--max-frames N` — override the preset cap for tighter token budget (e.g. `--max-frames 40`)
@@ -272,17 +272,18 @@ If you already watched a video this session and the user asks a follow-up, do **
 **What this skill does:**
 - Runs `yt-dlp` locally to download the video and pull native captions when the source supports them (public data; the request goes directly to whatever host the URL points at)
 - Runs `ffmpeg` / `ffprobe` locally to extract frames as JPEGs and, when Whisper is needed, a mono 16 kHz audio clip
-- Sends the extracted audio clip to Groq's Whisper API (`api.groq.com/openai/v1/audio/transcriptions`) when `GROQ_API_KEY` is set (preferred — cheaper, faster)
-- Sends the extracted audio clip to OpenAI's audio transcription API (`api.openai.com/v1/audio/transcriptions`) when `OPENAI_API_KEY` is set and Groq is not, or when `--whisper openai` is forced
+- Optionally passes a validated browser/profile identifier to yt-dlp with `WATCH_COOKIES_BROWSER`; yt-dlp then reads that browser's session cookies locally. This is never automatic.
+- Sends extracted audio to Groq/OpenAI only after `--allow-remote-transcription` or `WATCH_STT_ALLOW_REMOTE=true` explicitly authorizes it.
+- Sends the Question and selected transcript snippets to an explicitly configured HTTPS semantic endpoint only with both `--semantic remote` and `--allow-remote-semantic`.
 - Writes the downloaded video, frames, audio, and an intermediate transcript to a working directory under the system temp dir (or `--out-dir` if specified) so Claude can `Read` them
 - Reads / creates `~/.config/watch/.env` (mode `0600`) to store the Whisper API key(s) and a `SETUP_COMPLETE` marker. As a fallback, also reads `.env` in the current working directory
 
 **What this skill does NOT do:**
 - Does not upload the video itself to any API — only the extracted audio goes out, and only when native captions are missing AND Whisper is not disabled with `--no-whisper`
-- Does not access any platform account (no login, no session cookies, no posting) — yt-dlp only ever requests public data
+- Does not use platform accounts or cookies unless `WATCH_COOKIES_BROWSER` explicitly names a browser/profile; it never posts or modifies an account.
 - Does not share API keys between providers (Groq key only goes to `api.groq.com`, OpenAI key only goes to `api.openai.com`)
 - Does not log, cache, or write API keys to stdout, stderr, or output files
-- Does not persist anything outside the working directory and `~/.config/watch/.env` — clean up the working directory when you're done (Step 5)
+- Does not persist transcript/Scout state by default. `WATCH_STATE=1` explicitly enables an owner-only, bounded derived-evidence cache under `~/.cache/watch`; `lifecycle.py --purge-cache` removes it.
 
 **Bundled scripts:** `scripts/watch.py` (entry point), `scripts/download.py` (yt-dlp wrapper), `scripts/frames.py` (ffmpeg frame extraction), `scripts/transcribe.py` (caption selection + Whisper orchestration), `scripts/whisper.py` (Groq / OpenAI clients), `scripts/setup.py` (preflight + installer)
 

@@ -9,6 +9,7 @@ import zipfile
 import pytest
 
 from portable import BundleRefused, export_bundle, replay_bundle, verify_bundle
+from watch import _portable_evidence_files
 
 
 def metadata():
@@ -132,3 +133,17 @@ def test_verify_refuses_zip_symlink_entries(tmp_path):
         archive.writestr(link, b"target.txt")
     with pytest.raises(BundleRefused, match="symlink"):
         verify_bundle(bundle)
+
+
+def test_watch_sanitizes_machine_paths_before_portable_export(tmp_path):
+    evidence = tmp_path / "evidence"
+    frames = evidence / "frames"
+    frames.mkdir(parents=True)
+    manifest = evidence / "manifest.json"
+    report = evidence / "report.txt"
+    manifest.write_text(json.dumps({"evidence": [{"frame": str(frames / "one.jpg")}]}))
+    report.write_text(f"frame {frames / 'one.jpg'}\n")
+    files = _portable_evidence_files({"manifest": str(manifest), "report": str(report)}, tmp_path)
+    combined = files["manifest.json"].read_text() + files["report.txt"].read_text()
+    assert str(tmp_path) not in combined
+    assert "frames/one.jpg" in combined
