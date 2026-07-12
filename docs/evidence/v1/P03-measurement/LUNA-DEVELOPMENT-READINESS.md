@@ -62,8 +62,10 @@ development corpus output.
    placeholders and have no source locators or media bytes.
 2. No candidate/control development case manifest and fixed end-to-end benchmark command are
    available to bind those sources.
-3. Luna's workspace sandbox could not complete the network-dependent P00/P01 issue checks. This is
-   not a repository blocker: the coordinator reran the validator with GitHub access and it passed.
+3. Luna's workspace sandbox could not complete the network-dependent P00/P01 issue checks. The
+   coordinator reran the validator with GitHub access and it passed. A later release run reproduced
+   the same symptom because that workflow had `contents: write` but lacked `issues: read`; the
+   workflow permission was repaired separately.
 4. Existing P03 evidence output directories are non-empty; clearing or modifying them is outside
    this pass.
 
