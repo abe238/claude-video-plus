@@ -2,7 +2,7 @@ import hashlib
 import zipfile
 from pathlib import Path
 
-from tools.build_skill_bundle import MAX_BYTES, build
+from tools.build_skill_bundle import MAX_BYTES, RUNTIME_SCRIPTS, build
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,3 +30,21 @@ def test_bundle_inventory_matches_runtime_python_sources(tmp_path):
     expected = {"watch/SKILL.md"}
     expected.update(f"watch/scripts/{path.name}" for path in (ROOT / "skills/watch/scripts").glob("*.py"))
     assert set(receipt["files"]) == expected
+
+
+def test_bundle_rejects_unexpected_python_and_oversized_output(tmp_path):
+    skill = tmp_path / "watch"
+    scripts = skill / "scripts"
+    scripts.mkdir(parents=True)
+    (skill / "SKILL.md").write_text("---\nname: watch\ndescription: x\n---\n")
+    for name in RUNTIME_SCRIPTS:
+        (scripts / name).write_text("# runtime\n")
+    (scripts / "build_helper.py").write_text("# dev only\n")
+    with __import__("pytest").raises(ValueError, match="unexpected"):
+        build(skill, tmp_path / "unexpected.skill")
+    (scripts / "build_helper.py").unlink()
+    (scripts / RUNTIME_SCRIPTS[0]).write_bytes(__import__("os").urandom(MAX_BYTES * 2))
+    output = tmp_path / "oversized.skill"
+    with __import__("pytest").raises(ValueError, match="limit"):
+        build(skill, output)
+    assert not output.exists()

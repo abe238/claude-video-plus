@@ -12,14 +12,27 @@ from pathlib import Path
 
 MAX_BYTES = 250 * 1024
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
+RUNTIME_SCRIPTS = (
+    "acquisition.py", "config.py", "download.py", "evidence.py", "frames.py",
+    "lifecycle.py", "portable.py", "question.py", "retrieval.py", "semantic.py",
+    "setup.py", "state.py", "transcribe.py", "transcription.py",
+    "transcription_adapters.py", "transcription_chunks.py", "vision.py", "watch.py",
+    "whisper.py",
+)
 
 
 def runtime_files(skill_dir: Path) -> list[Path]:
     files = [skill_dir / "SKILL.md"]
-    files.extend(sorted((skill_dir / "scripts").glob("*.py")))
+    files.extend(skill_dir / "scripts" / name for name in RUNTIME_SCRIPTS)
     missing = [str(path) for path in files if not path.is_file()]
     if missing:
         raise ValueError(f"missing runtime file(s): {', '.join(missing)}")
+    unexpected = sorted(
+        path.name for path in (skill_dir / "scripts").glob("*.py")
+        if path.name not in RUNTIME_SCRIPTS
+    )
+    if unexpected:
+        raise ValueError(f"unexpected runtime Python file(s): {', '.join(unexpected)}")
     return files
 
 
