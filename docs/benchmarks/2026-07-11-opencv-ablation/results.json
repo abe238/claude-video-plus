@@ -1,0 +1,64 @@
+{
+  "date": "2026-07-11",
+  "decision": "reject_opencv_for_v1",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "python": "3.14.4",
+    "opencv": "4.13.0",
+    "numpy": "2.4.4",
+    "opencv_directory_mb": 119,
+    "numpy_directory_mb": 24,
+    "opencv_headless_wheel_mb": 44,
+    "cold_import_seconds_range": [0.08, 0.09],
+    "baseline_python_rss_mb": 15.5,
+    "opencv_import_rss_mb": 56.8
+  },
+  "real_video_dense_scoring": {
+    "duration_seconds": 2320.277,
+    "sample_rate_fps": 0.5,
+    "frame_budget": 100,
+    "curated_moment_count": 12,
+    "recall_tolerance_seconds": 4,
+    "current_16x16": {
+      "scoring_ms": 63.515,
+      "curated_moment_recall": 6,
+      "near_duplicate_pairs": 0,
+      "selected_frames": 100,
+      "estimated_image_tokens": 19700
+    },
+    "opencv_composite": {
+      "scoring_ms": 304.13,
+      "curated_moment_recall": 5,
+      "near_duplicate_pairs": 1,
+      "selected_frames": 100,
+      "estimated_image_tokens": 19700
+    },
+    "opencv_edge_only": {
+      "scoring_ms": 150.26,
+      "curated_moment_recall": 8,
+      "answer_quality_measured": false
+    }
+  },
+  "synthetic_scoring": {
+    "duration_seconds": 14,
+    "known_events": 6,
+    "frame_budget": 10,
+    "current_16x16": {
+      "median_ms": 3.955,
+      "p95_ms": 4.428,
+      "event_recall": 5
+    },
+    "opencv_composite": {
+      "median_ms": 18.043,
+      "p95_ms": 18.922,
+      "event_recall": 5
+    }
+  },
+  "limitations": [
+    "one real video and one synthetic fixture",
+    "real-video moments are a proxy derived from a previous evidence manifest",
+    "proxy recall and duplicate counts are not answer quality",
+    "development prototype rather than an exhaustively tuned OpenCV system"
+  ]
+}

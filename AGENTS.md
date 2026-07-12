@@ -51,7 +51,7 @@ No lint/type-check config exists (pure-stdlib Python, no pyproject.toml) — pyt
 
 ## Architecture note
 
-`watch.py` is a linear orchestrator today (download → frames → transcript → report), with `SKILL.md` carrying most of the intelligence as agent instructions. `docs/ARCHITECTURE.md` describes an in-progress, benchmark-gated redesign toward a query-aware "Scout → Retrieve → Verify" evidence compiler. Two plan docs cover it: `docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md` (v1 — hypotheses, research foundations, algorithm design) and `docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md` (an adversarial-review revision that supersedes v1's *sequencing, gating, and module scope* — read v2 first for "what order do we build this in," fall back to v1 for anything v2 is silent on). Changes to selection/scoring code must be measured against the frozen control commit `83da59f`, not merged on intuition. `CONTEXT.md` defines the domain vocabulary (**Evidence span**, **Evidence budget**, **Evidence manifest**, etc.) used across those docs — read it before naming new concepts in this area.
+`watch.py` is a linear orchestrator today (download → frames → transcript → report), with `SKILL.md` carrying most of the intelligence as agent instructions. `docs/ARCHITECTURE.md` describes an in-progress, benchmark-gated redesign toward a query-aware "Scout → Retrieve → Verify" evidence compiler. `docs/plans/V1.0-MASTER-PLAN.md` is the canonical execution plan. The two older evidence-backed plans are historical research and adversarial-review records, not implementation instructions. Changes to selection/scoring code must be measured against the frozen control commit `83da59f`, not merged on intuition. `CONTEXT.md` defines the domain vocabulary (**Evidence span**, **Evidence budget**, **Evidence manifest**, etc.) used across those docs — read it before naming new concepts in this area.
 
 ## Rules
 
@@ -60,7 +60,7 @@ No lint/type-check config exists (pure-stdlib Python, no pyproject.toml) — pyt
 - Never commit real API keys or `.env` contents; keys live in `~/.config/watch/.env` (mode `0600`) at runtime.
 - Preserve the easy install surfaces: Claude Code marketplace/plugin, `npx skills add <owner>/<repo> -g`, the release `watch.skill`, and the manual `skills/watch` symlink.
 - Keep `skills/watch/` self-contained. New large runtimes or models must remain optional unless reproducible benchmarks justify making them required.
-- Offer OpenCV as an informed, explicit installer choice. The default path must remain FFmpeg plus standard-library Python, and declining OpenCV must not reduce baseline compatibility.
+- Do not add OpenCV, PySceneDetect, an OpenCV installer choice, or an OpenCV runtime Adapter. The measured ablation in `docs/benchmarks/2026-07-11-opencv-ablation/` rejected that direction; use FFmpeg plus standard-library Python for vision scoring.
 - Measure optimization claims against the untouched upstream control commit `83da59f`; do not claim an improvement from intuition or proxy metrics alone.
 - Owner-directed work may commit directly to `main` for now. Future outside contributions should use a branch and pull request.
 - Preserve prominent, appreciative attribution to Brad Bonanno and `bradautomates/claude-video` in public-facing repository material.

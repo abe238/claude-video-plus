@@ -1,6 +1,6 @@
 # Query-Adaptive Video Evidence Compiler
 
-The detailed, benchmark-first implementation and review plan lives in two documents: [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md) is the source of truth for sequencing, gating, and module scope (it supersedes v1's decisions on those axes after an adversarial review), and [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN.md) remains authoritative for everything v2 is silent on. Treat this document as the concise architecture overview and those plans as the source of truth for control comparisons, research foundations, acceptance gates, sequencing, installation, and public claims.
+The detailed, benchmark-first implementation plan lives in [plans/V1.0-MASTER-PLAN.md](plans/V1.0-MASTER-PLAN.md). Treat this document as the concise architecture overview and the master plan as the source of truth for control comparisons, research foundations, acceptance gates, sequencing, installation, and public claims. The two older evidence-backed plans remain only as historical research and adversarial-review records.
 
 ## Goal
 
@@ -99,11 +99,11 @@ Do not claim "no compromise" until the candidate meets or exceeds upstream accur
 
 ## Implementation order
 
-The sequence is owned by the milestone structure in [plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md):
+The sequence is owned by the milestone structure in [plans/V1.0-MASTER-PLAN.md](plans/V1.0-MASTER-PLAN.md):
 
-1. **Milestone A** — benchmark module, shrink the skill interface, question seam, transcript retrieval.
-2. **Milestone B** — acquisition/transcription/extraction efficiency, minimal evidence store.
-3. **Milestone C** — scout separation, coarse-to-fine selection, adaptive resolution and crops.
-4. **Milestone D** — optional adapters (OCR, embeddings, local ASR), distribution identity, final confirmatory gate.
+1. **Milestone 0** — release integrity and canonical documentation.
+2. **Milestones 1–3** — acquisition, transcription, range-aware processing, and safe reuse.
+3. **Milestones 4–6** — evidence compilation, semantic retrieval, and dependency-free vision selection.
+4. **Milestone 7** — confirmatory evaluation and v1.0 distribution.
 
 Query-adaptive mode becomes the default only after every gate passes.
