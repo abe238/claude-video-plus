@@ -71,7 +71,28 @@ development corpus output.
 
 ## Smallest next action
 
-Provide or register the real development source identities and case manifest (including exact
-Control/Candidate bindings and output locations), then rerun the fixed development-only commands.
-Execution-registry validation is green in the coordinator environment. Until the source manifest
-exists, stop without inventing sources or running a benchmark.
+The development-only conformance preflight is now available. The custodian first copies
+`tools/development-manifest.example.json` to the ignored
+`tools/development-manifest.local.json`, replaces every fake value locally, and then runs:
+
+```bash
+python3 tools/run_development_conformance.py \
+  --control-worktree /absolute/path/to/clean-detached-83da59f \
+  --output-root /absolute/path/outside/this/repository/development-run-001
+```
+
+It refuses non-development identities (without listing reserve IDs), a stale registry seal,
+candidate commit/config drift, source hash drift, missing fixed questions or obligations,
+nonempty output, dirty/mispointed Control, and non-preregistered retry policy. It uses the P01
+Control harness and P02 paired conformance runner, preserves their receipts outside the repository,
+and writes locator-free `cases.jsonl` and `runs.jsonl` observations. Both arms deliberately use
+the Control-compatible configuration, so this is a corpus/acquisition preflight—not the
+evidence-mode performance comparison. It does not create human judgments, retrieval/gold-match
+claims, usage claims, or any LLM output; those and an evidence-mode arm remain explicit inputs
+required before `tools/evaluate_v1.py` can derive a gate result.
+
+The real run remains blocked by the same missing custodian-only development source mapping,
+fixed questions/obligations, frozen candidate config file, clean detached Control worktree, and
+the separate evidence-mode/reader observation step.
+The committed example contains fake paths, hashes, questions, and media only; real locators stay
+in the ignored local manifest and generated receipts must stay outside the repository.

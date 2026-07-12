@@ -14,3 +14,6 @@ htmlcov/
 
 # local Claude Code settings
 .claude/settings.local.json
+
+# Custodian-only development corpus locators/questions; never commit real sources.
+/tools/development-manifest.local.json

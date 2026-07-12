@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "actor_id": "development-executor-placeholder",
+  "registry_seal_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "candidate_commit": "0000000000000000000000000000000000000000",
+  "candidate_config_path": "/private/tmp/FAKE-candidate-config.json",
+  "candidate_config_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "environment": {
+    "environment_id": "macos-arm64-python-3.14",
+    "tools": {
+      "python": "/private/tmp/FAKE-python",
+      "ffmpeg": "/private/tmp/FAKE-ffmpeg",
+      "ffprobe": "/private/tmp/FAKE-ffprobe",
+      "yt_dlp": "/private/tmp/FAKE-yt-dlp"
+    },
+    "locale": "C",
+    "network_policy": "offline",
+    "timeout_seconds": 60,
+    "retry_policy": {"harness_attempts": 1}
+  },
+  "cases": [
+    {
+      "identity_id": "dev-source-placeholder-001",
+      "source": "/private/tmp/FAKE-development-media.mp4",
+      "question": "FAKE fixed development question",
+      "question_class": "targeted",
+      "frozen_flags": {"detail": "balanced", "max_frames": null, "resolution": 512, "fps": null, "timestamps": null, "start": null, "end": null, "no_whisper": true, "whisper": null, "no_dedup": false},
+      "obligations": ["FAKE obligation"],
+      "gold_evidence": null,
+      "gold_unavailable_reason": "FAKE: awaiting independent annotation",
+      "reader": {"model_epoch": "reader-epoch-unconfigured", "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000"}
+    }
+  ]
+}
