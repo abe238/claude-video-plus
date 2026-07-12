@@ -46,6 +46,7 @@ def test_ci_and_release_workflows_cover_push_and_artifact():
     assert "build-skill.sh" in release
     assert "watch.skill" in release
     assert re.search(r"(?m)^\s*issues:\s*read\s*$", release)
+    assert re.search(r"(?m)^\s*GH_TOKEN:\s*\$\{\{ github\.token \}\}\s*$", release)
     assert 'test "${GITHUB_REF_NAME}" = "v${VERSION}"' in release
     assert "prerelease: ${{ contains(github.ref_name, '-') }}" in release
 
