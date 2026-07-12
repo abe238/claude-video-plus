@@ -112,18 +112,36 @@ def load_api_key(preferred: str | None = None) -> tuple[str, str] | tuple[None, 
     return None, None
 
 
-def extract_audio(video_path: str, out_path: Path) -> Path:
-    """Extract mono 16kHz 64kbps mp3 — ~480 kB/min, fits any Whisper limit."""
+def extract_audio(
+    video_path: str,
+    out_path: Path,
+    *,
+    start_seconds: float | None = None,
+    end_seconds: float | None = None,
+) -> Path:
+    """Extract mono audio, limiting work to an optional requested source range."""
     if shutil.which("ffmpeg") is None:
         raise SystemExit("ffmpeg is not installed. Install with: brew install ffmpeg")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    start = float(start_seconds or 0.0)
+    if start < 0:
+        raise SystemExit("transcription range start must be non-negative")
+    if end_seconds is not None and float(end_seconds) <= start:
+        raise SystemExit("transcription range end must be greater than range start")
+
     cmd = [
         "ffmpeg",
         "-hide_banner",
         "-loglevel", "error",
         "-y",
-        "-i", str(Path(video_path).resolve()),
+    ]
+    if start:
+        cmd += ["-ss", f"{start:.3f}"]
+    cmd += ["-i", str(Path(video_path).resolve())]
+    if end_seconds is not None:
+        cmd += ["-t", f"{float(end_seconds) - start:.3f}"]
+    cmd += [
         "-vn",
         "-acodec", "libmp3lame",
         "-ar", "16000",
@@ -198,7 +216,7 @@ def split_audio(
     return chunks
 
 
-def _build_multipart(fields: dict[str, str], file_path: Path) -> tuple[bytes, str]:
+def build_multipart(fields: dict[str, str], file_path: Path) -> tuple[bytes, str]:
     """Assemble a multipart/form-data body the Whisper APIs accept.
 
     Whisper's multipart upload is small and predictable — doing it by hand
@@ -229,18 +247,34 @@ def _build_multipart(fields: dict[str, str], file_path: Path) -> tuple[bytes, st
     return buf.getvalue(), boundary
 
 
+# Backward-compatible private name used by the pre-P11 tests.
+_build_multipart = build_multipart
+
+
 MAX_ATTEMPTS = 4       # initial + 3 retries
 MAX_429_RETRIES = 2
 RETRY_BASE_DELAY = 2.0
 
 
-def _post_whisper(endpoint: str, api_key: str, model: str, audio_path: Path) -> dict:
+def _post_whisper(
+    endpoint: str,
+    api_key: str,
+    model: str,
+    audio_path: Path,
+    *,
+    max_attempts: int = MAX_ATTEMPTS,
+    language: str = "auto",
+) -> dict:
+    if not 1 <= max_attempts <= MAX_ATTEMPTS:
+        raise ValueError(f"max_attempts must be between 1 and {MAX_ATTEMPTS}")
     fields = {
         "model": model,
         "response_format": "verbose_json",
         "temperature": "0",
     }
-    body, boundary = _build_multipart(fields, audio_path)
+    if language and language != "auto":
+        fields["language"] = language
+    body, boundary = build_multipart(fields, audio_path)
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": f"multipart/form-data; boundary={boundary}",
@@ -255,7 +289,7 @@ def _post_whisper(endpoint: str, api_key: str, model: str, audio_path: Path) -> 
     last_exc: Exception | None = None
     last_detail = ""
 
-    for attempt in range(MAX_ATTEMPTS):
+    for attempt in range(max_attempts):
         request = Request(endpoint, data=body, headers=headers, method="POST")
         try:
             with urlopen(request, timeout=300, context=context) as response:
@@ -276,21 +310,21 @@ def _post_whisper(endpoint: str, api_key: str, model: str, audio_path: Path) -> 
             else:
                 delay = RETRY_BASE_DELAY * (2 ** attempt)
 
-            if attempt < MAX_ATTEMPTS - 1:
+            if attempt < max_attempts - 1:
                 print(
                     f"[watch] whisper HTTP {exc.code} — retrying in {delay:.1f}s "
-                    f"(attempt {attempt + 2}/{MAX_ATTEMPTS})",
+                    f"(attempt {attempt + 2}/{max_attempts})",
                     file=sys.stderr,
                 )
                 time.sleep(delay)
             continue
         except (urllib.error.URLError, TimeoutError, ConnectionResetError, OSError) as exc:
             last_exc, last_detail = exc, ""
-            if attempt < MAX_ATTEMPTS - 1:
+            if attempt < max_attempts - 1:
                 delay = RETRY_BASE_DELAY * (attempt + 1)
                 print(
                     f"[watch] whisper network error ({type(exc).__name__}: {exc}) — "
-                    f"retrying in {delay:.1f}s (attempt {attempt + 2}/{MAX_ATTEMPTS})",
+                    f"retrying in {delay:.1f}s (attempt {attempt + 2}/{max_attempts})",
                     file=sys.stderr,
                 )
                 time.sleep(delay)
@@ -302,7 +336,7 @@ def _post_whisper(endpoint: str, api_key: str, model: str, audio_path: Path) -> 
             raise SystemExit(f"Whisper returned non-JSON response: {exc}: {payload[:200]}")
 
     raise SystemExit(
-        f"Whisper request failed after {MAX_ATTEMPTS} attempts: {last_exc}{last_detail}"
+        f"Whisper request failed after {max_attempts} attempts: {type(last_exc).__name__}"
     )
 
 
@@ -337,17 +371,16 @@ def shift_segments(segments: list[dict], offset_seconds: float) -> list[dict]:
     """
     if offset_seconds == 0:
         return segments
-    return [
-        {
-            "start": round(seg["start"] + offset_seconds, 2),
-            "end": round(seg["end"] + offset_seconds, 2),
-            "text": seg["text"],
-        }
-        for seg in segments
-    ]
+    shifted: list[dict] = []
+    for segment in segments:
+        value = dict(segment)
+        value["start"] = round(float(segment["start"]) + offset_seconds, 2)
+        value["end"] = round(float(segment["end"]) + offset_seconds, 2)
+        shifted.append(value)
+    return shifted
 
 
-def _segments_from_response(data: dict) -> list[dict]:
+def segments_from_response(data: dict) -> list[dict]:
     """Convert Whisper verbose_json into our {start, end, text} segment format."""
     out: list[dict] = []
     for seg in data.get("segments") or []:
@@ -366,6 +399,9 @@ def _segments_from_response(data: dict) -> list[dict]:
             out.append({"start": 0.0, "end": 0.0, "text": full})
 
     return out
+
+
+_segments_from_response = segments_from_response
 
 
 def transcribe_chunks(
@@ -400,15 +436,31 @@ def transcribe_chunks(
     return segments
 
 
-def _transcribe_file(backend: str, api_key: str, audio_path: Path) -> list[dict]:
+def transcribe_file(
+    backend: str,
+    api_key: str,
+    audio_path: Path,
+    *,
+    max_attempts: int = MAX_ATTEMPTS,
+    language: str = "auto",
+) -> list[dict]:
     """Upload one audio file and return its 0-based segments."""
     if backend == "groq":
-        response = _post_whisper(GROQ_ENDPOINT, api_key, GROQ_MODEL, audio_path)
+        response = _post_whisper(
+            GROQ_ENDPOINT, api_key, GROQ_MODEL, audio_path,
+            max_attempts=max_attempts, language=language,
+        )
     elif backend == "openai":
-        response = _post_whisper(OPENAI_ENDPOINT, api_key, OPENAI_MODEL, audio_path)
+        response = _post_whisper(
+            OPENAI_ENDPOINT, api_key, OPENAI_MODEL, audio_path,
+            max_attempts=max_attempts, language=language,
+        )
     else:
         raise SystemExit(f"Unknown whisper backend: {backend}")
-    return _segments_from_response(response)
+    return segments_from_response(response)
+
+
+_transcribe_file = transcribe_file
 
 
 def transcribe_video(
@@ -416,6 +468,9 @@ def transcribe_video(
     audio_out: Path,
     backend: str | None = None,
     api_key: str | None = None,
+    start_seconds: float | None = None,
+    end_seconds: float | None = None,
+    language: str = "auto",
 ) -> tuple[list[dict], str]:
     """Run the full flow: extract audio → upload → parse segments.
 
@@ -435,11 +490,16 @@ def transcribe_video(
         )
 
     print(f"[watch] extracting audio for Whisper ({backend})…", file=sys.stderr)
-    audio_path = extract_audio(video_path, audio_out)
+    audio_path = extract_audio(
+        video_path,
+        audio_out,
+        start_seconds=start_seconds,
+        end_seconds=end_seconds,
+    )
     audio_bytes = audio_path.stat().st_size
 
     def transcribe_one(path: Path) -> list[dict]:
-        return _transcribe_file(backend, api_key, path)
+        return transcribe_file(backend, api_key, path, language=language)
 
     if audio_bytes <= MAX_UPLOAD_BYTES:
         print(
@@ -457,6 +517,9 @@ def transcribe_video(
         )
         chunks = split_audio(audio_path, audio_out.parent / "chunks", plan)
         segments = transcribe_chunks(chunks, transcribe_one)
+
+    if start_seconds:
+        segments = shift_segments(segments, float(start_seconds))
 
     if not segments:
         raise SystemExit("Whisper returned no transcript segments")

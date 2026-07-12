@@ -13,6 +13,12 @@ DEFAULT_DETAIL = "balanced"
 
 DETAILS = {"transcript", "efficient", "balanced", "token-burner"}
 
+DEFAULT_STT_ORDER = ("local-http", "yap", "groq", "openai")
+STT_ADAPTERS = frozenset(DEFAULT_STT_ORDER)
+DEFAULT_STT_URL = "http://127.0.0.1:8082"
+DEFAULT_STT_MODEL = "Systran/faster-whisper-medium"
+DEFAULT_LANGUAGE = "auto"
+
 
 def read_env_file(path: Path | None = None) -> dict[str, str]:
     if path is None:
@@ -58,6 +64,105 @@ def get_config() -> dict[str, object]:
 
     return {
         "detail": detail,
+        "config_file": str(CONFIG_FILE),
+    }
+
+
+def _config_value(
+    name: str,
+    file_values: dict[str, str],
+    overrides: dict[str, object],
+    default: object = None,
+) -> object:
+    """Resolve invocation override > environment > user config > default."""
+    if name in overrides and overrides[name] is not None:
+        return overrides[name]
+    if name in os.environ:
+        return os.environ[name]
+    if name in file_values:
+        return file_values[name]
+    return default
+
+
+def _bool_value(value: object, *, name: str) -> bool:
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off", ""}:
+        return False
+    raise ValueError(f"{name} must be true or false")
+
+
+def get_transcription_config(**overrides: object) -> dict[str, object]:
+    """Return the host-independent transcription configuration.
+
+    This is separate from :func:`get_config` so the existing detail-mode
+    Interface remains stable while P11-P18 land behind a new transcription
+    seam.  Keys and authorization headers are deliberately not returned.
+    """
+    file_values = read_env_file()
+
+    raw_order = _config_value(
+        "WATCH_STT_ORDER", file_values, overrides, ",".join(DEFAULT_STT_ORDER)
+    )
+    if isinstance(raw_order, (tuple, list)):
+        order = tuple(str(item).strip().lower() for item in raw_order if str(item).strip())
+    else:
+        order = tuple(part.strip().lower() for part in str(raw_order).split(",") if part.strip())
+    if not order:
+        raise ValueError("WATCH_STT_ORDER must name at least one Adapter")
+    unknown = sorted(set(order) - STT_ADAPTERS)
+    if unknown:
+        raise ValueError(f"WATCH_STT_ORDER contains unknown Adapter(s): {', '.join(unknown)}")
+    if len(order) != len(set(order)):
+        raise ValueError("WATCH_STT_ORDER must not contain duplicate Adapters")
+
+    language = str(
+        _config_value("WATCH_LANGUAGE", file_values, overrides, DEFAULT_LANGUAGE)
+    ).strip() or DEFAULT_LANGUAGE
+    stt_url = str(
+        _config_value("WATCH_STT_URL", file_values, overrides, DEFAULT_STT_URL)
+    ).strip()
+    stt_model = str(
+        _config_value("WATCH_STT_MODEL", file_values, overrides, DEFAULT_STT_MODEL)
+    ).strip() or DEFAULT_STT_MODEL
+    yap_path = str(_config_value("WATCH_YAP_PATH", file_values, overrides, "yap")).strip() or "yap"
+
+    try:
+        timeout = float(_config_value("WATCH_STT_TIMEOUT", file_values, overrides, 300.0))
+        probe_timeout = float(
+            _config_value("WATCH_STT_PROBE_TIMEOUT", file_values, overrides, 1.0)
+        )
+        max_attempts = int(_config_value("WATCH_STT_MAX_ATTEMPTS", file_values, overrides, 2))
+    except (TypeError, ValueError) as exc:
+        raise ValueError("transcription timeout/attempt settings must be numeric") from exc
+    if timeout <= 0 or probe_timeout <= 0:
+        raise ValueError("transcription timeouts must be greater than zero")
+    if not 1 <= max_attempts <= 4:
+        raise ValueError("WATCH_STT_MAX_ATTEMPTS must be between 1 and 4")
+
+    allow_remote = _bool_value(
+        _config_value("WATCH_STT_ALLOW_REMOTE", file_values, overrides, False),
+        name="WATCH_STT_ALLOW_REMOTE",
+    )
+    receipts = _bool_value(
+        _config_value("WATCH_STT_RECEIPTS", file_values, overrides, True),
+        name="WATCH_STT_RECEIPTS",
+    )
+
+    return {
+        "order": order,
+        "url": stt_url,
+        "model": stt_model,
+        "language": language,
+        "yap_path": yap_path,
+        "allow_remote": allow_remote,
+        "timeout": timeout,
+        "probe_timeout": probe_timeout,
+        "max_attempts": max_attempts,
+        "receipts": receipts,
         "config_file": str(CONFIG_FILE),
     }
 

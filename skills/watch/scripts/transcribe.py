@@ -11,18 +11,25 @@ import sys
 from pathlib import Path
 
 
-TS_RE = re.compile(
-    r"(\d{2}):(\d{2}):(\d{2})[.,](\d{3})\s+-->\s+(\d{2}):(\d{2}):(\d{2})[.,](\d{3})"
-)
+TS_VALUE = r"(?:(\d{1,2}):)?(\d{2}):(\d{2})[.,](\d{3})"
+TS_RE = re.compile(rf"^\s*{TS_VALUE}\s+-->\s+{TS_VALUE}(?:\s+.*)?$")
 TAG_RE = re.compile(r"<[^>]+>")
 
 
-def _to_seconds(h: str, m: str, s: str, ms: str) -> float:
-    return int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
+def _to_seconds(h: str | None, m: str, s: str, ms: str) -> float:
+    return int(h or 0) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
 
 
-def parse_vtt(path: str) -> list[dict]:
-    text = Path(path).read_text(encoding="utf-8", errors="ignore")
+def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
+    """Parse WebVTT or SubRip into the legacy timestamped-segment shape.
+
+    ``strict`` is used for user-supplied sidecars: malformed UTF-8 or a file
+    containing cue text but no valid timestamps is rejected instead of silently
+    becoming an empty transcript.  Native-caption compatibility keeps the old
+    forgiving behavior through :func:`parse_vtt`.
+    """
+    subtitle_path = Path(path)
+    text = subtitle_path.read_text(encoding="utf-8", errors="strict" if strict else "ignore")
     lines = text.splitlines()
 
     segments: list[dict] = []
@@ -35,6 +42,11 @@ def parse_vtt(path: str) -> list[dict]:
 
         start = _to_seconds(*match.groups()[:4])
         end = _to_seconds(*match.groups()[4:])
+        if end < start:
+            if strict:
+                raise ValueError(f"subtitle cue ends before it starts in {subtitle_path.name}")
+            i += 1
+            continue
         i += 1
 
         cue_lines: list[str] = []
@@ -49,7 +61,18 @@ def parse_vtt(path: str) -> list[dict]:
             segments.append({"start": round(start, 2), "end": round(end, 2), "text": cue_text})
         i += 1
 
-    return _dedupe(segments)
+    result = _dedupe(segments)
+    if strict and text.strip() and not result:
+        raise ValueError(f"no valid timestamped cues in {subtitle_path.name}")
+    return result
+
+
+def parse_vtt(path: str) -> list[dict]:
+    return parse_subtitle(path)
+
+
+def parse_srt(path: str) -> list[dict]:
+    return parse_subtitle(path)
 
 
 def _dedupe(segments: list[dict]) -> list[dict]:
