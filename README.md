@@ -8,7 +8,7 @@
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
 > [!IMPORTANT]
-> **v1.0 is still in progress.** The Sol-reviewed plan is being executed through independently reviewed work packets. Remaining work includes release/install integrity, acquisition resilience, local-first transcription including optional YAP and loopback `:8082`, safe reuse, semantic retrieval, improved frame selection, and one untouched confirmatory evaluation. The [complete status checklist](docs/V1-STATUS.md) is the canonical progress record; see also the [plain-language website roadmap](https://abe238.github.io/claude-video-plus/#what-remains-before-v10), [master plan](docs/plans/V1.0-MASTER-PLAN.md), and [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
+> **The v1.0 implementation is assembled; integrated verification is next.** Acquisition recovery, local-first transcription (sidecars, loopback `:8082`, optional YAP, explicitly authorized cloud), range-only resumable audio, private state, portable bundles, lexical/optional semantic retrieval, dependency-free vision scoring, and release tooling are now present on `main`. They are not release claims until the consolidated tests, install matrix, benchmarks, confirmatory evaluation, and final audit pass. See the [status checklist](docs/V1-STATUS.md), [master plan](docs/plans/V1.0-MASTER-PLAN.md), and [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
 
 ## Install
 
@@ -56,6 +56,9 @@ Direct answers, because you don't have time to discover these yourself:
 - **It can take slightly longer end-to-end.** Evidence compilation adds ~1.5–2s after download, and the reader is instructed to mine frames more carefully. You're trading a little wall time for a lot of tokens and (measured) better answers.
 - **URL sources with captions only, today.** Local files and caption-less videos automatically fall back to the original `balanced` mode — you lose nothing, but you also gain nothing there yet.
 - **Coverage/summary questions keep the full transcript by design** (top-k retrieval on a summary question is how you miss stories). Savings there come from smarter frames and transcript dedup (−60%), not retrieval; the big cuts (−77/79%) are on targeted questions.
+- **Local transcription stays optional.** Same-name `.vtt`/`.srt`, loopback OpenAI-compatible `:8082`, and detected YAP run before cloud; nothing is installed automatically.
+- **Cloud transmission is explicit.** Groq/OpenAI audio and remote semantic scoring require separate authorization flags/configuration.
+- **OpenCV is not included.** Its measured prototype lost to the FFmpeg/stdlib approach on the available recall, duplicate, and scoring-time comparison.
 - **Retrieval is lexical (tf-idf + guards), not semantic.** A question with zero word overlap with the video's language can under-retrieve. The numeric guard, facet expansion, and chapter roll-up exist to blunt this; the fallback catches the rest.
 - **The benchmark is honest but small.** It is one deep-dive with LLM judges and blind paired panels; the multi-video battery is still in progress. These are measurements with raw data you can audit, not a preregistered statistical trial. The confirmatory protocol is specified in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md) and [measurement contract](docs/execution/v1/MEASUREMENT.md) and runs before any stronger claim.
 - **Full video still downloads for frame extraction** (same as upstream's frame modes). Range downloads are planned, not shipped.
