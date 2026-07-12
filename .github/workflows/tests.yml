@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            python: "3.11"
+          - os: macos-14
+            python: "3.12"
+          - os: macos-14
+            python: "3.14"
+          - os: ubuntu-22.04
+            python: "3.11"
+          - os: ubuntu-24.04
+            python: "3.12"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Install media tools on Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check yt-dlp
+      - name: Install media tools on macOS
+        if: runner.os == 'macOS'
+        run: brew install ffmpeg yt-dlp
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Compile Python
+        run: python -m compileall -q skills tools tests
+      - name: Validate execution registry
+        run: python tools/validate_v1_execution.py

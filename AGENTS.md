@@ -54,8 +54,10 @@ No lint/type-check config exists (pure-stdlib Python, no pyproject.toml) — pyt
 `watch.py` is a linear orchestrator today (download → frames → transcript → report), with `SKILL.md` carrying most of the intelligence as agent instructions. `docs/ARCHITECTURE.md` describes an in-progress, benchmark-gated redesign toward a query-aware "Scout → Retrieve → Verify" evidence compiler. `docs/plans/V1.0-MASTER-PLAN.md` is the canonical execution plan. The two older evidence-backed plans are historical research and adversarial-review records, not implementation instructions. Changes to selection/scoring code must be measured against the frozen control commit `83da59f`, not merged on intuition. `CONTEXT.md` defines the domain vocabulary (**Evidence span**, **Evidence budget**, **Evidence manifest**, etc.) used across those docs — read it before naming new concepts in this area.
 
 Execution follows `docs/execution/v1/PROTOCOL.md` and `docs/execution/v1/CHAIN.md`.
-Terra implements one frozen packet; deterministic checks run before Sol independently
-reviews the exact staged tree. No unresolved P0/P1 finding may be committed or pushed.
+Terra implements one frozen packet; focused deterministic checks run before Sol independently
+reviews the exact staged tree. For P02–P32, each packet receives one implementation pass and one
+review. A packet with unresolved findings is recorded as implemented and routes those findings to
+their later owner; P32 must close every release blocker before publication.
 
 ## Rules
 

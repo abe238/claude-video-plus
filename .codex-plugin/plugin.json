@@ -1,7 +1,7 @@
 {
   "name": "watch",
   "version": "0.3.0",
-  "description": "Let Claude watch a video — and fetch only the evidence your question needs. Ask a question and /watch retrieves the relevant chapters, pricing/benchmark lines, and on-screen moments instead of sampling the whole timeline: 60-80% fewer tokens with equal-or-better answers in blind paired judging. Fork of Bradley Bonanno's claude-video; same install, same defaults, evidence mode is opt-in.",
+  "description": "Let Claude watch a video and retrieve question-relevant evidence. In an initial one-video, three-question benchmark, evidence mode used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Fork of Brad Bonanno's claude-video; evidence mode is opt-in.",
   "author": {
     "name": "Abe Diaz"
   },
@@ -27,7 +27,7 @@
   "interface": {
     "displayName": "watch",
     "shortDescription": "Give the agent a video input — ask a question, get only the evidence that answers it.",
-    "longDescription": "watch lets the agent watch any video: it downloads with yt-dlp, extracts frames with ffmpeg, pulls a timestamped transcript from native captions (or the Whisper API as a fallback), and hands frames + transcript to the model. This fork of Bradley Bonanno's claude-video adds question-aware evidence retrieval: pass your question and it selects whole topical chapters, rescues pricing/benchmark lines from elsewhere in the video, and grabs frames at chapter starts, 'as you can see' cue moments, and on-screen tables — 60-80% fewer tokens than whole-timeline sampling with equal-or-better answers in blind paired judging. Any failure falls back to the original pipeline automatically.",
+    "longDescription": "watch downloads video with yt-dlp, extracts frames with ffmpeg, obtains a timestamped transcript from native captions or optional Whisper, and gives the evidence to the model. This fork of Brad Bonanno's claude-video adds opt-in question-aware retrieval: chapters, pricing/benchmark lines, cue moments, and on-screen tables. In an initial one-video, three-question benchmark it used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Failures use an automatic compatibility fallback.",
     "developerName": "Abe Diaz",
     "category": "Productivity",
     "capabilities": [

@@ -17,6 +17,30 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install release verification dependencies
+        run: |
+          python -m pip install --disable-pip-version-check pytest yt-dlp
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Verify release tag and repository
+        run: |
+          test "${GITHUB_REF_NAME}" = "v$(python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('skills/watch/SKILL.md').read_text(encoding='utf-8')
+          print(re.search(r'^version: ["'\'']?([^"'\'']+)', text, re.MULTILINE).group(1))
+          PY
+          )"
+          python -m pytest -q
+          python -m compileall -q skills tools tests
+          python tools/validate_v1_execution.py
+
       - name: Build .skill artifact
         run: |
           bash skills/watch/scripts/build-skill.sh

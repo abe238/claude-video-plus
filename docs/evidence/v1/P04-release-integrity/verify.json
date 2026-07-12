@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "artifact_type": "verify",
+  "created_at_utc": "2026-07-12T12:00:00Z",
+  "packet_id": "P04",
+  "requirement_ids": ["DIST-001", "ATTR-001"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": "b4fe76a0c7b3bfa1e9a79a7e322c98b8c863cdb7",
+  "candidate_config_hash": "b87d7251abae35e9ef8cb597570d9a15fdd76e2325ad51b93e72ce7e59c2cb1c",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
+  "environment_id": "macos-arm64-python-3.14",
+  "tool_versions": {"python": "3.14.4"},
+  "command_or_protocol": "P04 owner-directed single implementation pass; focused release-integrity and attribution checks only; consolidated suite and release assembly deferred to P32.",
+  "status": "provisional",
+  "checks": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider tests/test_release_integrity.py tests/test_attribution.py", "exit": 0, "result": "8 passed in 0.01s"},
+    {"command": "python3 -m pytest -q", "status": "not_run", "result": "Owner-directed policy defers consolidated full-suite audit to P32."},
+    {"command": "python3 tools/validate_v1_execution.py", "exit": 0, "result": "ok: 45 requirements, 35 packets"},
+    {"command": "python3 tools/validate_v1_evidence.py docs/evidence/v1/P04-release-integrity/verify.json", "status": "rerun_after_receipt_completion"},
+    {"command": "git diff --check", "exit": 0}
+  ],
+  "reviewed_tree": "40307012777f37573171bfa44bfd1e21e46fa932",
+  "artifact_checksums": {}
+}

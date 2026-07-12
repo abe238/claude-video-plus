@@ -2,11 +2,12 @@
 
 All notable changes to `/watch` are documented here.
 
-## [0.3.0] — 2026-07-11
+## [0.3.0] — Unreleased
 
-First release under the `abe238/claude-video-plus` derivative identity (fork of
-Bradley Bonanno's `bradautomates/claude-video`; upstream history, license, and
-attribution preserved).
+Pending maintenance release under the `abe238/claude-video-plus` derivative identity
+(fork of Brad Bonanno's `bradautomates/claude-video`; upstream history, license, and
+attribution preserved). There is no `v0.3.0` tag or release artifact yet; the release
+workflow will refuse a tag whose value disagrees with the package manifests.
 
 ### Added
 - **`--detail evidence` + `--question`** — question-aware evidence retrieval
@@ -23,7 +24,7 @@ attribution preserved).
   primary evidence instead of repeating either.
 - 22 new tests (`tests/test_evidence.py`); suite now 93.
 
-### Measured (single-video paired benchmark; multi-video battery in docs/benchmarks/)
+### Measured (initial single-video paired benchmark; multi-video battery in progress)
 - 60-79% fewer evidence tokens than `balanced` on the same questions, with
   equal-or-better answers from a 3-judge blind panel (wins on coverage + targeted,
   tie on the cost question).
@@ -53,6 +54,13 @@ attribution preserved).
 
 ### Removed
 - `V2_PLAN.md` and `V2_CONCERNS.md` planning docs.
+
+## [0.2.0] — 2026-06-30 (upstream)
+
+Last release from the preserved `bradautomates/claude-video` history before the
+derivative `0.3.0` work. Added the self-contained `skills/watch/` layout, detail modes,
+frame deduplication, timestamp cues, Whisper chunking, and the cross-host manifests.
+The tag points to upstream commit `83da59f`.
 
 ## [0.1.3] — 2026-05-09
 

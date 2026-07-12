@@ -8,7 +8,7 @@
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
 > [!IMPORTANT]
-> **v1.0 is still in progress.** The Sol-reviewed plan and frozen-original Control harness are complete (2 of 35 execution packets). The repository currently passes 146 tests. The remaining 33 packets cover conformance and measurement, release/install integrity, acquisition resilience, local-first transcription including optional YAP and loopback `:8082`, safe reuse, semantic retrieval, improved frame selection, and one untouched confirmatory evaluation. Follow the [plain-language website roadmap](https://abe238.github.io/claude-video-plus/#what-remains-before-v10), [complete status checklist](docs/V1-STATUS.md), [master plan](docs/plans/V1.0-MASTER-PLAN.md), or [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
+> **v1.0 is still in progress.** The Sol-reviewed plan is being executed through independently reviewed work packets. Remaining work includes release/install integrity, acquisition resilience, local-first transcription including optional YAP and loopback `:8082`, safe reuse, semantic retrieval, improved frame selection, and one untouched confirmatory evaluation. The [complete status checklist](docs/V1-STATUS.md) is the canonical progress record; see also the [plain-language website roadmap](https://abe238.github.io/claude-video-plus/#what-remains-before-v10), [master plan](docs/plans/V1.0-MASTER-PLAN.md), and [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
 
 ## Install
 
@@ -52,7 +52,7 @@ Everything else — the four original detail modes, focused `--start`/`--end` ra
 
 Direct answers, because you don't have time to discover these yourself:
 
-- **Evidence mode needs a question.** Without `--question`, you get the original pipeline unchanged. It's opt-in per invocation.
+- **Evidence mode needs a question.** Without `--question`, the standard non-evidence path runs. Evidence mode is opt-in per invocation; behavioral conformance with the frozen upstream Control remains a v1.0 release gate.
 - **It can take slightly longer end-to-end.** Evidence compilation adds ~1.5–2s after download, and the reader is instructed to mine frames more carefully. You're trading a little wall time for a lot of tokens and (measured) better answers.
 - **URL sources with captions only, today.** Local files and caption-less videos automatically fall back to the original `balanced` mode — you lose nothing, but you also gain nothing there yet.
 - **Coverage/summary questions keep the full transcript by design** (top-k retrieval on a summary question is how you miss stories). Savings there come from smarter frames and transcript dedup (−60%), not retrieval; the big cuts (−77/79%) are on targeted questions.
@@ -99,7 +99,7 @@ Other knobs (passed to `scripts/watch.py`):
 5. **Frames + transcript (or evidence manifest) are handed to Claude**, which Reads every frame as an image — with instructions to mine on-screen tables and reconcile conflicting claims.
 6. **Claude answers grounded in what's on screen and in the audio**, citing timestamps.
 
-### Original detail modes — measured (unchanged from upstream)
+### Control-lineage detail modes — initial measurement
 
 Numbers from a real run against a 49:08 YouTube video (1280×720, English auto-captions):
 
@@ -132,14 +132,14 @@ Update later with `/plugin update watch@claude-video-plus` or `npx skills update
 │   └── scripts/                  # watch.py, evidence.py, download/frames/transcribe/whisper/setup/config
 ├── docs/benchmarks/              # supplemental evidence data (NOT in the install package)
 ├── docs/plans/                   # canonical v1 master plan plus historical review records
-├── tests/                        # pytest suite — 146 tests at the current checkpoint
+├── tests/                        # deterministic pytest suite
 └── .claude-plugin/ .codex-plugin/ .agents/   # host manifests
 ```
 
 ## Develop
 
 ```bash
-python3 -m pytest -q                          # 146 tests at the current checkpoint
+python3 -m pytest -q                          # full deterministic suite
 bash skills/watch/scripts/build-skill.sh      # → dist/watch.skill (requires clean tree)
 ./dev-sync.sh                                 # mirror working tree into installed plugin cache
 ```
@@ -154,6 +154,21 @@ We also appreciate the maintainers whose tools make the runtime possible:
 - Whisper transcription via [Groq](https://groq.com) or [OpenAI](https://openai.com)
 
 The evidence-mode design draws on published research — VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others — credited with transferability cautions in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md). The bounded execution and independent-review process is inspired by Miguel Rios's [`miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills), especially Cascade and Parable.
+
+We are also grateful to the fork authors whose public work helped us identify mechanisms worth evaluating for v1.0. Credit here records design influence and evaluation provenance; it does **not** claim their source code or every listed feature currently ships. If a mechanism is promoted, its exact origin, revision, license, modifications, and release-note credit must be recorded first.
+
+- [`taeloautomates/claude-video`](https://github.com/taeloautomates/claude-video) — YouTube SABR/client and cookie-resilience concept.
+- [`thedirektor/claude-video`](https://github.com/thedirektor/claude-video) — classified acquisition retries, focused transcription, resume/cache, OCR, and testing ideas.
+- [`RadoslavSheytanov/claude-video`](https://github.com/RadoslavSheytanov/claude-video) — caption-coverage and Whisper-reliability ideas.
+- [`Tigertycoon/claude-video`](https://github.com/Tigertycoon/claude-video) and [`manojbadam/claude-video`](https://github.com/manojbadam/claude-video) — sidecar-first transcript ideas.
+- [`CJNA/claude-video`](https://github.com/CJNA/claude-video) — Fathom source exploration, deferred from v1.0.
+- [`sciencemj/claude-video-local`](https://github.com/sciencemj/claude-video-local) — local transcription and portable-bundle architecture.
+- [`troyshelton/claude-video`](https://github.com/troyshelton/claude-video), [`jsstn/claude-video`](https://github.com/jsstn/claude-video), and [`danielfrey63/claude-video`](https://github.com/danielfrey63/claude-video) — local and pluggable transcription patterns.
+- [`joweiser/claude-video`](https://github.com/joweiser/claude-video) and [`JoseBallestas/claude-video`](https://github.com/JoseBallestas/claude-video) — silence-aware chunks, focused transcription, bounded retries, and diagnostics.
+- [`finnvoor/yap`](https://github.com/finnvoor/yap) and the faster-whisper server ecosystem — optional local transcription references; neither is automatically installed.
+- [`DanielZYoffe/claude-video-lite`](https://github.com/DanielZYoffe/claude-video-lite) — PySceneDetect reference evaluated in the documented OpenCV ablation; that Adapter was rejected for v1.0.
+
+The canonical mechanism-by-mechanism disposition is maintained in [PROVENANCE.md](docs/execution/v1/PROVENANCE.md).
 
 ## License
 
