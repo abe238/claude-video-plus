@@ -1,6 +1,6 @@
 # /watch — claude-video-plus
 
-**Ask a video a question and `/watch` fetches only the evidence that answers it: 60–80% fewer tokens than sampling the whole timeline, with equal-or-better answers in blind paired judging. Fork of [bradautomates/claude-video](https://github.com/bradautomates/claude-video) — same one-command install, evidence mode added, automatic fallback to the original behavior.**
+**Ask a video a question and `/watch` fetches only the evidence that answers it. In one initial 38-minute benchmark, evidence mode used 60–79% fewer estimated reader tokens and tied or won three blind-judged questions; broader testing is still in progress. Fork of [bradautomates/claude-video](https://github.com/bradautomates/claude-video) — same one-command install, evidence mode added, automatic compatibility fallback.**
 
 > [!NOTE]
 > This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), created by Brad Bonanno and distributed under the MIT License. The full upstream Git history and license are preserved. We are grateful to Brad for designing and openly sharing the reliable foundation this work builds on — see [Gratitude](#gratitude-and-attribution).
@@ -43,7 +43,7 @@ This fork adds **evidence mode**: pass your question and the pipeline retrieves 
 
 Two reader-level rules the benchmark loop proved out are now part of the skill contract: **mine on-screen tables from frames** (pricing pages, leaderboards — content nobody reads aloud) and **reconcile conflicting claims** (presenters misspeak; the judges credited this fork for catching a real pricing self-contradiction the original repeated).
 
-Everything else — the four original detail modes, focused `--start`/`--end` ranges, `--timestamps` cues, Whisper fallback, frame dedup — works exactly as upstream shipped it. No question, no evidence mode: the default behavior is byte-for-byte the original pipeline.
+Everything else — the four original detail modes, focused `--start`/`--end` ranges, `--timestamps` cues, Whisper fallback, and frame dedup — remains available. No question means no evidence mode. Behavioral conformance against the frozen upstream Control is a v1 release gate; this repository does not claim byte-for-byte identity.
 
 ## Tradeoffs — read before adopting
 
@@ -54,7 +54,7 @@ Direct answers, because you don't have time to discover these yourself:
 - **URL sources with captions only, today.** Local files and caption-less videos automatically fall back to the original `balanced` mode — you lose nothing, but you also gain nothing there yet.
 - **Coverage/summary questions keep the full transcript by design** (top-k retrieval on a summary question is how you miss stories). Savings there come from smarter frames and transcript dedup (−60%), not retrieval; the big cuts (−77/79%) are on targeted questions.
 - **Retrieval is lexical (tf-idf + guards), not semantic.** A question with zero word overlap with the video's language can under-retrieve. The numeric guard, facet expansion, and chapter roll-up exist to blunt this; the fallback catches the rest.
-- **The benchmark is honest but small.** LLM judges, blind paired panels, n = 1 deep-dive + a multi-video battery in [docs/benchmarks/](docs/benchmarks/) — measurements with raw data you can audit, not a preregistered statistical trial. The full statistical protocol is specified in [docs/plans/](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md) and runs before any stronger claim.
+- **The benchmark is honest but small.** It is one deep-dive with LLM judges and blind paired panels; the multi-video battery is still in progress. These are measurements with raw data you can audit, not a preregistered statistical trial. The confirmatory protocol is specified in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md) and [measurement contract](docs/execution/v1/MEASUREMENT.md) and runs before any stronger claim.
 - **Full video still downloads for frame extraction** (same as upstream's frame modes). Range downloads are planned, not shipped.
 
 ## Usage
@@ -128,7 +128,7 @@ Update later with `/plugin update watch@claude-video-plus` or `npx skills update
 │   ├── SKILL.md                  # skill contract — source of truth across all hosts
 │   └── scripts/                  # watch.py, evidence.py, download/frames/transcribe/whisper/setup/config
 ├── docs/benchmarks/              # supplemental evidence data (NOT in the install package)
-├── docs/plans/                   # the benchmark-gated improvement plan (v1 + adversarially-reviewed v2)
+├── docs/plans/                   # canonical v1 master plan plus historical review records
 ├── tests/                        # pytest suite — 93 tests, no network
 └── .claude-plugin/ .codex-plugin/ .agents/   # host manifests
 ```
@@ -143,14 +143,14 @@ bash skills/watch/scripts/build-skill.sh      # → dist/watch.skill (requires c
 
 ## Gratitude and attribution
 
-This fork exists because **Brad Bonanno** ([@bradautomates](https://github.com/bradautomates)) built and openly shared [claude-video](https://github.com/bradautomates/claude-video) — a genuinely reliable foundation whose design decisions (caption-first, self-contained skill folder, fail-open everything) this fork inherits wholesale. The upstream Git history, MIT license, and original authorship are intentionally preserved. Brad makes content about building with AI on [YouTube](https://www.youtube.com/@bradbonanno) and builds AI operating systems at [Solaris Automation](https://www.solarisautomation.io/) — go say hi.
+This fork exists because **Brad Bonanno** ([@bradautomates](https://github.com/bradautomates)) built and openly shared [claude-video](https://github.com/bradautomates/claude-video) — a genuinely reliable foundation whose design decisions (caption-first, self-contained skill folder, fail-open everything) this fork inherits wholesale. The upstream Git history, MIT license, and original authorship are intentionally preserved. Brad makes content about building with AI on [YouTube](https://www.youtube.com/@bradbonanno), check them out.
 
 We also appreciate the maintainers whose tools make the runtime possible:
 
 - [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) and [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) — the entire media layer
 - Whisper transcription via [Groq](https://groq.com) or [OpenAI](https://openai.com)
 
-The evidence-mode design draws on published research — VideoTree, Adaptive Keyframe Sampling, Deep Video Discovery, DIG, and others — credited in full with links and transferability cautions in the [improvement plan](docs/plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md).
+The evidence-mode design draws on published research — VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others — credited with transferability cautions in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md). The bounded execution and independent-review process is inspired by Miguel Rios's [`miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills), especially Cascade and Parable.
 
 ## License
 

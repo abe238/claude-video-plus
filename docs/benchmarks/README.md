@@ -23,8 +23,9 @@ install package (`.skillignore` excludes `docs/`; the claude.ai bundle archives 
 LLM judges are a measured-but-imperfect instrument (panel-to-panel variance is visible
 in the raw scores — the *paired per-round* comparison is the meaningful number). This is
 measurement with auditable raw data, not a preregistered statistical trial; the full
-statistical protocol (preregistered margins, stratified bootstrap, dev/confirmatory
-corpus split) is specified in [../plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md](../plans/EVIDENCE-BACKED-IMPROVEMENT-PLAN-V2.md)
+statistical protocol (preregistered margins, family-clustered bootstrap, dev/confirmatory
+corpus split) is specified in [../plans/V1.0-MASTER-PLAN.md](../plans/V1.0-MASTER-PLAN.md)
+and [../execution/v1/MEASUREMENT.md](../execution/v1/MEASUREMENT.md)
 and gates any stronger public claim. Where the evidence pipeline loses, the loss ships
 here unedited.
 

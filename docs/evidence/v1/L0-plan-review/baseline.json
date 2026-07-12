@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "artifact_type": "baseline",
+  "created_at_utc": "2026-07-12T01:48:00Z",
+  "packet_id": "P00",
+  "requirement_ids": ["GOV-001", "GOV-002", "GOV-003"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": "75f318980f84f287611abe7ed034421fb8d44b95",
+  "candidate_config_hash": null,
+  "plan_sha256": null,
+  "environment_id": "macos-arm64-python-3.14.4-local",
+  "tool_versions": {"codex_cli": "0.144.1", "skill_version": "0.3.0"},
+  "command_or_protocol": "detached clean worktree baseline",
+  "status": "provisional",
+  "results": {
+    "pytest": {"command": "python3 -m pytest -q", "exit": 0, "passed": 93, "seconds": 2.81},
+    "compile": {"command": "python3 -m compileall -q skills/watch/scripts", "exit": 0},
+    "bundle": {"command": "bash skills/watch/scripts/build-skill.sh", "exit": 0, "bytes": 45144, "entries": 13},
+    "bundle_unwanted_entries_observed": ["watch/.skillignore", "watch/scripts/build-skill.sh"],
+    "preflight": {"command": "setup.py --check", "runs": 30, "aggregate_seconds": 0.88, "mean_ms": 29.3, "stdout": ""},
+    "versions_synchronized": true,
+    "control_is_candidate_ancestor": true
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "seed": 17,
+  "replicates": 10000,
+  "p95_values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+  "gate_inputs": {
+    "quality_family_deltas": {"family-a": 0.1, "family-b": 0.1, "family-c": 0.1},
+    "quality_class_family_deltas": {"targeted": {"family-a": 0.1, "family-b": 0.1}},
+    "recall_family_deltas": {"family-a": 0.01, "family-b": 0.01},
+    "citation_family_deltas": {"family-a": 0.01, "family-b": 0.01},
+    "completion_by_environment": {"macos-arm64": {"control": 10, "candidate": 10}},
+    "reader_tokens": {
+      "targeted": {"control": [100, 100, 100], "candidate": [40, 40, 40]},
+      "coverage": {"control": [100, 100, 100], "candidate": [70, 70, 70]}
+    },
+    "latency": {"warm-short": {
+      "noop": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+      "control": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+      "candidate": [102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102]
+    }},
+    "asr": {"control_wer": 10, "candidate_wer": 10.5, "control_boundary_median": 0.5,
+      "candidate_boundary_median": 0.6, "control_boundary_p95": 1.0, "candidate_boundary_p95": 1.2,
+      "language_wer_deltas": {"en": 0.5}},
+    "blocker_failures": [],
+    "primary_improvements": {"reader_tokens": true},
+    "strict_regressions": []
+  },
+  "cases": [
+    {
+      "id": "valid-partial-overlap",
+      "family_id": "family-a",
+      "control_judgments": [
+        {"correctness": 8, "completeness": 8, "citation": 8, "adherence": 8},
+        {"correctness": 8, "completeness": 8, "citation": 8, "adherence": 8}
+      ],
+      "candidate_judgments": [
+        {"correctness": 9, "completeness": 9, "citation": 9, "adherence": 9},
+        {"correctness": 9, "completeness": 9, "citation": 9, "adherence": 9}
+      ],
+      "gold": [
+        {"kind": "interval", "start": 0, "end": 10},
+        {"kind": "point", "time": 20}
+      ],
+      "selected": [
+        {"kind": "interval", "start": 0, "end": 5},
+        {"kind": "point", "time": 21}
+      ],
+      "before": [0, 2],
+      "after": [8, 10],
+      "selected_times": [1, 9]
+    },
+    {"id": "candidate-failure", "family_id": "family-a", "candidate_failure": true,
+      "control_judgments": [
+        {"correctness": 8, "completeness": 8, "citation": 8, "adherence": 8},
+        {"correctness": 8, "completeness": 8, "citation": 8, "adherence": 8}
+      ]},
+    {"id": "control-failure", "family_id": "family-b", "control_failure": true,
+      "candidate_judgments": [
+        {"correctness": 7, "completeness": 7, "citation": 7, "adherence": 7},
+        {"correctness": 7, "completeness": 7, "citation": 7, "adherence": 7}
+      ]},
+    {"id": "both-failure", "family_id": "family-c", "both_failure": true},
+    {"id": "grader-refusal", "family_id": "family-c",
+      "control_judgments": [{"refused": true}, {"refused": true}],
+      "candidate_judgments": [{"refused": true}, {"refused": true}]}
+  ]
+}

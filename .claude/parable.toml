@@ -1,0 +1,39 @@
+[parable]
+version = 1
+log_dir = ".parable"
+repo_notes = """
+The canonical plan is docs/plans/V1.0-MASTER-PLAN.md and the frozen upstream control is
+83da59f. Keep skills/watch self-contained and pure-standard-library Python. Preserve all
+four install surfaces and prominent attribution to Brad Bonanno and
+bradautomates/claude-video. Do not add OpenCV or PySceneDetect. Owner-directed work may
+land directly on main only after deterministic checks and an independent Sol review.
+Never stage the legacy untracked LOOP_CHAIN files or evidence outside docs/evidence/v1.
+"""
+
+[checks.pytest]
+run = "python3 -m pytest -q"
+when = ["post-implement", "pre-commit"]
+timeout_minutes = 10
+grep = "FAILED|ERROR|passed|failed"
+tail_lines = 12
+
+[checks.compile]
+run = "python3 -m compileall -q skills/watch/scripts"
+when = ["post-implement", "pre-commit"]
+timeout_minutes = 2
+tail_lines = 12
+
+[checks.diff]
+run = "git diff --check"
+when = ["post-implement", "pre-commit"]
+timeout_minutes = 2
+tail_lines = 12
+
+[routing]
+mechanical = ["terra", "sonnet"]
+feature = ["terra", "sonnet"]
+refactor_wide = ["sol", "sonnet"]
+gnarly = ["sol", "opus"]
+review = ["sol", "opus"]
+smoke_test = ["terra", "opus"]
+escalation = ["terra", "sonnet", "sol", "opus"]
