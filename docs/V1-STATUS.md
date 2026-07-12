@@ -2,15 +2,21 @@
 
 Last updated: 2026-07-12
 
-`claude-video-plus` is usable today, and the planned v1.0 implementation is now assembled on
-`main`. It is **not release-verified yet**. The remaining work is one integrated phase:
+`claude-video-plus` is usable today, and `0.3.0-rc.1` is verified for an **early prerelease** on
+`main`. Current evidence:
 
-- run focused and complete deterministic tests;
-- exercise install/update/invoke/rollback/purge/uninstall and the deterministic bundle;
-- run the development benchmarks and repair failures;
+- 327 local deterministic tests pass;
+- all five hosted macOS/Linux Python 3.11–3.14 jobs pass;
+- isolated `npx skills` install, diagnostics invocation, uninstall, and source-preservation pass;
+- deterministic `watch.skill` is 81,952 bytes with SHA-256
+  `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`;
+- the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
+
+Stable v1.0 remains open because it still requires:
+
+- run the multi-video development benchmarks and publish Pareto evidence;
 - validate the grader, open the sealed confirmation set once, and evaluate the frozen Candidate;
-- complete the final independent audit before any tag, artifact, public visibility change, or
-  broad superiority claim.
+- complete the final claim audit before a stable tag or broad superiority claim.
 
 The machine-readable source of truth is
 [`docs/execution/v1/REQUIREMENTS.json`](execution/v1/REQUIREMENTS.json). The full design and

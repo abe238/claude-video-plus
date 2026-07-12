@@ -9,6 +9,9 @@ Pending maintenance release under the `abe238/claude-video-plus` derivative iden
 attribution preserved). There is no `v0.3.0-rc.1` tag or release artifact yet; the release
 workflow will refuse a tag whose value disagrees with the package manifests.
 
+RC verification: 327 local tests, five hosted macOS/Linux Python jobs, isolated Agent Skills
+install/invoke/uninstall, deterministic 81,952-byte bundle, and independent early-publish review.
+
 ### Added
 - **`--detail evidence` + `--question`** — question-aware evidence retrieval
   (`scripts/evidence.py`, pure stdlib): whole-chapter roll-up (YouTube chapters,
