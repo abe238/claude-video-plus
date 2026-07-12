@@ -199,7 +199,7 @@
   <header>
     <div class="crumb up d1"><a href="https://github.com/abe238/claude-video-plus">abe238/claude-video-plus</a> · fork of <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a></div>
     <h1 class="up d2">/watch<span class="thin"><br>Ask a video.<br>Skip the parts you don't need.</span></h1>
-    <p class="pitch up d3">Most video tools hand the AI the full transcript and dozens of screenshots, even when you asked one specific question. <strong>/watch finds the sections, spoken details, and screenshots that answer your question.</strong> In our first test, that gave the AI <strong>60–79% less material to read</strong>, while answer scores stayed the same or improved. If the smarter search cannot work, it uses the original method automatically.</p>
+    <p class="pitch up d3">Most video tools hand the AI the full transcript and dozens of screenshots, even when you asked one specific question. <strong>/watch finds the sections, spoken details, and screenshots that answer your question.</strong> In our initial one-video, three-question benchmark, that gave the AI <strong>60–79% less estimated material to read</strong>, while answer scores tied or improved; broader testing is in progress. If evidence mode cannot work, it uses a compatibility fallback automatically.</p>
     <div class="install up d4">
       <div class="cmd" onclick="cp(this,'/plugin marketplace add abe238/claude-video-plus\n/plugin install watch@claude-video-plus')">
         <small># Claude Code</small>
@@ -267,7 +267,7 @@
       <div class="stat win"><b>146</b><span>automated tests passing across the repository</span></div>
       <div class="stat"><b>19</b><span>focused tests that attack the original-version harness</span></div>
       <div class="stat"><b>83da59f</b><span>the exact untouched original version used for comparisons</span></div>
-      <div class="stat tok"><b>2 of 35</b><span>planned v1.0 work steps complete; 33 remain</span></div>
+      <div class="stat tok"><b>In progress</b><span>v1.0 follows an evidence-gated 35-packet plan</span></div>
     </div>
     <div class="grid2">
       <div class="mech"><h3>Same original every time</h3><p>The harness refuses a modified checkout, changed executable, mismatched source, unsupported setting, or dirty output directory.</p></div>
@@ -282,7 +282,7 @@
     <div class="kicker">What remains before v1.0</div>
     <h2>33 planned steps are still open.</h2>
     <p class="lede">This is the complete roadmap in normal language. Each group has its own tests and evidence gate. A feature is not called finished merely because its code exists.</p>
-    <div class="progress" aria-label="2 of 35 v1.0 work packets complete"><span></span></div>
+    <div class="progress" aria-label="v1.0 execution is in progress; see canonical status checklist"><span></span></div>
     <p class="progress-label">2 complete · 33 remaining · status taken from the repository execution registry</p>
     <div class="roadmap">
       <div class="phase done"><span class="count">Done · 2 steps</span><h3>Freeze the plan and the original</h3><p>The reviewed plan is locked, and the untouched original now has a strict, independently reviewed comparison harness.</p></div>

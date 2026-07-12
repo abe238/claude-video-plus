@@ -1,7 +1,7 @@
 {
   "name": "claude-video-plus",
   "metadata": {
-    "description": "Ask a video a question and /watch fetches only the evidence that answers it: 60-80% fewer tokens than whole-timeline sampling, equal-or-better answers in blind judging. Fork of Bradley Bonanno's claude-video — same easy install, evidence mode added."
+    "description": "Ask a video a question and /watch fetches relevant evidence. An initial one-video, three-question benchmark measured 60-79% fewer estimated reader tokens with tied-or-better blind judging; broader testing is in progress. Fork of Brad Bonanno's claude-video."
   },
   "owner": {
     "name": "Abe Diaz"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "watch",
-      "description": "Watch a video (URL or local path). Question-aware evidence retrieval (chapter roll-up, numeric guard, cue frames) on top of the original download/frames/transcript pipeline. Falls back to the original behavior automatically on any failure.",
+      "description": "Watch a video (URL or local path). Question-aware evidence retrieval (chapter roll-up, numeric guard, cue frames) with an automatic compatibility fallback on failure.",
       "author": {
         "name": "Abe Diaz"
       },
