@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>claude-video-plus — /watch, but it fetches only the evidence</title>
-<meta name="description" content="Ask a video a question and /watch fetches only the evidence that answers it: 60–80% fewer tokens, equal-or-better answers in blind judging. Fork of claude-video.">
+<title>claude-video-plus — ask a video without making AI read the whole thing</title>
+<meta name="description" content="Ask a video a question. In our first three-question test, /watch gave the AI 60–79% less material to read without lowering answer scores.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #0c0e0b;
@@ -173,12 +173,12 @@
 </style>
 </head>
 <body>
-<div class="rail"><span style="top:120px">EVIDENCE COMPILED · NOT SAMPLED</span><span style="top:520px">t=03:36 → 12:54 · OpenAI SuperApp</span><span style="top:920px">numeric-guard · $1/$6 per 1M</span></div>
+<div class="rail"><span style="top:120px">ASK THE VIDEO · SKIP THE FILLER</span><span style="top:520px">THE USEFUL PART · 03:36 → 12:54</span><span style="top:920px">PRICING FOUND · $1/$6 PER 1M</span></div>
 <main>
   <header>
     <div class="crumb up d1"><a href="https://github.com/abe238/claude-video-plus">abe238/claude-video-plus</a> · fork of <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a></div>
-    <h1 class="up d2">/watch<span class="thin"> — but it fetches only<br>the evidence.</span></h1>
-    <p class="pitch up d3">Ask a video a question and <strong>/watch retrieves just what answers it</strong> — the relevant chapters, the pricing lines wherever they hide, the on-screen moments — instead of sampling the whole timeline. <strong>60–80% fewer tokens, equal-or-better answers</strong> in blind paired judging, and it falls back to the original pipeline automatically.</p>
+    <h1 class="up d2">Ask a video.<span class="thin"><br>Skip the parts you don't need.</span></h1>
+    <p class="pitch up d3">Most video tools hand the AI the full transcript and dozens of screenshots, even when you asked one specific question. <strong>/watch finds the sections, spoken details, and screenshots that answer your question.</strong> In our first test, that gave the AI <strong>60–79% less material to read</strong>, while answer scores stayed the same or improved. If the smarter search cannot work, it uses the original method automatically.</p>
     <div class="install up d4">
       <div class="cmd" onclick="cp(this,'/plugin marketplace add abe238/claude-video-plus\n/plugin install watch@claude-video-plus')">
         <small># Claude Code</small>
@@ -193,75 +193,75 @@
       </div>
     </div>
     <div class="stats up d5">
-      <div class="stat tok"><b>−60→79%</b><span>evidence tokens vs original, same questions</span></div>
-      <div class="stat win"><b>2W · 1T</b><span>blind 3-judge panels, position-swapped</span></div>
-      <div class="stat"><b>93</b><span>tests, pure-stdlib Python, no new deps</span></div>
-      <div class="stat"><b>0</b><span>changes to defaults — evidence mode is opt-in</span></div>
+      <div class="stat tok"><b>60–79%</b><span>less material sent to the AI in our first test</span></div>
+      <div class="stat win"><b>2 better · 1 same</b><span>answer scores across three questions</span></div>
+      <div class="stat"><b>93</b><span>automated checks currently passing</span></div>
+      <div class="stat"><b>1 video</b><span>tested so far — more testing is still needed</span></div>
     </div>
   </header>
 
   <section>
-    <div class="kicker">How it works</div>
-    <h2>A question in, an evidence manifest out.</h2>
-    <p class="lede">The original samples 100 frames + the full transcript no matter what you asked (~50k tokens on a 40-minute video). Evidence mode compiles what your question actually needs — and writes down why it picked every piece.</p>
+    <div class="kicker">What it does</div>
+    <h2>It reads less video before answering.</h2>
+    <p class="lede">On our 38-minute test video, the original method sent the AI 100 screenshots and the full transcript: 50,941 tokens. Tokens are the small pieces of text and images an AI has to process. The new mode chose the useful sections first and kept a record of every choice.</p>
     <div class="manifest">
 <span class="c">$ watch.py "$URL" --detail evidence --question "what's actually new — skip the hype?"</span><br>
-<span class="hl">policy:</span> targeted &nbsp;<span class="c">// summaries auto-keep the full transcript instead</span><br>
-<span class="hl">chapter-rollup</span>&nbsp;&nbsp;<span class="t">[00:12–03:36]</span> GPT-5.6 <span class="c">score 3.24</span><br>
-<span class="hl">chapter-rollup</span>&nbsp;&nbsp;<span class="t">[34:02–38:16]</span> GPT-5.6 vs. Fable <span class="c">score 2.61</span><br>
-<span class="hl">numeric-guard</span>&nbsp;&nbsp;&nbsp;<span class="t">[23:05–23:25]</span> API pricing $5/$30 · $2.50/$15 · $1/$6 <span class="r">+ frame (tables live on-screen)</span><br>
-<span class="hl">deictic-cue</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t">[06:50]</span> "you can see" → frame<br>
-<span class="hl">reader_cost:</span> 11,505 tokens <span class="c">vs 50,941 sampling the timeline</span> <span class="r">−77%</span>
+<span class="hl">Question type:</span> specific &nbsp;<span class="c">// summaries still keep the full transcript</span><br>
+<span class="hl">Useful section</span>&nbsp;&nbsp;<span class="t">[00:12–03:36]</span> GPT-5.6 announcement<br>
+<span class="hl">Useful section</span>&nbsp;&nbsp;<span class="t">[34:02–38:16]</span> GPT-5.6 compared with Fable<br>
+<span class="hl">Numbers found</span>&nbsp;&nbsp;&nbsp;<span class="t">[23:05–23:25]</span> API pricing $5/$30 · $2.50/$15 · $1/$6 <span class="r">+ screenshot of the table</span><br>
+<span class="hl">Screen checked</span>&nbsp;&nbsp;&nbsp;<span class="t">[06:50]</span> speaker says "you can see" → save that screenshot<br>
+<span class="hl">Material sent to AI:</span> 11,505 tokens <span class="c">instead of 50,941</span> <span class="r">77% less</span>
     </div>
     <div class="grid2">
-      <div class="mech"><h3><code>chapter roll-up</code></h3><p>Whole topical chapters (YouTube chapters, pause-gap fallback) — not isolated snippets, so features described without your question's words still make it in.</p></div>
-      <div class="mech"><h3><code>numeric guard</code></h3><p>Pricing, benchmarks, and specs get rescued from anywhere in the video — with a frame each, because tables live on-screen, not in speech.</p></div>
-      <div class="mech"><h3><code>reader rules</code></h3><p>The skill instructs the model to mine on-screen tables and reconcile conflicting claims — it caught a presenter's pricing self-contradiction the original repeated.</p></div>
-      <div class="mech"><h3><code>fail-open</code></h3><p>No captions, local file, any compile error → the original pipeline runs instead. You can't end up worse off than upstream.</p></div>
+      <div class="mech"><h3>It keeps complete ideas</h3><p>It selects whole relevant sections, not random sentences. That helps when the speaker explains something without using the exact words in your question.</p></div>
+      <div class="mech"><h3>It looks for hard facts</h3><p>Prices, benchmark scores, and specifications are kept even when they appear somewhere unexpected. It also saves the matching screenshot when the important numbers are shown on screen.</p></div>
+      <div class="mech"><h3>It checks what is on screen</h3><p>The AI is told to read tables and pages instead of relying only on speech. In our test, that helped catch a pricing statement that contradicted the presenter's own list.</p></div>
+      <div class="mech"><h3>It has a safe backup</h3><p>If there are no captions or the smarter search fails, /watch switches back to the original method instead of returning an incomplete result.</p></div>
     </div>
   </section>
 
   <section>
-    <div class="kicker">The evidence</div>
-    <h2>Blind-judged, paired, raw data in the repo.</h2>
-    <p class="lede">Same 38-minute video, same three questions, one answering agent per pipeline, three blind judges with position swap. Every score and answer is committed — audit it yourself.</p>
+    <div class="kicker">The actual numbers</div>
+    <h2>Here is what happened in the first test.</h2>
+    <p class="lede">Both versions answered the same three questions about the same 38-minute video. Three AI judges scored the answers from 1 to 10 without being told which version made which answer. The raw answers and scores are in the repository.</p>
     <table>
-      <thead><tr><th>Question class</th><th>Original</th><th>Evidence mode</th><th>Tokens</th><th>Blind quality</th></tr></thead>
+      <thead><tr><th>Question</th><th>Original</th><th>New mode</th><th>Less to read</th><th>Average judge score</th></tr></thead>
       <tbody>
-        <tr><td>Coverage summary</td><td class="mono">50,941 tok</td><td class="mono">20,148 tok</td><td class="delta">−60%</td><td><span class="win">9.33</span> vs 8.33 — win</td></tr>
-        <tr><td>Targeted · cost + specs</td><td class="mono">50,941 tok</td><td class="mono">11,505 tok</td><td class="delta">−77%</td><td><span class="tie">9.00 vs 9.00 — tie</span></td></tr>
-        <tr><td>Targeted · feature</td><td class="mono">50,941 tok</td><td class="mono">10,555 tok</td><td class="delta">−79%</td><td><span class="win">9.33</span> vs 8.33 — win</td></tr>
+        <tr><td>Summarize the whole video</td><td class="mono">50,941 tokens</td><td class="mono">20,148 tokens</td><td class="delta">60%</td><td><span class="win">9.33</span> vs 8.33 — better</td></tr>
+        <tr><td>What did it say about costs and specs?</td><td class="mono">50,941 tokens</td><td class="mono">11,505 tokens</td><td class="delta">77%</td><td><span class="tie">9.00 vs 9.00 — same</span></td></tr>
+        <tr><td>What does the new feature do?</td><td class="mono">50,941 tokens</td><td class="mono">10,555 tokens</td><td class="delta">79%</td><td><span class="win">9.33</span> vs 8.33 — better</td></tr>
       </tbody>
     </table>
     <div class="loss">
-      <div class="kicker">We publish the round we lost</div>
-      <p>The first retrieval prototype saved <b>91% of tokens and lost 3–0</b> — it missed the pricing segment on a cost question and skipped two headline features. That failing round ships in the repo next to the wins, because it's what the shipped mechanisms actually fix. If a future benchmark shows a loss, it ships too.</p>
+      <div class="kicker">The first version failed</div>
+      <p>Our first attempt gave the AI <b>91% less material, but made worse answers on all three questions</b>. It missed a pricing section and two major features. We publish that failed test beside the improved result because saving tokens is useless if the answer gets worse.</p>
     </div>
     <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">Read the raw data</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus">GitHub repo</a>
   </section>
 
   <section>
-    <div class="kicker">Tradeoffs</div>
-    <h2>What you give up. Directly.</h2>
+    <div class="kicker">What to know before using it</div>
+    <h2>It is promising, not magic.</h2>
     <ul class="trade">
-      <li><b>Needs a question.</b> No <code>--question</code>, no evidence mode — you get the original pipeline, unchanged.</li>
-      <li><b>Slightly slower end-to-end.</b> ~2s of compile after download, plus more careful frame reading. Tokens down a lot, wall-clock up a little.</li>
-      <li><b>URLs with captions only, today.</b> Local files and caption-less videos fall back to the original automatically.</li>
-      <li><b>Summaries keep the full transcript by design</b> — top-k retrieval on a summary is how you miss stories. The −60% there comes from smarter frames + dedup.</li>
-      <li><b>Retrieval is lexical, not semantic.</b> Zero word-overlap questions can under-retrieve; the guard, facet expansion, and fallback blunt this.</li>
-      <li><b>The benchmark is honest but small.</b> LLM judges, paired blind panels, auditable raw data — not yet the preregistered statistical trial specified in the repo's improvement plan.</li>
+      <li><b>You need to ask a question.</b> Without one, /watch uses the original method.</li>
+      <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
+      <li><b>The smarter mode currently needs a URL with captions.</b> Local files and videos without captions use the original method for now.</li>
+      <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video.</li>
+      <li><b>Today it mostly matches words.</b> A question phrased very differently from the video can miss a section. Hybrid semantic search is planned for v1.0 and will be measured before release.</li>
+      <li><b>So far, this is one video and three questions.</b> The numbers above are real, but they do not prove the same improvement on every kind of video. A larger test is planned.</li>
     </ul>
   </section>
 
   <section>
     <div class="kicker">Gratitude</div>
     <h2>Built on someone else's good decisions.</h2>
-    <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a> — caption-first, self-contained, fail-open everywhere. Those decisions are why an evidence compiler could be added without breaking a thing. Upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a> and builds AI operating systems at <a href="https://www.solarisautomation.io/">Solaris Automation</a>. The media layer is <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>; transcription via <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>; research credits with transferability cautions live in the improvement plan.</p>
+    <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a>. Its caption-first design, simple installation, and reliable backup behavior made this project possible. The upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a>, check them out. The media tools are <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>; transcription uses <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>. Research credits and links are in the improvement plan.</p>
   </section>
 
   <footer>
-    <span>MIT · original © Brad Bonanno · derivative © Abe Diaz</span>
+    <span>MIT License</span>
     <span><a href="https://github.com/abe238/claude-video-plus">github.com/abe238/claude-video-plus</a></span>
   </footer>
 </main>
