@@ -2,6 +2,19 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.0.2] — 2026-07-12
+
+Behavior release. The release artifact is
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.2/watch.skill).
+
+### Changed
+
+- Evidence mode now routes videos under 9 minutes (540s) to the original pipeline
+  automatically, before any video download. The 2026-07-12 development battery lost
+  every question on the one video under 9 minutes — short videos are already cheap
+  to read in full, so trimming only costs quality. One new unit test pins the guard
+  (suite: 338).
+
 ## [1.0.1] — 2026-07-12
 
 Security patch for the agent-facing skill contract. The release artifact is
