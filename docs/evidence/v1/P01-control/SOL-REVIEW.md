@@ -41,3 +41,13 @@ later yt-dlp call, and that undeclared source/invocation provenance fields were 
 bounded remediation now snapshots VTTs synchronously inside a hash-recorded yt-dlp pass-through
 wrapper before Control resumes, selects the consumed snapshot using frozen rules, and requires
 exact provenance key sets. This smaller remediation requires a fresh independent verdict.
+
+## Final approval
+
+Model: `gpt-5.6-sol`
+
+Session: `019f54fb-63e6-7ea2-937a-45f72809a318`
+
+Approved staged tree: `60121e1316cde582fc61f44239e87dc3a17b76e8`
+
+Final verdict: **APPROVE**
