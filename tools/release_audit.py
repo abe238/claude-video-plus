@@ -13,6 +13,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CONTROL_TESTS = ["tests/test_control_harness.py", "tests/test_control_conformance.py"]
+MEDIA_TESTS = ["tests/test_dedup.py", "tests/test_fixtures.py", "tests/test_frames.py",
+               "tests/test_timestamps.py", "tests/test_watch.py", "tests/test_whisper.py"]
 
 
 def run(command: list[str]) -> dict:
@@ -43,8 +46,12 @@ def main() -> int:
     parser.add_argument("--artifact", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+    all_tests = sorted(str(path.relative_to(ROOT)) for path in (ROOT / "tests").glob("test_*.py"))
+    fast_tests = [path for path in all_tests if path not in CONTROL_TESTS and path not in MEDIA_TESTS]
     checks = [run(["python3", "tools/validate_v1_execution.py"]),
-              run(["python3", "-m", "pytest", "-q"]),
+              run(["python3", "-m", "pytest", "-q", *CONTROL_TESTS]),
+              run(["python3", "-m", "pytest", "-q", *MEDIA_TESTS]),
+              run(["python3", "-m", "pytest", "-q", *fast_tests]),
               run(["python3", "-m", "compileall", "-q", "skills", "tools", "tests"])]
     report = {"schema_version": 1, "versions": versions(), "checks": checks,
               "artifact": artifact(args.artifact) if args.artifact else None,
