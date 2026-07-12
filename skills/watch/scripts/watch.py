@@ -19,8 +19,8 @@ from config import frame_cap, get_config  # noqa: E402
 from download import download, fetch_captions, is_url  # noqa: E402
 from frames import MAX_FPS, auto_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 from transcribe import filter_range, format_transcript, parse_vtt  # noqa: E402
-from whisper import load_api_key, transcribe_video  # noqa: E402
 from question import WatchRequest  # noqa: E402
+from transcription import transcribe as transcribe_pipeline, transcription_diagnostics  # noqa: E402
 
 
 def run_evidence(args) -> int:
@@ -48,7 +48,7 @@ def run_evidence(args) -> int:
 
     from evidence import compile_evidence  # noqa: E402 — same-dir sibling
 
-    compile_evidence(
+    summary = compile_evidence(
         dl["subtitle_path"],
         dl["video_path"],
         str(work / "download" / "video.info.json"),
@@ -60,7 +60,19 @@ def run_evidence(args) -> int:
         semantic_endpoint=args.semantic_endpoint,
         semantic_model=args.semantic_model,
         allow_remote_semantic=args.allow_remote_semantic,
+        acquisition={key: dl.get(key) for key in (
+            "state", "source_identity", "attempts", "selected_strategy", "warnings",
+            "fallback_reason", "failure_class")},
     )
+    if args.export_bundle:
+        from portable import export_bundle
+        export_bundle(
+            {"manifest.json": Path(summary["manifest"]), "report.txt": Path(summary["report"])},
+            args.export_bundle,
+            tool_versions={"watch": "0.3.0"}, schema_versions={"evidence": 1},
+            evidence_budget={"text_chars": args.text_budget, "frames": args.max_frames},
+            completeness_state="complete", provenance={"source_identity": dl.get("source_identity", "unknown")},
+        )
     print((work / "evidence" / "report.txt").read_text(encoding="utf-8"))
     print(f"\n---\n_Work dir: `{work}` — delete when done._")
     return 0
@@ -73,6 +85,9 @@ def main() -> int:
     )
     ap.add_argument("source", nargs="?", help="Video URL or local file path")
     ap.add_argument("--request-json", help="Versioned JSON request file; avoids shell quoting ambiguity")
+    ap.add_argument("--export-bundle", help="Evidence mode: export manifest/report as a portable bundle")
+    ap.add_argument("--verify-bundle", help="Verify a portable evidence bundle and exit")
+    ap.add_argument("--replay-bundle", help="Replay a verified portable bundle into --out-dir and exit")
     ap.add_argument("--max-frames", type=int, default=None, help="Override frame cap")
     ap.add_argument("--resolution", type=int, default=512, help="Frame width in pixels (default 512)")
     ap.add_argument("--fps", type=float, default=None, help="Override auto-fps")
@@ -120,6 +135,12 @@ def main() -> int:
         default=None,
         help="Force a specific Whisper backend. Default: prefer Groq, fall back to OpenAI.",
     )
+    ap.add_argument("--stt", choices=["auto", "sidecar", "local-http", "yap", "groq", "openai"],
+                    default="auto", help="Select a normalized transcription Adapter")
+    ap.add_argument("--allow-remote-transcription", action="store_true",
+                    help="Explicitly authorize audio transmission to Groq/OpenAI")
+    ap.add_argument("--diagnostics-json", action="store_true",
+                    help="Print secret-free transcription/config diagnostics and exit")
     ap.add_argument(
         "--no-dedup",
         action="store_true",
@@ -127,6 +148,16 @@ def main() -> int:
              "frames (static screen recordings, held slides) instead of collapsing them.",
     )
     args = ap.parse_args()
+
+    if args.verify_bundle or args.replay_bundle:
+        from portable import replay_bundle, verify_bundle
+        if args.verify_bundle:
+            print(__import__("json").dumps(verify_bundle(args.verify_bundle), indent=2, sort_keys=True))
+        else:
+            if not args.out_dir:
+                ap.error("--replay-bundle requires --out-dir")
+            print(__import__("json").dumps(replay_bundle(args.replay_bundle, args.out_dir), indent=2, sort_keys=True))
+        return 0
 
     if args.request_json:
         request = WatchRequest.from_file(args.request_json)
@@ -137,6 +168,9 @@ def main() -> int:
         args.detail = request.detail
         args.text_budget = request.text_budget
         args.max_frames = request.max_frames
+    if args.diagnostics_json:
+        print(__import__("json").dumps(transcription_diagnostics(), indent=2, sort_keys=True))
+        return 0
     if not args.source:
         ap.error("source is required unless supplied by --request-json")
 
@@ -318,32 +352,24 @@ def main() -> int:
         except Exception as exc:
             print(f"[watch] subtitle parse failed: {exc}", file=sys.stderr)
 
+    transcript_result = None
     if not transcript_segments and not args.no_whisper and video_path and meta.get("has_audio"):
-        backend, api_key = load_api_key(args.whisper)
-        if backend and api_key:
-            try:
-                all_segments, used_backend = transcribe_video(
-                    video_path,
-                    work / "audio.mp3",
-                    backend=backend,
-                    api_key=api_key,
-                )
-                transcript_segments = filter_range(all_segments, start_sec, end_sec) if focused else all_segments
+        selected_adapter = args.whisper or args.stt
+        try:
+            transcript_result = transcribe_pipeline(
+                video_path, work / "transcription",
+                start_seconds=start_sec, end_seconds=end_sec,
+                adapter=selected_adapter,
+                allow_remote=args.allow_remote_transcription,
+            )
+            if transcript_result.usable:
+                transcript_segments = [segment.to_dict() for segment in transcript_result.segments]
                 transcript_text = format_transcript(transcript_segments)
-                transcript_source = f"whisper ({used_backend})"
-            except SystemExit as exc:
-                print(f"[watch] whisper fallback failed: {exc}", file=sys.stderr)
-        else:
-            hint = (
-                f"--whisper {args.whisper} was set but the matching API key is missing"
-                if args.whisper else
-                "no subtitles and no Whisper API key found"
-            )
-            setup_py = SCRIPT_DIR / "setup.py"
-            print(
-                f"[watch] {hint} — run `python3 {setup_py}` to enable the Whisper fallback",
-                file=sys.stderr,
-            )
+                transcript_source = transcript_result.adapter or "transcription Adapter"
+            else:
+                print(f"[watch] transcription unavailable: {transcript_result.failure_code}", file=sys.stderr)
+        except (ValueError, RuntimeError) as exc:
+            print(f"[watch] transcription failed: {type(exc).__name__}", file=sys.stderr)
     elif not transcript_segments and video_path and not meta.get("has_audio"):
         print("[watch] no audio stream found — proceeding without transcription", file=sys.stderr)
 
@@ -358,6 +384,10 @@ def main() -> int:
     if info.get("uploader"):
         print(f"- **Uploader:** {info['uploader']}")
     print(f"- **Duration:** {format_time(full_duration)} ({full_duration:.1f}s)")
+    if dl.get("selected_strategy"):
+        print(f"- **Acquisition:** {dl['selected_strategy']} ({len(dl.get('attempts') or [])} attempt(s))")
+    for warning in dl.get("warnings") or []:
+        print(f"> **Acquisition warning:** {warning}")
     if focused:
         print(
             f"- **Focus range:** {format_time(effective_start)} → {format_time(effective_end)} "
@@ -397,6 +427,9 @@ def main() -> int:
         )
     else:
         print("- **Transcript:** none available")
+    if transcript_result:
+        print(f"- **Transcription state:** {transcript_result.state}; "
+              f"{len(transcript_result.attempts)} Adapter attempt(s)")
 
     if detail == "token-burner" and len(frames) > 250:
         print()

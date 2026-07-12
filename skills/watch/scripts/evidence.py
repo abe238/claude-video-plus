@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -27,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from transcribe import parse_vtt  # noqa: E402
 from retrieval import conflicts, lexical_rank, obligations, progressive_expand, scout_identity  # noqa: E402
 from semantic import hashed_local_rank, remote_rank, uncertainty  # noqa: E402
+from state import CacheKey, EvidenceState  # noqa: E402
 
 SPAN_SECONDS = 30.0
 PAUSE_GAP_SECONDS = 2.0
@@ -435,14 +437,29 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
                      semantic_backend: str = "off",
                      semantic_endpoint: str | None = None,
                      semantic_model: str = "default",
-                     allow_remote_semantic: bool = False) -> dict:
+                     allow_remote_semantic: bool = False,
+                     acquisition: dict | None = None) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    segments = dedupe_rolling(parse_vtt(str(vtt_path)))
+    info = json.loads(Path(info_path).read_text(encoding="utf-8"))
+    source_identity = hashlib.sha256(
+        str(info.get("id") or info.get("webpage_url") or video_path).encode()
+    ).hexdigest()
+    state = EvidenceState()
+    cache_key = CacheKey(source_identity=source_identity, adapter="captions", model="vtt",
+                         policy="scout-v1")
+    cached = state.get(cache_key) if os.environ.get("WATCH_STATE", "1") != "0" else None
+    if cached and cached.status == "hit" and isinstance(cached.payload, dict):
+        segments = cached.payload.get("segments", [])
+        scout_reuse = "verified-hit"
+    else:
+        segments = dedupe_rolling(parse_vtt(str(vtt_path)))
+        scout_reuse = "miss"
+        if segments and os.environ.get("WATCH_STATE", "1") != "0":
+            state.put(cache_key, {"segments": segments}, payload_kind="scout")
     if not segments:
         raise ValueError(f"no transcript segments parsed from {vtt_path}")
-    info = json.loads(Path(info_path).read_text(encoding="utf-8"))
     duration = float(info.get("duration") or segments[-1]["end"])
     chapters = load_chapters(info, segments, duration)
     attach_chapters(segments, chapters)
@@ -500,9 +517,6 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
             })
     evidence.extend(frame_entries)
 
-    source_identity = hashlib.sha256(
-        str(info.get("id") or info.get("webpage_url") or video_path).encode()
-    ).hexdigest()
     manifest = {
         "schema_version": 1,
         "policy": policy,
@@ -525,6 +539,7 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
             ],
             "conflicts": conflicts([row["segment"] for row in lexical]),
             "scout_identity": scout_identity(source_identity, segments),
+            "scout_reuse": scout_reuse,
             "progressive_verification": expanded,
         },
         "semantic": {
@@ -534,6 +549,7 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
             "receipt": semantic_receipt.__dict__ if semantic_receipt else None,
         },
         "vision": {"backend": "ffmpeg-stdlib-v1", "opencv_included": False},
+        "acquisition": acquisition or {},
     }
     (out_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2), encoding="utf-8")
