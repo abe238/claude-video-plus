@@ -1,7 +1,7 @@
 {
   "name": "watch",
   "version": "1.0.0",
-  "description": "Let Claude watch a video and retrieve question-relevant evidence. In an initial one-video, three-question benchmark, evidence mode used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Fork of Brad Bonanno's claude-video; evidence mode is opt-in.",
+  "description": "Fork of Brad Bonanno's bradautomates/claude-video. Adds opt-in question-aware evidence retrieval; an initial one-video, three-question benchmark used 60-79% fewer estimated reader tokens and tied or won blind paired judging. Broader testing is in progress.",
   "author": {
     "name": "Abe Diaz"
   },
@@ -27,7 +27,7 @@
   "interface": {
     "displayName": "watch",
     "shortDescription": "Give the agent a video input — ask a question, get only the evidence that answers it.",
-    "longDescription": "watch downloads video with yt-dlp, extracts frames with ffmpeg, obtains a timestamped transcript from native captions or optional Whisper, and gives the evidence to the model. This fork of Brad Bonanno's claude-video adds opt-in question-aware retrieval: chapters, pricing/benchmark lines, cue moments, and on-screen tables. In an initial one-video, three-question benchmark it used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Failures use an automatic compatibility fallback.",
+    "longDescription": "watch is a fork of Brad Bonanno's original bradautomates/claude-video. It downloads video with yt-dlp, extracts frames with ffmpeg, obtains a timestamped transcript from native captions or optional Whisper, and gives the evidence to the model. This fork adds opt-in question-aware retrieval: chapters, pricing/benchmark lines, cue moments, and on-screen tables. In an initial one-video, three-question benchmark it used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Failures use an automatic compatibility fallback.",
     "developerName": "Abe Diaz",
     "category": "Productivity",
     "capabilities": [

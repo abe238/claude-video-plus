@@ -1,6 +1,8 @@
 # /watch — claude-video-plus
 
-**Ask a video a question and `/watch` fetches only the evidence that answers it. In one initial 38-minute benchmark, evidence mode used 60–79% fewer estimated reader tokens and tied or won three blind-judged questions; broader testing is still in progress. Fork of [bradautomates/claude-video](https://github.com/bradautomates/claude-video) — same one-command install, evidence mode added, automatic compatibility fallback.**
+> **Fork notice:** `claude-video-plus` is a fork of Brad Bonanno's original [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video). This project builds on Brad's work; it is not the original repository.
+
+**Ask a video a question and `/watch` fetches only the evidence that answers it. In one initial 38-minute benchmark, evidence mode used 60–79% fewer estimated reader tokens and tied or won three blind-judged questions; broader testing is still in progress. Same one-command install, evidence mode added, automatic compatibility fallback.**
 
 > [!NOTE]
 > This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), created by Brad Bonanno and distributed under the MIT License. The full upstream Git history and license are preserved. We are grateful to Brad for designing and openly sharing the reliable foundation this work builds on — see [Gratitude](#gratitude-and-attribution).

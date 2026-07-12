@@ -1,7 +1,7 @@
 {
   "name": "watch",
   "version": "1.0.0",
-  "description": "Let Claude watch a video and retrieve question-relevant evidence. In an initial one-video, three-question benchmark, evidence mode used 60-79% fewer estimated reader tokens and tied or won blind paired judging; broader testing is in progress. Fork of Brad Bonanno's claude-video; evidence mode is opt-in.",
+  "description": "Fork of Brad Bonanno's bradautomates/claude-video. Adds opt-in question-aware evidence retrieval; an initial one-video, three-question benchmark used 60-79% fewer estimated reader tokens and tied or won blind paired judging. Broader testing is in progress.",
   "author": {
     "name": "Abe Diaz"
   },
