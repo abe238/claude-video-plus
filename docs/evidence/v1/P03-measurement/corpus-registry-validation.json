@@ -1,0 +1,11 @@
+{
+  "status": "provisional",
+  "command": "python3 tools/corpus_registry.py docs/execution/v1/CORPUS-REGISTRY-v1.json --access-log docs/evidence/v1/P03-measurement/raw/access-log.jsonl",
+  "exit": 0,
+  "result": "ok: corpus registry seal and access log",
+  "registry_path": "docs/execution/v1/CORPUS-REGISTRY-v1.json",
+  "registry_sha256": "0505802c1faaee4d5a0cf74a569fee7fe85b10d254ed0da8d78cd4c6f294612d",
+  "registry_seal_sha256": "7768601f5c9c6ac0a1d02dbf64d832c937ce06da06c6e74cd571fa2a292fc887",
+  "access_log": {"records": 0, "state": "unopened and unspent", "path": "raw/access-log.jsonl", "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", "template": "raw/access-log-template.json"},
+  "identity_disclosure": "synthetic placeholder IDs and SHA-256 labels only; no source locator, URL, media, caption, or private path"
+}

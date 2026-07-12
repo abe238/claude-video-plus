@@ -1,0 +1,9 @@
+{
+  "buckets": {
+    "macos-arm64-python-3.14:cold:short": {"allowance_ms": 5.0, "median_delta_ms": 4.0, "p95_delta_ms": 4.0, "pass": true},
+    "macos-arm64-python-3.14:warm:short": {"allowance_ms": 5.0, "median_delta_ms": 4.0, "p95_delta_ms": 4.0, "pass": true}
+  },
+  "evaluator_version": "v1",
+  "fixture_sha256": "4b5e7e3a7341153b0dd2def63dc06cf84a787b369d7c3ce81c1f8d1f5960df0d",
+  "pass": true
+}
