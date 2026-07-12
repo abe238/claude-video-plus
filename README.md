@@ -8,7 +8,7 @@
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
 > [!IMPORTANT]
-> **The v1.0 implementation is assembled; integrated verification is next.** Acquisition recovery, local-first transcription (sidecars, loopback `:8082`, optional YAP, explicitly authorized cloud), range-only resumable audio, private state, portable bundles, lexical/optional semantic retrieval, dependency-free vision scoring, and release tooling are now present on `main`. They are not release claims until the consolidated tests, install matrix, benchmarks, confirmatory evaluation, and final audit pass. See the [status checklist](docs/V1-STATUS.md), [master plan](docs/plans/V1.0-MASTER-PLAN.md), and [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
+> **`0.3.0-rc.1` is ready to publish as a clearly labeled prerelease.** The assembled implementation passes 327 local tests, the five-job macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` install/invoke/uninstall lifecycle, deterministic bundle verification, and an independent early-publish review. The 81,952-byte `watch.skill` SHA-256 is `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`. Stable v1.0 and broad superiority claims still require the multi-video benchmark, human-validated grader, and one sealed confirmation run. See the [RC audit](docs/evidence/v1/P32-release/RC-AUDIT.md), [status checklist](docs/V1-STATUS.md), and [master plan](docs/plans/V1.0-MASTER-PLAN.md).
 
 ## Install
 
