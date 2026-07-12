@@ -2,8 +2,8 @@
 
 Date: 2026-07-11
 
-Pacing: **autonomous**, with mandatory stops at `AT_BOUND`, scope-expansion decisions, and
-the final public-release gate.
+Pacing: **autonomous and single-pass** for P02 through P32, with mandatory stops only for genuine
+external blockers, material scope expansion, and the final public-release gate.
 
 Source: `docs/plans/V1.0-MASTER-PLAN.md` at the commit recorded in
 `REQUIREMENTS.json`. The upstream control remains commit `83da59f`.
@@ -17,10 +17,10 @@ bound, and an explicit successor. Inner work follows:
 RE-PLAN -> BUILD -> PIN -> PROVE -> MEASURE -> SOL REVIEW -> COMMIT/PUSH -> EXIT
 ```
 
-Maximum per implementation packet: two valid PROVE failures and three Sol review/fix rounds.
-For P00, the owner has given standing authorization to continue bounded, read-only Sol
-review/remediation passes until approval. Do not ask for per-pass authorization; stop only for a
-genuine external blocker or a material scope-expansion decision.
+P02 through P32 each receive one implementation pass, focused packet tests, deterministic
+validators, and one read-only Sol review. Do not repeatedly run the full suite or start iterative
+packet review loops. P32 runs the full repository suite and one consolidated repair/release audit.
+The owner has standing authorization for work after P32; do not ask for per-pass authorization.
 
 ## Chain
 

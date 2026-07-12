@@ -28,9 +28,10 @@ Every packet names:
 5. tests and live proof to add;
 6. deterministic commands;
 7. evidence output paths;
-8. a maximum of two valid PROVE failures and three Sol review/fix rounds for implementation
-   packets; P00 has standing owner authorization for read-only Sol review/remediation until
-   approval, without repeated per-pass authorization requests;
+8. one implementation pass and one read-only Sol review for packets P02 through P32. Run only the
+   packet's focused tests and deterministic validators; defer the full repository regression suite
+   and consolidated release audit to P32. Record residual non-release-blocking uncertainty instead
+   of starting another packet-level review loop;
 9. stop conditions requiring escalation rather than invention.
 
 The executor receives the packet and only the references named by it. It does not receive
@@ -43,7 +44,13 @@ PLANNED -> READY_FOR_TERRA -> IMPLEMENTING -> VERIFYING -> SOL_REVIEW
         -> CHANGES_REQUIRED -> IMPLEMENTING
         -> VERIFIED -> COMMITTED -> PUSHED -> COMPLETE
 
-Any state -> AT_BOUND when a declared bound is exhausted.
+Any state -> AT_BOUND after its single authorized implementation/review pass. P32 owns the one
+consolidated release repair/audit pass for cross-packet or release-blocking findings.
+
+After its pass, a packet with unresolved findings is `implemented`, not `complete`. Its findings
+must name a downstream owner and may not cross P32's release gate. Downstream packets may build on
+an `implemented` dependency; only P32 may promote the chain to release-complete after consolidated
+repair, the full suite, and final audit.
 ```
 
 The coordinator resumes the same Terra session once for concrete verification or review

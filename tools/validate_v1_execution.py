@@ -409,7 +409,7 @@ def validate(data: dict[str, Any], *, root: Path = ROOT, ready: bool = False) ->
             continue
         incomplete = [
             dependency for dependency in packet.get("depends_on", [])
-            if packet_by_id.get(dependency, {}).get("state") != "complete"
+            if packet_by_id.get(dependency, {}).get("state") not in {"implemented", "complete"}
         ]
         if incomplete:
             errors.append(f"complete packet {packet.get('id')} has incomplete dependencies: {incomplete}")
