@@ -42,4 +42,9 @@ here unedited.
   result where a naive retrieval candidate *lost* 3–0 — kept because it shows what the
   shipped mechanisms (numeric guard, chapter roll-up, frame-mining, reconciliation)
   actually fix.
-- Multi-video battery — in progress; lands as its own dated folder.
+- [2026-07-12-multi-video-battery/](2026-07-12-multi-video-battery/) — 4 videos, 12 questions,
+  measured at commit `b90ae21`: mean token reduction **80%**, overall quality parity (control
+  8.64 vs evidence 8.58 mean). Duration split is the real finding — 0 wins/0 ties/3 losses on
+  the one video under 8 min, vs 5 wins/2 ties/2 losses on videos 8 min and up. A 5th video
+  (Veritasium) was collected but its judge panel hit a session limit; excluded from all
+  aggregates, raw answers included unjudged.

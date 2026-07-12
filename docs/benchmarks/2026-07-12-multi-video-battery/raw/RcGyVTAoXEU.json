@@ -1,0 +1,315 @@
+{
+  "video": {
+    "id": "RcGyVTAoXEU",
+    "title": "How to Make Stress Your Friend (TED, Kelly McGonigal)",
+    "duration": 869,
+    "chapters": true,
+    "genre": "talk"
+  },
+  "prep": {
+    "control_frames": 100,
+    "control_text_chars": 42913
+  },
+  "questions": [
+    {
+      "id": "q1_coverage",
+      "policy": "coverage",
+      "text": "Can you summarize the main points of this talk? What is her core argument about stress and what evidence does she use to back it up?",
+      "why_verifiable": "The talk has a clear arc: confession that she demonized stress for a decade, the mindset-changes-mortality study, the Harvard reappraisal study on the physical stress response, oxytocin as a stress hormone driving social connection, and the caregiving/resilience study. A good summary must hit these beats, all checkable against the transcript."
+    },
+    {
+      "id": "q2_targeted",
+      "policy": "targeted",
+      "text": "What were the numbers from that big study she mentions about people who believe stress is harmful? How much did it raise their risk of dying, and how many deaths did the researchers blame on that belief?",
+      "why_verifiable": "Transcript gives exact figures: 30,000 US adults tracked 8 years, 43 percent increased risk of dying only for those who believed stress is harmful, 182,000 estimated premature deaths (over 20,000/year), making the belief the 15th largest cause of death in the US, more than skin cancer, HIV/AIDS, and homicide."
+    },
+    {
+      "id": "q3_targeted",
+      "policy": "targeted",
+      "text": "What does she say about oxytocin in the talk? I thought it was just the cuddle hormone, but apparently it has something to do with stress and heart health?",
+      "why_verifiable": "Transcript states oxytocin is pumped out by the pituitary gland as part of the stress response, motivates seeking support, is a natural anti-inflammatory, keeps blood vessels relaxed during stress, and helps heart cells regenerate from stress-induced damage, all enhanced by social contact. Each claim is directly checkable."
+    }
+  ],
+  "compile": [
+    {
+      "id": "q1_coverage",
+      "transcript_chars": 13725,
+      "frames": 32,
+      "report": "scratchpad/battery/RcGyVTAoXEU/evidence/q1_coverage/report.txt"
+    },
+    {
+      "id": "q2_targeted",
+      "transcript_chars": 13721,
+      "frames": 6,
+      "report": "scratchpad/battery/RcGyVTAoXEU/evidence/q2_targeted/report.txt"
+    },
+    {
+      "id": "q3_targeted",
+      "transcript_chars": 13721,
+      "frames": 6,
+      "report": "scratchpad/battery/RcGyVTAoXEU/evidence/q3_targeted/report.txt"
+    }
+  ],
+  "ctlAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "CORE ARGUMENT: Kelly McGonigal argues that stress itself is not the enemy - it's your BELIEF about stress and how you RESPOND to it that determines whether stress harms you. Change how you think about stress and you literally change your body's physical response, making you healthier. Her goal shifted from getting rid of your stress to making you 'better at stress' [06:53-07:00]. Two mechanisms carry the argument: (1) viewing your stress response as helpful produces a healthier cardiovascular profile - 'the biology of courage' [12:17-12:22]; (2) stress makes you social (via oxytocin), and connecting with others under stress 'creates resilience' [12:24-12:28].\n\nEVERY DISTINCT SEGMENT:\n1. Opening confession [00:16-01:01]: She asks the audience to confess how much stress they've had. Her own confession: as a health psychologist she spent the last 10 years teaching that 'stress makes you sick' - increasing risk of everything from the common cold to cardiovascular disease - turning stress into the enemy, and now fears that message did 'more harm than good.'\n2. Study 1 - the belief study [01:20-03:00]: A study tracked 30,000 US adults for 8 years, asking how much stress they'd had and whether they believed stress is harmful, then checked public death records. High stress carried a 43% increased risk of dying - BUT only for people who also believed stress was harmful. Those with high stress who did NOT view it as harmful had the lowest risk of dying of anyone. Estimated 182,000 died prematurely from the BELIEF (not the stress), over 20,000/year, which would rank it the 15th largest cause of death. EVIDENCE (on-screen, not read aloud): '43%' slide cites Keller, Litzelman, Wisk et al. 2012, University of Wisconsin School of Medicine and Public Health [02:28]; a 'Top Causes of Death (U.S.)' CDC 2012 slide lists 'Stress Beliefs (20,231)' at #15 [02:47].\n3. The social stress test demonstration [03:22-05:20]: She makes the audience pretend to be participants - a 5-minute impromptu speech on personal weaknesses before expert evaluators giving discouraging feedback, then a math test counting backward from 996 by sevens while being harassed (on-screen: '996 - 7...' [04:07-04:33]). Point: we normally read a pounding heart and fast breathing as anxiety/not coping.\n4. Harvard reappraisal study [05:20-06:52]: Participants taught to view the stress response as helpful (pounding heart = preparing for action; fast breathing = more oxygen to the brain) were less stressed, more confident, and - most striking - their blood vessels stayed relaxed instead of constricting, a healthier cardiovascular profile resembling joy and courage. This could be the difference between a stress-induced heart attack at 50 and living into your 90s. EVIDENCE (on-screen): heart/blood-vessel animations cite Jamieson, Nock & Mendes 2012, Harvard University Department of Psychology [05:39].\n5. Goal shift [06:52-07:26]: She no longer wants to eliminate stress but to make you better at it; the audience 'intervention' means next time your heart pounds you'll think 'this is my body helping me rise to this challenge' and your body responds more healthily.\n6. Oxytocin / 'stress makes you social' [07:30-10:46]: The 'cuddle hormone' is also a stress hormone pumped out by the pituitary; it motivates you to seek support and connection, protects the cardiovascular system, and helps the heart heal - and its benefits are amplified by social contact. The built-in mechanism for stress resilience is human connection. EVIDENCE (on-screen): oxytocin molecule slides [07:54, 09:34].\n7. Study 3 - caring for others [10:52-11:56]: A study of ~1,000 US adults aged 34-93, tracked 5 years, found each major stressful life experience raised risk of dying by 30% - but people who spent time caring for others showed ZERO stress-related increase in dying. 'Caring created resilience.' EVIDENCE (on-screen): '30%' caring photos cite Poulin, Brown, Dillard & Smith 2013, University at Buffalo, NY, Department of Psychology [11:16-11:42].\n8. Conclusion [11:56-13:22]: The harmful effects of stress are not inevitable; how you think and act transforms your experience - view stress as helpful (biology of courage), connect with others (resilience). Stress gives us access to our hearts. Trust yourself to handle life's challenges and remember you don't have to face them alone.\n9. Q&A with the host (Chris Anderson) [13:32-14:15]: Asked whether it's equally wise to take a stressful job if you believe you can handle it, she says chasing meaning is better for your health than avoiding discomfort - go after what creates meaning and trust yourself to handle the stress that follows.\n\nEVIDENCE SUMMARY: three studies (two large death-record epidemiological studies and one Harvard experimental reappraisal study) plus the physiology of oxytocin.",
+        "cited_timestamps": [
+          "00:16",
+          "01:01",
+          "01:20",
+          "01:55",
+          "02:01",
+          "02:24",
+          "02:28",
+          "02:38",
+          "02:41",
+          "02:47",
+          "03:22",
+          "04:07",
+          "04:33",
+          "05:20",
+          "05:39",
+          "06:20",
+          "06:52",
+          "06:53",
+          "07:00",
+          "07:30",
+          "07:54",
+          "09:34",
+          "10:37",
+          "10:46",
+          "10:52",
+          "11:16",
+          "11:42",
+          "11:56",
+          "12:17",
+          "12:24",
+          "13:22",
+          "13:32",
+          "14:15"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "The 'big study' tracked 30,000 adults in the United States for 8 years [01:26-01:31]. It asked how much stress they'd experienced in the past year and whether they believed stress is harmful to their health, then used public death records to see who died [01:31-01:49].\n\nTHE NUMBERS:\n- RAISED RISK OF DYING: 43% increased risk of dying for people who had experienced a lot of stress in the previous year [01:55-02:00] - but ONLY for those who ALSO believed stress was harmful [02:01-02:07]. People with high stress who did NOT view stress as harmful were no more likely to die; in fact they had the lowest risk of dying of anyone in the study [02:13-02:22]. On-screen (not read aloud), the '43%' slide is attributed to Keller, Litzelman, Wisk, et al. 2012, University of Wisconsin School of Medicine and Public Health [02:28].\n- DEATHS BLAMED ON THE BELIEF: The researchers estimated that over the 8 years, 182,000 Americans died prematurely - 'not from stress but from the belief that stress is bad for you' [02:24-02:38]. She frames this as over 20,000 deaths a year [02:38-02:41], which would make believing stress is bad the 15th largest cause of death in the US, killing more people than skin cancer, HIV/AIDS, and homicide [02:41-02:53].\n\nON-SCREEN DETAIL (mine, never read aloud): A 'Top Causes of Death (U.S.)' slide (CDC 2012) lists the exact annual figure 'Stress Beliefs (20,231)' inserted at #15, struck through over 'Pneumonitis (18,090)' [02:47]. So the spoken 'over 20,000 a year' corresponds to the on-screen 20,231.\n\nReconciliation note: the 182,000 figure is the estimated total over the full 8-year tracking window, while 20,231 (on-screen) / 'over 20,000' (spoken) is the single-year figure used to rank it among CDC 2012 causes of death - these are consistent framings, not a contradiction.",
+        "cited_timestamps": [
+          "01:26",
+          "01:55",
+          "02:01",
+          "02:13",
+          "02:24",
+          "02:28",
+          "02:38",
+          "02:41",
+          "02:47",
+          "02:53"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "You're right that it's popularly known as the cuddle hormone, but McGonigal's point is that oxytocin is also a STRESS hormone that protects your heart. She introduces it under the idea 'stress makes you social' [07:45-07:54].\n\nWHAT SHE SAYS ABOUT OXYTOCIN:\n- The 'cuddle hormone' reputation: she acknowledges it has 'gotten as much hype as a hormone can get,' with the nickname the cuddle hormone because it's released when you hug someone - but says that's 'a very small part of what oxytocin is involved in' [07:55-08:07]. (On-screen oxytocin molecule/brain slide at [07:54], not read verbatim.)\n- Social functions: it's a neurohormone that fine-tunes your brain's social instincts, priming you to strengthen close relationships - it makes you crave physical contact with friends and family, enhances empathy, and makes you more willing to help and support people you care about [08:09-08:33]. Some have even suggested snorting oxytocin to become more compassionate [08:33-08:43].\n- THE KEY REVEAL - it's a stress hormone: 'here's what most people don't understand about oxytocin - it's a stress hormone' [08:43-08:51]. Your pituitary gland pumps it out as part of the stress response, 'as much a part of your stress response as the adrenaline that makes your heart pound' [08:51-09:00]. When released during stress it motivates you to seek support - to tell someone how you feel instead of bottling it up, and to notice when others are struggling so you can support each other [09:02-09:33].\n- HEART/CARDIOVASCULAR HEALTH: oxytocin also acts on your body, and 'one of its main roles in your body is to protect your cardiovascular system from the effects of stress' [09:42-09:47]. It's a natural anti-inflammatory and helps your blood vessels stay relaxed during stress [09:47-09:55]. Her 'favorite effect' is on the heart: your heart has receptors for oxytocin, and it helps heart cells regenerate and heal from stress-induced damage - 'this stress hormone strengthens your heart' [09:55-10:15]. (On-screen: oxytocin molecule shown beside a beating heart at [09:34].)\n- THE SOCIAL LOOP: all these physical benefits are enhanced by social contact and support, so when you reach out to others under stress - to seek or give help - you release more oxytocin, your stress response becomes healthier, and you recover faster from stress [10:15-10:37]. She calls this a built-in mechanism for stress resilience, and 'that mechanism is human connection' [10:37-10:46].\n\nSo yes: far from being 'just the cuddle hormone,' oxytocin is part of the stress response itself, and by pushing you toward connection while protecting and healing your heart, it's central to her claim that stress can be good for you.",
+        "cited_timestamps": [
+          "07:45",
+          "07:54",
+          "07:55",
+          "08:09",
+          "08:33",
+          "08:43",
+          "08:51",
+          "09:02",
+          "09:34",
+          "09:42",
+          "09:47",
+          "09:55",
+          "10:15",
+          "10:37"
+        ]
+      }
+    ],
+    "frames_read": 100
+  },
+  "evAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "CORE ARGUMENT: Speaker is health psychologist Kelly McGonigal (named at [14:15]). Her thesis: stress is not inherently harmful; what harms you is BELIEVING stress is bad and treating it as the enemy. How you THINK about stress physically changes your body's response, so shifting your mindset (and reaching out to others) makes stress healthier. Her new goal is not to get rid of your stress but to make you 'better at stress' [06:56-06:58]. She opens by confessing that for 10 years she taught 'stress makes you sick' (raising risk of everything from the common cold to cardiovascular disease) and turned stress into the enemy, but has changed her mind [00:44-01:17].\n\nEVIDENCE / DISTINCT SEGMENTS:\n\n1) BIG EPIDEMIOLOGICAL STUDY (belief-that-stress-is-harmful) [01:21-03:02]: Tracked 30,000 US adults for 8 years, asking how much stress they'd had and whether they believed stress is harmful, then checked public death records. A lot of stress raised risk of dying 43% -- but ONLY for people who also believed stress was harmful [01:53-02:08]. Those with a lot of stress who did NOT view it as harmful were no more likely to die and in fact had the LOWEST death risk of anyone, even below low-stress people [02:10-02:23]. Researchers estimated 182,000 Americans died prematurely over the 8 years not from stress but from the belief stress is bad -- over 20,000/year, which she says would make that belief the 15th largest US cause of death, killing more than skin cancer, HIV/AIDS and homicide [02:24-02:57]. ON-SCREEN (t02:29, not read aloud): a circulatory-system graphic with '43%' and '182,000 deaths,' cited to 'Keller, Litzelman, Wisk, et al. 2012, University of Wisconsin School of Medicine and Public Health.' ON-SCREEN (t02:59): a 'Top Causes of Death (U.S.)' slide ranking 15 causes (Heart disease 596,339; Cancer 575,313; Respiratory diseases 143,382; Cerebrovascular diseases 128,931; Accidents 122,777; Alzheimer's 84,691; Diabetes 73,282; Influenza 53,667; Nephritis 45,731; Suicide 38,285; Septicemia 35,539; Liver disease 33,539; Hypertension 27,477; Parkinson's 23,107; Pneumonitis 18,090) with 'Stress Beliefs (20,231)' added in red -- the annual figure behind her spoken 'over 20,000 deaths a year.'\n\n2) SOCIAL STRESS TEST DEMO + HARVARD REAPPRAISAL STUDY [03:22-06:53]: She runs the audience through the lab 'social stress test' -- a 5-minute impromptu speech on your personal weaknesses to expert evaluators trained to give discouraging nonverbal feedback under bright lights/camera, followed by a harassed math test counting backwards from 996 by sevens [03:22-04:55]. Normally we read a pounding heart, fast breathing and sweat as anxiety/not coping. A Harvard University study (ON-SCREEN t06:07: 'Jamieson, Nock, & Mendes 2012, Harvard University Department of Psychology') taught participants BEFORE the test to reframe the stress response as helpful (pounding heart = preparing for action; faster breathing = more oxygen to the brain) [05:21-05:41]. Result: they were less stressed, less anxious, more confident, and -- the key finding -- their physical response changed: in a normal stress response blood vessels constrict (a reason chronic stress links to cardiovascular disease), but reappraisers' blood vessels stayed relaxed while the heart still pounded -- a healthier cardiovascular profile resembling joy and courage [05:42-06:28]. Over a lifetime this one change could be the difference between a stress-induced heart attack at 50 and living into your 90s [06:33-06:43]. ON-SCREEN t06:07 visualizes a beating heart with a red ring showing relaxed vs constricted vessels.\n\n3) OXYTOCIN / 'STRESS MAKES YOU SOCIAL' [07:30-10:46]: Second intervention. The 'cuddle hormone' oxytocin is also a stress hormone pumped out by the pituitary as part of the stress response; it pushes you to seek support and connect, and it protects the cardiovascular system, acts as a natural anti-inflammatory, keeps blood vessels relaxed, and helps heart cells regenerate/heal from stress damage -- 'strengthens your heart.' These benefits grow with social contact, so reaching out to others under stress makes your stress response healthier and you recover faster; the built-in resilience mechanism is human connection [07:45-10:46].\n\n4) CAREGIVING / RESILIENCE STUDY [10:51-11:56]: A second study tracked ~1,000 US adults aged 34-93 for 5 years, asking about stress and about time spent helping friends, neighbors and community, then checked public records. Every major stressful life experience (e.g. financial difficulties, family crisis) raised death risk 30% -- but people who spent time caring for others showed ZERO stress-related increase in dying. 'Caring created resilience' [11:27-11:56]. ON-SCREEN (t11:32, not read aloud): two photos of people caring for one another, cited to 'Poulin, Brown, Dillard & Smith 2013, University at Buffalo, NY, Department of Psychology.'\n\n5) CLOSING [12:00-13:21]: The harmful effects of stress are not inevitable; how you think and act transforms it. Viewing your stress response as helpful creates 'the biology of courage'; connecting with others creates resilience. Stress gives access to our hearts -- the compassionate heart and the pounding physical one -- and choosing this view means trusting yourself to handle life's challenges and not facing them alone.\n\n6) Q&A WITH CHRIS ANDERSON [13:32-14:18]: Asked whether to choose a stressful vs non-stressful job, she answers that chasing meaning is better for your health than avoiding discomfort -- go after what creates meaning and trust yourself to handle the stress that follows.\n\nIn short, three pillars of evidence back her argument: (a) the 30,000-person belief study, (b) the Harvard lab reappraisal experiment showing mindset changes cardiovascular physiology, and (c) the caregiving study showing social connection erases stress's death risk.",
+        "cited_timestamps": [
+          "00:44",
+          "01:01",
+          "01:21",
+          "01:53",
+          "02:00",
+          "02:10",
+          "02:24",
+          "02:29",
+          "02:38",
+          "02:44",
+          "02:59",
+          "03:22",
+          "03:36",
+          "04:27",
+          "05:00",
+          "05:21",
+          "05:41",
+          "05:57",
+          "06:07",
+          "06:14",
+          "06:33",
+          "06:56",
+          "07:30",
+          "07:45",
+          "08:48",
+          "09:42",
+          "10:10",
+          "10:51",
+          "11:27",
+          "11:32",
+          "11:46",
+          "11:56",
+          "12:17",
+          "13:32",
+          "14:00",
+          "14:15"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "THE STUDY: She calls it the study that made her rethink stress. It tracked 30,000 adults in the United States for 8 years, asking each person how much stress they'd had in the past year AND whether they believed stress is harmful to their health, then used public death records to see who died [01:21-01:44].\n\nHOW MUCH IT RAISED DEATH RISK: People who had experienced a lot of stress had a 43 percent increased risk of dying -- but that elevated risk was true ONLY for the people who ALSO believed that stress is harmful to their health [01:53-02:08]. This is the crucial qualifier: people with just as much stress who did NOT view stress as harmful were no more likely to die; in fact they had the lowest risk of dying of anyone in the study, even lower than people who had relatively little stress [02:10-02:23].\n\nDEATHS BLAMED ON THE BELIEF: The researchers estimated that over the 8 years they tracked deaths, 182,000 Americans died prematurely -- not from stress itself, but from the belief that stress is bad for you [02:24-02:36]. She reframes that as 'over 20,000 deaths a year' [02:38], and says if the estimate is correct it would make believing stress is bad the 15th largest cause of death in the US that year, killing more people than skin cancer, HIV/AIDS and homicide [02:41-02:56].\n\nON-SCREEN CONTENT (not read aloud): Her 'Top Causes of Death (U.S.)' slide [02:59] lists the top 15 causes and appends, in red, 'Stress Beliefs (20,231)' -- i.e. the on-screen annual figure for stress-belief deaths is 20,231, the precise number behind her spoken 'over 20,000 deaths a year.'\n\nRECONCILIATION OF THE TWO FIGURES (no contradiction): The 182,000 is the total over the full 8-year study window; the ~20,000/year (shown on-screen as 20,231) is the annual rate she derives from it to rank it against yearly causes of death. They are consistent -- roughly 20,000+ deaths per year across 8 years -- not conflicting numbers.\n\nSUMMARY: 43% higher risk of dying (only for high-stress people who believed stress is harmful); 182,000 premature deaths over the 8 years attributed to that belief, i.e. more than 20,000 a year (on-screen: 20,231/year).",
+        "cited_timestamps": [
+          "01:21",
+          "01:26",
+          "01:37",
+          "01:44",
+          "01:53",
+          "01:56",
+          "02:00",
+          "02:10",
+          "02:16",
+          "02:24",
+          "02:29",
+          "02:33",
+          "02:38",
+          "02:41",
+          "02:47",
+          "02:59"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "Your premise is right: she uses oxytocin to overturn the 'just the cuddle hormone' idea and tie it to both stress and heart health. This comes in her second intervention, under the banner 'Stress makes you social' [07:40-07:45].\n\nTHE CUDDLE-HORMONE VIEW (and why it's incomplete): She acknowledges oxytocin 'has already gotten as much hype as a hormone can get' and even has the cute nickname 'the cuddle hormone,' because it's released when you hug someone -- but she says that is only 'a very small part of what oxytocin is involved in' [07:53-08:04]. More broadly it's a neuro-hormone that fine-tunes your brain's social instincts, primes you to strengthen close relationships, makes you crave physical contact with friends and family, enhances empathy, and makes you more willing to help and support people you care about -- some people have even suggested snorting it to become more compassionate [08:09-08:39].\n\nTHE STRESS CONNECTION (the reveal): 'Here's what most people don't understand about oxytocin. It's a stress hormone' [08:43-08:48]. Your pituitary gland pumps it out as part of the stress response -- it's as much a part of your stress response as the adrenaline that makes your heart pound [08:51-08:58]. Its job in that moment is social: when oxytocin is released during stress it motivates you to seek support, nudges you to tell someone how you feel instead of bottling it up, makes you notice when someone else is struggling so you can support each other, and drives you to be surrounded by people who care about you [09:02-09:33]. That is her mechanism for why 'stress makes you social.'\n\nTHE HEART / CARDIOVASCULAR HEALTH CONNECTION: Oxytocin doesn't only act on the brain -- it also acts on the body, and one of its main roles is to protect your cardiovascular system from the effects of stress [09:37-09:44]. It's a natural anti-inflammatory and it helps your blood vessels stay relaxed during stress [09:49-09:52]. Her 'favorite effect' is on the heart itself: your heart has receptors for oxytocin, and the hormone helps heart cells regenerate and heal from stress-induced damage -- so, in her words, 'this stress hormone strengthens your heart' [09:55-10:10].\n\nWHY IT MATTERS PRACTICALLY: All these physical benefits are enhanced by social contact and support. So when you reach out to others under stress -- to seek support OR to help someone else -- you release more oxytocin, your stress response becomes healthier, and you actually recover faster from stress [10:15-10:37]. Her takeaway: the stress response has a built-in mechanism for resilience, and that mechanism is human connection [10:37-10:46].\n\nNote on evidence scope: all oxytocin claims above are from the spoken transcript in this segment; the frames provided for this question do not include a dedicated oxytocin slide, so there is no additional on-screen oxytocin text to report. (The heart graphic at [06:07] with its 'Jamieson, Nock, & Mendes 2012, Harvard' citation belongs to the earlier blood-vessel/reappraisal study, not the oxytocin discussion.)",
+        "cited_timestamps": [
+          "07:40",
+          "07:45",
+          "07:51",
+          "07:58",
+          "08:04",
+          "08:09",
+          "08:21",
+          "08:33",
+          "08:43",
+          "08:48",
+          "08:51",
+          "08:55",
+          "09:02",
+          "09:16",
+          "09:24",
+          "09:37",
+          "09:42",
+          "09:49",
+          "09:52",
+          "09:55",
+          "09:59",
+          "10:03",
+          "10:10",
+          "10:15",
+          "10:23",
+          "10:37",
+          "10:46"
+        ]
+      }
+    ],
+    "frames_read": 44
+  },
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both correctly capture the core argument (belief/mindset, not stress itself, drives harm), the goal shift, oxytocin, and all three studies with accurate numbers. No factual errors in either. Verified A@06:53 (line147), A@12:17 (line251), B@00:44 (line10), B@11:27 (line238) all accurate. B adds a fuller causes-of-death slide (figures match real CDC data, uncontradicted); A gives cleaner evidence synthesis and more granular segmentation. Offsetting strengths; genuinely equivalent."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both give the exact answer: 30,000 adults/8 years, 43% increased risk only for believers, 182,000 deaths over 8 years (>20,000/year), 15th cause of death, plus the on-screen 20,231 and the 8-year-total vs annual reconciliation. Citations verified accurate in both (A@01:55/02:24/02:13; B@01:53/02:16/01:37 all match lines 34/44/39/33/41/27). Content is essentially identical and fully correct."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both fully and accurately cover the spoken oxytocin content: cuddle-hormone-is-incomplete, neuro-hormone social role, snorting quip, the stress-hormone reveal (pituitary/adrenaline), seek-support motivation, cardiovascular protection, anti-inflammatory, heart receptors/regeneration, connection-amplified. Citations verified (A@08:43/09:55/09:42; B@08:48/09:59/10:10 all match). B has more granular, all-accurate citations plus an honest evidence-scope note; A adds plausible-visual oxytocin-slide claims (uncontradicted). Balanced; equivalent quality."
+        }
+      ],
+      "aIsControl": true
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both correctly identify Kelly McGonigal and her thesis (belief about stress + response, not stress itself, harms you), and both walk every distinct segment: opening confession, 30,000/8-yr belief study (43%, 182,000, 15th largest), social stress test (996 by sevens), Harvard reappraisal (relaxed blood vessels), oxytocin, ~1,000-adult caregiving study (30%, zero increase), conclusion, and Chris Anderson Q&A. Every spoken number matches the transcript in both. Citation spot-checks pass in both (A: [01:01] stress-makes-you-sick, [02:29] 182,000, [14:15] name; B: [00:16] confession, [02:47] 15th largest, [11:16] caring study). A is more granular (full on-screen CDC death-cause list) but that detail is unverifiable visual embroidery the question does not require; B is more concise but equally complete on the talk. No factual errors in either. Genuine tie."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "The two load-bearing numbers are correct in both: 43% increased risk of dying (only for those who also believed stress is harmful) and 182,000 premature deaths over the 8 years attributed to the belief, framed as over 20,000/year. Both correctly add the 30,000-adult/8-year design, the lowest-risk finding for non-believers, and the 15th-largest-cause ranking (more than skin cancer, HIV/AIDS, homicide). Both give the correct reconciliation that 182,000 is the 8-year total and ~20,000 is the annual rate, and both cite the on-screen 20,231 plausibly. Citations verify (A [02:38] over-20,000, [02:47] 15th largest; B [02:38], [02:53] homicide). Substantively equivalent and both fully correct. Tie."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both accurately overturn the cuddle-hormone premise and trace oxytocin as (1) cuddle hormone/small part, (2) a stress hormone pumped by the pituitary, as much as adrenaline ([08:48]), (3) heart protector: anti-inflammatory, relaxed vessels, heart receptors, regenerates/heals heart cells, 'strengthens your heart' ([09:55-10:10]), and (4) social loop enhanced by contact, recover faster, resilience = human connection. Spoken content and citations are accurate in both. A edges ahead on two counts: it is more thorough enumerating the social functions, and it handles the visual boundary carefully, correctly noting the [06:07] heart graphic belongs to the earlier Harvard reappraisal study (not oxytocin) and declining to assert an oxytocin slide its frames did not show. B instead asserts oxytocin molecule slides at [07:54] and [09:34] which are plausible but unverifiable and unhedged. Both strong; A is slightly more complete and more epistemically careful."
+        }
+      ],
+      "aIsControl": false
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both nail the core argument (stress isn't the enemy; belief and response determine harm; mindset changes physiology; connection builds resilience) and cover every segment: opening confession, 30k belief study, social-stress-test demo, Harvard reappraisal, oxytocin, caregiving study, close, and the Chris Anderson Q&A. All numbers match the transcript (30,000/8yr/43%/182,000/~20,000; ~1,000/34-93/5yr/30%/zero). Citations spot-checked accurate for both. B is marginally more granular and correctly labels the two interventions in order plus dumps the full (real, plausibly-visual) CDC causes-of-death list; A has cleaner numbered structure and adds the 996-7 and oxytocin visuals. Strengths cancel; no errors in either."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Question asks the risk increase and deaths blamed on the belief. Both give the exact correct answers: 43% increased death risk (only for high-stress people who also believed stress harmful), and 182,000 premature deaths over the 8-year window, reframed as 'over 20,000/year.' Both correctly add the 15th-cause-of-death framing and both flag the on-screen 20,231 while reconciling the 8-year total vs annual figure without contradiction. B's citations pinpoint slightly tighter (43% at 01:53, 182,000 at 02:29) but A's ranges are equally accurate. Content is effectively identical and fully responsive; tie."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both correct the 'just the cuddle hormone' premise and cover the full arc: cuddle-hormone hype, the 'it's a stress hormone' reveal, pituitary/adrenaline parallel, motivation to seek support, and heart/cardiovascular link (protects cardiovascular system, natural anti-inflammatory, keeps vessels relaxed, heart receptors regenerate/heal, 'strengthens your heart'), plus social amplification and human-connection resilience. Citations verified for both (07:45, 08:43-08:48, 09:37-09:44, 09:55-10:10). A adds plausibly-visual oxytocin-slide claims (real in the talk, not contradicted); B adds an honest scope caveat and correctly warns against misattributing the 06:07 Harvard heart graphic. Equal substance, different but valid strengths; tie."
+        }
+      ],
+      "aIsControl": true
+    }
+  ]
+}

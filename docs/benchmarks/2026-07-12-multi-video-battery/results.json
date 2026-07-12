@@ -1,0 +1,319 @@
+{
+  "measured_candidate_commit": "b90ae21",
+  "measured": "2026-07-11",
+  "note": "Development comparison of the v0.3.0 evidence compiler; v1.0.0 later extended evidence.py (defaults unchanged: semantic/state off). Veritasium answers collected but unjudged (session limit); excluded from aggregates.",
+  "videos": [
+    {
+      "id": "c347oYQO57A",
+      "title": "So This is Peak Smartphone (MKBHD)",
+      "genre": "tech review",
+      "duration_s": 797,
+      "youtube_chapters": false,
+      "questions": [
+        {
+          "question_id": "q1_coverage",
+          "policy": "coverage",
+          "question": "What are the main points of this video? What does MKBHD mean by 'peak slab phone' and what's his overall argument?",
+          "control_tokens": 33361,
+          "evidence_tokens": 10307,
+          "token_reduction_pct": 69,
+          "control_quality_mean": 8.0,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            8,
+            8,
+            8
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "win"
+        },
+        {
+          "question_id": "q2_targeted",
+          "policy": "targeted",
+          "question": "What are the specs of the Oppo Find X9 Ultra in this video, especially the battery size and the camera setup on the back?",
+          "control_tokens": 33361,
+          "evidence_tokens": 6365,
+          "token_reduction_pct": 81,
+          "control_quality_mean": 7.0,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            7,
+            7,
+            7
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "win"
+        },
+        {
+          "question_id": "q3_targeted",
+          "policy": "targeted",
+          "question": "Does he think phone cameras can actually replace a real professional camera? I heard he compares this phone to a Hasselblad he owns.",
+          "control_tokens": 33361,
+          "evidence_tokens": 6365,
+          "token_reduction_pct": 81,
+          "control_quality_mean": 8.33,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            8,
+            8,
+            9
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "win"
+        }
+      ]
+    },
+    {
+      "id": "RcGyVTAoXEU",
+      "title": "How to Make Stress Your Friend (TED, Kelly McGonigal)",
+      "genre": "talk",
+      "duration_s": 869,
+      "youtube_chapters": true,
+      "questions": [
+        {
+          "question_id": "q1_coverage",
+          "policy": "coverage",
+          "question": "Can you summarize the main points of this talk? What is her core argument about stress and what evidence does she use to back it up?",
+          "control_tokens": 31620,
+          "evidence_tokens": 10116,
+          "token_reduction_pct": 68,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "tie"
+        },
+        {
+          "question_id": "q2_targeted",
+          "policy": "targeted",
+          "question": "What were the numbers from that big study she mentions about people who believe stress is harmful? How much did it raise their risk of dying, and how many deaths did the researchers blame on that belief?",
+          "control_tokens": 31620,
+          "evidence_tokens": 4993,
+          "token_reduction_pct": 84,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "tie"
+        },
+        {
+          "question_id": "q3_targeted",
+          "policy": "targeted",
+          "question": "What does she say about oxytocin in the talk? I thought it was just the cuddle hormone, but apparently it has something to do with stress and heart health?",
+          "control_tokens": 31620,
+          "evidence_tokens": 4993,
+          "token_reduction_pct": 84,
+          "control_quality_mean": 8.67,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            9,
+            8,
+            9
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "win"
+        }
+      ]
+    },
+    {
+      "id": "Sntj4HmuykI",
+      "title": "The most trusted code on Earth is being rewritten in Rust (Fireship)",
+      "genre": "short tech news",
+      "duration_s": 319,
+      "youtube_chapters": false,
+      "questions": [
+        {
+          "question_id": "q1_coverage",
+          "policy": "coverage",
+          "question": "What is this video about? Give me the main points and the overall story it tells.",
+          "control_tokens": 21892,
+          "evidence_tokens": 4157,
+          "token_reduction_pct": 81,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 8.0,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            8,
+            8,
+            8
+          ],
+          "verdict": "loss"
+        },
+        {
+          "question_id": "q2_targeted",
+          "policy": "targeted",
+          "question": "How many people actually maintain SQLite, and why can't outsiders contribute code to it?",
+          "control_tokens": 21892,
+          "evidence_tokens": 2581,
+          "token_reduction_pct": 88,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 7.0,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            7,
+            7,
+            7
+          ],
+          "verdict": "loss"
+        },
+        {
+          "question_id": "q3_targeted",
+          "policy": "targeted",
+          "question": "How does the Turso team test their Rust database to make sure it never loses anyone's data?",
+          "control_tokens": 21892,
+          "evidence_tokens": 2581,
+          "token_reduction_pct": 88,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 8.0,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            8,
+            8,
+            8
+          ],
+          "verdict": "loss"
+        }
+      ]
+    },
+    {
+      "id": "9sfm9aqxygs",
+      "title": "Food Lab Basics: POV Tteokbokki (Kenji Lopez-Alt)",
+      "genre": "cooking POV",
+      "duration_s": 971,
+      "youtube_chapters": true,
+      "questions": [
+        {
+          "question_id": "q1_coverage",
+          "policy": "coverage",
+          "question": "Can you summarize this Kenji tteokbokki video for me? What are the main steps and points he makes?",
+          "control_tokens": 32216,
+          "evidence_tokens": 9689,
+          "token_reduction_pct": 70,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 8.33,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            8,
+            8,
+            9
+          ],
+          "verdict": "loss"
+        },
+        {
+          "question_id": "q2_targeted",
+          "policy": "targeted",
+          "question": "How long do the Korean rice cakes need to simmer in the sauce, and does Kenji say whether to buy them refrigerated or frozen?",
+          "control_tokens": 32216,
+          "evidence_tokens": 5551,
+          "token_reduction_pct": 83,
+          "control_quality_mean": 9.0,
+          "evidence_quality_mean": 8.67,
+          "per_judge_control": [
+            9,
+            9,
+            9
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            8
+          ],
+          "verdict": "loss"
+        },
+        {
+          "question_id": "q3_targeted",
+          "policy": "targeted",
+          "question": "Kenji brings up his restaurant's Korean-style Nashville hot chicken partway through. What's in that spice blend, and what's the tip he shares about dunking fried chicken in oil?",
+          "control_tokens": 32216,
+          "evidence_tokens": 5111,
+          "token_reduction_pct": 84,
+          "control_quality_mean": 8.67,
+          "evidence_quality_mean": 9.0,
+          "per_judge_control": [
+            9,
+            9,
+            8
+          ],
+          "per_judge_evidence": [
+            9,
+            9,
+            9
+          ],
+          "verdict": "win"
+        }
+      ]
+    }
+  ],
+  "overall": {
+    "videos_judged": 4,
+    "questions": 12,
+    "evidence_wins": 5,
+    "ties": 2,
+    "evidence_losses": 5,
+    "mean_control_quality": 8.64,
+    "mean_evidence_quality": 8.58,
+    "mean_token_reduction_pct": 80
+  },
+  "by_duration": {
+    "short_videos_under_8min": {
+      "questions": 3,
+      "evidence_wins": 0,
+      "ties": 0,
+      "evidence_losses": 3
+    },
+    "videos_8min_plus": {
+      "questions": 9,
+      "evidence_wins": 5,
+      "ties": 2,
+      "evidence_losses": 2
+    }
+  }
+}

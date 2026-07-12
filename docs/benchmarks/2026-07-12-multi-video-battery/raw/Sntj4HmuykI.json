@@ -1,0 +1,354 @@
+{
+  "video": {
+    "id": "Sntj4HmuykI",
+    "title": "The most trusted code on Earth is being rewritten in Rust (Fireship)",
+    "duration": 319,
+    "chapters": false,
+    "genre": "short tech news"
+  },
+  "prep": {
+    "control_frames": 73,
+    "control_text_chars": 27038
+  },
+  "questions": [
+    {
+      "id": "q1_coverage",
+      "policy": "coverage",
+      "text": "What is this video about? Give me the main points and the overall story it tells.",
+      "why_verifiable": "Coverage answer should hit the checkable beats: SQLite's origin with D. Richard Hipp in 2000, why it's embedded and ubiquitous, the Turso project rewriting it in Rust, its new features (concurrent writers, async I/O, vector search), and how it aims to earn SQLite-level trust."
+    },
+    {
+      "id": "q2_targeted",
+      "policy": "targeted",
+      "text": "How many people actually maintain SQLite, and why can't outsiders contribute code to it?",
+      "why_verifiable": "Numeric/factual: the video states SQLite is maintained by just three people who don't accept outside contributions, that the source is available but it isn't open source in the traditional sense, and that this closed model is a big reason it's trusted."
+    },
+    {
+      "id": "q3_targeted",
+      "policy": "targeted",
+      "text": "How does the Turso team test their Rust database to make sure it never loses anyone's data?",
+      "why_verifiable": "Concrete named claim: deterministic simulation testing, running the database in a simulated universe controlling time/network/disk, injecting failures like power loss mid-write, corrupted pages, and disks that lie about saving, then replaying the exact scenario from the same random seed."
+    }
+  ],
+  "compile": [
+    {
+      "id": "q1_coverage",
+      "transcript_chars": 7165,
+      "frames": 11,
+      "report": "scratchpad/battery/Sntj4HmuykI/evidence/q1_coverage/report.txt"
+    },
+    {
+      "id": "q2_targeted",
+      "transcript_chars": 7163,
+      "frames": 3,
+      "report": "scratchpad/battery/Sntj4HmuykI/evidence/q2_targeted/report.txt"
+    },
+    {
+      "id": "q3_targeted",
+      "transcript_chars": 7163,
+      "frames": 3,
+      "report": "scratchpad/battery/Sntj4HmuykI/evidence/q3_targeted/report.txt"
+    }
+  ],
+  "ctlAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "This is a Fireship \"Code Report\" episode (dated June 19, 2026 [01:16-01:19]) titled \"The most trusted code on Earth is being rewritten in Rust.\" The overall story: SQLite became the most deployed, most trusted software on Earth via a closed three-person maintenance model, and now the Turso project is rewriting it from scratch in Rust as a truly open-source, feature-extended drop-in replacement, with an exotic testing strategy to earn SQLite-level trust. Distinct segments:\n\n1) Origin story of SQLite (2000): D. Richard Hipp was building damage-control software for US Navy guided missile destroyers [00:02-00:06]; frames show Navy operators and the destroyer USS John S. McCain (on-screen, 00:04-00:08) plus a \"SEP 11, 2001\" Bush-classroom clip used as a joke [00:08, 00:20-00:24]. His app died whenever the SQL database server went down [00:13-00:18], so he asked why a SQL engine couldn't be embedded in the app itself, talking directly to files on disk [00:26-00:31], eliminating the server process, ports, and config [00:31-00:38]. On-screen at 00:32: a client -> DB-server-process diagram with PostgreSQL/MySQL logos and a .conf file (never read aloud).\n\n2) SQLite's rise: he named it and spent 25 years building it; \"may be the most important piece of software ever written\" [00:40-00:45]. On-screen at 00:42: the actual CVS timeline showing SQLite's \"initial check-in of the new version (CVS 1)\" dated 2000-05-29 (on-screen only). Stripping it to a single library reading one file made it small enough to drop anywhere [00:45-00:53]; today there are trillions of SQLite databases, on every iPhone, Android, Mac, Windows, browser, and Mars rover [00:57-01:08]. On-screen at 00:45: sqlite.org text estimating 4.0 billion smartphones and \"over one trillion (1e12) SQLite databases in active use\" with a \"1,000,000,000,000+\" banner; at 00:48 the docs page \"no separate server process... contained in a single disk file\"; at 00:57 the \"Most Widely Deployed Database Engine\" list (Android, iPhone, Firefox/Chrome/Safari, Skype, iTunes, Dropbox, TurboTax/QuickBooks, PHP, Python, TVs, automotive systems, on-screen only). It's \"the most trusted and resilient software out there\" [01:08-01:11].\n\n3) The premise: a project crazy enough to rewrite it from scratch in Rust [01:13-01:16]; frames at 01:12-01:14 show real Rust code from the Turso repo (turso/core/io_uring.rs, on-screen).\n\n4) Who's behind it: two people, \"evidence points mostly to smart\" [01:27-01:31]. Pekka Enberg wrote a book on latency (on-screen at 01:33: Manning's \"Latency: Reduce delay in software systems\") [01:31-01:33]; Glauber Costa was ranked by Linus as a top-five Linux kernel contributor [01:33-01:37]. On-screen at 01:34: Linus's actual email listing top-five committers since 2.6.24 in arch/x86 with \"Glauber de Oliveira Costa (117)\" highlighted; at 01:39 Glauber's Reddit AMA (\"I am Glauber Costa, CEO and co-founder of Turso... rewriting SQLite in Rust\") mentioning KVM at Red Hat, ScyllaDB, Datadog, the libSQL fork, and codename \"Limbo\" (on-screen only).\n\n5) The motivation: SQLite isn't truly open source; source is available but it's maintained by just three people and takes no outside contributions [01:39-01:50]. That model is a big reason it's trusted, but if you have opinions on improving it you're out of luck [01:50-02:02], so they rewrote the library in Rust and called it Turso [02:02-02:06]. On-screen: sqlite.org \"Open-Source, not Open-Contribution\" page (01:41), the SQLite Developers page with Fireship's caption \"*D. Richard Hipp & 2 other people...\" (01:48), and the \"Contributed Code\" policy: \"the project does not accept patches from random people on the internet\" (01:50). The GitHub mirror frame at 01:44 even shows an AGENTS.md commit \"Strengthen the statement about not accepting agentic code\" (on-screen only).\n\n6) Turso feature 1, concurrency: SQLite allows only one writer at a time; Turso lets multiple writers work on different parts simultaneously, conflicting only on the same rows [02:09-02:22]. SQLite has had this on a branch for nearly a decade but never shipped it to main [02:22-02:27]. On-screen: \"The Single-Writer Bottleneck\" doc highlighting the SQLITE_BUSY error (~500k rows/sec with batching, 02:11), an MVCC in-memory-index diagram with BEGIN CONCURRENT transactions (02:15), and the sqlite GitHub \"begin-concurrent\" branch \"updated 9 years ago,\" 14,119 commits behind (02:23, on-screen only).\n\n7) Feature 2, async: SQLite blocks the thread on every disk touch; Turso hands control back so the app can do other things while waiting [02:27-02:38]. Visual gag: \"2. ASYNCHRONOUS\" over the boy band NSYNC (02:28, on-screen).\n\n8) Feature 3, vector search: every AI app needs to store embeddings; bolting on Pinecone means running two databases [02:44-02:54]. Turso has native vector types and indexing built in, embeddings live in the same file, queried with normal SQL [02:56-03:05]. It's the same trick Hipp pulled 25 years ago, except now the thing being crammed into a library is \"your AI's entire memory\" [03:05-03:15]. On-screen at 02:57: Turso's Vector Types docs (dense/sparse/quantized/binary; vector32 = 4 bytes per dimension, vector64 = 8 bytes) and the highlighted line \"It's just a file, and vectors are now just another column type\" (on-screen only).\n\n9) The trust problem: doing more than SQLite is easy; the hard part is earning 25 years of trust [03:18-03:22], which requires being a drop-in replacement and never losing data [03:22-03:26]. Drop-in is basically done (fully backwards compatible with SQLite) [03:28-03:34]; on-screen at 03:18 the SQLite testing doc (\"millions and millions of test cases... 100% branch test coverage\"). For never-lose-data, Turso uses deterministic simulation testing [03:36-04:01] (detail in q3), and because Turso is actually open source, anyone can contribute traditionally [04:01-04:05].\n\n10) Verdict: is rewriting the most trusted database on Earth a good idea? \"Probably not, but you're only viewed as an idiot until it works\" [04:07-04:13]; on-screen O'RLY parody book \"Rewrite everything in Rust: 10x Developer Guide, by Bootcamp Graduate\" (04:13).\n\n11) Sponsor segment, JetBrains Junie [04:20-05:11]: the Junie coding agent graduated from beta, is model-agnostic with a cost lever per task (cheap models for routine work, expensive for hard jobs) [04:24-04:41]. Fireship used the Junie CLI to add role-based permissions to an admin dashboard and liked the plan mode's plans directory with requirements, technical design, delivery stages, and tests [04:41-04:56]; he used a strong model for planning and a cheap one for implementation [04:56-05:02]. On-screen: a Reddit post \"Mystery company accidentally blew $500 million on Claude AI in a single month\" (04:18), Junie's model picker with prices (Claude Opus 4.7/4.8 $25/Mtok, Sonnet 4.6 $15, Gemini 3.1 Flash Lite $1.50, GPT-5.x models, 04:32, on-screen only). He claims \"Junie just beat out every other coding agent in the most recent SWE rebench\" [05:02-05:07]; note a reconciliation: the on-screen leaderboard at 05:04 actually shows raw model gpt-5.5-2026-04-23-xhigh at #1 (62.7%) with Junie at #2 (61.6%), ahead of Codex (60.4%) and Claude Code (59.8%), so the spoken claim holds only against other coding agents, not the top raw model; the frame is the primary evidence for the actual rankings. Promo: 20 free AI credits with code \"Fireship 20\" [05:07-05:11], then the outro [05:14-05:17].",
+        "cited_timestamps": [
+          "00:02",
+          "00:04",
+          "00:06",
+          "00:08",
+          "00:13",
+          "00:18",
+          "00:20",
+          "00:24",
+          "00:26",
+          "00:31",
+          "00:32",
+          "00:38",
+          "00:40",
+          "00:42",
+          "00:45",
+          "00:48",
+          "00:53",
+          "00:57",
+          "01:08",
+          "01:11",
+          "01:12",
+          "01:13",
+          "01:14",
+          "01:16",
+          "01:19",
+          "01:27",
+          "01:31",
+          "01:33",
+          "01:34",
+          "01:37",
+          "01:39",
+          "01:41",
+          "01:44",
+          "01:48",
+          "01:50",
+          "02:02",
+          "02:06",
+          "02:09",
+          "02:11",
+          "02:15",
+          "02:22",
+          "02:23",
+          "02:27",
+          "02:28",
+          "02:38",
+          "02:44",
+          "02:54",
+          "02:56",
+          "02:57",
+          "03:05",
+          "03:15",
+          "03:18",
+          "03:22",
+          "03:26",
+          "03:28",
+          "03:34",
+          "03:36",
+          "04:01",
+          "04:05",
+          "04:07",
+          "04:13",
+          "04:18",
+          "04:20",
+          "04:24",
+          "04:32",
+          "04:41",
+          "04:56",
+          "05:02",
+          "05:04",
+          "05:07",
+          "05:11",
+          "05:14",
+          "05:17"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "How many maintainers: just three people. The narration says SQLite's source is available and you can do whatever you want with it, \"but it's maintained by just three people, and they don't accept outside contributions\" [01:46-01:50]. On-screen support at 01:48: the actual sqlite.org \"SQLite Developers\" page, which says SQLite is \"written and maintained by a team of dedicated software professionals located around the world - on three continents\" and that the page used to list names and pictures of key developers but took them down because \"there are a lot of crazy people in the world who might misuse that information,\" directing serious inquiries to lead developer Richard Hipp (drh); Fireship's on-screen caption reads \"*D. Richard Hipp & 2 other people but I'm not going to name them out of respect\" (on-screen content, 01:48). So the concrete answer: three maintainers, led by D. Richard Hipp.\n\nWhy outsiders can't contribute code: SQLite is \"not truly open source in the traditional sense\" [01:41-01:45]; it is open-source but not open-contribution. On-screen at 01:41: the sqlite.org copyright page with the heading \"Open-Source, not Open-Contribution,\" on the \"SQLite Is Public Domain\" page (on-screen content, the speaker never reads this heading aloud). On-screen at 01:50: the \"Contributed Code\" section stating, highlighted, \"In order to keep SQLite completely free and unencumbered by copyright, the project does not accept patches from random people on the internet,\" adding that there is a process to get a patch accepted but it is involved and not worth it for smaller changes, that proof-of-concept patches accompanying suggestions are welcome, and \"do not be offended if we rewrite your patch from scratch\" (on-screen content). In other words, the legal rationale is protecting SQLite's public-domain / copyright-unencumbered status. The video adds that this closed model \"is a big reason why it's trusted\" [01:50-01:54], but it means anyone with opinions on improving SQLite has no path in [01:54-02:02], which is exactly what motivated the Turso founders to rewrite it in Rust [02:02-02:06]; by contrast Turso is \"actually open source\" and anyone can contribute traditionally [04:01-04:05]. Two extra on-screen corroborations the speaker never reads: Glauber Costa's Reddit AMA at 01:39 highlights \"SQLite is the most widely deployed database in the world, but the project doesn't accept outside contributions\"; and the GitHub sqlite/sqlite mirror at 01:44 (labeled \"Official Git mirror of the SQLite source tree\") shows a recent commit to AGENTS.md titled \"Strengthen the statement about not accepting agentic code\" (on-screen content). No conflicts between transcript and frames on this question; the frames only add precision (the reason is copyright/public-domain purity, and one of the three is Richard Hipp).",
+        "cited_timestamps": [
+          "01:41",
+          "01:45",
+          "01:46",
+          "01:48",
+          "01:50",
+          "01:54",
+          "02:02",
+          "02:06",
+          "01:39",
+          "01:44",
+          "04:01",
+          "04:05"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "Turso's strategy is called deterministic simulation testing [03:38-03:41]. The stated goal: to earn SQLite's 25-years-of-trust, Turso must be a drop-in replacement and \"never lose someone's data\" [03:20-03:26]; the drop-in half is basically done because Turso is already fully backwards compatible with SQLite [03:28-03:34], but never losing data is the harder half, which is what this testing approach targets [03:34-03:38]. How it works, per the video: (1) they run the entire database inside a simulated universe where they \"play God\" with time, the network, and (per the failure examples that follow) the disk [03:44-03:48]; (2) they inject failures such as power loss mid-write, a corrupted page, or a disk that lies about whether it actually saved your data [03:50-03:56]; (3) because the simulation is deterministic, they replay the exact same failure scenario from the same random seed over and over until they squash the bug [03:56-04:01]. On-screen at 04:02: a \"SIMULATED UNIVERSE\" graphic showing a WRITE REQUEST arrow into the database with \"seed: 69\" displayed at the bottom, visually confirming the seeded-replay mechanic (on-screen content; the specific seed number is never spoken). One caption artifact to flag: the auto-caption at [03:48] reads \"play God with time, the network and the the,\" garbling the third item; the immediately following disk-failure examples (disk that lies about saving data [03:55-03:56]) and the simulation graphic support \"the disk\" as the intended third element, so treat the garbled caption as a transcription defect, not a content conflict. For contrast, the video shows (on-screen at 03:18, not read aloud in full) SQLite's own testing page: \"very carefully tested prior to every release... an automated test suite runs millions and millions of test cases involving hundreds of millions of individual SQL statements and achieves 100% branch test coverage\", that is the trust bar Turso's deterministic simulation is trying to match. The evidence covers only this simulation strategy; the video does not describe any other Turso test infrastructure (e.g., fuzzing or CI details), so I can't speak to anything beyond deterministic simulation.",
+        "cited_timestamps": [
+          "03:18",
+          "03:20",
+          "03:26",
+          "03:28",
+          "03:34",
+          "03:38",
+          "03:41",
+          "03:44",
+          "03:48",
+          "03:50",
+          "03:55",
+          "03:56",
+          "04:01",
+          "04:02"
+        ]
+      }
+    ],
+    "frames_read": 73
+  },
+  "evAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "This is a Code Report episode (dated June 19th, 2026 [01:16]) about Turso, a project to rewrite SQLite from scratch in Rust. The story arc: SQLite's origin -> why it became the world's most trusted software -> who is rewriting it and why -> what the rewrite adds -> how they plan to earn SQLite-level trust -> a sponsor segment.\n\nSegments in order:\n\n1. SQLite origin story (2000): Developer D. Richard Hipp was building damage-control software for US Navy guided missile destroyers [00:02-00:06]; his app died whenever its SQL database server went down [00:13-00:18]. He asked why a SQL engine couldn't be embedded in the application itself, talking directly to files on disk, eliminating the separate server process, ports, configuration, and admin [00:26-00:38]. He spent the next 25 years building it [00:40-00:42]. On-screen content: archival Sept 11, 2001 footage of Bush in the classroom accompanies the 'terrorist attack was about to change the world' joke [00:10], and a client/DB/.conf diagram with a stereotypical 'webmaster' photo illustrates the server-admin overhead [00:34].\n\n2. SQLite's ubiquity and trust: Stripping the database to a single library reading one file made it small enough to drop anywhere; today there are trillions of SQLite databases, at least one on every iPhone, Android, Mac, Windows machine, browser, and Mars rover [00:46-01:08]. It's called the most trusted and resilient software out there [01:08-01:11]. On-screen: SQLite logo surrounded by phones and a MacBook [01:04].\n\n3. Who's rewriting it: Two people, 'the evidence points mostly to smart': one wrote a book on latency, the other was ranked by Linus himself as a top-five Linux kernel contributor [01:27-01:39]. On-screen content at [01:34]: a screenshot of kernel committer stats listing the top five committers since 2.6.24 in arch/x86 (Ingo Molnar 194, Thomas Gleixner 125, Glauber de Oliveira Costa 117 highlighted, Roland McGrath 103, Glauber Costa 92) with the person holding a handwritten sign, visually backing the top-five-contributor claim.\n\n4. Why rewrite: SQLite isn't bad, but it's 'not truly open source in the traditional sense': the source is available and freely usable, but it's maintained by just three people who don't accept outside contributions [01:39-01:50]. That model builds trust, but if you have opinions on improving it, your only option is to rewrite it, which they did, calling it Turso [01:50-02:06].\n\n5. Turso's three features SQLite lacks: (1) Concurrency: SQLite allows only one writer at a time; Turso lets multiple writers work on different parts simultaneously, conflicting only on the same rows; SQLite has had this on a branch for nearly a decade but never shipped it to main [02:09-02:27] (on-screen '1. CONCURRENCY' diagram of multiple clients hitting one DB [02:10]). (2) Async: SQLite blocks the thread on disk I/O; Turso hands control back so the app can do other work while waiting [02:27-02:38] (on-screen diagram of the app's main thread continuing past a write request [02:34]). (3) Vector search: instead of bolting on a separate vector DB like Pinecone, Turso has native vector types and indexing so embeddings live in the same file and are queried with SQL [02:42-03:05]. On-screen code at [03:04] (never read aloud): a libsql client example with CREATE TABLE movies (title, year, emb F32_BLOB(3)), a libsql_vector_idx index with metric=cosine, vector() inserts, and a vector_top_k('movies_idx', ...) query. This repeats Hipp's original trick, cramming a server-sized thing into an embeddable library, except now 'the thing is your AI's entire memory' [03:05-03:15].\n\n6. Earning trust: doing more than SQLite is easy; earning 25 years of trust requires being a drop-in replacement and never losing data [03:18-03:26]. Drop-in is basically done, Turso is fully backwards compatible with SQLite [03:30-03:34] (on-screen at [03:34]: Turso Cloud docs page 'Import your SQLite Database' showing the `turso db import ~/path/to/my-database.db` command). For never losing data, Turso uses deterministic simulation testing: run the database in a simulated universe, control time/network, inject failures (power loss mid-write, corrupted page, a disk that lies about saving), and replay the same scenario from the same random seed until the bug is squashed [03:36-04:01]. And unlike SQLite, Turso is actually open source, so anyone can contribute traditionally [04:01-04:05]. Verdict: rewriting the most trusted database is 'probably not' a good idea, 'but you're only viewed as an idiot until it works' [04:07-04:13]. On-screen at [04:10]: the SQLite logo dissolving into the Rust logo.\n\n7. Sponsor segment (JetBrains Junie): Junie coding agent graduated out of beta; premise is that AI tokens cost too much, so it's model-agnostic with a cost lever per task, cheaper models for routine work, pricier ones for hard jobs [04:21-04:41]. The host used the Junie CLI to add role-based permissions to an admin dashboard, using a strong model for planning and a cheap one for implementation [04:41-05:02]. On-screen at [04:34]: Junie's model picker listing per-Mtok output prices (e.g. Claude Opus 4.7 $25.00, Claude Sonnet 4.6 $15.00, Gemini 3.1 Flash Lite $1.50, GPT-5 $10.00, provider: JetBrains AI). The claim that 'Junie just beat out every other coding agent in the most recent SWE rebench' [05:02-05:07] partially conflicts with the on-screen SWE-rebench leaderboard at [05:04], which shows Junie ranked #2 (61.6%) behind gpt-5.5-2026-04-23-xhigh (62.7%), though ahead of Codex (60.4%) and Claude Code (59.8%); the spoken claim holds only if the #1 entry counts as a raw model rather than a coding agent, so treat 'beat every other agent' as the marketing framing and the on-screen table as the primary evidence. Promo: 20 free AI credits with code Fireship20 [05:07-05:11]. Sign-off [05:14-05:17].",
+        "cited_timestamps": [
+          "00:02",
+          "00:06",
+          "00:10",
+          "00:13",
+          "00:18",
+          "00:26",
+          "00:34",
+          "00:38",
+          "00:40",
+          "00:42",
+          "00:46",
+          "01:04",
+          "01:08",
+          "01:11",
+          "01:16",
+          "01:27",
+          "01:34",
+          "01:39",
+          "01:50",
+          "02:06",
+          "02:09",
+          "02:10",
+          "02:27",
+          "02:34",
+          "02:38",
+          "02:42",
+          "03:04",
+          "03:05",
+          "03:15",
+          "03:18",
+          "03:26",
+          "03:30",
+          "03:34",
+          "03:36",
+          "04:01",
+          "04:05",
+          "04:07",
+          "04:10",
+          "04:13",
+          "04:21",
+          "04:34",
+          "04:41",
+          "05:02",
+          "05:04",
+          "05:07",
+          "05:11",
+          "05:14",
+          "05:17"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "Three people. The video states SQLite 'is maintained by just three people, and they don't accept outside contributions' [01:46-01:50].\n\nWhy outsiders can't contribute code: the video frames it as a deliberate governance model, not a technical barrier. SQLite is 'not truly open source in the traditional sense' [01:41-01:45]: the source code is available and you can do whatever you want with it [01:45], but the maintainers simply do not take outside code contributions [01:48-01:50]. The video adds that this closed-contribution model 'is a big reason why it's trusted' [01:50-01:52], the implication being that keeping authorship to three vetted maintainers is what makes SQLite so reliable. The consequence: if you have opinions on how SQLite could be better, your options are to give up or 'rewrite the library in Rust' [01:52-02:06], which is exactly what the Turso founders did. The video later contrasts this with Turso, which 'is actually open source, anyone can contribute as you traditionally would' [04:01-04:05].\n\nThe evidence gives no reason beyond the maintainers' chosen trust model (no mention of licensing mechanics, contributor agreements, or public-domain dedication), so a deeper 'why' is not answerable from this evidence. The three frames provided for this question (9/11 archival footage [00:10], the '1. CONCURRENCY' diagram [02:10], and the SQLite-to-Rust logo transition [04:10]) contain no additional on-screen text about SQLite's maintainer count or contribution policy.",
+        "cited_timestamps": [
+          "00:10",
+          "01:41",
+          "01:45",
+          "01:46",
+          "01:48",
+          "01:50",
+          "01:52",
+          "02:06",
+          "02:10",
+          "04:01",
+          "04:05",
+          "04:10"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "Turso uses a testing strategy the video calls deterministic simulation [03:38-03:41]. Context: to earn SQLite's trust, Turso must be a drop-in replacement and 'never lose someone's data' [03:22-03:26]; the drop-in part is basically done (fully backwards compatible with SQLite [03:30-03:34]), but never losing data is the harder part [03:36], and deterministic simulation is how they attack it.\n\nHow it works, per the video:\n1. They run the entire database inside a simulated universe [03:41-03:46], where they 'play God' with time and the network [03:46-03:48] (the transcript garbles the third simulated element at [03:48], 'the network and the the', so the evidence doesn't name it, though the failure list that follows suggests the disk).\n2. Inside that simulation they inject failures: power loss mid-write, a corrupted page, or a disk that lies about whether it actually saved your data [03:50-03:56].\n3. Because the simulation is deterministic, when a failure surfaces a bug they can replay the exact same scenario from the same random seed until they squash the bug [03:56-04:01].\n\nThe video also notes that, unlike SQLite, Turso is actually open source so anyone can contribute in the traditional way [04:01-04:05], which complements the testing story but isn't part of the simulation mechanism itself. The three frames supplied for this question (9/11 footage [00:10], the '1. CONCURRENCY' diagram [02:10], and the SQLite logo dissolving into the Rust logo [04:10]) show no on-screen text or UI about the simulation testing, so all detail comes from the narration. The evidence contains no further specifics (no tool names, code, or coverage numbers for the simulator).",
+        "cited_timestamps": [
+          "00:10",
+          "02:10",
+          "03:22",
+          "03:26",
+          "03:30",
+          "03:34",
+          "03:36",
+          "03:38",
+          "03:41",
+          "03:46",
+          "03:48",
+          "03:50",
+          "03:56",
+          "04:01",
+          "04:05",
+          "04:10"
+        ]
+      }
+    ],
+    "frames_read": 17
+  },
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both are accurate against the transcript with no contradicted claims and passing citation spot-checks ([01:16] date, [00:02-00:06] origin, [02:22-02:27] decade-old branch, [05:02-05:07] rebench claim). A is more complete: it names both founders (Pekka Enberg, Glauber Costa) via on-screen evidence, covers the 'Open-Source, not Open-Contribution' page, the SQLite testing doc, and reconciles the SWE-rebench spoken claim vs the on-screen leaderboard with the same numbers B gives. B is well-organized and accurate but omits the founders' identities and several key on-screen anchors. A's only flaw is bloat; B's is coverage gaps, which matter more for a coverage question."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 7,
+          "rationale": "Both correctly answer 'three people' [01:46-01:50] and correctly ground the closed-contribution model and its trust rationale [01:41-01:54, 04:01-04:05]. The question asks WHY outsiders can't contribute: A delivers the actual rationale from on-screen sqlite.org pages (keeping SQLite public-domain/copyright-unencumbered, 'does not accept patches from random people on the internet') plus identifies Hipp as lead; none of it is contradicted. B honestly declares the deeper why unanswerable because its frames were irrelevant (9/11 footage, concurrency diagram), which is transcript-faithful but materially less complete. All spot-checked citations valid for both."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both accurately reconstruct deterministic simulation testing: simulated universe, play-God with time/network, injected failures (power loss mid-write, corrupted page, lying disk), seeded replay [03:38-04:01], and both correctly flag the garbled caption at [03:48] and infer 'the disk.' Citations check out for both. A edges ahead with corroborating on-screen evidence (the 'seed: 69' simulated-universe graphic confirming the seeded-replay mechanic) and the SQLite testing-page contrast at [03:18] framing the trust bar; B explicitly notes its frames showed nothing, so its answer is narration-only. Both correctly bound their claims to the simulation strategy."
+        }
+      ],
+      "aIsControl": true
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "B",
+          "a_score": 8,
+          "b_score": 9,
+          "rationale": "Both are accurate against the transcript with correct timestamps on every spot-checked claim (origin 00:02-00:38, three maintainers 01:46-01:50, features 02:09-03:15, simulation 03:36-04:01, sponsor 04:21-05:11), and both flag the SWE-rebench spoken-claim vs leaderboard discrepancy identically. B is more complete: it includes the Junie plan-mode plans-directory details (04:48-04:54) that A omits, the 'most important piece of software ever written' line (00:44), the founders' names from frames, and much richer on-screen corroboration (sqlite.org open-contribution pages, begin-concurrent branch age, vector docs) that is plausible and uncontradicted. A's minor flaws: misquotes promo code as 'Fireship20' (transcript: 'Fireship 20') and thinner sponsor coverage."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "B",
+          "a_score": 7,
+          "b_score": 9,
+          "rationale": "Both correctly answer 'three people' with the right citation [01:46-01:50] and correctly frame 'not truly open source in the traditional sense' [01:41-01:45]. The question also asks WHY outsiders can't contribute: B supplies the on-screen sqlite.org rationale ('Open-Source, not Open-Contribution'; refusing patches 'to keep SQLite completely free and unencumbered by copyright'), a plausible visual claim consistent with the real sqlite.org page, plus identifying Hipp as the lead. A honestly states the deeper why is unanswerable from its evidence, which is defensible given its limited frames but leaves the 'why' answered only at the governance-model level. All spot-checked citations in both resolve correctly."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "B",
+          "a_score": 8,
+          "b_score": 9,
+          "rationale": "Both accurately reproduce the full mechanism: deterministic simulation [03:38-03:41], simulated universe with control of time/network [03:44-03:48], injected failures (power loss mid-write, corrupted page, lying disk) [03:50-03:56], and seeded replay until the bug is squashed [03:56-04:01]; both honestly flag the garbled 'the the' caption and reasonably infer 'the disk'. B edges ahead with the 'SIMULATED UNIVERSE / seed: 69' on-screen graphic confirming the seeded-replay mechanic and the SQLite testing-page contrast (matching the real doc) as the trust bar, both plausible and uncontradicted. All spot-checked citations resolve to the correct transcript lines in both answers."
+        }
+      ],
+      "aIsControl": false
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both fully accurate vs transcript (spot-checked date [01:16], trillions/devices [00:57-01:08], decade-old branch [02:24], sponsor claims [04:24-05:11]; all match). Both reconcile the SWE-rebench spoken claim vs on-screen leaderboard the same way. A is more complete: names both Turso founders with on-screen corroboration, covers the Open-Source-not-Open-Contribution page, SQLite testing doc, and closing gags B omits. B covers every spoken beat cleanly with good frame detail but is less exhaustive. No contradicted claims in either."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 7,
+          "rationale": "Both correctly say three maintainers [01:46-01:50] with accurate citations. The spoken 'why' is thin; A supplies the substantive rationale from plausible, uncontradicted on-screen sqlite.org content (public-domain/copyright purity, 'does not accept patches from random people on the internet') and identifies Hipp as lead. B answers correctly but shallowly ('chosen trust model, no deeper why answerable'), honest about its irrelevant frames, yet cites three non-probative timestamps ([00:10],[02:10],[04:10]) and delivers less of what the question asked."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both correctly describe deterministic simulation: simulated universe, God-mode over time/network [03:44-03:48], injected failures (power loss mid-write, corrupted page, lying disk) [03:50-03:56], seeded replay [03:56-04:01]; citations check out for both. Both properly flag the garbled caption at [03:48] and hedge the 'disk' inference. A adds the on-screen 'seed: 69' graphic corroborating the seeded-replay mechanic plus the SQLite 100%-branch-coverage trust-bar contrast; B accurately notes its frames were irrelevant but delivers slightly less supporting evidence."
+        }
+      ],
+      "aIsControl": true
+    }
+  ]
+}

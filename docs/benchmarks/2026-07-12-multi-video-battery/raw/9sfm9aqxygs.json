@@ -1,0 +1,442 @@
+{
+  "video": {
+    "id": "9sfm9aqxygs",
+    "title": "Food Lab Basics: POV Tteokbokki (Kenji Lopez-Alt)",
+    "duration": 971,
+    "chapters": true,
+    "genre": "cooking POV"
+  },
+  "prep": {
+    "control_frames": 100,
+    "control_text_chars": 45057
+  },
+  "questions": [
+    {
+      "id": "q1_coverage",
+      "policy": "coverage",
+      "text": "Can you summarize this Kenji tteokbokki video for me? What are the main steps and points he makes?",
+      "why_verifiable": "Coverage answer should hit: rice cakes simmered in a gochujang chili broth, maple-cured pork belly/bacon optional, chive flowers/cabbage/scallions added, gochugaru, water instead of anchovy stock, tasting/adjusting with soy sauce, plus the restaurant free-meals backstory during COVID."
+    },
+    {
+      "id": "q2_targeted",
+      "policy": "targeted",
+      "text": "How long do the Korean rice cakes need to simmer in the sauce, and does Kenji say whether to buy them refrigerated or frozen?",
+      "why_verifiable": "Transcript states rice cakes simmer about 8 to 10 minutes until soft (vegetables about 3 minutes), and that they're sold refrigerated or frozen with the refrigerated kind generally a little better."
+    },
+    {
+      "id": "q3_targeted",
+      "policy": "targeted",
+      "text": "Kenji brings up his restaurant's Korean-style Nashville hot chicken partway through. What's in that spice blend, and what's the tip he shares about dunking fried chicken in oil?",
+      "why_verifiable": "Transcript names the blend as gochugaru, cayenne, black sesame and other spices, bloomed with hot fryer oil into a chili oil, and the concrete claim that dropping fried food into oil doesn't make it soggy, it stays crispy."
+    }
+  ],
+  "compile": [
+    {
+      "id": "q1_coverage",
+      "transcript_chars": 15024,
+      "frames": 28,
+      "report": "scratchpad/battery/9sfm9aqxygs/evidence/q1_coverage/report.txt"
+    },
+    {
+      "id": "q2_targeted",
+      "transcript_chars": 15020,
+      "frames": 7,
+      "report": "scratchpad/battery/9sfm9aqxygs/evidence/q2_targeted/report.txt"
+    },
+    {
+      "id": "q3_targeted",
+      "transcript_chars": 14144,
+      "frames": 6,
+      "report": "scratchpad/battery/9sfm9aqxygs/evidence/q3_targeted/report.txt"
+    }
+  ],
+  "ctlAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "This is a ~16-minute POV video (\"Food Lab Basics: POV Tteokbokki\") shot by J. Kenji L\u00f3pez-Alt in the kitchen of his restaurant (Wursthall, San Mateo, CA). Segments in order:\n\n1) Intro / charity note [00:03-00:16]: He's at the restaurant and has just finished packing ~140 meals to deliver the next day; he points viewers to the description for the cause.\n\n2) Dish introduction [00:18-01:01]: Today's dish is tteokbokki, Korean rice cakes simmered in a chili broth. He jokes about the pronunciation (his daughter's bathtub game \"duck bucket\") [00:29-00:37], calls it classic Korean home-cooking comfort food, and says a Korean girlfriend in college introduced it to him [00:52-00:59].\n\n3) Scallion prep [01:07-01:20]: Roughly chops scallions; precision doesn't matter, just trim nasty ends. Frames at 00:19-00:49 show him washing/prepping scallions at the sink with the rice-cake bag (Korean-labeled packaging, on-screen) on the counter.\n\n4) Core ingredients [01:23-01:56]: Simplest version is just rice cakes simmered with gochujang, the Korean fermented chili-and-wheat paste (a little sweet, salty, spicy) [01:26-01:36]. Rice cakes come refrigerated or frozen (refrigerated generally a little better) [01:40-01:43] and in two shapes: ~1.5-inch cylinders or diagonally cut coins; coins are traditional for this dish but either works [01:45-01:56].\n\n5) Pork [01:58-02:35]: He adds \"sous chef Eric's pancetta\", then corrects himself: it's actually a maple-cured pork belly, sweeter, more like American bacon [02:18-02:28]. You can use regular bacon or no pork at all; a pork product isn't typical for this dish [02:07-02:15]. A little sweetness works here [02:32-02:35].\n\n6) Equipment note [02:37-02:44]: It's a simmered dish, not a stir-fry, so no wok needed; a saucepan or skillet is fine, he just happens to have a wok.\n\n7) Chive flowers [03:00-03:54]: Bought at a Chinese market; great in stir-fries and dishes like this, and unlike scallions (which go off in days to a couple weeks max) they keep for weeks wrapped or in an airtight container [03:33-03:47]. Aside: his home range is cooler than the restaurant burner [03:19-03:26].\n\n8) Garlic [03:57-04:18]: Smashes (\"whack the crap out of\") a couple of cloves and does a rough mince, not super fine.\n\n9) Camera aside [04:28-04:46]: He worries the GoPro is recording sideways, stops to check; it wasn't.\n\n10) Building the broth [04:58-05:56]: Renders the pork crispy, then adds water (typically you'd use anchovy stock, but he doesn't have any) [05:03-05:08], a little sugar, the garlic [05:19], the rice sticks [05:34], and the gochujang [05:46].\n\n11) Callback [05:56-06:19]: His earlier gochujang-and-kimchi spaetzle video was a variation of this dish; kimchi would be totally appropriate and delicious here.\n\n12) Simmer timing [06:21-06:26]: Rice cakes take about 8-10 minutes to simmer (longer than spaetzle).\n\n13) Restaurant perks aside [06:41-06:53]: Nice ramekins for mise en place thanks to the industrial dishwasher, which he'd love (overkill) at home.\n\n14) Cabbage [06:55-07:15]: Roughly slices green cabbage; the restaurant is German and makes lots of sauerkraut, so cabbage is always around. It goes in later.\n\n15) Gochugaru [07:25-08:05]: Adds a couple tablespoons of Korean chili flake. On-screen: the bag is labeled in Korean \"\uace0\ucda7\uac00\ub8e8\" with English \"HOT PEPPER POWDER\" [07:27]. Point: Korean food, even the spicy stuff, isn't that hot compared to Thai or Chinese cuisines [07:34-07:47]; gochugaru is sweet, peppery, roasty, not much heat even in quantity [07:50-08:01].\n\n16) Cook-down plan [08:10-08:33]: Simmer until it thickens ~3-4 minutes, then add cabbage and the other vegetables, which simmer in the sauce ~3 minutes, while the rice sticks simmer ~8-10 minutes total until soft.\n\n17) Nashville hot chicken tangent [08:35-09:54]: His restaurant does a Korean-flavored Nashville-style hot chicken: double-fried, with a spice blend of gochugaru, cayenne, a couple other spices, and black sesame (\"gochugaru mainly, but hotter because of the cayenne\") plus a little sugar [08:51-09:07]. Hot fryer oil is poured over the blend to bloom it into a chili oil [09:00-09:11]; fried chicken is dunked in it, and he shares the tip that dunking fried food in oil doesn't make it soggy, it stays crispy [09:23-09:38]; then rack-drain and dust with a ton more spice [09:41-09:47]. On-screen: the clear container of the red-orange spice blend with visible black sesame seeds [08:44-08:54].\n\n18) Sneeze bit [09:54-10:26]: Pepper up his nose almost makes him sneeze; jokes it's \"not coronavirus, just pepper\" [10:11-10:13] and about cartoon bad guys.\n\n19) Vegetables in [10:28-11:16]: Dumps in the vegetables, deliberately at a very high vegetable-to-rice-stick ratio [10:32-10:39]. Point he makes: he often ups the vegetable ratio in fried rice, noodles, and pasta; you should consider whether your carb dishes match how much you like vegetables [10:51-11:16].\n\n20) Adjustments [11:23-11:59]: Adds a bit more water; realizes he forgot soy sauce and fetches it from the fridge [11:33-11:41], showing off sous chef Eric's fermented hot sauce and pickled red Fresno chilies along the way [11:52-11:59].\n\n21) COVID / restaurant status [12:15-13:15]: The restaurant isn't operating normally; it's only making and delivering free meals daily for hospitals, community centers, and anyone who needs food, which he does four nights a week [12:29-12:48]. Sous chef Eric may do an online class on making pancetta at home; he asks viewers to weigh in via comments [12:55-13:15].\n\n22) Beer break [13:17-14:19]: Drinks a Hefeweizen (transcript garbles the name as \"vine Stefano\"; the on-screen bottle label at 13:16-13:36 is a German wheat beer, consistent with Weihenstephaner) because the banana/clove notes of a wheat beer go well with chili, though really it was just the open case they had [13:22-13:36]. Normally he'd pull Pliny (Russian River Brewing, from north of San Mateo) from the taps, but the taps were emptied and the beer fridge is off because the restaurant is closed [13:41-14:11]; he jokes about the \"nasty imported German stuff\" [14:17-14:19].\n\n23) Taste and fix [14:23-14:44]: It's a little sweeter than he wants (too much sugar; some people like it sweet, he doesn't), so he adds more soy sauce.\n\n24) Plating [15:20-15:44]: He won't eat it all, saving some for someone tomorrow; finishes the bowl with a sprinkle of the restaurant's chicken spice blend to make it \"a little bit hotter, a little prettier\" [15:30-15:44].\n\n25) Outro [15:49-16:03]: \"A steaming hot bowl of\" tteokbokki, Korean comfort food he says dates from the 1950s, post-World War II [15:55-16:03]. On-screen end card (never spoken): \"And thus the capacity of my GoPro's battery life was reached. See you tomorrow.\" [16:01].",
+        "cited_timestamps": [
+          "00:03",
+          "00:16",
+          "00:18",
+          "00:29",
+          "00:37",
+          "00:52",
+          "00:59",
+          "01:01",
+          "01:07",
+          "01:20",
+          "00:19",
+          "00:49",
+          "01:23",
+          "01:26",
+          "01:36",
+          "01:40",
+          "01:43",
+          "01:45",
+          "01:56",
+          "01:58",
+          "02:07",
+          "02:15",
+          "02:18",
+          "02:28",
+          "02:32",
+          "02:35",
+          "02:37",
+          "02:44",
+          "03:00",
+          "03:19",
+          "03:26",
+          "03:33",
+          "03:47",
+          "03:54",
+          "03:57",
+          "04:18",
+          "04:28",
+          "04:46",
+          "04:58",
+          "05:03",
+          "05:08",
+          "05:19",
+          "05:34",
+          "05:46",
+          "05:56",
+          "06:19",
+          "06:21",
+          "06:26",
+          "06:41",
+          "06:53",
+          "06:55",
+          "07:15",
+          "07:25",
+          "07:27",
+          "07:34",
+          "07:47",
+          "07:50",
+          "08:01",
+          "08:05",
+          "08:10",
+          "08:33",
+          "08:35",
+          "08:44",
+          "08:51",
+          "08:54",
+          "09:00",
+          "09:07",
+          "09:11",
+          "09:23",
+          "09:38",
+          "09:41",
+          "09:47",
+          "09:54",
+          "10:11",
+          "10:13",
+          "10:26",
+          "10:28",
+          "10:32",
+          "10:39",
+          "10:51",
+          "11:16",
+          "11:23",
+          "11:33",
+          "11:41",
+          "11:52",
+          "11:59",
+          "12:15",
+          "12:29",
+          "12:48",
+          "12:55",
+          "13:15",
+          "13:16",
+          "13:17",
+          "13:22",
+          "13:36",
+          "13:41",
+          "14:11",
+          "14:17",
+          "14:19",
+          "14:23",
+          "14:44",
+          "15:20",
+          "15:30",
+          "15:44",
+          "15:49",
+          "15:55",
+          "16:03",
+          "16:01"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "Simmer time: the rice cakes need about 8 to 10 minutes of simmering. Kenji states this twice, consistently: \"these take about 8 to 10 minutes or so\" when they go into the broth [06:22-06:26], and again in his timing recap, \"the rice sticks total will simmer for about eight to ten minutes until soft\" [08:31-08:33]. (Don't confuse this with the ~3 minutes he mentions in the same recap; that shorter figure is for the cabbage and other vegetables simmering in the sauce after they're added roughly 3-4 minutes in [08:10-08:28], not for the rice cakes.)\n\nRefrigerated vs frozen: yes, he addresses it directly. The rice cakes are sold both refrigerated and frozen, and \"generally the refrigerated kind are a little better\" [01:40-01:43]. He also notes they come in two shapes, ~1.5-inch cylinders and diagonally cut coins; the coins are traditional for tteokbokki but it really doesn't matter which you use [01:45-01:56]. On-screen content: the plastic bag of rice cakes with Korean-language labeling (red hand-written-style Korean text) is visible on the counter and in his hands at [00:29], [01:27], and as he adds them to the wok around [05:40], though the label text is only decorative context, he never reads it aloud.",
+        "cited_timestamps": [
+          "06:22",
+          "06:26",
+          "08:31",
+          "08:33",
+          "08:10",
+          "08:28",
+          "01:40",
+          "01:43",
+          "01:45",
+          "01:56",
+          "00:29",
+          "01:27",
+          "05:40"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "The tangent starts around [08:35-08:43]: at his restaurant they make their own version of Nashville-style hot chicken but with Korean flavors, and the chicken is double-fried [08:45].\n\nThe spice blend (he holds up the container, and frames at [08:44] and [08:54] show a clear tub of red-orange powder flecked with black sesame seeds, on-screen content matching his description): it's gochugaru, cayenne, \"a couple other spices in there,\" and black sesame [08:51-08:54]. He characterizes it as \"gochugaru mainly, but hotter because we add the cayenne\" [08:57-08:59], and he also mixes in a little sugar as he demonstrates [09:06]. The evidence only identifies gochugaru, cayenne, black sesame, and sugar by name; the \"couple other spices\" are never specified, so a full ingredient list isn't available in this evidence.\n\nThe technique and the tip: they take hot oil straight from the fryer and pour it over a bowl of the spice blend to bloom it, making a kind of chili oil [09:00-09:11]; when the chicken comes out of the fryer they dunk it in that chili oil to coat [09:13-09:16]. The tip he shares: you can dunk fried chicken, or anything fried, into a vat of oil and it will NOT get soggy; fried things dropped in oil stay crispy (sogginess comes from water, not oil) [09:23-09:38]. After the dunk, the chicken goes on a rack to drain and then gets dusted with a ton more of the dry spice, coming out really spicy and nicely flavored [09:41-09:47]; toasting the blend in the hot oil makes it, and the black sesame, taste really toasty [09:49-09:54]. The bit ends with the pepper nearly making him sneeze [09:54-10:13].\n\nCallback: he sprinkles this same chicken spice over the finished tteokbokki at the end to make it \"a little bit hotter, a little prettier\" [15:30-15:44].",
+        "cited_timestamps": [
+          "08:35",
+          "08:43",
+          "08:45",
+          "08:44",
+          "08:54",
+          "08:51",
+          "08:57",
+          "08:59",
+          "09:06",
+          "09:00",
+          "09:11",
+          "09:13",
+          "09:16",
+          "09:23",
+          "09:38",
+          "09:41",
+          "09:47",
+          "09:49",
+          "09:54",
+          "10:13",
+          "15:30",
+          "15:44"
+        ]
+      }
+    ],
+    "frames_read": 100
+  },
+  "evAns": {
+    "answers": [
+      {
+        "question_id": "q1_coverage",
+        "answer": "This is a POV video of Kenji Lopez-Alt cooking tteokbokki (Korean rice cakes in chili broth) at his restaurant's kitchen. Main segments and points, in order:\n\n1. Intro at the restaurant [00:03]: He's \"still at Wursthall,\" having just packed about 140 meals to deliver the next day as part of a charity meal effort; he points viewers to the description to support it [00:07]-[00:13]. Frame [00:10] shows him talking to camera in the commercial kitchen.\n2. Dish introduction [00:18]-[00:55]: Today's dish is tteokbokki (he jokingly fumbles the pronunciation, comparing it to his daughter's bathtub game \"duck bucket\" [00:29]). It's Korean rice cakes simmered in a chili broth, classic Korean home-cooking comfort food he learned from a Korean girlfriend in college [00:40]-[00:55], very simple with many variations [01:01].\n3. Scallions [01:07]: Roughly chopped, no precision needed, just trim nasty ends [01:11]-[01:18]. On-screen at [01:15]: overhead shot of the mise en place, cabbage, a tub of gochujang, scallions/chives, pork, and a bag of rice cakes with Korean packaging.\n4. Core ingredients [01:23]-[01:56]: Simplest version is just rice cakes simmered with gochujang, a Korean fermented chili-and-wheat paste that's a little sweet, salty, and spicy [01:26]-[01:35]. Rice cakes are sold refrigerated or frozen; refrigerated is generally a little better [01:40]-[01:43]. They come in shapes: ~1.5-inch cylinders (what he has, shown in the bag on-screen at [01:47]) or diagonally cut coins, which are traditional for this dish, but either works [01:47]-[01:55].\n5. Pork (optional) [01:58]-[02:30]: He uses his sous chef Eric's cured pork, actually a maple-cured pork belly, sweeter and more like American bacon than Italian pancetta, which he thinks suits the dish since you want some sweetness [02:20]-[02:35]. Regular bacon works, and traditionally no pork product is used at all [02:07]-[02:13]. Frame [02:30] shows the pork rendering in the wok.\n6. Equipment point [02:37]-[02:44]: It's a simmered dish, not a stir-fry, so a saucepan or skillet is fine; he just happens to have a wok.\n7. Chive flowers [03:00]-[03:51]: From the Chinese market; great for stir-fries and dishes like this, and unlike scallions (which go off in days to a couple weeks) they keep for weeks wrapped in plastic or in an airtight container. Aside: the restaurant range is hotter than his home stove; this is a homestyle dish [03:19]-[03:26].\n8. Garlic [03:57]-[04:18]: A couple of cloves, whacked and given a rough (not super-fine) mince. Brief camera check to make sure he isn't recording sideways [04:28]-[04:41].\n9. Building the broth [04:58]-[05:46]: Once the pork is rendered and a little crispy, he adds water (anchovy stock is typical, but he has none [05:03]-[05:07]), a little sugar, the garlic, the rice sticks, and the gochujang. On-screen at [05:18]: he grabs the tub of gochujang.\n10. Callback + variation [05:56]-[06:19]: His earlier gochujang-kimchi spaetzle video was a variation of this dish; adding kimchi here would be appropriate and delicious.\n11. Timing point [06:21]-[06:24]: The rice cakes take about 8-10 minutes to simmer (longer than spaetzle did).\n12. Restaurant aside [06:41]-[06:53]: He can use nice ramekins for mise en place because of the industrial dishwasher; wants one at home but it might be overkill.\n13. Green cabbage [06:55]-[07:15]: They have tons because it's a German restaurant that makes lots of sauerkraut; roughly sliced, to go in later and simmer. Frame [07:05] shows him prepping the cabbage head.\n14. Gochugaru [07:25]-[08:05]: Korean chili flake, added by the couple of tablespoons. Point: Korean food, even the spicy stuff, isn't that hot compared to Thai or Chinese food; gochugaru is sweet, peppery, roasty, and won't add much heat even in quantity [07:34]-[08:01]. On-screen at [08:37] he opens a large Korean-labeled bag of it.\n15. Simmer plan [08:10]-[08:33]: Let the sauce simmer and thicken about 3-4 minutes, then add cabbage and the other ingredients to finish cooking down; those simmer in the sauce about 3 minutes, while the rice sticks simmer about 8-10 minutes total until soft.\n16. Nashville hot chicken tangent [08:37]-[09:52]: At the restaurant they make a Korean-flavored version of Nashville hot chicken: double-fried, with a spice blend of gochugaru (mainly), cayenne (making it hotter), black sesame, and a couple other spices, plus a little sugar [08:45]-[09:06]. Hot fryer oil is poured over the blend to bloom it into a chili oil, and the fried chicken is dunked in it [09:02]-[09:16]. Tip: dunking fried food in oil doesn't make it soggy, it stays crispy [09:21]-[09:38]; then it's racked to drain and dusted with more spice [09:42]-[09:47]. On-screen at [09:21]: a container of the red spice blend flecked with black sesame.\n17. Comedy beat [09:54]-[10:28]: The pepper makes him need to sneeze (\"I swear it's not coronavirus, that's just pepper up my nose\" [10:11]); he jokes he needs a cartoon bad guy to hide from.\n18. Vegetables in + philosophy [10:28]-[11:16]: He dumps in the vegetables (shown in the wok on-screen at [10:22]-[10:52]), noting he's using a deliberately high vegetable-to-rice-stick ratio because he wants more vegetables in his life; he does the same with fried rice, noodles, and pasta, and suggests viewers consider whether their carb dishes match how much they like vegetables.\n19. Adjustments [11:23]-[11:59]: More water, then he remembers soy sauce and fetches it from the fridge (fridge shown on-screen at [11:53]), also showing sous chef Eric's fermented hot sauce and pickled red Fresno chilies.\n20. Coronavirus context [12:15]-[12:48]: The restaurant isn't operating at normal capacity; it's only making and delivering free meals daily to hospitals, community centers, and anyone who needs food; he does this four nights a week. Sous chef Eric may do an online class on making pancetta at home; Kenji asks viewers to comment if interested [12:55]-[13:09].\n21. Beer break [13:19]-[14:17]: He drinks a Hefeweizen (transcribed as \"vine Stefano\"; frame [13:54] shows the wheat-beer pour), joking he picked it for the banana-and-clove notes that go well with chili, then admitting it was just the open case. Normally he'd pull Pliny from Russian River Brewing (a little north of San Mateo, CA, where he is), but the taps are shut off and emptied and the beer fridge is off since the restaurant is closed [13:41]-[14:11].\n22. Taste and fix [14:23]-[14:43]: It's pretty good but a little sweeter than he wants (he added too much sugar; some people like it sweet, he doesn't), so he adds more soy sauce.\n23. Finish and plating [15:20]-[16:03]: He won't eat it all, saving some for someone tomorrow [15:20]; he finishes the bowl with a dusting of the restaurant's chicken spice blend to make it hotter and prettier [15:30]-[15:44] (bowling-up shown on-screen at [15:55]), and signs off calling it a steaming hot bowl of \"duck bucket\" tteokbokki, Korean comfort food he believes dates to the post-war 1950s [15:49]-[16:03].",
+        "cited_timestamps": [
+          "00:03",
+          "00:07",
+          "00:10",
+          "00:13",
+          "00:18",
+          "00:29",
+          "00:40",
+          "00:55",
+          "01:01",
+          "01:07",
+          "01:11",
+          "01:15",
+          "01:18",
+          "01:23",
+          "01:26",
+          "01:35",
+          "01:40",
+          "01:43",
+          "01:47",
+          "01:55",
+          "01:56",
+          "01:58",
+          "02:07",
+          "02:13",
+          "02:20",
+          "02:30",
+          "02:35",
+          "02:37",
+          "02:44",
+          "03:00",
+          "03:19",
+          "03:26",
+          "03:51",
+          "03:57",
+          "04:18",
+          "04:28",
+          "04:41",
+          "04:58",
+          "05:03",
+          "05:07",
+          "05:18",
+          "05:46",
+          "05:56",
+          "06:19",
+          "06:21",
+          "06:24",
+          "06:41",
+          "06:53",
+          "06:55",
+          "07:05",
+          "07:15",
+          "07:25",
+          "07:34",
+          "08:01",
+          "08:05",
+          "08:10",
+          "08:33",
+          "08:37",
+          "08:45",
+          "09:02",
+          "09:06",
+          "09:16",
+          "09:21",
+          "09:38",
+          "09:42",
+          "09:47",
+          "09:52",
+          "09:54",
+          "10:11",
+          "10:22",
+          "10:28",
+          "10:52",
+          "11:16",
+          "11:23",
+          "11:53",
+          "11:59",
+          "12:15",
+          "12:48",
+          "12:55",
+          "13:09",
+          "13:19",
+          "13:41",
+          "13:54",
+          "14:11",
+          "14:17",
+          "14:23",
+          "14:43",
+          "15:20",
+          "15:30",
+          "15:44",
+          "15:49",
+          "15:55",
+          "16:03"
+        ]
+      },
+      {
+        "question_id": "q2_targeted",
+        "answer": "Simmer time: The rice cakes need about 8 to 10 minutes of simmering. Kenji states this twice, consistently: when he first drops them in he says \"these take about 8 to 10 minutes or so\" (longer than the spaetzle in his earlier variation) [06:21]-[06:24], and later he restates the plan: the sauce simmers down and thickens for about 3-4 minutes, then the cabbage and other ingredients go in and simmer in the sauce for about 3 more minutes, \"while the rice sticks total will simmer for about eight to ten minutes until soft\" [08:10]-[08:33]. There is no conflict between the two moments: the ~3-minute figure at [08:27] applies to the cabbage/other add-ins, not the rice cakes, whose total is 8-10 minutes in both statements.\n\nRefrigerated vs frozen: Yes, he addresses this directly. Rice cakes are sold either refrigerated or frozen, and \"generally the refrigerated kind are a little better\" [01:36]-[01:43]. He also notes they come in different shapes, the ~1.5-inch cylinders he's using versus diagonally cut coins, which are traditional for this dish, but either works [01:44]-[01:55]. On-screen content: the frame at [01:47] shows him holding the bag of white cylindrical rice cakes with Korean-language packaging over the wok, and the frame at [08:37] shows the large Korean-labeled bag of gochugaru he opens for the sauce.",
+        "cited_timestamps": [
+          "01:36",
+          "01:43",
+          "01:44",
+          "01:47",
+          "01:55",
+          "06:21",
+          "06:24",
+          "08:10",
+          "08:27",
+          "08:33",
+          "08:37"
+        ]
+      },
+      {
+        "question_id": "q3_targeted",
+        "answer": "The spice blend: At his restaurant they make their own Korean-flavored version of Nashville-style hot chicken, with double-fried chicken [08:37]-[08:45]. He holds up the chicken spice blend and says it contains gochugaru (Korean chili flake, the main component), cayenne, black sesame, and \"a couple other spices\" [08:49]-[08:54]; it's \"gochugaru mainly, but hotter because we add the cayenne\" [08:57]-[08:59]. He also mixes \"a little sugar in here\" as part of the bowl [09:04]-[09:06]. Per the transcript he doesn't name the other spices beyond gochugaru, cayenne, black sesame, and sugar, so the evidence is insufficient to identify those remaining \"couple other spices.\" On-screen content in this question's frames: at [08:37] he is opening a large Korean-labeled bag with red chili peppers pictured on it, the gochugaru he references. How the blend is used: hot oil straight from the fryer is poured over a bowl of the blend to bloom it into a chili oil, a typical Nashville hot chicken technique [09:02]-[09:11]; when the chicken comes out of the fryer it's dunked in that chili oil to coat [09:11]-[09:16], then put on a rack to drain and dusted with a ton more of the spice blend, which comes out really spicy and nicely flavored, with the spices (especially the black sesame) getting toasty from the hot oil [09:42]-[09:52].\n\nThe dunking tip: You can dunk fried chicken, or anything fried, into a vat of oil and it will NOT get soggy; fried things dropped in oil stay crispy [09:21]-[09:38] (\"when you drop fried things in oil they don't get soggy, they stay crispy\" [09:35]-[09:38]). Sogginess isn't a risk from oil, which is why the chili-oil dunk works for coating the hot chicken without ruining its crust.",
+        "cited_timestamps": [
+          "08:37",
+          "08:45",
+          "08:49",
+          "08:54",
+          "08:57",
+          "08:59",
+          "09:02",
+          "09:04",
+          "09:06",
+          "09:11",
+          "09:16",
+          "09:21",
+          "09:35",
+          "09:38",
+          "09:42",
+          "09:52"
+        ]
+      }
+    ],
+    "frames_read": 41
+  },
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both are chronological, accurate, and heavily cited; spot-checks all land (A: [01:40-01:43] refrigerated>frozen, [08:51-08:54] blend contents, [12:29-12:48] free meals four nights/week; B: [00:07-00:13] 140 meals, [02:20-02:35] maple-cured pork belly, [13:41-14:11] Pliny/taps emptied). A is more complete: it captures the 'nasty imported German stuff' joke [14:17-14:19], the sneeze bit as its own beat, and the end card, all of which B omits. A's dings: unverifiable video-title claim ('Food Lab Basics: POV Tteokbokki') and a scallion-washing visual pinned to 00:19-00:49 while the scallion talk is at 01:07 (plausible, not contradicted). B's dings: places its gochugaru-bag visual at [08:37] inside the [07:25-08:05] gochugaru section when [08:37] is the hot-chicken transition, and slightly thinner tail coverage. A wins on completeness with equal correctness."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both nail both halves: 8-10 minutes, verified at [06:22-06:26] ('these take about 8 to 10 minutes or so') and [08:31-08:33] ('rice sticks total will simmer for about eight to ten minutes until soft'), and both correctly disambiguate the ~3-minute figure as the cabbage/vegetable simmer, not the rice cakes. Both correctly report refrigerated-or-frozen with 'generally the refrigerated kind are a little better' [01:40-01:43] (B's [01:36] start also checks out). B adds the genuinely transcript-supported detail that his are the 1.5-inch cylinders ('these are... inch and a half cylinders' [01:47]) but pads with an irrelevant gochugaru-bag frame at [08:37]; A pads with three unverifiable bag-sighting frames ([00:29],[01:27],[05:40]). Equivalent quality, offsetting minor noise."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both correctly list the blend as gochugaru (main), cayenne, black sesame, 'a couple other spices' unnamed, plus sugar mixed in, verified at [08:51-08:54], [08:57-08:59], [09:06]; both correctly flag that the remaining spices are never named. Both get the technique (fryer oil poured over to bloom into chili oil [09:02-09:11], dunk the fried chicken [09:11-09:16]) and the tip (fried food dunked in oil does not get soggy, stays crispy [09:23-09:38]), plus rack-drain and heavy re-dusting [09:42-09:47]. Each smuggles in one unsupported inference: A's parenthetical '(sogginess comes from water, not oil)' sits inside a cited sentence; B's closing 'sogginess isn't a risk from oil' line is uncited editorializing. A adds the supported callback (blend sprinkled on the finished bowl [15:30-15:44]); B counters with a verbatim quote of the tip. Even on strict correctness, completeness, and citation accuracy."
+        }
+      ],
+      "aIsControl": true
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "B",
+          "a_score": 8,
+          "b_score": 9,
+          "rationale": "Both summaries are chronologically complete, factually faithful, and cite accurately (spot-checked 6+ timestamps each: 140 meals [00:07], refrigerated-better [01:40-01:43], maple-cured belly [02:20-02:28], 8-10 min [06:22], gochugaru heat point [07:34-08:05], Pliny/taps [13:41-14:11] all land). B edges A on completeness and visual grounding: it captures the 'nasty imported German stuff' beer joke [14:17-14:19] that A omits, identifies the garbled 'vine Stefano' as Weihenstephaner via the on-screen label, notes the unspoken end card, and its visual claims are internally consistent. A's frame claim at [00:10] ('shows him talking to camera') contradicts A's own POV-video framing, a small unforced accuracy wobble. Otherwise both are excellent."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both nail the two asked facts exactly: rice cakes simmer 8-10 minutes (stated twice, [06:22-06:26] and [08:31-08:33]) and yes, Kenji says they're sold refrigerated or frozen with refrigerated 'generally a little better' [01:40-01:43]. Both correctly disambiguate the ~3-minute figure as applying to the cabbage/vegetables, not the rice cakes. All spot-checked citations verified. Minor symmetric flaws: A appends an off-topic on-screen note about the gochugaru bag at [08:37]; B appends unverifiable rice-cake-bag frame sightings. Neither affects the answer to the question. Effectively identical quality."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both correctly list the blend per [08:49-08:59]: gochugaru (main), cayenne (adds the heat), black sesame, plus unnamed 'couple other spices,' and both hedge the ambiguous 'little sugar' [09:06] and explicitly state the remaining spices are never named, good epistemic hygiene. Both state the tip correctly: hot fryer oil blooms the blend into a chili oil, the fried chicken is dunked in it, and dunking fried food in oil doesn't make it soggy, it stays crispy [09:21-09:38]. Citations spot-checked accurate on both sides. B's parenthetical 'sogginess comes from water, not oil' is an unsupported addition to Kenji's words, but B offsets it with a verified, relevant callback that the same blend finishes the tteokbokki [15:30-15:44]. Net wash."
+        }
+      ],
+      "aIsControl": false
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q1_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "rationale": "Both are near-exhaustive, correctly ordered summaries with no transcript contradictions. Spot-checks pass for both: A's [01:40-01:43] refrigerated-better, [06:21-06:26] 8-10 min simmer, [13:41-14:11] Pliny/taps-emptied, [15:55-16:03] 1950s post-war all match; B's [00:07-00:13] 140 meals, [02:20-02:35] maple-cured pork belly, [07:34-08:01] Korean-food-not-that-hot, [12:55-13:09] pancetta-class comments all match. Both correctly capture the maple pork belly self-correction, wok-not-needed point, chive-flower shelf-life vs scallions, gochugaru mildness, 3-4 min thicken then ~3 min vegetables vs 8-10 min rice sticks, hot-chicken tangent, vegetable-ratio philosophy, COVID free-meal context, Hefeweizen/Pliny beer bit, too-sweet fix with soy sauce, and chicken-spice finish. Minor soft spots on each side: A anchors scallion-prep frames at 00:19-00:49 (dish-intro speech window, plausible visually but odd) and adds unverifiable-but-hedged extras (video title, Weihenstephaner inference, GoPro end card); B places a gochugaru bag on-screen at [08:37] where the audio has moved to the chicken-blend segue (plausible, not contradicted). Neither has a factual error against the transcript; coverage and citation quality are effectively equal."
+        },
+        {
+          "question_id": "q2_targeted",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "rationale": "Both nail the two facts: 8-10 minute simmer (stated at [06:22-06:26] and restated at [08:31-08:33], both verified) and refrigerated-or-frozen with refrigerated generally a little better ([01:40-01:43], verified). Both correctly disambiguate the ~3-minute figure at [08:27-08:28] as applying to cabbage/add-ins, not rice cakes, which is exactly the trap in this question. Citation spot-checks pass on both sides (A: 06:22, 08:31, 01:40; B: 06:21, 08:27, 01:36 all land on the right lines). A edges it on relevance discipline: all of A's extra material (bag sightings at 00:29/01:27/05:40, shape note) stays on the rice cakes. B closes with an off-topic on-screen note about the gochugaru bag at [08:37], which has nothing to do with rice-cake simmer time or refrigerated-vs-frozen and risks being misread as about the rice cakes."
+        },
+        {
+          "question_id": "q3_targeted",
+          "winner": "B",
+          "a_score": 8,
+          "b_score": 9,
+          "rationale": "Both correctly list the blend (gochugaru mainly, cayenne for extra heat, black sesame, unspecified 'couple other spices', plus a little sugar, [08:51-09:06] verified), both correctly flag that the remaining spices are never named, and both correctly render the technique (fryer oil poured over the blend to bloom a chili oil [09:02-09:11], dunk the fried chicken, rack, dust with more spice [09:42-09:47]) and the tip (dunking fried food in oil does not make it soggy, it stays crispy, [09:23-09:38] verified; B even quotes the exact line at [09:35-09:38]). The differentiator: A inserts '(sogginess comes from water, not oil)' inside the sentence describing 'the tip he shares' and inside the [09:23-09:38] citation span, but Kenji never gives that causal explanation, so A attributes an inference to the speaker within a cited claim. B's equivalent gloss ('sogginess isn't a risk from oil') stays within what was actually said. A's callback to the final chicken-spice sprinkle [15:30-15:44] is a nice extra but was not asked for and does not offset the attribution slip."
+        }
+      ],
+      "aIsControl": true
+    }
+  ]
+}
