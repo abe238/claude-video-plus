@@ -24,6 +24,18 @@ def run(command: list[str]) -> dict:
             "stdout": result.stdout[-4000:], "stderr": result.stderr[-4000:]}
 
 
+def run_parallel(commands: list[list[str]]) -> list[dict]:
+    """Run independent release checks concurrently to keep the audit fast."""
+    processes = [subprocess.Popen(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE) for command in commands]
+    results = []
+    for command, process in zip(commands, processes):
+        stdout, stderr = process.communicate()
+        results.append({"command": command, "exit": process.returncode,
+                        "stdout": stdout[-4000:], "stderr": stderr[-4000:]})
+    return results
+
+
 def versions() -> dict:
     skill = (ROOT / "skills/watch/SKILL.md").read_text(encoding="utf-8")
     skill_version = re.search(r'^\s*version: ["\']?([^"\'\n]+)', skill, re.M).group(1)
@@ -48,11 +60,13 @@ def main() -> int:
     args = parser.parse_args()
     all_tests = sorted(str(path.relative_to(ROOT)) for path in (ROOT / "tests").glob("test_*.py"))
     fast_tests = [path for path in all_tests if path not in CONTROL_TESTS and path not in MEDIA_TESTS]
-    checks = [run(["python3", "tools/validate_v1_execution.py"]),
-              run(["python3", "-m", "pytest", "-q", *CONTROL_TESTS]),
-              run(["python3", "-m", "pytest", "-q", *MEDIA_TESTS]),
-              run(["python3", "-m", "pytest", "-q", *fast_tests]),
-              run(["python3", "-m", "compileall", "-q", "skills", "tools", "tests"])]
+    checks = run_parallel([
+        ["python3", "tools/validate_v1_execution.py"],
+        ["python3", "-m", "pytest", "-q", *CONTROL_TESTS],
+        ["python3", "-m", "pytest", "-q", *MEDIA_TESTS],
+        ["python3", "-m", "pytest", "-q", *fast_tests],
+        ["python3", "-m", "compileall", "-q", "skills", "tools", "tests"],
+    ])
     report = {"schema_version": 1, "versions": versions(), "checks": checks,
               "artifact": artifact(args.artifact) if args.artifact else None,
               "public_visibility_authorized": False}
