@@ -5,13 +5,13 @@
   "packet_id": "P00",
   "requirement_ids": ["GOV-001", "GOV-002", "GOV-003"],
   "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
-  "candidate_commit": null,
-  "candidate_config_hash": null,
-  "plan_sha256": null,
+  "candidate_commit": "edc2ce6696a88501f19060cc2000ed4f513c6133",
+  "candidate_config_hash": "148ac5bd32224c9a783e60cd1a77a4966ae7c780f0e7a0346b62054bd97a6115",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
   "environment_id": "macos-arm64-python-3.14.4-local",
   "tool_versions": {"python": "3.14.4", "codex_cli": "0.144.1"},
   "command_or_protocol": "P00 exact-tree plan verification",
-  "status": "provisional",
+  "status": "complete",
   "checks": [
     {"command": "python3 -m pytest -q tests/test_execution_registry.py tests/test_v1_evaluator.py tests/test_v1_evidence_schema.py", "exit": 0},
     {"command": "python3 -m pytest -q", "exit": 0},
@@ -20,10 +20,10 @@
     {"command": "python3 tools/validate_v1_evidence.py docs/evidence/v1/L0-plan-review/baseline.json", "exit": 0},
     {"command": "git diff --check", "exit": 0}
   ],
-  "reviewed_tree": "0000000000000000000000000000000000000000",
+  "reviewed_tree": "b280c7e82bb045101e44943135f75bb3f546aebd",
   "artifact_checksums": {
     "baseline.json": "603513c085a1fe0a2ea6293f51f6bd4d7deb46b3189f158f2d6ed35a2d8049b1",
-    "SOL-REVIEW.md": "b2dfb9aa55554cbf8fe5991d9753c08a7ca776dd2992d17dad0f5f1a42bf2ec4",
+    "SOL-REVIEW.md": "b6a1c5695b6c221914a7f887f624bc28fb6067569ef5ac2751c247d7d5de5b82",
     "EXIT.md": "201e8c849a3c057e733430a60a954b1af6317a61613a8baa1b56f595eb2ebe9f"
   }
 }
