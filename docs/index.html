@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>claude-video-plus — ask a video without making AI read the whole thing</title>
-<meta name="description" content="Ask a video a question. See measured token savings, current v1.0 status, completed verification work, and every major step still remaining.">
+<meta name="description" content="Ask a video a question. Same blind-judged answer quality as the original claude-video at 56% fewer tokens, faster than the default — with sealed benchmark data and every tradeoff stated.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
@@ -137,21 +137,6 @@
   .mech h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
   .mech h3 code { font: 600 13px var(--mono); color: var(--amber); }
   .mech p { font-size: 14px; color: #b4bca6; }
-  .progress {
-    height: 10px; margin-top: 28px; overflow: hidden; border: 1px solid var(--line);
-    border-radius: 999px; background: var(--panel);
-  }
-  .progress span { display: block; width: 5.714%; height: 100%; background: var(--green); }
-  .progress-label { margin-top: 9px; font: 400 12px var(--mono); color: var(--dim); }
-  .roadmap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 30px; }
-  .phase { padding: 20px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
-  .phase h3 { font-size: 16px; margin-bottom: 7px; }
-  .phase p { color: #b4bca6; font-size: 14px; }
-  .phase .count { display: inline-block; margin-bottom: 10px; font: 600 10px var(--mono); color: var(--amber); letter-spacing: .1em; text-transform: uppercase; }
-  .phase.done { border-color: rgba(61,220,132,.35); }
-  .phase.done .count { color: var(--green); }
-  @media (max-width: 700px) { .roadmap { grid-template-columns: 1fr; } }
-
   table { width: 100%; border-collapse: collapse; margin-top: 34px; font-size: 15px; }
   th { font: 600 11px var(--mono); color: var(--dim); text-transform: uppercase; letter-spacing: .14em; text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); }
   td { padding: 15px 14px; border-bottom: 1px solid var(--line); }
@@ -303,7 +288,7 @@
     <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a>. Its caption-first design, simple installation, and reliable backup behavior made this project possible. The upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a>, check them out. The media tools are <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>; transcription uses <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>. Research credits and links are in the improvement plan.</p>
     <details class="credits">
       <summary>Other projects whose ideas are being evaluated and credited</summary>
-      <p>No credit here implies that code was copied or that a planned feature has shipped. The roadmap records whether each source inspired a design, contributed an adapted mechanism, was deferred, or was rejected after testing: <a href="https://github.com/taeloautomates/claude-video">taeloautomates/claude-video</a>, <a href="https://github.com/thedirektor/claude-video">thedirektor/claude-video</a>, <a href="https://github.com/RadoslavSheytanov/claude-video">RadoslavSheytanov/claude-video</a>, <a href="https://github.com/Tigertycoon/claude-video">Tigertycoon/claude-video</a>, <a href="https://github.com/manojbadam/claude-video">manojbadam/claude-video</a>, <a href="https://github.com/CJNA/claude-video">CJNA/claude-video</a>, <a href="https://github.com/sciencemj/claude-video-local">sciencemj/claude-video-local</a>, <a href="https://github.com/troyshelton/claude-video">troyshelton/claude-video</a>, <a href="https://github.com/jsstn/claude-video">jsstn/claude-video</a>, <a href="https://github.com/joweiser/claude-video">joweiser/claude-video</a>, <a href="https://github.com/JoseBallestas/claude-video">JoseBallestas/claude-video</a>, <a href="https://github.com/danielfrey63/claude-video">danielfrey63/claude-video</a>, <a href="https://github.com/finnvoor/yap">finnvoor/yap</a>, and <a href="https://github.com/miguelrios/unc-skills">miguelrios/unc-skills</a>.</p>
+      <p>No credit here implies that code was copied or that a listed feature shipped. The <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/execution/v1/PROVENANCE.md">provenance record</a> documents whether each source inspired a design, contributed an adapted mechanism, was deferred, or was rejected after testing: <a href="https://github.com/taeloautomates/claude-video">taeloautomates/claude-video</a>, <a href="https://github.com/thedirektor/claude-video">thedirektor/claude-video</a>, <a href="https://github.com/RadoslavSheytanov/claude-video">RadoslavSheytanov/claude-video</a>, <a href="https://github.com/Tigertycoon/claude-video">Tigertycoon/claude-video</a>, <a href="https://github.com/manojbadam/claude-video">manojbadam/claude-video</a>, <a href="https://github.com/CJNA/claude-video">CJNA/claude-video</a>, <a href="https://github.com/sciencemj/claude-video-local">sciencemj/claude-video-local</a>, <a href="https://github.com/troyshelton/claude-video">troyshelton/claude-video</a>, <a href="https://github.com/jsstn/claude-video">jsstn/claude-video</a>, <a href="https://github.com/joweiser/claude-video">joweiser/claude-video</a>, <a href="https://github.com/JoseBallestas/claude-video">JoseBallestas/claude-video</a>, <a href="https://github.com/danielfrey63/claude-video">danielfrey63/claude-video</a>, <a href="https://github.com/finnvoor/yap">finnvoor/yap</a>, and <a href="https://github.com/miguelrios/unc-skills">miguelrios/unc-skills</a>.</p>
     </details>
   </section>
 
