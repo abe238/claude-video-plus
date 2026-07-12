@@ -5,9 +5,9 @@
   "packet_id": "P01",
   "requirement_ids": ["CTRL-001"],
   "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
-  "candidate_commit": null,
-  "candidate_config_hash": null,
-  "plan_sha256": null,
+  "candidate_commit": "a97724f4c0c35ce575ba37aed21a0e7bf5adfcb1",
+  "candidate_config_hash": "63494f0fd844035d5a42e6a6acabe9be9c7adb1efd9b23589c784dc8eac51e8e",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
   "environment_id": "macos-arm64-python-3.14.4-local",
   "tool_versions": {
     "python": "3.14.4",
@@ -16,7 +16,7 @@
     "yt_dlp": "2026.07.04 (actual final local-Control proof)"
   },
   "command_or_protocol": "P01 frozen Control harness; provisional before Sol exact-tree review",
-  "status": "provisional",
+  "status": "complete",
   "checks": [
     {"command": "python3 -m pytest -q tests/test_control_harness.py", "exit": 0, "result": "19 passed"},
     {"command": "python3 -m pytest -q", "exit": 0, "result": "146 passed"},
@@ -32,6 +32,12 @@
     "execution_validator": "passed",
     "yt_dlp_version": "2026.06.09"
   },
-  "reviewed_tree": "0000000000000000000000000000000000000000",
-  "artifact_checksums": {}
+  "reviewed_tree": "60121e1316cde582fc61f44239e87dc3a17b76e8",
+  "artifact_checksums": {
+    "EXIT.md": "f5b84752be3bacbd39920910151bc79576d41e6c41d8f01aa0dab0b125ab7d9b",
+    "live-local-control-snapshots/README.md": "e4afaadd67f1757a8cecac825372cb135630fb230ca192a9a09fe40f96f20142",
+    "live-local-control-snapshots/run.json": "60d8a2ddef7d45d1aa9bfb6fee0805dd96a730186a71ef0cc4b3c363cc769dbb",
+    "live-local-control-snapshots/stdout.raw": "9a2742c5673e8de5b1f596ac719db8f1243cfdd1492347c6e3733128510be691",
+    "live-local-control-snapshots/stderr.raw": "bdb3694f2723d8b0c34cd703b056e2aeaa2f103f9de5e5bdd9c063c5140dc8e0"
+  }
 }
