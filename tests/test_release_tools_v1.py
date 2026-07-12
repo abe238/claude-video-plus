@@ -20,7 +20,7 @@ def test_grader_requires_dual_humans_and_meets_agreement_gate():
 def test_release_versions_are_coherent():
     result = versions()
     assert result["coherent"]
-    assert set(result.values()) >= {"1.0.2", True}
+    assert set(result.values()) >= {"1.0.3", True}
 
 
 def test_lifecycle_refuses_unknown_cleanup_root(tmp_path):

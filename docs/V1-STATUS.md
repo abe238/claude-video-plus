@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-12
 
-[`claude-video-plus 1.0.2`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.2)
+[`claude-video-plus 1.0.3`](https://github.com/abe238/claude-video-plus/releases/latest)
 is the current stable public release. It is ready to install and use. Current engineering evidence:
 
 - 338 local deterministic tests pass;
@@ -12,7 +12,7 @@ is the current stable public release. It is ready to install and use. Current en
   `c19a2cbe1b649e1418108bb31386679aa8509dd551fd7497ca9814603082ea24`;
 - the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
 
-The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.2/watch.skill)
+The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill)
 and the repository supports the same one-command Agent Skills install used by the original.
 
 The following research remains open, but does not block using stable v1.0:

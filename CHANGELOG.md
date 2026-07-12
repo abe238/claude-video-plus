@@ -2,6 +2,14 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.0.3] — 2026-07-12
+
+Messaging release. The release artifact is
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill).
+Unified README and website around the confirmed numbers:
+same quality, 56% fewer tokens, ~14s faster than the default, risk-free
+fallback. No runtime changes beyond version receipts.
+
 ## [1.0.2] — 2026-07-12
 
 Behavior release. The release artifact is

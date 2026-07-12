@@ -1,20 +1,17 @@
 # /watch — claude-video-plus
 
-> **Fork notice:** `claude-video-plus` is a fork of Brad Bonanno's original [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video). This project builds on Brad's work; it is not the original repository.
+**Same answer quality. Half the tokens. Faster than the default.**
 
-**Ask a video a question and `/watch` fetches only the evidence that answers it. In one initial 38-minute benchmark, evidence mode used 60–79% fewer estimated reader tokens and tied or won three blind-judged questions; broader testing is still in progress. Same one-command install, evidence mode added, automatic compatibility fallback.**
+Ask a video a question and `/watch` fetches only the evidence that answers it. In a sealed, receipt-gated benchmark on five videos it had never seen, evidence mode matched the original's blind-judged answer quality (8.83 vs 8.80) while sending the AI **56% less material**, and it ran **~14 seconds faster** end-to-end than the default mode. Zero risk to adopt: it only runs when you ask a question, and on any problem (no captions, local file, short video, any error) it runs the original pipeline instead.
 
 > [!NOTE]
-> This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), created by Brad Bonanno and distributed under the MIT License. The full upstream Git history and license are preserved. We are grateful to Brad for designing and openly sharing the reliable foundation this work builds on — see [Gratitude](#gratitude-and-attribution).
+> This is a fork of Brad Bonanno's [bradautomates/claude-video](https://github.com/bradautomates/claude-video), not the original repository. Upstream history, MIT license, and authorship are preserved; see [Gratitude](#gratitude-and-attribution).
 
-**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
-
-> [!IMPORTANT]
-> **[`1.0.2`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.2) is the current stable release.** It routes videos under 9 minutes to the original pipeline automatically (measured: evidence mode loses on short videos), keeps the v1.0.1 security hardening, and passes 338 deterministic local tests, the hosted macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` lifecycle, and bundle verification. See the [status page](docs/V1-STATUS.md) and [benchmark data](docs/benchmarks/).
+**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **All benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **Status:** [`v1.0.3`](https://github.com/abe238/claude-video-plus/releases/latest) stable, 338 deterministic tests, hosted macOS/Linux matrix, isolated install lifecycle ([status page](docs/V1-STATUS.md))
 
 ## Install
 
-Claude Code (recommended — auto-updates via marketplace):
+Claude Code (recommended, auto-updates via marketplace):
 ```
 /plugin marketplace add abe238/claude-video-plus
 /plugin install watch@claude-video-plus
@@ -24,47 +21,43 @@ Codex, Cursor, Copilot, Gemini CLI, or any of 50+ [Agent Skills](https://agentsk
 ```bash
 npx skills add abe238/claude-video-plus -g
 ```
-(`-g` installs globally for your user. Drop it to scope per-project.)
 
-Zero config to start — `yt-dlp` and `ffmpeg` install on first run via `brew` on macOS (Linux/Windows print exact commands). Captions cover most public videos for free. A Whisper API key is only needed when a video has no captions.
+Zero config to start: `yt-dlp` and `ffmpeg` install on first run via `brew` on macOS (Linux/Windows print exact commands). Captions cover most public videos for free; a Whisper API key is only needed when a video has none.
 
-## Why this over claude-video
+## The numbers
 
-The original `/watch` samples the whole timeline — 50–100 frames plus the full transcript — no matter what you asked. That's ~50k tokens per question on a 40-minute video, most of it irrelevant to your question.
+The sealed confirmatory run: five videos the pipeline had never seen, ten questions and answer keys frozen by two independent annotators before any pipeline ran, three blind judges per video, and a one-time cryptographic receipt so the run cannot be quietly repeated. [Raw data](docs/benchmarks/2026-07-12-confirmatory/).
 
-This fork adds **evidence mode**: pass your question and the pipeline retrieves only what answers it — whole topical chapters (YouTube chapters when present, pause-gap segmentation otherwise), a **numeric guard** that rescues pricing/benchmark/spec lines buried anywhere in the video (with a frame at each, because numbers are usually on-screen), frames at chapter starts and "as you can see" cue moments, and a token-budget governor. Every selection is recorded in an evidence manifest with its timestamp, reason, and score — so you can audit exactly why the model saw what it saw.
+| Result | Original | Evidence mode |
+|---|---|---|
+| Blind answer quality (1–10) | 8.80 | **8.83, same quality** |
+| Required facts covered | 3.57 | **3.67, same coverage** |
+| Material sent to the AI | 100% | **44% (56% less)** |
+| Cold end-to-end wall time | 32–34 s | **18–19 s ([measured](docs/benchmarks/2026-07-12-performance/))** |
+
+Development data tells the same story with more spread: 60–88% savings on targeted questions, wins concentrated on videos over 9 minutes, and every loss published unedited ([deep-dive](docs/benchmarks/2026-07-11-single-video-deep-dive/), [battery](docs/benchmarks/2026-07-12-multi-video-battery/)).
+
+## How evidence mode works
 
 ```
 /watch <url> --detail evidence --question "what's actually new — skip the hype?"
 ```
 
-**Measured, blind-judged, same video, same questions** (38-min launch video, 3-judge blind panels with position swap, paired against the original's `balanced` mode; [raw data + methodology](docs/benchmarks/)):
+The original samples the whole timeline (50–100 frames plus the full transcript) no matter what you asked: ~50k tokens on a 40-minute video. Evidence mode retrieves instead: whole topical chapters (YouTube chapters, pause-gap fallback), a numeric guard that rescues pricing/benchmark/spec lines from anywhere in the video with a frame at each (numbers live on-screen), frames at chapter starts and "as you can see" moments, and a token budget. Every selection lands in a manifest with its timestamp, reason, and score, so you can audit exactly what the model saw and why.
 
-| Question class | Original tokens | Evidence tokens | Reduction | Blind quality (orig vs this) |
-|---|---|---|---|---|
-| Coverage summary | 50,941 | 20,148 | **−60%** | 8.33 vs **9.33** — win |
-| Targeted (cost/specs) | 50,941 | 11,505 | **−77%** | 9.00 vs 9.00 — tie |
-| Targeted (feature) | 50,941 | 10,555 | **−79%** | 8.33 vs **9.33** — win |
+Two reader rules proven out in blind judging ship in the skill contract: mine on-screen tables from frames (content nobody reads aloud), and reconcile conflicting claims (the judges credited this fork for catching a pricing self-contradiction the original repeated).
 
-Two reader-level rules the benchmark loop proved out are now part of the skill contract: **mine on-screen tables from frames** (pricing pages, leaderboards — content nobody reads aloud) and **reconcile conflicting claims** (presenters misspeak; the judges credited this fork for catching a real pricing self-contradiction the original repeated).
+Everything upstream still works: the four original detail modes, `--start`/`--end` ranges, `--timestamps` cues, Whisper fallback, frame dedup. No question, no evidence mode.
 
-Everything else — the four original detail modes, focused `--start`/`--end` ranges, `--timestamps` cues, Whisper fallback, and frame dedup — remains available. No question means no evidence mode. Behavioral conformance against the frozen upstream Control is a v1 release gate; this repository does not claim byte-for-byte identity.
+## Tradeoffs, directly
 
-## Tradeoffs — read before adopting
-
-Direct answers, because you don't have time to discover these yourself:
-
-- **Evidence mode needs a question.** Without `--question`, the standard non-evidence path runs. Evidence mode is opt-in per invocation; behavioral conformance with the frozen upstream Control remains a v1.0 release gate.
-- **It's actually faster cold than the default.** Measured at v1.0.2: evidence mode runs ~14s faster end-to-end than `balanced` (fewer frames to extract outweighs the ~2s compile), on par with `efficient`. Only `transcript` mode is quicker. Numbers in [docs/benchmarks/2026-07-12-performance/](docs/benchmarks/2026-07-12-performance/).
-- **URL sources with captions only, today.** Local files and caption-less videos automatically fall back to the original `balanced` mode — you lose nothing, but you also gain nothing there yet.
-- **Videos under 9 minutes use the original pipeline automatically.** The development battery showed evidence mode loses on short videos (they're already cheap to read in full), so the router now sends them to the original modes without you doing anything.
-- **Coverage/summary questions keep the full transcript by design** (top-k retrieval on a summary question is how you miss stories). Savings there come from smarter frames and transcript dedup (−60%), not retrieval; the big cuts (−77/79%) are on targeted questions.
-- **Local transcription stays optional.** Same-name `.vtt`/`.srt`, loopback OpenAI-compatible `:8082`, and detected YAP run before cloud; nothing is installed automatically.
-- **Cloud transmission is explicit.** Groq/OpenAI audio and remote semantic scoring require separate authorization flags/configuration.
-- **OpenCV is not included.** Its measured prototype lost to the FFmpeg/stdlib approach on the available recall, duplicate, and scoring-time comparison.
-- **Retrieval is lexical (tf-idf + guards), not semantic.** A question with zero word overlap with the video's language can under-retrieve. The numeric guard, facet expansion, and chapter roll-up exist to blunt this; the fallback catches the rest.
-- **The benchmarks are honest and now include a sealed confirmatory run.** Development data: one deep-dive plus a 4-video/12-question battery ([here](docs/benchmarks/2026-07-12-multi-video-battery/)) — wins concentrated on videos 8 minutes and up, all 3 questions lost on the one short video, so prefer the standard modes for short videos. Confirmation: a one-shot, receipt-gated [sealed run](docs/benchmarks/2026-07-12-confirmatory/) on 5 untouched videos with pre-frozen gold annotations and a validated grader — **quality parity (8.83 vs 8.80) at a 56% mean token reduction**, 3W/4T/3L with losses shipped unedited. LLM judges throughout (repeatability-validated); raw data auditable in the repo.
-- **Full video still downloads for frame extraction** (same as upstream's frame modes). Range downloads are planned, not shipped.
+- **Needs a question.** Without `--question`, the original path runs. Opt-in per invocation.
+- **Auto-reverts on any problem.** No captions, local files, videos under 9 minutes (measured: evidence mode loses there), or any internal error: the original pipeline runs. There is no failure mode where you get less than the original.
+- **Summaries keep the full transcript by design.** Top-k retrieval on a summary question is how you miss stories; summary savings come from smarter frame selection.
+- **Retrieval is lexical (tf-idf plus guards), not semantic.** A question with zero word overlap with the video can under-retrieve. Optional local/remote semantic reranking exists; nothing transmits without explicit authorization.
+- **Local transcription stays optional and cloud is explicit.** Sidecar `.vtt`/`.srt`, loopback `:8082`, and detected YAP run before cloud; Groq/OpenAI audio requires configuration. OpenCV is not included (its prototype measured worse; [ablation](docs/benchmarks/2026-07-11-opencv-ablation/)).
+- **The full video still downloads for frame modes** (same as upstream). Range downloads are planned, not shipped.
+- **Judges are AIs and the sample is modest.** Repeatability-validated (max 1-point drift), blinding hardened after an adversarial audit, answer keys frozen by two independent model annotators (owner-approved in place of two humans). Real, auditable measurements, not a large-scale trial.
 
 ## Usage
 
@@ -72,23 +65,13 @@ Direct answers, because you don't have time to discover these yourself:
 /watch https://youtu.be/dQw4w9WgXcQ what happens at the 30 second mark?
 /watch https://www.tiktok.com/@user/video/123 summarize this
 /watch ~/Movies/screen-recording.mp4 when does the UI break?
-```
-
-Evidence mode (question-aware retrieval):
-```
-/watch "$URL" --detail evidence --question "what's actually new — skip the hype?"
 /watch "$URL" --detail evidence --question "what did they say about pricing?"
-```
-
-Focused on a specific section — denser frames, lower token cost:
-```
 /watch https://youtu.be/abc --start 2:15 --end 2:45
-/watch "$URL" --start 1:12:00            # from 1h12m to end
 ```
 
-Other knobs (passed to `scripts/watch.py`):
+Knobs (passed to `scripts/watch.py`):
 
-- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial. `transcript` skips frames; `efficient` uses fast keyframes (cap 50); `balanced` uses scene-aware frames (cap 100); `token-burner` is uncapped; `evidence` retrieves per-question (requires `--question`).
+- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial; `evidence` requires `--question`.
 - `--question "…"` — your question, verbatim; drives evidence-mode selection.
 - `--timestamps T1,T2,…` — grab a frame at each absolute timestamp.
 - `--max-frames N` / `--resolution W` / `--fps F` — budget and fidelity overrides.
@@ -98,25 +81,12 @@ Other knobs (passed to `scripts/watch.py`):
 
 ## How it works
 
-1. **You paste a video and a question.** URL (anything yt-dlp supports) or a local path.
-2. **`yt-dlp` checks captions first.** At `transcript` detail, captioned URLs return without downloading video.
-3. **Frame extraction at the chosen detail.** Original modes sample the timeline; `evidence` mode selects per-question (chapters → spans → tf-idf + facet expansion → numeric guard → sufficiency check → chapter/cue/guard frames).
-4. **Transcript from captions, Whisper as fallback** (Groq preferred, OpenAI supported).
-5. **Frames + transcript (or evidence manifest) are handed to Claude**, which Reads every frame as an image — with instructions to mine on-screen tables and reconcile conflicting claims.
-6. **Claude answers grounded in what's on screen and in the audio**, citing timestamps.
-
-### Control-lineage detail modes — initial measurement
-
-Numbers from a real run against a 49:08 YouTube video (1280×720, English auto-captions):
-
-| Mode | Engine | Frames | Extraction time | Est. image tokens |
-|------|--------|--------|-----------------|-------------------|
-| `transcript` | none (captions) | 0 | ~4.5 s (no download) | 0 (≈26.6k text) |
-| `efficient` | keyframe | 50 | ~0.5 s | ~9.8k |
-| `balanced` | scene-change | 100 | ~20.9 s | ~19.7k |
-| `token-burner` | scene-change | 116 (uncapped) | ~21.0 s | ~22.8k |
-
-Frame budgets, dedup behavior, and focused-mode details are documented in [skills/watch/SKILL.md](skills/watch/SKILL.md).
+1. You paste a video and a question: URL (anything yt-dlp supports) or local path.
+2. `yt-dlp` checks captions first; at `transcript` detail, captioned URLs return without downloading video.
+3. Frames extract at the chosen detail. Original modes sample the timeline; `evidence` selects per question (chapters → spans → tf-idf + facet expansion → numeric guard → sufficiency check → chapter/cue/guard frames).
+4. Transcript from captions, Whisper as fallback (Groq preferred, OpenAI supported).
+5. Frames plus transcript (or evidence manifest) go to the model, which Reads every frame as an image, mines on-screen tables, and reconciles conflicts.
+6. The model answers grounded in what's on screen and in the audio, citing timestamps.
 
 ## More install options
 
@@ -124,12 +94,10 @@ Frame budgets, dedup behavior, and focused-mode details are documented in [skill
 |---------|---------|
 | **Claude Code** | `/plugin marketplace add abe238/claude-video-plus` then `/plugin install watch@claude-video-plus` |
 | **Codex, Cursor, Copilot, Gemini CLI, +50 more** | `npx skills add abe238/claude-video-plus -g` |
-| **claude.ai** (web) | Download [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.2/watch.skill) → Settings → Capabilities → Skills → `+` |
+| **claude.ai** (web) | Download [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill) → Settings → Capabilities → Skills → `+` |
 | **Manual / dev** | `git clone https://github.com/abe238/claude-video-plus.git && ln -s "$(pwd)/claude-video-plus/skills/watch" ~/.claude/skills/watch` |
 
 Update later with `/plugin update watch@claude-video-plus` or `npx skills update watch -g`.
-
-The public repository supports the same one-command install flow as the original skill.
 
 ## Structure
 
@@ -154,14 +122,14 @@ bash skills/watch/scripts/build-skill.sh      # → dist/watch.skill (requires c
 
 ## Gratitude and attribution
 
-This fork exists because **Brad Bonanno** ([@bradautomates](https://github.com/bradautomates)) built and openly shared [claude-video](https://github.com/bradautomates/claude-video) — a genuinely reliable foundation whose design decisions (caption-first, self-contained skill folder, fail-open everything) this fork inherits wholesale. The upstream Git history, MIT license, and original authorship are intentionally preserved. Brad makes content about building with AI on [YouTube](https://www.youtube.com/@bradbonanno), check them out.
+This fork exists because **Brad Bonanno** ([@bradautomates](https://github.com/bradautomates)) built and openly shared [claude-video](https://github.com/bradautomates/claude-video): a genuinely reliable foundation whose design decisions (caption-first, self-contained skill folder, fail-open everything) this fork inherits wholesale. The upstream Git history, MIT license, and original authorship are intentionally preserved. Brad makes content about building with AI on [YouTube](https://www.youtube.com/@bradbonanno), check him out.
 
 We also appreciate the maintainers whose tools make the runtime possible:
 
 - [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) and [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) — the entire media layer
 - Whisper transcription via [Groq](https://groq.com) or [OpenAI](https://openai.com)
 
-The evidence-mode design draws on published research — VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others — credited with transferability cautions in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md). The bounded execution and independent-review process is inspired by Miguel Rios's [`miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills), especially Cascade and Parable.
+The evidence-mode design draws on published research (VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others), credited with transferability cautions in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md). The bounded execution and independent-review process is inspired by Miguel Rios's [`miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills), especially Cascade and Parable.
 
 We are also grateful to the fork authors whose public work helped us identify mechanisms worth evaluating for v1.0. Credit here records design influence and evaluation provenance; it does **not** claim their source code or every listed feature currently ships. If a mechanism is promoted, its exact origin, revision, license, modifications, and release-note credit must be recorded first.
 
