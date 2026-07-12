@@ -2,17 +2,16 @@
 
 All notable changes to `/watch` are documented here.
 
-## [0.3.0-rc.1] — 2026-07-12
+## [1.0.0] — 2026-07-12
 
-Private prerelease under the `abe238/claude-video-plus` derivative identity
+First stable release under the `abe238/claude-video-plus` derivative identity
 (fork of Brad Bonanno's `bradautomates/claude-video`; upstream history, license, and
 attribution preserved). The tagged release includes the self-contained
-[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill)
-artifact. Repository permission is required while the project remains private. The release
-workflow refuses a tag whose value disagrees with the package manifests.
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill)
+artifact. The release workflow refuses a tag whose value disagrees with the package manifests.
 
-RC verification: 327 local tests, five hosted macOS/Linux Python jobs, isolated Agent Skills
-install/invoke/uninstall, deterministic 81,952-byte bundle, and independent early-publish review.
+Stable-release verification: 335 local tests, five hosted macOS/Linux Python jobs, isolated Agent
+Skills install/invoke/uninstall, deterministic bundle construction, and release-integrity checks.
 
 ### Added
 - **`--detail evidence` + `--question`** — question-aware evidence retrieval
@@ -63,7 +62,7 @@ install/invoke/uninstall, deterministic 81,952-byte bundle, and independent earl
 ## [0.2.0] — 2026-06-30 (upstream)
 
 Last release from the preserved `bradautomates/claude-video` history before the
-derivative `0.3.0-rc.1` work. Added the self-contained `skills/watch/` layout, detail modes,
+derivative work that culminated in `1.0.0`. Added the self-contained `skills/watch/` layout, detail modes,
 frame deduplication, timestamp cues, Whisper chunking, and the cross-host manifests.
 The tag points to upstream commit `83da59f`.
 

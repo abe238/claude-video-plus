@@ -219,9 +219,9 @@
       <div class="stat"><b>about +2 sec</b><span>extra time to choose the useful parts after download</span></div>
       <div class="stat"><b>1 video · 3 questions</b><span>a small first test — useful evidence, not final proof</span></div>
     </div>
-    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1">0.3.0-rc.1</a> is available as a private prerelease. Its implementation and engineering checks are complete; stable v1.0 still needs broader comparisons, human grader validation, and one untouched confirmation run. Repository access is required until the owner later decides whether to make it public.</p>
-    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill">Download watch.skill</a>
-    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1">View prerelease</a>
+    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">1.0.0</a> is the first stable public release. The implementation and engineering checks are complete. The measured performance numbers below remain intentionally limited to one video and three questions.</p>
+    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill">Download watch.skill</a>
+    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">View release</a>
   </header>
 
   <section>
@@ -263,13 +263,13 @@
 
   <section>
     <div class="kicker">What is implemented now</div>
-    <h2>The release candidate is published privately.</h2>
-    <p class="lede">The code now includes resilient video fetching, local-first transcription, safe reuse, portable evidence, semantic options, dependency-free visual scoring, and fail-closed release tools. Version 0.3.0-rc.1 passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, deterministic bundle audit, and independent blocker review. The repository and download remain private. Stable v1.0 claims still wait for broader measured evidence.</p>
+    <h2>Version 1.0 is ready to use.</h2>
+    <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. Version 1.0.0 passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit. The repository and download are public.</p>
     <div class="stats">
-      <div class="stat win"><b>327</b><span>local deterministic tests passing</span></div>
+      <div class="stat win"><b>335</b><span>local deterministic tests passing</span></div>
       <div class="stat"><b>5/5</b><span>hosted macOS/Linux Python jobs passing</span></div>
       <div class="stat"><b>83da59f</b><span>the exact untouched original version used for comparisons</span></div>
-      <div class="stat tok"><b>In progress</b><span>v1.0 follows an evidence-gated 35-packet plan</span></div>
+      <div class="stat tok"><b>v1.0.0</b><span>stable public release</span></div>
     </div>
     <div class="grid2">
       <div class="mech"><h3>Same original every time</h3><p>The harness refuses a modified checkout, changed executable, mismatched source, unsupported setting, or dirty output directory.</p></div>
@@ -280,18 +280,18 @@
     <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/evidence/v1/P01-control">Inspect the verification evidence</a>
   </section>
 
-  <section id="what-remains-before-v10">
-    <div class="kicker">What remains before v1.0</div>
-    <h2>Prove the broader performance claims.</h2>
-    <p class="lede">The feature implementation is assembled and the prerelease engineering checks pass. What remains is one consolidated evidence campaign: multi-video comparisons, human validation of the answer grader, one untouched confirmation run, and the final stable-release claim audit.</p>
-    <div class="progress" aria-label="v1.0 execution is in progress; see canonical status checklist"><span></span></div>
-    <p class="progress-label">Private prerelease published · stable v1.0 evidence pending</p>
+  <section id="what-comes-after-v10">
+    <div class="kicker">What comes after v1.0</div>
+    <h2>Test broader performance claims.</h2>
+    <p class="lede">The stable skill is ready to use. A separate research campaign can test whether the first benchmark results generalize across more videos. Until then, the site reports only the small measured result above.</p>
+    <div class="progress" aria-label="stable v1.0 is published; broader research is optional"><span></span></div>
+    <p class="progress-label">Stable v1.0 published · broader comparative research remains optional</p>
     <div class="roadmap">
       <div class="phase done"><span class="count">Done</span><h3>Build and verify the candidate</h3><p>The planned runtime and tooling are assembled. The local suite, hosted matrix, isolated install lifecycle, bundle audit, and independent prerelease review pass.</p></div>
       <div class="phase"><span class="count">Next</span><h3>Run the broader comparison</h3><p>Compare the original and candidate across the development videos, then publish speed, reliability, token, duplicate, recall, and answer-quality results.</p></div>
       <div class="phase"><span class="count">Human check</span><h3>Validate answer grading</h3><p>Use blinded human judgments to prove the answer-quality grader is trustworthy before relying on its scores.</p></div>
       <div class="phase"><span class="count">One run</span><h3>Open the untouched set once</h3><p>Freeze one candidate, confirm the final videos are still sealed, run them once after owner authorization, and publish every result—including failures.</p></div>
-      <div class="phase"><span class="count">Final audit</span><h3>Release stable v1.0</h3><p>Make the public claims match the measured data, recheck installation and the artifact, preserve attribution, and complete one independent release review.</p></div>
+      <div class="phase done"><span class="count">Done</span><h3>Release stable v1.0</h3><p>Public claims stay within the measured data, installation and the artifact are checked, and attribution is preserved.</p></div>
     </div>
     <a class="btn" href="https://github.com/abe238/claude-video-plus/blob/main/docs/V1-STATUS.md">See every remaining step</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/blob/main/docs/plans/V1.0-MASTER-PLAN.md">Read the full master plan</a>
@@ -303,12 +303,12 @@
     <div class="kicker">What to know before using it</div>
     <h2>It is promising, not magic.</h2>
     <ul class="trade">
-      <li><b>The RC is not stable v1.0.</b> The implementation is assembled, but the broader benchmark, human grader check, one sealed confirmation run, and final claim audit remain.</li>
+      <li><b>Version 1.0 is stable, but the benchmark is still small.</b> The published numbers come from one video and three questions, not every kind of video.</li>
       <li><b>You need to ask a question.</b> Without one, /watch uses the original method.</li>
       <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
       <li><b>The smarter mode currently needs a URL with captions.</b> Local files and videos without captions use the original method for now.</li>
       <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video.</li>
-      <li><b>Today it mostly matches words.</b> A question phrased very differently from the video can miss a section. Hybrid semantic search is planned for v1.0 and will be measured before release.</li>
+      <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required.</li>
       <li><b>So far, this is one video and three questions.</b> The numbers above are real, but they do not prove the same improvement on every kind of video. The final roadmap includes a larger development test and one untouched confirmation run.</li>
     </ul>
   </section>
@@ -324,7 +324,7 @@
   </section>
 
   <footer>
-    <span>MIT License · private 0.3.0-rc.1 prerelease · stable v1.0 evidence in progress</span>
+    <span>MIT License · stable public v1.0.0 · fork attribution preserved</span>
     <span><a href="https://github.com/abe238/claude-video-plus">github.com/abe238/claude-video-plus</a></span>
   </footer>
 </main>

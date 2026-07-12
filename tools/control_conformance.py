@@ -47,7 +47,9 @@ COVERAGE_RE = re.compile(r"\b(?:coverage|summary|summar(?:y|ize)|all topics|ever
 SAID_RE = re.compile(r"\b(?:said|say|explained|explain|spoken|tell me)\b", re.I)
 FRAME_LINE_RE = re.compile(r"^\s*-?\s*.*?/frames/(frame_[^\s`)]+).*?\(t=([^,)]+)(?:,\s*reason=([^)]*))?\)", re.M)
 TRANSCRIPT_LINE_RE = re.compile(r"^\[([^\]]+)\]\s*(.*)$", re.M)
-ABS_PATH_RE = re.compile(r"(?<![\w:])/(?:[^\s`)>]+/)+[^\s`)>]+")
+# A local absolute path starts with one slash. Exclude URL ``//`` prefixes as well as
+# scheme separators so public source URLs are not mistaken for filesystem leakage.
+ABS_PATH_RE = re.compile(r"(?<![\w:/])/(?:[^\s`)>]+/)+[^\s`)>]+")
 
 
 class ConformanceRefusal(RuntimeError):
@@ -304,6 +306,17 @@ def _audit_source() -> str:
     return '''import json, os, shutil, socket, subprocess, time, urllib.request
 LOG = os.environ.get("P02_AUDIT_LOG")
 ALLOWED = set(json.loads(os.environ.get("P02_ALLOWED_EXECUTABLES", "[]")))
+def pinned_wrapper_target(path):
+    """Accept only the P01 caption-snapshot wrapper around an already allowed tool."""
+    if os.path.basename(os.path.dirname(path)) != "pinned-tools": return None
+    try:
+        with open(path, encoding="utf-8") as handle: lines = handle.read().splitlines()
+    except OSError: return None
+    if not lines or lines[0] != "#!/bin/sh": return None
+    targets = [line[5:] for line in lines if line.startswith("real=")]
+    if len(targets) != 1: return None
+    target = os.path.realpath(targets[0])
+    return target if target in ALLOWED else None
 def record(kind, value):
     if LOG:
         with open(LOG, "a", encoding="utf-8") as h: h.write(json.dumps({"event":"audit","kind":kind,"value":str(value),"monotonic_ns":time.monotonic_ns()}, sort_keys=True)+"\\n")
@@ -315,7 +328,7 @@ def audited_popen(args, *a, **kw):
     command = os.fsdecode(argv[0])
     resolved = os.path.realpath(command if os.path.isabs(command) else (shutil.which(command) or ""))
     record("subprocess", {"argv": list(argv), "resolved": resolved})
-    if not resolved or resolved not in ALLOWED:
+    if not resolved or (resolved not in ALLOWED and not pinned_wrapper_target(resolved)):
         raise RuntimeError("P02 audit refused executable identity drift: " + command)
     return _popen(args, *a, **kw)
 subprocess.Popen = audited_popen

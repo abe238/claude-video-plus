@@ -136,6 +136,11 @@ def test_normalization_refuses_an_undeclared_absolute_path(tmp_path: Path):
         conformance.normalize_text("leak /not-a-declared-root/file.txt", (tmp_path,))
 
 
+def test_normalization_does_not_treat_public_url_as_local_path(tmp_path: Path):
+    url = "https://www.youtube.com/watch?v=public-id"
+    assert conformance.normalize_text(url, (tmp_path,)) == url
+
+
 def test_undeclared_behavioral_difference_blocks():
     base = {"stdout": "same", "stderr": "", "frames": [], "transcript": [], "raw_manifest": []}
     changed = {**base, "transcript": [{"timestamp": "00:01", "text": "changed"}]}

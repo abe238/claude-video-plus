@@ -2,33 +2,32 @@
 
 Last updated: 2026-07-12
 
-`claude-video-plus` is usable today. [`0.3.0-rc.1`](https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1)
-is the current **private prerelease**; it is not the stable v1.0 release. Current evidence:
+[`claude-video-plus 1.0.0`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0)
+is the first stable public release. It is ready to install and use. Current engineering evidence:
 
-- 327 local deterministic tests pass;
+- 335 local deterministic tests pass;
 - all five hosted macOS/Linux Python 3.11–3.14 jobs pass;
 - isolated `npx skills` install, diagnostics invocation, uninstall, and source-preservation pass;
 - deterministic `watch.skill` is 81,952 bytes with SHA-256
   `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`;
 - the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
 
-The release and its [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill)
-require repository permission while the project remains private. Public visibility remains a
-separate owner decision.
+The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill)
+and the repository supports the same one-command Agent Skills install used by the original.
 
-Stable v1.0 remains open because it still requires:
+The following research remains open, but does not block using stable v1.0:
 
 - run the multi-video development benchmarks and publish Pareto evidence;
 - validate the grader, open the sealed confirmation set once, and evaluate the frozen Candidate;
-- complete the final claim audit before a stable tag or broad superiority claim.
+- complete the final claim audit before making any broad superiority claim.
 
 The machine-readable source of truth is
 [`docs/execution/v1/REQUIREMENTS.json`](execution/v1/REQUIREMENTS.json). The full design and
 measurement rules live in [`V1.0-MASTER-PLAN.md`](plans/V1.0-MASTER-PLAN.md). This page is the
 human-readable view; if it ever disagrees with the registry, the registry wins.
 
-The implementation for P02–P32 is assembled. The remaining work is consolidated measurement and
-release proof—not 31 more feature-building loops. The economical execution sequence is documented
+The implementation for P02–P32 is assembled. Remaining work is consolidated measurement for
+stronger comparative claims—not more feature-building loops. The economical sequence is documented
 in [`V1.0-LOW-COST-COMPLETION.md`](plans/V1.0-LOW-COST-COMPLETION.md).
 
 ## Implemented foundations
@@ -41,7 +40,7 @@ in [`V1.0-LOW-COST-COMPLETION.md`](plans/V1.0-LOW-COST-COMPLETION.md).
 P02–P32 implementation is present as integrated runtime/tooling slices. Their issues remain open
 until the consolidated verification phase supplies passing evidence and final review.
 
-## Next: prove the comparison itself
+## Next research: prove broader comparisons
 
 | Step | What remains | Issue |
 | --- | --- | --- |
@@ -105,14 +104,14 @@ until the consolidated verification phase supplies passing evidence and final re
 | --- | --- | --- |
 | P28 | Test dependency-free FFmpeg/standard-Python signals for important screen changes against answer quality, duplicates, tokens, and total runtime. | [#32](https://github.com/abe238/claude-video-plus/issues/32) |
 
-## Confirmation and v1.0 release
+## Optional confirmation campaign after v1.0
 
 | Step | What remains | Issue |
 | --- | --- | --- |
 | P29 | Verify the untouched confirmation set is still sealed, then open it only with the required authorization. | [#33](https://github.com/abe238/claude-video-plus/issues/33) |
 | P30 | Validate the answer grader against human judgments and freeze exactly one release candidate. | [#34](https://github.com/abe238/claude-video-plus/issues/34) |
 | P31 | Run the confirmation evaluation once and publish complete raw results, including failures. | [#35](https://github.com/abe238/claude-video-plus/issues/35) |
-| P32 | Audit the install surfaces, evidence, attribution, limits, rollback, and release artifact; then assemble v1.0. | [#36](https://github.com/abe238/claude-video-plus/issues/36) |
+| P32 | Audit the install surfaces, evidence, attribution, limits, rollback, and release artifact; then maintain stable releases. | [#36](https://github.com/abe238/claude-video-plus/issues/36) |
 
 ## What “done” means
 

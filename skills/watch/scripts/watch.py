@@ -90,7 +90,7 @@ def run_evidence(args) -> int:
         export_bundle(
             _portable_evidence_files(summary, work),
             args.export_bundle,
-            tool_versions={"watch": "0.3.0-rc.1"}, schema_versions={"evidence": 1},
+            tool_versions={"watch": "1.0.0"}, schema_versions={"evidence": 1},
             evidence_budget={"text_chars": args.text_budget, "frames": args.max_frames},
             completeness_state="complete", provenance={"source_identity": dl.get("source_identity", "unknown")},
         )
