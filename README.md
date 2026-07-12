@@ -7,6 +7,9 @@
 
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
+> [!IMPORTANT]
+> **v1.0 is still in progress.** The Sol-reviewed plan and frozen-original Control harness are complete (2 of 35 execution packets). The repository currently passes 146 tests. The remaining 33 packets cover conformance and measurement, release/install integrity, acquisition resilience, local-first transcription including optional YAP and loopback `:8082`, safe reuse, semantic retrieval, improved frame selection, and one untouched confirmatory evaluation. Follow the [plain-language website roadmap](https://abe238.github.io/claude-video-plus/#what-remains-before-v10), [complete status checklist](docs/V1-STATUS.md), [master plan](docs/plans/V1.0-MASTER-PLAN.md), or [GitHub issues](https://github.com/abe238/claude-video-plus/issues).
+
 ## Install
 
 Claude Code (recommended — auto-updates via marketplace):
@@ -129,14 +132,14 @@ Update later with `/plugin update watch@claude-video-plus` or `npx skills update
 │   └── scripts/                  # watch.py, evidence.py, download/frames/transcribe/whisper/setup/config
 ├── docs/benchmarks/              # supplemental evidence data (NOT in the install package)
 ├── docs/plans/                   # canonical v1 master plan plus historical review records
-├── tests/                        # pytest suite — 93 tests, no network
+├── tests/                        # pytest suite — 146 tests at the current checkpoint
 └── .claude-plugin/ .codex-plugin/ .agents/   # host manifests
 ```
 
 ## Develop
 
 ```bash
-python3 -m pytest -q                          # 93 tests (ffmpeg required for frame tests)
+python3 -m pytest -q                          # 146 tests at the current checkpoint
 bash skills/watch/scripts/build-skill.sh      # → dist/watch.skill (requires clean tree)
 ./dev-sync.sh                                 # mirror working tree into installed plugin cache
 ```
