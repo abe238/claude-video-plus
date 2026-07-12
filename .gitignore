@@ -17,3 +17,4 @@ htmlcov/
 
 # Custodian-only development corpus locators/questions; never commit real sources.
 /tools/development-manifest.local.json
+/tools/development-candidate-config.local.json
