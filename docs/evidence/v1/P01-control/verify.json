@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "artifact_type": "verify",
+  "created_at_utc": "2026-07-12T06:30:00Z",
+  "packet_id": "P01",
+  "requirement_ids": ["CTRL-001"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": null,
+  "candidate_config_hash": null,
+  "plan_sha256": null,
+  "environment_id": "macos-arm64-python-3.14.4-local",
+  "tool_versions": {
+    "python": "3.14.4",
+    "ffmpeg": "8.1",
+    "ffprobe": "8.1",
+    "yt_dlp": "2026.07.04 (actual final local-Control proof)"
+  },
+  "command_or_protocol": "P01 frozen Control harness; provisional before Sol exact-tree review",
+  "status": "provisional",
+  "checks": [
+    {"command": "python3 -m pytest -q tests/test_control_harness.py", "exit": 0, "result": "19 passed"},
+    {"command": "python3 -m pytest -q", "exit": 0, "result": "146 passed"},
+    {"command": "python3 -m compileall -q skills tools tests", "exit": 0},
+    {"command": "python3 tools/validate_v1_execution.py", "exit": 0, "result": "45 requirements; 35 packets"},
+    {"command": "python3 tools/validate_v1_evidence.py docs/evidence/v1/P01-control/verify.json", "exit": 0},
+    {"command": "network-free actual Control proof; see live-local-control-snapshots/run.json", "exit": 0, "result": "real pinned Python/ffmpeg/ffprobe/yt-dlp; wrapper hash recorded; consumed-caption no-caption expectation matched; post-run Control status clean"},
+    {"command": "git diff --check", "exit": 0}
+  ],
+  "coordinator_observed_before_p01_followup": {
+    "focused_tests": "7 passed",
+    "full_tests": "134 passed",
+    "execution_validator": "passed",
+    "yt_dlp_version": "2026.06.09"
+  },
+  "reviewed_tree": "0000000000000000000000000000000000000000",
+  "artifact_checksums": {}
+}

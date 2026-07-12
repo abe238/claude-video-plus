@@ -1,0 +1,21 @@
+
+# watch: video report
+
+- **Source:** /private/tmp/p01-live-control.T74khW/source.mp4
+- **Title:** source.mp4
+- **Duration:** 00:01 (1.0s)
+- **Resolution:** 32x32 (h264)
+- **Detail:** transcript
+- **Frames:** skipped (transcript detail)
+- **Transcript:** none available
+
+## Frames
+
+_No frames extracted._
+
+## Transcript
+
+_No transcript available at transcript detail. Captions were missing and Whisper was unavailable or failed, so there is no visual fallback here. Re-run with `--detail balanced` for frames._
+
+---
+_Work dir: `/private/tmp/p01-live-control.T74khW/out` — delete when done._
