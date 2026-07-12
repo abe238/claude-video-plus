@@ -28,10 +28,10 @@ Every packet names:
 5. tests and live proof to add;
 6. deterministic commands;
 7. evidence output paths;
-8. one implementation pass and one read-only Sol review for packets P02 through P32. Run only the
-   packet's focused tests and deterministic validators; defer the full repository regression suite
-   and consolidated release audit to P32. Record residual non-release-blocking uncertainty instead
-   of starting another packet-level review loop;
+8. one implementation pass for packets P02 through P32. Under the owner's implementation-first
+   direction, finish all remaining runtime/tooling slices before starting the consolidated test,
+   benchmark, install, bundle, and independent-review phase. Do not pause for packet-level test or
+   review loops; record ownership and repair failures once during the final audit;
 9. stop conditions requiring escalation rather than invention.
 
 The executor receives the packet and only the references named by it. It does not receive
@@ -53,15 +53,16 @@ an `implemented` dependency; only P32 may promote the chain to release-complete 
 repair, the full suite, and final audit.
 ```
 
-The coordinator resumes the same Terra session once for concrete verification or review
-failures. A second valid failure escalates with a fresh, smaller packet. Infrastructure
-failures do not consume the evidence bound but must be recorded.
+The coordinator integrates implementation slices first. After the complete Candidate exists,
+verification runs from cheap deterministic checks through the full suite, install/bundle matrix,
+benchmarks, and one independent final review. Failures are repaired in that consolidated phase so
+the owner can evaluate or publish an earlier coherent Candidate without waiting on 31 test loops.
 
 ## Verification order
 
-1. changed paths match packet ownership;
-2. focused tests;
-3. full test suite;
+1. all planned implementation paths are present and integration is complete;
+2. changed paths match requirement ownership;
+3. focused tests, then the full test suite;
 4. Python compilation and manifest/schema validation where applicable;
 5. live-path proof and benchmark slice where the packet changes runtime behavior;
 6. evidence files contain non-null results and environment/provenance;
