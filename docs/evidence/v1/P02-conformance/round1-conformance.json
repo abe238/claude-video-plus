@@ -1,0 +1,64 @@
+{
+  "artifact_type": "p02_round1_generated_receipt",
+  "schema_version": 1,
+  "generation": "tools/control_conformance.py run_pair, run_evidence_fallback, and run_deterministic_fixture_pair; paths sanitized by normalize_text",
+  "fixture_build_command": ["ffmpeg","-hide_banner","-loglevel","error","-y","-f","lavfi","-t","1.2","-i","color=c=blue:s=320x240:r=10","-c:v","libx264","-pix_fmt","yuv420p","<TMP_PATH>/fixture.mp4"],
+  "fixture": {
+    "media_included": false,
+    "source_identity_sha256": "987dadc0c4082856db2a3401b91d508156a8f12017d1782321c895b13c45ef5c",
+    "question": "What happens after the transition?",
+    "flags": {"detail":"balanced","max_frames":4,"resolution":160,"fps":null,"timestamps":null,"start":null,"end":null,"no_whisper":true,"whisper":null,"no_dedup":false}
+  },
+  "binding": {
+    "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+    "control_clean_before": true,
+    "control_clean_after": true,
+    "candidate_commit": "a9b3de6252d6616f28a87f1423a21b5d75b5bca0",
+    "candidate_index_sha256": "58e379a6c108e633a6ad099dc9e065e3f442ed4452fbbb14e0c29ec0457b1d2c",
+    "candidate_runtime_sha256": "e56dbdc7b80e0d89b712f282e5187f19db2a86c7105f2cc97666ad00d7935620",
+    "routing_version": "cheapest-control-v1",
+    "retry_policy": {"harness_attempts": 1},
+    "paired_order": ["candidate", "control"]
+  },
+  "environment": {
+    "os":"Darwin", "architecture":"arm64", "locale":"C", "network_policy":"offline",
+    "tool_versions":{"python":"Python 3.14.4","ffmpeg":"ffmpeg version 8.1","ffprobe":"ffprobe version 8.1","yt_dlp":"2026.03.17"},
+    "tool_sha256":{"python":"a6a412ff830271043f7730e2527455bdbf52c9e1712f753dc2d90089949e9943","ffmpeg":"5cc8f6fabfe9a6ac1fe51f1679bc9d063653801575874016409127f78a014c97","ffprobe":"008d2de26bd19f7fa497d0b7d9d45880e0240de46dc984916be759fd35bdd135","yt_dlp":"70e81e1361e3bf4aac3b3b18968de1ff96620bb1d77266dddcb5724db7e04539"}
+  },
+  "paired_result": {
+    "allowed_differences":["temporary_paths"],
+    "no_op_samples_ms":{"candidate":[39.865917,40.232042,39.878542],"control":[40.815208,39.78225,41.482459]},
+    "latency_formula":"max(5, 0.05 * control_payload_wall_ms, control_noop_p95 - control_noop_p50)",
+    "latency_allowance_ms":12.29262085,
+    "command":{"candidate":["<TMP_PATH>","<TMP_PATH>","<TMP_PATH>","--detail","balanced","--resolution","160","--max-frames","4","--no-whisper","--out-dir","<TMP_PATH>"],"control":["<TMP_PATH>","skills/watch/scripts/watch.py","<TMP_PATH>","--detail","balanced","--resolution","160","--max-frames","4","--no-whisper","--out-dir","<TMP_PATH>"]},
+    "arms": {
+      "candidate":{"exit_class":"success","payload_wall_ms":242.577542,"process_calls":5,"provider_network_calls":0,"raw_unredacted_stdout_sha256":"a1042a6e7acff08f2d89c1196f127f5ac5b1103198ae128c26b3c9bf301bb89d","raw_unredacted_stderr_sha256":"45237ce0f9c59054a73aedbc3807dcaca926ecd2debf883659942b67600a1fbb"},
+      "control":{"exit_class":"success","payload_wall_ms":245.852417,"process_calls":5,"provider_network_calls":0,"raw_unredacted_stdout_sha256":"a1042a6e7acff08f2d89c1196f127f5ac5b1103198ae128c26b3c9bf301bb89d","raw_unredacted_stderr_sha256":"45237ce0f9c59054a73aedbc3807dcaca926ecd2debf883659942b67600a1fbb"}
+    },
+    "observed_call_argv_identical_after_declared_path_normalization": true,
+    "observed_call_argv":[
+      {"tool":"python","argv":["<TMP_PATH>","watch.py","<TMP_PATH>","--detail","balanced","--resolution","160","--max-frames","4","--no-whisper","--out-dir","<TMP_PATH>"]},
+      {"tool":"ffprobe","argv":["-v","quiet","-print_format","json","-show_format","-show_streams","<TMP_PATH>"]},
+      {"tool":"ffmpeg","argv":["-hide_banner","-loglevel","info","-y","-i","<TMP_PATH>","-vf","scene-selection+scale+showinfo","-vsync","vfr","-q:v","4","<TMP_PATH>"]},
+      {"tool":"ffmpeg","argv":["-hide_banner","-loglevel","error","-y","-i","<TMP_PATH>","-vf","uniform-fallback+scale","-frames:v","2","-q:v","4","<TMP_PATH>"]},
+      {"tool":"ffmpeg","argv":["-hide_banner","-loglevel","error","-start_number","1","-i","<TMP_PATH>","-vf","scale=16:16,format=gray","-f","rawvideo","-"]}
+    ],
+    "shared_output":{"transcript":[],"frames":[{"name":"frame_0001.jpg","timestamp":"00:00","reason":"uniform","dimensions":[160,120]}],"raw_manifest":[{"path":"frames/frame_0001.jpg","bytes":344,"sha256":"46b2160ec5cac268c01ad6541e4c82db8d36559d597f29fed3b8bc5dae6d6a17"}]},
+    "sanitized_raw_receipts":{"stdout":{"path":"raw/pair.stdout.txt","sha256":"822609cd10d124c3e7ce39e2973959a7729fa6cf954e3c6fd7a0b0c8812b1d3d"},"stderr":{"path":"raw/pair.stderr.txt","sha256":"3a660a86fead73fe5ac6af2fc6eca21288eb6d4b877e9a82ad90a712599e72fb"}}
+  },
+  "evidence_fallback": {
+    "order":["evidence","balanced"], "evidence_exit":0, "balanced_exit":0, "warning_count":1,
+    "warning":"[watch] evidence mode failed (evidence mode currently supports URL sources with captions) — falling back to balanced",
+    "evidence":{"process_calls":5,"provider_network_calls":0,"payload_wall_ms":549.118458,"stderr":{"path":"raw/fallback-evidence.stderr.txt","sha256":"e39cb978409abbe865ed22eb6c13577b925a96c20d4d2c43f686d9bd0875f222"}},
+    "balanced":{"process_calls":5,"provider_network_calls":0,"payload_wall_ms":554.359208,"stderr":{"path":"raw/fallback-balanced.stderr.txt","sha256":"3a660a86fead73fe5ac6af2fc6eca21288eb6d4b877e9a82ad90a712599e72fb"}},
+    "normalized_behavior_matches_candidate_balanced":true,
+    "normalized_behavior_matches_frozen_control_balanced":true
+  },
+  "deterministic_fixture_pairs": {
+    "success":{"control":"success","candidate":"success","differences":[]},
+    "failure":{"control":"failure/invalid_source","candidate":"failure/invalid_source","differences":[]},
+    "timeout":{"control":"timeout","candidate":"timeout","termination":"process-group timeout cleanup","differences":[]},
+    "fallback":{"control":["native","sidecar"],"candidate":["native","sidecar"],"differences":[]}
+  },
+  "portable_safety":{"media":false,"secrets":false,"absolute_private_paths":false,"executable_symlinks":false}
+}

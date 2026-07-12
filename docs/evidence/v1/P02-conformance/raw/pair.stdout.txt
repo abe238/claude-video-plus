@@ -1,0 +1,26 @@
+
+# watch: video report
+
+- **Source:** <TMP_PATH>
+- **Title:** fixture.mp4
+- **Duration:** 00:01 (1.2s)
+- **Resolution:** 320x240 (h264)
+- **Detail:** balanced
+- **Frames:** 1 selected from 1 candidates (uniform with uniform fallback, 1 near-duplicate dropped, full range, budget 2, cap 4)
+- **Frame size:** max 160px wide, max 1998px tall
+- **Transcript:** none available
+
+## Frames
+
+Frames live at: `<TMP_PATH>`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `<TMP_PATH>` (t=00:00, reason=uniform)
+
+## Transcript
+
+_No transcript available — proceed with frames only. Captions were missing and the Whisper fallback was unavailable (no API key set, or `--no-whisper` was used). Run `python3 <TMP_PATH>` to enable Whisper, then re-run._
+
+---
+_Work dir: `<TMP_PATH>` — delete when done._

@@ -1,0 +1,17 @@
+{
+  "artifact_type": "p02_owner_single_pass_machine_receipt",
+  "schema_version": 1,
+  "policy": "Owner-directed single-pass: focused tests and packet validators only; P32 owns the consolidated audit.",
+  "generation": "tools/control_conformance.py run_pair and run_evidence_fallback machine output; generated media and private paths retained outside portable evidence.",
+  "case_id": "p02-owner-final",
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "question": "What logo looks like while a person walks?",
+  "runtime_fallback_order": ["scene", "uniform"],
+  "arms": {
+    "control": {"raw_stdout_sha256":"57c48fbe563d1336b6d14bb2d3248b3646b984595df4226caea345c29cdefd80","raw_stderr_sha256":"1227cff01ea07c382bb0edfeae45d2c8f85d50d93a5d76804dccf6cc35346e77","process_calls":13,"provider_network_calls":0},
+    "candidate": {"raw_stdout_sha256":"0a85c200a3a8138a515641d832f16af75c6b92ba12138dcd2f05c48d4a4d1633","raw_stderr_sha256":"381588db13ea96c61878fe210d020694c894f2893194377e77ee6b118e68ae66","process_calls":13,"provider_network_calls":0}
+  },
+  "evidence_fallback": {"order":["evidence","balanced"],"evidence_process_calls":13,"balanced_process_calls":13,"evidence_provider_network_calls":0,"balanced_provider_network_calls":0},
+  "audit": "Exact resolved executable allowlist, subprocess argv logging, socket connect/connect_ex/sendto and urllib blocking, and os.system refusal are active in both paired arms and fallback.",
+  "portable_safety": {"media":false,"secrets":false,"absolute_private_paths":false,"symlinks":false}
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "artifact_type": "verify",
+  "created_at_utc": "2026-07-12T17:51:11Z",
+  "packet_id": "P02",
+  "requirement_ids": ["CTRL-002", "CTRL-003"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": "a9b3de6252d6616f28a87f1423a21b5d75b5bca0",
+  "candidate_config_hash": "e56dbdc7b80e0d89b712f282e5187f19db2a86c7105f2cc97666ad00d7935620",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
+  "environment_id": "macos-arm64-python-3.14.4-local",
+  "tool_versions": {"python": "3.14.4", "ffmpeg": "8.1", "ffprobe": "8.1", "yt_dlp": "2026.03.17"},
+  "command_or_protocol": "P02 cheapest-control-v1 and paired local compatibility conformance; provisional before Sol exact-tree review",
+  "status": "provisional",
+  "checks": [
+    {"command": "python3 -m pytest -q tests/test_control_conformance.py", "exit": 0, "result": "63 passed"},
+    {"command": "python3 -m pytest -q", "exit": 0, "result": "205 passed (coordinator-confirmed)"},
+    {"command": "python3 -m compileall -q skills tools tests", "exit": 0},
+    {"command": "python3 tools/validate_v1_evidence.py docs/evidence/v1/P02-conformance/verify.json", "exit": 0, "result": "ok: 1 evidence file(s)"},
+    {"command": "python3 tools/validate_v1_execution.py", "exit": 0, "result": "ok: 45 requirements, 35 packets (coordinator-confirmed)"},
+    {"command": "git diff --check", "exit": 0},
+    {"command": "git diff --check --no-index /dev/null <each P02-owned untracked path>", "exit": 0, "result": "owned untracked-path whitespace audit passed"},
+    {"command": "git status --short changed-path audit", "exit": 0, "result": "P02 changes confined to the four owned path groups; pre-existing unrelated untracked paths preserved"},
+    {"command": "paired local deterministic fixture via tools/control_conformance.py API", "exit": 0, "result": "observed Control/Candidate payload intervals, process/provider calls, normalized raw output/frame/manifest conformance; see round1-conformance.json"},
+    {"command": "actual Candidate --detail evidence --question local fail-open", "exit": 0, "result": "exit 0; one warning; observed provider/network calls 0; normalized balanced result; see round1-conformance.json"},
+    {"command": "gh issue view 4 --repo abe238/claude-video-plus --json number,title,state,labels,url", "exit": 0, "result": "issue #4 is open with exact P02 title and ready-for-agent label"}
+  ],
+  "reviewed_tree": "0000000000000000000000000000000000000000",
+  "artifact_checksums": {
+    "EXIT.md": "4e7334d5b41f0bcd4f61d6c8f7992f120d24ae805483e42f41a381c121694623",
+    "SOL-REVIEW.md": "ad9189eb5193e7131f31201a82a63a6741f79ea0f349ea4e1c6c79883f818a0d",
+    "round1-conformance.json": "7b236ff4af74d4aa546955d0feb53a5d87a0725c4b20801efa5f3d3259a369aa",
+    "round3-real-fixtures.json": "2c4ca46a8b50a243769072ac7085ca38c5701d06c344b25a7335b09fb6cd3fd3",
+    "owner-single-pass.json": "49d739acf1e8298741df8cd7ba73f3cd9e130fcfb094a16d1efb7a97bdbcda03",
+    "raw/pair.stdout.txt": "822609cd10d124c3e7ce39e2973959a7729fa6cf954e3c6fd7a0b0c8812b1d3d",
+    "raw/pair.stderr.txt": "3a660a86fead73fe5ac6af2fc6eca21288eb6d4b877e9a82ad90a712599e72fb",
+    "raw/fallback-evidence.stderr.txt": "e39cb978409abbe865ed22eb6c13577b925a96c20d4d2c43f686d9bd0875f222",
+    "raw/fallback-balanced.stderr.txt": "3a660a86fead73fe5ac6af2fc6eca21288eb6d4b877e9a82ad90a712599e72fb"
+  }
+}
