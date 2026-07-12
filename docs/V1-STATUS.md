@@ -29,12 +29,12 @@ Every check on the original measurement plan has now run. Nothing remains open:
   ([confirmatory raw data](benchmarks/2026-07-12-confirmatory/));
 - the sealed confirmation set was opened exactly once under the receipt gate and the
   frozen candidate evaluated: **quality parity (8.83 vs 8.80) with identical gold-fact
-  coverage at a 56% mean token reduction** — 3 wins, 4 ties, 3 losses
+  coverage at a 56% mean token reduction**: 3 wins, 4 ties, 3 losses
   ([sealed run](benchmarks/2026-07-12-confirmatory/));
 - cold end-to-end timing (evidence mode ~14 s faster than the balanced default) and the
   whole-project reliability record are published
   ([performance](benchmarks/2026-07-12-performance/));
-- the one negative result — the OpenCV frame scorer — is published with raw data and the
+- the one negative result (the OpenCV frame scorer) is published with raw data and the
   mechanism was rejected ([ablation](benchmarks/2026-07-11-opencv-ablation/)).
 
 The full evidence index is [docs/benchmarks/](benchmarks/).
@@ -65,4 +65,4 @@ or benchmark evidence was recorded, an independent Sol review found no unresolve
 high-priority issue, the exact reviewed tree was committed and pushed, and the matching
 GitHub issue was closed. A code commit by itself was never completion, and no
 development result became a public performance claim before the sealed confirmation
-gate — which has now run, once, with the receipt published.
+gate, which has now run, once, with the receipt published.
