@@ -2,8 +2,8 @@
 
 Last updated: 2026-07-12
 
-`claude-video-plus` is usable today, and `0.3.0-rc.1` is verified for an **early prerelease** on
-`main`. Current evidence:
+`claude-video-plus` is usable today. [`0.3.0-rc.1`](https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1)
+is the current **private prerelease**; it is not the stable v1.0 release. Current evidence:
 
 - 327 local deterministic tests pass;
 - all five hosted macOS/Linux Python 3.11–3.14 jobs pass;
@@ -11,6 +11,10 @@ Last updated: 2026-07-12
 - deterministic `watch.skill` is 81,952 bytes with SHA-256
   `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`;
 - the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
+
+The release and its [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill)
+require repository permission while the project remains private. Public visibility remains a
+separate owner decision.
 
 Stable v1.0 remains open because it still requires:
 
@@ -22,6 +26,10 @@ The machine-readable source of truth is
 [`docs/execution/v1/REQUIREMENTS.json`](execution/v1/REQUIREMENTS.json). The full design and
 measurement rules live in [`V1.0-MASTER-PLAN.md`](plans/V1.0-MASTER-PLAN.md). This page is the
 human-readable view; if it ever disagrees with the registry, the registry wins.
+
+The implementation for P02–P32 is assembled. The remaining work is consolidated measurement and
+release proof—not 31 more feature-building loops. The economical execution sequence is documented
+in [`V1.0-LOW-COST-COMPLETION.md`](plans/V1.0-LOW-COST-COMPLETION.md).
 
 ## Implemented foundations
 

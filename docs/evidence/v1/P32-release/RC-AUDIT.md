@@ -1,6 +1,8 @@
 # 0.3.0-rc.1 early-publish audit
 
-Candidate commit: `c0efe180b1d8f0afdf38a7cb9297cba6977038e9`
+Reviewed implementation commit: `c0efe180b1d8f0afdf38a7cb9297cba6977038e9`
+
+Published prerelease: [`v0.3.0-rc.1`](https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1)
 
 ## Acceptance evidence
 
@@ -17,7 +19,8 @@ Candidate commit: `c0efe180b1d8f0afdf38a7cb9297cba6977038e9`
 
 ## Boundary
 
-This authorizes only a clearly labeled `0.3.0-rc.1` prerelease. The repository remains private and
-no tag or GitHub release was created. Stable v1.0, public visibility, and broad superiority claims
+This audit authorized only a clearly labeled `0.3.0-rc.1` prerelease, which was subsequently
+tagged and published without changing repository visibility. The release and artifact remain
+private to authorized GitHub users. Stable v1.0, public visibility, and broad superiority claims
 remain blocked on multi-video Pareto evidence, human grader validation, the authorized sealed
 confirmation run, and the owner's later publication decision.
