@@ -48,3 +48,10 @@ here unedited.
   the one video under 8 min, vs 5 wins/2 ties/2 losses on videos 8 min and up. A 5th video
   (Veritasium) was collected but its judge panel hit a session limit; excluded from all
   aggregates, raw answers included unjudged.
+- [2026-07-12-confirmatory/](2026-07-12-confirmatory/) — **the sealed one-shot confirmatory
+  run** (owner-authorized, receipt-gated, cannot be re-run): 5 untouched videos, 10 questions,
+  gold annotated by two independent model annotators before any pipeline ran, grader validated
+  for repeatability, blinding hardened after an adversarial leak probe. Verdict: **quality
+  parity (8.83 vs 8.80) with identical gold-fact coverage at a 56% mean token reduction** —
+  3 wins / 4 ties / 3 losses, losses shipped unedited. Passes the project's Pareto promotion
+  rule for an opt-in feature.

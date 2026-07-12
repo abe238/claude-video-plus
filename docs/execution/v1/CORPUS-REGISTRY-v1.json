@@ -1,17 +1,144 @@
 {
-  "custodian_id": "p03-custodian-placeholder",
-  "development_executor_ids": ["development-executor-local"],
+  "custodian_id": "abe238-custodian",
+  "development_executor_ids": [
+    "development-executor-local"
+  ],
   "families": [
-    {"family_id": "dev-family-conversation", "identities": [{"identity_id": "dev-source-conversation", "identity_sha256": "8d7fcbd0f74edcb248e40fdfd2dfd9e75d33f163d43792f0b58a7eeff7ec2393"}], "question_classes": ["coverage"], "split": "development"},
-    {"family_id": "dev-family-dashboard", "identities": [{"identity_id": "dev-source-dashboard", "identity_sha256": "ba28c50e5565cfcbe860586d0a666129a76f702202e64dd9434fb57c91286dc7"}], "question_classes": ["targeted"], "split": "development"},
-    {"family_id": "dev-family-photography", "identities": [{"identity_id": "dev-source-photography", "identity_sha256": "64052b07dabebf56f78233ed38d4fa8611e1c5ad4c8f6e84781cc73e4d60dadc"}], "question_classes": ["targeted"], "split": "development"},
-    {"family_id": "dev-family-search", "identities": [{"identity_id": "dev-source-search", "identity_sha256": "0b89bee27bf625995e004182de500df9d6d76d700f0560b850d7047f46867beb"}], "question_classes": ["coverage"], "split": "development"},
-    {"family_id": "dev-family-digestion", "identities": [{"identity_id": "dev-source-digestion", "identity_sha256": "b93dbe2bc652f2440a0126721fa7b209f4633367fd2ffd88be3c3b5d89d90df8"}], "question_classes": ["targeted"], "split": "development"},
-    {"family_id": "confirm-family-placeholder-001", "identities": [{"identity_id": "reserve-source-placeholder-001", "identity_sha256": "7dedf21e254e8abaa51572dfa8cb6699711ba5cda2e1e86c7610976061768594"}], "question_classes": ["targeted", "coverage"], "split": "confirmatory"},
-    {"family_id": "confirm-family-placeholder-002", "identities": [{"identity_id": "reserve-source-placeholder-002", "identity_sha256": "60f0fc629087710739df9bc63833ef9aadab62edbee0d27c755ef14ea7131464"}], "question_classes": ["targeted", "coverage"], "split": "confirmatory"},
-    {"family_id": "confirm-family-placeholder-003", "identities": [{"identity_id": "reserve-source-placeholder-003", "identity_sha256": "6210442c1d966ab300749f5b2a524617e6498ec4f43564ba86388e315145847a"}], "question_classes": ["targeted", "coverage"], "split": "confirmatory"},
-    {"family_id": "confirm-family-placeholder-004", "identities": [{"identity_id": "reserve-source-placeholder-004", "identity_sha256": "e1a0e56751049e4d997755d7ae0592c9d36a8be3e77e5c64287b023da635c35c"}], "question_classes": ["targeted", "coverage"], "split": "confirmatory"},
-    {"family_id": "confirm-family-placeholder-005", "identities": [{"identity_id": "reserve-source-placeholder-005", "identity_sha256": "6aef50e335b24749027eebc75ed267cab600938395237ec72f77a95c636e5271"}], "question_classes": ["targeted", "coverage"], "split": "confirmatory"}
+    {
+      "family_id": "dev-family-conversation",
+      "identities": [
+        {
+          "identity_id": "dev-source-conversation",
+          "identity_sha256": "8d7fcbd0f74edcb248e40fdfd2dfd9e75d33f163d43792f0b58a7eeff7ec2393"
+        }
+      ],
+      "question_classes": [
+        "coverage"
+      ],
+      "split": "development"
+    },
+    {
+      "family_id": "dev-family-dashboard",
+      "identities": [
+        {
+          "identity_id": "dev-source-dashboard",
+          "identity_sha256": "ba28c50e5565cfcbe860586d0a666129a76f702202e64dd9434fb57c91286dc7"
+        }
+      ],
+      "question_classes": [
+        "targeted"
+      ],
+      "split": "development"
+    },
+    {
+      "family_id": "dev-family-photography",
+      "identities": [
+        {
+          "identity_id": "dev-source-photography",
+          "identity_sha256": "64052b07dabebf56f78233ed38d4fa8611e1c5ad4c8f6e84781cc73e4d60dadc"
+        }
+      ],
+      "question_classes": [
+        "targeted"
+      ],
+      "split": "development"
+    },
+    {
+      "family_id": "dev-family-search",
+      "identities": [
+        {
+          "identity_id": "dev-source-search",
+          "identity_sha256": "0b89bee27bf625995e004182de500df9d6d76d700f0560b850d7047f46867beb"
+        }
+      ],
+      "question_classes": [
+        "coverage"
+      ],
+      "split": "development"
+    },
+    {
+      "family_id": "dev-family-digestion",
+      "identities": [
+        {
+          "identity_id": "dev-source-digestion",
+          "identity_sha256": "b93dbe2bc652f2440a0126721fa7b209f4633367fd2ffd88be3c3b5d89d90df8"
+        }
+      ],
+      "question_classes": [
+        "targeted"
+      ],
+      "split": "development"
+    },
+    {
+      "family_id": "confirm-family-001",
+      "split": "confirmatory",
+      "question_classes": [
+        "targeted",
+        "coverage"
+      ],
+      "identities": [
+        {
+          "identity_id": "confirm-source-001",
+          "identity_sha256": "2c9d88253e128afda9f92285c235e15334560f5cc4395cf944452982a23da5b2"
+        }
+      ]
+    },
+    {
+      "family_id": "confirm-family-002",
+      "split": "confirmatory",
+      "question_classes": [
+        "targeted",
+        "coverage"
+      ],
+      "identities": [
+        {
+          "identity_id": "confirm-source-002",
+          "identity_sha256": "82cb37fc6fcb096f0c41986614e71c40f714714b1bde34b1da5e6b878c61d618"
+        }
+      ]
+    },
+    {
+      "family_id": "confirm-family-003",
+      "split": "confirmatory",
+      "question_classes": [
+        "targeted",
+        "coverage"
+      ],
+      "identities": [
+        {
+          "identity_id": "confirm-source-003",
+          "identity_sha256": "27da3e22e89b4df834f74bfa66477bd42e3e87cb791a5d4b0413f2e7ed2def55"
+        }
+      ]
+    },
+    {
+      "family_id": "confirm-family-004",
+      "split": "confirmatory",
+      "question_classes": [
+        "targeted",
+        "coverage"
+      ],
+      "identities": [
+        {
+          "identity_id": "confirm-source-004",
+          "identity_sha256": "8a0ab2331aaf98b52ab51bc575a80dc571e93a9784017402c79833d6702f7086"
+        }
+      ]
+    },
+    {
+      "family_id": "confirm-family-005",
+      "split": "confirmatory",
+      "question_classes": [
+        "targeted",
+        "coverage"
+      ],
+      "identities": [
+        {
+          "identity_id": "confirm-source-005",
+          "identity_sha256": "9cb97e5bce06f077587d44bc3a05688e54f0a7825899f88e2b3ec28da9b9322e"
+        }
+      ]
+    }
   ],
   "frozen": {
     "candidate_commit": "e0e5499de264d07fcf4041938b069d0ca80a069c",
@@ -20,15 +147,23 @@
     "exclusions": [],
     "grader_epoch": "grader-epoch-unconfigured",
     "minimum_confirmatory_families": 5,
-    "minimum_confirmatory_families_by_class": {"coverage": 3, "targeted": 3},
+    "minimum_confirmatory_families_by_class": {
+      "coverage": 3,
+      "targeted": 3
+    },
     "prompt_epoch": "reader-prompt-v1",
     "reader_epoch": "reader-epoch-unconfigured",
     "routing_epoch": "cheapest-control-v1",
-    "supported_classes": ["targeted", "coverage"],
-    "supported_environments": ["macos-arm64-python-3.14"]
+    "supported_classes": [
+      "targeted",
+      "coverage"
+    ],
+    "supported_environments": [
+      "macos-arm64-python-3.14"
+    ]
   },
   "registry_version": "corpus-registry-v1",
   "schema_version": 1,
-  "seal_sha256": "9644c137e028c4e499a005508a86051bb379bc44885ccaf56e3b35447aee2da9",
+  "seal_sha256": "407bd36b7928da65bf049ed454b1ef02c823e3a677d7c60f85369f3735770e6c",
   "status": "sealed"
 }

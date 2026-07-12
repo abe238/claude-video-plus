@@ -1,0 +1,11 @@
+{
+  "access_log_sha256": "e3e81c697f2a330cccf173472b47ecc5574d9775ea658147c383e970cb356aa4",
+  "authorization_sha256": "65f4e3d5fa5210daf0aeeca3e424c539d47b79f63b4ae95430dbd78f528ca988",
+  "candidate_commit": "e0e5499de264d07fcf4041938b069d0ca80a069c",
+  "candidate_config_hash": "122dac665632b413a864cf2219d687ae0fee61dae527ad0d7d51b2f29002af69",
+  "evaluation_dir": "docs/benchmarks/2026-07-12-confirmatory",
+  "opened_at_utc": "2026-07-12T22:09:17.920040+00:00",
+  "registry_sha256": "af58f5e74821becccfd501940b4655b05bdee52babec482924f43de887ebf5b9",
+  "schema_version": 1,
+  "status": "authorized_once"
+}

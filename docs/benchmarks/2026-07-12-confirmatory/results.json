@@ -1,0 +1,135 @@
+{
+  "questions": [
+    {
+      "video": "PqtggjVAi8M",
+      "q": "q_coverage",
+      "ctl_tok": 24334,
+      "ev_tok": 10523,
+      "red": 57,
+      "ctl_q": 9.0,
+      "ev_q": 9.0,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "tie"
+    },
+    {
+      "video": "PqtggjVAi8M",
+      "q": "q_targeted",
+      "ctl_tok": 24334,
+      "ev_tok": 5401,
+      "red": 78,
+      "ctl_q": 9.0,
+      "ev_q": 9.0,
+      "ctl_facts": 2.0,
+      "ev_facts": 2.0,
+      "verdict": "tie"
+    },
+    {
+      "video": "vZdbbN3FCzE",
+      "q": "q_coverage",
+      "ctl_tok": 24699,
+      "ev_tok": 11298,
+      "red": 54,
+      "ctl_q": 9.0,
+      "ev_q": 8.33,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "loss"
+    },
+    {
+      "video": "vZdbbN3FCzE",
+      "q": "q_targeted",
+      "ctl_tok": 24699,
+      "ev_tok": 6569,
+      "red": 73,
+      "ctl_q": 9.0,
+      "ev_q": 8.33,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "loss"
+    },
+    {
+      "video": "gUV5DJb6KGs",
+      "q": "q_coverage",
+      "ctl_tok": 11444,
+      "ev_tok": 9819,
+      "red": 14,
+      "ctl_q": 8.33,
+      "ev_q": 9.0,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "win"
+    },
+    {
+      "video": "gUV5DJb6KGs",
+      "q": "q_targeted",
+      "ctl_tok": 11444,
+      "ev_tok": 4032,
+      "red": 65,
+      "ctl_q": 9.0,
+      "ev_q": 9.0,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "tie"
+    },
+    {
+      "video": "Q10_srZ-pbs",
+      "q": "q_coverage",
+      "ctl_tok": 29783,
+      "ev_tok": 16387,
+      "red": 45,
+      "ctl_q": 8.67,
+      "ev_q": 9.0,
+      "ctl_facts": 4.0,
+      "ev_facts": 4.0,
+      "verdict": "win"
+    },
+    {
+      "video": "Q10_srZ-pbs",
+      "q": "q_targeted",
+      "ctl_tok": 29783,
+      "ev_tok": 9381,
+      "red": 69,
+      "ctl_q": 9.0,
+      "ev_q": 9.0,
+      "ctl_facts": 3.0,
+      "ev_facts": 3.0,
+      "verdict": "tie"
+    },
+    {
+      "video": "-Ud2cqoB7gE",
+      "q": "q_coverage",
+      "ctl_tok": 8664,
+      "ev_tok": 5118,
+      "red": 41,
+      "ctl_q": 8.0,
+      "ev_q": 9.0,
+      "ctl_facts": 3.7,
+      "ev_facts": 4.7,
+      "verdict": "win"
+    },
+    {
+      "video": "-Ud2cqoB7gE",
+      "q": "q_targeted",
+      "ctl_tok": 8664,
+      "ev_tok": 2904,
+      "red": 66,
+      "ctl_q": 9.0,
+      "ev_q": 8.67,
+      "ctl_facts": 3.0,
+      "ev_facts": 3.0,
+      "verdict": "loss"
+    }
+  ],
+  "overall": {
+    "n": 10,
+    "evidence_wins": 3,
+    "ties": 4,
+    "evidence_losses": 3,
+    "mean_quality_control": 8.8,
+    "mean_quality_evidence": 8.83,
+    "mean_gold_facts_control": 3.57,
+    "mean_gold_facts_evidence": 3.67,
+    "mean_token_reduction_pct": 56
+  }
+}

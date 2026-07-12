@@ -1,0 +1,275 @@
+{
+  "frozen_at": "2026-07-12",
+  "rule": "coverage=union(A,B), text=A; targeted merged when topic-coincident else alternate per targeted_source",
+  "annotators": {
+    "A": "claude-sonnet-5 (independent)",
+    "B": "gpt-5.6-terra (independent)"
+  },
+  "annotator_file_sha256": {
+    "A": "18660f80092d185399ec19d6ad68c2f557b3bdd43ce2d8db61b7a80d8d4030df",
+    "B": "d09292e3c0ec3f199a7771f2f655f4c4730500ea5390195fcbfd45438bb8ebad"
+  },
+  "note": "Model annotators approved by owner 2026-07-12 as substitute for the two-human requirement; recorded as models, not humans.",
+  "videos": [
+    {
+      "id": "PqtggjVAi8M",
+      "q_coverage": {
+        "text": "What does this video explain about how memories are formed in the brain and why they change each time we remember them?",
+        "gold_spans": [
+          "00:00-00:37",
+          "00:00-00:45",
+          "00:45-04:07",
+          "00:48-03:47",
+          "04:07-06:09",
+          "04:10-05:55",
+          "07:13-09:38",
+          "09:42-12:52",
+          "09:45-12:52"
+        ],
+        "required_facts": [
+          "Memories aren't static like photos - they're patterns of synchronized neuron activity called 'assemblies'. (03:16-03:30)",
+          "When one 'assembly' wins your attention, the hippocampus creates a blueprint of it and indexes it as a new memory. (04:39-05:11)",
+          "New memories are fragile - without reinforcement they fade, which is why you forget most moments of your life. (05:36-05:47)",
+          "Novelty, repetition, and strong emotion are the main ways a memory gets reinforced into a lasting one. (07:20-08:07)",
+          "A lot of memory consolidation happens during sleep, when the hippocampus replays the assembly over and over. (09:08-09:16)",
+          "Recalling a memory makes it 'moldable' again - each time you retrieve it, your brain updates it with your current context. (10:15-10:54)",
+          "A vividly-remembered memory isn't necessarily an accurate one - memory strength and accuracy are not the same thing. (12:04-12:10)",
+          "Because retrieval reshapes memories, therapy that revisits difficult memories in a safe context can literally rewire the brain. (12:34-12:42)",
+          "Memories let the mind encode, store, and retrieve information, but they are not static records. (00:00-00:23)",
+          "The brain has about 86 billion neurons; synapses strengthen when neurons fire together. (01:00-01:55)",
+          "Sensory and other brain columns form a synchronized assembly that creates the experience of a moment. (02:01-03:35)",
+          "The winning, attended assembly is chemically made more changeable, while the hippocampus stores a rough blueprint and index. (04:10-05:14)",
+          "A new memory is a distributed activation pattern, but it fades unless its synapses are reinforced. (05:21-05:55)",
+          "Novelty, repeated reactivation, and strong emotion make an assembly more likely to persist. (07:20-09:06)",
+          "During sleep the hippocampus replays the assembly, consolidating it; insufficient sleep means forgetting more. (09:08-09:25)",
+          "Retrieval makes a memory plastic again, so new context, emotions, and expectations can change it; vividness does not guarantee accuracy. (09:45-12:10)"
+        ]
+      },
+      "q_targeted": {
+        "text": "How many neurons are in the human brain, and how many other neurons does each one typically connect to?",
+        "gold_spans": [
+          "01:00-01:40"
+        ],
+        "required_facts": [
+          "The brain has about 86 billion neurons. (01:00)",
+          "A typical neuron is connected to up to 10,000 other neurons. (01:25)",
+          "Together they form a network of hundreds of trillions of connections. (01:31)",
+          "That's about a hundred times more connections than there are galaxies in the observable universe. (01:35)"
+        ]
+      },
+      "targeted_source": "A"
+    },
+    {
+      "id": "vZdbbN3FCzE",
+      "q_coverage": {
+        "text": "What's the main story this video tells about OnePlus's history and why it says 'the downfall of OnePlus will be studied'?",
+        "gold_spans": [
+          "00:02-01:31",
+          "01:35-03:02",
+          "01:58-03:43",
+          "03:02-05:21",
+          "04:00-06:58",
+          "05:21-06:58",
+          "06:58-10:51",
+          "07:00-10:46",
+          "10:51-13:05",
+          "10:51-14:46",
+          "13:05-15:04"
+        ],
+        "required_facts": [
+          "Thesis: enthusiast tech brands eventually 'betray' their early fans when they pivot to the mainstream, and most (e.g. Nextbit, Essential) don't survive that jump. (00:37-01:12)",
+          "The 2014 OnePlus One launched as a $300 flagship-killer with invite-only sales and huge hype, aiming to break the Samsung/Apple duopoly. (01:58-02:58)",
+          "Enthusiast early adopters are a small, picky and fickle base; OnePlus wobbled with the mid-range OnePlus X before the OnePlus 3 refocused on enthusiasts. (03:02-05:19)",
+          "The OnePlus 5/6/7-series phones were considered 'peak OnePlus,' widely praised by reviewers as the best value in the industry. (05:21-06:19)",
+          "The core dilemma: what wins enthusiasts (cost-cutting, no ads) is the opposite of what mass-market buyers want; other brands like Asus's ROG Phone and Zenfone failed trying to make that jump. (08:03-10:35)",
+          "OnePlus pivoted toward the mainstream with glass designs, official IP ratings, rising prices, the budget 'Nord' line, and US carrier deals, while co-founder Carl Pei left the company. (10:51-12:00)",
+          "Today (OnePlus 15) the company survives but has lost much of its distinct identity, closely resembling sibling brand Oppo - a 'barely' successful outcome other enthusiast brands can study. (12:41-13:29)",
+          "The video begins by rejecting an unsupported claim that OnePlus is being dismantled and frames the company as a case study in enthusiast-brand survival. (00:02-01:31)",
+          "The OnePlus One combined flagship specifications, a $300 price, a clean CyanogenMod experience, and an invite-only launch that still sold over one million units. (02:09-02:58)",
+          "Enthusiasts gave OnePlus early attention but are small, demanding, and quick to leave for slightly better specifications. (03:02-03:43)",
+          "The 5, 6, and 7 era represented peak enthusiast OnePlus, with strong value, fast charging, refined OxygenOS, and the 7T Pro as the reviewer's favorite. (05:21-06:58)",
+          "To scale, brands need mainstream buyers who value official IP ratings, carrier-store availability, and safer familiar choices rather than enthusiast cost-cutting. (08:03-09:23)",
+          "OnePlus shifted through glass designs, IP ratings, higher prices, Nord budget models, carrier deals, and a Hasselblad partnership, while becoming more like Oppo. (10:51-12:48)",
+          "The current OnePlus 15 is smooth with strong battery life and fast charging but is generic-looking with merely fine cameras, and enthusiasts have moved on. (12:50-13:19)",
+          "The reviewer calls OnePlus a technical, narrow success: it remains alive by slowly softening enthusiast edges while building mainstream appeal. (13:20-14:46)"
+        ]
+      },
+      "q_targeted": {
+        "text": "How much did the original OnePlus One cost when it launched, and what made it such a big deal?",
+        "gold_spans": [
+          "01:58-03:02",
+          "02:09-02:58"
+        ],
+        "required_facts": [
+          "The OnePlus One launched in 2014 with flagship specs, including the latest-generation Snapdragon 800-series chip. (02:09-02:17)",
+          "It was priced at just $300, which felt 'unreal' for those specs. (02:17-02:19)",
+          "It ran CyanogenMod - clean, developer-friendly software with no bloatware. (02:23-02:30)",
+          "It was nicknamed the 'flagship killer.' (02:32-02:35)",
+          "It required an invite to purchase, making it hard to get. (02:49-02:53)",
+          "Despite that, it sold over a million units and immediately put OnePlus on the map. (02:54-02:59)",
+          "Before shipping, it promised flagship specifications including a latest-generation Snapdragon 800-series chip. (02:09-02:17)",
+          "It cost $300, far below the roughly $600-$700 Apple and Samsung flagships it challenged. (02:16-02:38)",
+          "It had a clean design with a distinctive sandstone finish. (02:19-02:23)",
+          "CyanogenMod provided a developer-friendly, clean, no-bloatware software experience. (02:23-02:30)",
+          "Buyers needed an invite, yet the phone still sold more than one million units and put OnePlus on the map. (02:43-02:58)"
+        ]
+      },
+      "targeted_source": "merge"
+    },
+    {
+      "id": "gUV5DJb6KGs",
+      "q_coverage": {
+        "text": "What is this talk about, and what's the main lesson the speaker learned about talking to the difficult parts of herself?",
+        "gold_spans": [
+          "00:18-02:09",
+          "00:18-02:37",
+          "02:09-05:25",
+          "03:03-07:36",
+          "05:34-07:19",
+          "07:19-09:48",
+          "07:42-10:09",
+          "09:48-11:36",
+          "10:14-12:45",
+          "11:36-14:32",
+          "13:02-14:19"
+        ],
+        "required_facts": [
+          "Central claim: it's false that you must love yourself before you can love others - love welcomes everyone unconditionally, a lesson she learned moderating focus groups. (00:18-00:47)",
+          "She realized she has multiple internal 'selves' (e.g. a sentimental one and an analytical one) that argue with each other; having conflicting feelings is normal, but self-hating/shame thoughts are harder to live with. (02:41-04:36)",
+          "She has complex post-traumatic stress from an 'appalling upbringing' (discovered while working a job taking meeting notes) and tried nearly every kind of therapy to silence her difficult thoughts. (04:50-06:09)",
+          "As a professional 'people researcher,' she developed a technique called 'unconditional welcome,' illustrated by connecting with a research subject (an anti-vaccine mother) she personally disliked. (07:36-09:04)",
+          "She later applied this same technique to a harsh, suicidal voice in her own head, telling it 'I will listen to you, but I will not obey you,' which calmed it. (10:41-11:33)",
+          "She now treats her mind like a moderated round table of voices, thanking each part of herself and describing herself as a 'prism,' not a 'broken mirror.' (12:00-12:16)",
+          "Conclusion: everyone deserves unconditional welcome - if you can't start with yourself, start with the person next to you. (13:23-14:17)",
+          "The speaker rejects the claim that a person must love themself before loving anyone else. (00:18-00:39)",
+          "Her work moderating focus groups taught her to ensure that strange, difficult, and diverse voices are heard, a model she uses in meditation. (01:34-02:37)",
+          "She treats inner conflict as different parts or voices, including ordinary conflicting feelings as well as painful self-condemning thoughts. (03:03-04:36)",
+          "Her attempts to silence the painful thoughts through many therapies and practices did not stop her from telling her own mind to shut up. (04:46-05:29)",
+          "Her complex trauma brought shame and a fragmented self but also hypervigilance that made her a keen observer of other people. (05:34-07:19)",
+          "She defines unconditional welcome as accepting someone exactly as they are, without comments or notes, and used it to understand a mother she had judged. (08:42-10:09)",
+          "She later used moderator-style dialogue and boundaries with a desperate inner voice: she would listen to it but not obey it. (10:14-11:33)",
+          "Her internal round table is guided by honesty, boundaries, kindness, and gratitude; the conclusion invites people to welcome others and themselves. (11:36-14:19)"
+        ]
+      },
+      "q_targeted": {
+        "text": "What did the speaker say to the angry, suicidal voice in her head, and how did it respond?",
+        "gold_spans": [
+          "09:48-11:36",
+          "10:14-11:33"
+        ],
+        "required_facts": [
+          "A part of her became very chatty, afraid, and angry, and repeatedly told her she wanted to die. (10:14-10:37)",
+          "She had begged this voice to shut up for weeks and it did not stop. (10:37-10:41)",
+          "She became her own 'moderator,' saying: 'Thank you for sharing. I'm going to remind you of our agreement to be honest and reasonable.' (10:44-11:06)",
+          "The voice answered back and said it was in a lot of pain. (11:08-11:21)",
+          "She responded, 'I will listen to you, but I will not obey you,' and the voice said 'okay.' (11:23-11:33)",
+          "The speaker describes a fearful, angry inner part that said they would never get better and repeatedly wanted to die. (10:14-10:37)",
+          "After unsuccessfully begging it to stop, she took a breath and became her own focus-group moderator. (10:37-10:53)",
+          "Her opening response was gratitude for sharing, coupled with a reminder to be honest and reasonable. (10:57-11:06)",
+          "She recognized the voice's pain and promised to take care of it. (11:18-11:23)",
+          "She set the key boundary: she would listen to the part but would not obey it. (11:23-11:29)",
+          "The talk treats this as internal thinking with distinct-seeming parts, after which a dialogue could begin. (11:06-11:35)"
+        ]
+      },
+      "targeted_source": "merge"
+    },
+    {
+      "id": "Q10_srZ-pbs",
+      "q_coverage": {
+        "text": "What's the story this video tells about how physicists discovered the 'principle of least action,' and why does it matter?",
+        "gold_spans": [
+          "00:00-02:30",
+          "00:51-10:32",
+          "02:30-03:36",
+          "03:36-07:18",
+          "07:18-10:38",
+          "10:38-12:28",
+          "10:38-16:40",
+          "12:28-16:40",
+          "16:40-26:04",
+          "17:01-26:43",
+          "26:04-30:34",
+          "27:08-30:19"
+        ],
+        "required_facts": [
+          "The video's central story is how the 'principle of least action' - that nature always follows the path that makes a quantity called action stationary (usually minimal) - came to unify all of physics. (00:00-00:19)",
+          "It starts with the brachistochrone ('fastest descent') problem, which Johann Bernoulli posed as a public challenge to the world's best mathematicians in June 1696. (01:03-01:52)",
+          "Newton solved it anonymously overnight (by 4am), something that had taken Bernoulli two weeks; Bernoulli still recognized him instantly, saying 'I recognize the lion by his claw.' (02:49-03:19)",
+          "Bernoulli solved the fastest-descent problem using Fermat's 1657 'principle of least time' for light, discovering the fastest path is a cycloid curve, not a circle - also called the brachistochrone curve. (05:11-09:53)",
+          "In the 1740s, Maupertuis proposed a new quantity called 'action' (mass times velocity times distance) that nature minimizes, but was ridiculed by peers including Voltaire, who wrote a 32-page pamphlet mocking him. (10:38-12:56)",
+          "Euler mathematically rigorized the principle (showing it requires energy to be conserved), and Lagrange later gave it a general proof around 1760. (14:09-16:40)",
+          "William Rowan Hamilton rewrote the principle in 1834 as the integral of kinetic minus potential energy (the Lagrangian) over time - the modern form used in physics today. (22:07-22:16)",
+          "The principle of least action turns out to be equivalent to Newton's second law (F=ma) but applies far more broadly, unifying mechanics and optics, and later becomes central to quantum theory. (26:02-26:14)",
+          "The fastest-descent problem asks for the ramp shape that balances an initially steeper acceleration against path length to minimize travel time. (00:55-01:30)",
+          "Fermat explained refraction by proposing that light takes the path of shortest travel time, from which Snell's law follows when light changes speed between media. (04:47-07:13)",
+          "Bernoulli mapped the descent problem to layered optics and identified its solution as a cycloid, the brachistochrone; it is also tautochronous. (07:18-10:08)",
+          "Maupertuis proposed action as mass times velocity times distance and claimed nature selects the path that minimizes its total action. (10:38-12:24)",
+          "Euler made the idea more rigorous with an integral and found that total energy must be conserved and equal across the paths considered; Lagrange later supplied a general proof. (14:09-16:40)",
+          "In the modern Hamiltonian formulation, action is the time integral of the Lagrangian, kinetic energy minus potential energy, with fixed endpoints and endpoint times. (19:33-23:16)",
+          "Setting the first-order variation of action to zero yields Newton's second law and unifies mechanics with optical phenomena such as reflection and refraction. (23:25-26:43)",
+          "The Lagrangian method simplifies mechanics, handles multiple or convenient coordinates, and 'least action' is more accurately stationary action. (27:08-30:19)"
+        ]
+      },
+      "q_targeted": {
+        "text": "Is the principle of least action always a true minimum, and what is the more precise name for it?",
+        "gold_spans": [
+          "29:33-30:19"
+        ],
+        "required_facts": [
+          "The video explicitly warns that the common name 'principle of least action' is misleading. (29:33-29:49)",
+          "Setting a derivative to zero in calculus does not by itself guarantee a function's minimum. (29:49-29:57)",
+          "The more accurate term is the principle of stationary action. (29:58-30:03)",
+          "Its laws of motion come from requiring a stationary point, expressed by setting the relevant derivative to zero and obtaining the Euler-Lagrange equation. (30:03-30:13)",
+          "The action is often a true minimum, but not always. (30:14-30:19)"
+        ]
+      },
+      "targeted_source": "B"
+    },
+    {
+      "id": "-Ud2cqoB7gE",
+      "q_coverage": {
+        "text": "Can you walk me through how Kenji makes this creamy, dairy-free tomato soup, step by step?",
+        "gold_spans": [
+          "00:02-00:44",
+          "00:02-03:46",
+          "00:44-02:01",
+          "02:01-03:46",
+          "03:46-05:37",
+          "03:53-05:37",
+          "05:37-07:11",
+          "06:04-07:46",
+          "07:11-08:58"
+        ],
+        "required_facts": [
+          "It's a roughly 15-minute recipe using pantry ingredients: canned tomatoes, dried oregano, garlic, olive oil, red pepper flakes, and bread. (00:02-00:13)",
+          "The base is built by cooking garlic and hot pepper flakes in olive oil, then adding dried oregano. (00:44-01:21)",
+          "He crushes canned tomatoes with a pastry cutter for a rough texture, then seasons generously with salt. (02:23-03:31)",
+          "The soup gets its creaminess without any dairy by pureeing in white sandwich bread and emulsifying it with olive oil, similar to a gazpacho. (04:19-04:49)",
+          "He blends everything together, starting the blender on slow speed and building up. (06:13-06:25)",
+          "It's finished and served with a bit of cracked pepper and olive oil on top. (08:23-08:51)",
+          "The soup is presented as an approximately 15-minute pantry recipe using canned tomatoes, dried oregano, garlic, olive oil, red-pepper flakes, and bread. (00:02-00:13)",
+          "He starts the tomato base with olive oil, garlic, hot pepper flakes, and dried oregano. (00:44-01:21)",
+          "He recommends dried hardy herbs such as oregano, marjoram, thyme, and sage because their flavor survives drying better. (01:21-02:11)",
+          "The canned tomatoes are roughly chopped, salted, and cooked for about 10 to 12 minutes. (02:23-03:46)",
+          "The sauce becomes soup by pureeing it and emulsifying it with olive oil and bread rather than cream. (03:53-04:50)",
+          "Making it dairy-free keeps the tomato flavor cleaner instead of muting it with dairy. (05:18-05:37)",
+          "He tears white sandwich bread (or sourdough) into the cooked tomatoes, then starts the blender slowly and gradually increases speed. (05:37-07:25)"
+        ]
+      },
+      "q_targeted": {
+        "text": "Which dried herbs does Kenji recommend for this tomato soup, which ones does he avoid, and why?",
+        "gold_spans": [
+          "01:21-02:11"
+        ],
+        "required_facts": [
+          "He says dried oregano works well, along with other hardy herbs such as marjoram, thyme, and sage. (01:21-01:30)",
+          "He contrasts them with delicate herbs including parsley, basil, and chives, which he says do not dry well. (01:31-02:06)",
+          "The hardy herbs' aromatic compounds are less volatile. (01:38-01:45)",
+          "He connects that trait to their growing in hotter climates, where those aromas are less prone to evaporating away. (01:45-01:53)",
+          "As a result, hardy-herb flavors persist better when dried, so he would use dried thyme, oregano, marjoram, or savory but not dried parsley, basil, chervil, or chives. (01:53-02:11)"
+        ]
+      },
+      "targeted_source": "B"
+    }
+  ]
+}

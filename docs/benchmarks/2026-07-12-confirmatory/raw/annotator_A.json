@@ -1,0 +1,176 @@
+{
+  "videos": [
+    {
+      "id": "PqtggjVAi8M",
+      "q_coverage": {
+        "text": "What does this video explain about how memories are formed in the brain and why they change each time we remember them?",
+        "gold_spans": [
+          "00:00-00:45",
+          "00:45-04:07",
+          "04:07-06:09",
+          "07:13-09:38",
+          "09:42-12:52"
+        ],
+        "required_facts": [
+          {"fact": "Memories aren't static like photos - they're patterns of synchronized neuron activity called 'assemblies'.", "timestamp": "03:16-03:30"},
+          {"fact": "When one 'assembly' wins your attention, the hippocampus creates a blueprint of it and indexes it as a new memory.", "timestamp": "04:39-05:11"},
+          {"fact": "New memories are fragile - without reinforcement they fade, which is why you forget most moments of your life.", "timestamp": "05:36-05:47"},
+          {"fact": "Novelty, repetition, and strong emotion are the main ways a memory gets reinforced into a lasting one.", "timestamp": "07:20-08:07"},
+          {"fact": "A lot of memory consolidation happens during sleep, when the hippocampus replays the assembly over and over.", "timestamp": "09:08-09:16"},
+          {"fact": "Recalling a memory makes it 'moldable' again - each time you retrieve it, your brain updates it with your current context.", "timestamp": "10:15-10:54"},
+          {"fact": "A vividly-remembered memory isn't necessarily an accurate one - memory strength and accuracy are not the same thing.", "timestamp": "12:04-12:10"},
+          {"fact": "Because retrieval reshapes memories, therapy that revisits difficult memories in a safe context can literally rewire the brain.", "timestamp": "12:34-12:42"}
+        ]
+      },
+      "q_targeted": {
+        "text": "How many neurons are in the human brain, and how many other neurons does each one typically connect to?",
+        "gold_spans": ["01:00-01:40"],
+        "required_facts": [
+          {"fact": "The brain has about 86 billion neurons.", "timestamp": "01:00"},
+          {"fact": "A typical neuron is connected to up to 10,000 other neurons.", "timestamp": "01:25"},
+          {"fact": "Together they form a network of hundreds of trillions of connections.", "timestamp": "01:31"},
+          {"fact": "That's about a hundred times more connections than there are galaxies in the observable universe.", "timestamp": "01:35"}
+        ]
+      }
+    },
+    {
+      "id": "vZdbbN3FCzE",
+      "q_coverage": {
+        "text": "What's the main story this video tells about OnePlus's history and why it says 'the downfall of OnePlus will be studied'?",
+        "gold_spans": [
+          "00:02-01:31",
+          "01:35-03:02",
+          "03:02-05:21",
+          "05:21-06:58",
+          "06:58-10:51",
+          "10:51-13:05",
+          "13:05-15:04"
+        ],
+        "required_facts": [
+          {"fact": "Thesis: enthusiast tech brands eventually 'betray' their early fans when they pivot to the mainstream, and most (e.g. Nextbit, Essential) don't survive that jump.", "timestamp": "00:37-01:12"},
+          {"fact": "The 2014 OnePlus One launched as a $300 flagship-killer with invite-only sales and huge hype, aiming to break the Samsung/Apple duopoly.", "timestamp": "01:58-02:58"},
+          {"fact": "Enthusiast early adopters are a small, picky and fickle base; OnePlus wobbled with the mid-range OnePlus X before the OnePlus 3 refocused on enthusiasts.", "timestamp": "03:02-05:19"},
+          {"fact": "The OnePlus 5/6/7-series phones were considered 'peak OnePlus,' widely praised by reviewers as the best value in the industry.", "timestamp": "05:21-06:19"},
+          {"fact": "The core dilemma: what wins enthusiasts (cost-cutting, no ads) is the opposite of what mass-market buyers want; other brands like Asus's ROG Phone and Zenfone failed trying to make that jump.", "timestamp": "08:03-10:35"},
+          {"fact": "OnePlus pivoted toward the mainstream with glass designs, official IP ratings, rising prices, the budget 'Nord' line, and US carrier deals, while co-founder Carl Pei left the company.", "timestamp": "10:51-12:00"},
+          {"fact": "Today (OnePlus 15) the company survives but has lost much of its distinct identity, closely resembling sibling brand Oppo - a 'barely' successful outcome other enthusiast brands can study.", "timestamp": "12:41-13:29"}
+        ]
+      },
+      "q_targeted": {
+        "text": "How much did the original OnePlus One cost when it launched, and what made it such a big deal?",
+        "gold_spans": ["01:58-03:02"],
+        "required_facts": [
+          {"fact": "The OnePlus One launched in 2014 with flagship specs, including the latest-generation Snapdragon 800-series chip.", "timestamp": "02:09-02:17"},
+          {"fact": "It was priced at just $300, which felt 'unreal' for those specs.", "timestamp": "02:17-02:19"},
+          {"fact": "It ran CyanogenMod - clean, developer-friendly software with no bloatware.", "timestamp": "02:23-02:30"},
+          {"fact": "It was nicknamed the 'flagship killer.'", "timestamp": "02:32-02:35"},
+          {"fact": "It required an invite to purchase, making it hard to get.", "timestamp": "02:49-02:53"},
+          {"fact": "Despite that, it sold over a million units and immediately put OnePlus on the map.", "timestamp": "02:54-02:59"}
+        ]
+      }
+    },
+    {
+      "id": "gUV5DJb6KGs",
+      "q_coverage": {
+        "text": "What is this talk about, and what's the main lesson the speaker learned about talking to the difficult parts of herself?",
+        "gold_spans": [
+          "00:18-02:09",
+          "02:09-05:25",
+          "05:34-07:19",
+          "07:19-09:48",
+          "09:48-11:36",
+          "11:36-14:32"
+        ],
+        "required_facts": [
+          {"fact": "Central claim: it's false that you must love yourself before you can love others - love welcomes everyone unconditionally, a lesson she learned moderating focus groups.", "timestamp": "00:18-00:47"},
+          {"fact": "She realized she has multiple internal 'selves' (e.g. a sentimental one and an analytical one) that argue with each other; having conflicting feelings is normal, but self-hating/shame thoughts are harder to live with.", "timestamp": "02:41-04:36"},
+          {"fact": "She has complex post-traumatic stress from an 'appalling upbringing' (discovered while working a job taking meeting notes) and tried nearly every kind of therapy to silence her difficult thoughts.", "timestamp": "04:50-06:09"},
+          {"fact": "As a professional 'people researcher,' she developed a technique called 'unconditional welcome,' illustrated by connecting with a research subject (an anti-vaccine mother) she personally disliked.", "timestamp": "07:36-09:04"},
+          {"fact": "She later applied this same technique to a harsh, suicidal voice in her own head, telling it 'I will listen to you, but I will not obey you,' which calmed it.", "timestamp": "10:41-11:33"},
+          {"fact": "She now treats her mind like a moderated round table of voices, thanking each part of herself and describing herself as a 'prism,' not a 'broken mirror.'", "timestamp": "12:00-12:16"},
+          {"fact": "Conclusion: everyone deserves unconditional welcome - if you can't start with yourself, start with the person next to you.", "timestamp": "13:23-14:17"}
+        ]
+      },
+      "q_targeted": {
+        "text": "What did the speaker say to the angry, suicidal voice in her head, and how did it respond?",
+        "gold_spans": ["09:48-11:36"],
+        "required_facts": [
+          {"fact": "A part of her became very chatty, afraid, and angry, and repeatedly told her she wanted to die.", "timestamp": "10:14-10:37"},
+          {"fact": "She had begged this voice to shut up for weeks and it did not stop.", "timestamp": "10:37-10:41"},
+          {"fact": "She became her own 'moderator,' saying: 'Thank you for sharing. I'm going to remind you of our agreement to be honest and reasonable.'", "timestamp": "10:44-11:06"},
+          {"fact": "The voice answered back and said it was in a lot of pain.", "timestamp": "11:08-11:21"},
+          {"fact": "She responded, 'I will listen to you, but I will not obey you,' and the voice said 'okay.'", "timestamp": "11:23-11:33"}
+        ]
+      }
+    },
+    {
+      "id": "Q10_srZ-pbs",
+      "q_coverage": {
+        "text": "What's the story this video tells about how physicists discovered the 'principle of least action,' and why does it matter?",
+        "gold_spans": [
+          "00:00-02:30",
+          "02:30-03:36",
+          "03:36-07:18",
+          "07:18-10:38",
+          "10:38-12:28",
+          "12:28-16:40",
+          "16:40-26:04",
+          "26:04-30:34"
+        ],
+        "required_facts": [
+          {"fact": "The video's central story is how the 'principle of least action' - that nature always follows the path that makes a quantity called action stationary (usually minimal) - came to unify all of physics.", "timestamp": "00:00-00:19"},
+          {"fact": "It starts with the brachistochrone ('fastest descent') problem, which Johann Bernoulli posed as a public challenge to the world's best mathematicians in June 1696.", "timestamp": "01:03-01:52"},
+          {"fact": "Newton solved it anonymously overnight (by 4am), something that had taken Bernoulli two weeks; Bernoulli still recognized him instantly, saying 'I recognize the lion by his claw.'", "timestamp": "02:49-03:19"},
+          {"fact": "Bernoulli solved the fastest-descent problem using Fermat's 1657 'principle of least time' for light, discovering the fastest path is a cycloid curve, not a circle - also called the brachistochrone curve.", "timestamp": "05:11-09:53"},
+          {"fact": "In the 1740s, Maupertuis proposed a new quantity called 'action' (mass times velocity times distance) that nature minimizes, but was ridiculed by peers including Voltaire, who wrote a 32-page pamphlet mocking him.", "timestamp": "10:38-12:56"},
+          {"fact": "Euler mathematically rigorized the principle (showing it requires energy to be conserved), and Lagrange later gave it a general proof around 1760.", "timestamp": "14:09-16:40"},
+          {"fact": "William Rowan Hamilton rewrote the principle in 1834 as the integral of kinetic minus potential energy (the Lagrangian) over time - the modern form used in physics today.", "timestamp": "22:07-22:16"},
+          {"fact": "The principle of least action turns out to be equivalent to Newton's second law (F=ma) but applies far more broadly, unifying mechanics and optics, and later becomes central to quantum theory.", "timestamp": "26:02-26:14"}
+        ]
+      },
+      "q_targeted": {
+        "text": "What shape is actually the fastest path for an object sliding down under gravity - is it a straight line, a circle, or something else?",
+        "gold_spans": ["00:55-01:39", "09:22-09:56"],
+        "required_facts": [
+          {"fact": "The puzzle asks: what shape of ramp gets a sliding mass from point A to point B the fastest?", "timestamp": "00:55-01:03"},
+          {"fact": "A straight line is not fastest - a curve that dips down early lets the mass accelerate sooner and arrive quicker despite a longer path.", "timestamp": "01:06-01:20"},
+          {"fact": "Galileo had guessed the fastest path was an arc of a circle and showed it beat any polygon path, but the video notes it's not actually the fastest.", "timestamp": "01:32-01:39"},
+          {"fact": "The true answer, found by Bernoulli using an optics analogy, is a cycloid - the curve traced by a point on a rolling wheel - also called the brachistochrone curve.", "timestamp": "09:28-09:53"},
+          {"fact": "The video explicitly states the answer is 'not a circle' - it's a cycloid.", "timestamp": "09:53-09:56"}
+        ]
+      }
+    },
+    {
+      "id": "-Ud2cqoB7gE",
+      "q_coverage": {
+        "text": "Can you walk me through how Kenji makes this creamy, dairy-free tomato soup, step by step?",
+        "gold_spans": [
+          "00:02-00:44",
+          "00:44-02:01",
+          "02:01-03:46",
+          "03:46-05:37",
+          "05:37-07:11",
+          "07:11-08:58"
+        ],
+        "required_facts": [
+          {"fact": "It's a roughly 15-minute recipe using pantry ingredients: canned tomatoes, dried oregano, garlic, olive oil, red pepper flakes, and bread.", "timestamp": "00:02-00:13"},
+          {"fact": "The base is built by cooking garlic and hot pepper flakes in olive oil, then adding dried oregano.", "timestamp": "00:44-01:21"},
+          {"fact": "He crushes canned tomatoes with a pastry cutter for a rough texture, then seasons generously with salt.", "timestamp": "02:23-03:31"},
+          {"fact": "The soup gets its creaminess without any dairy by pureeing in white sandwich bread and emulsifying it with olive oil, similar to a gazpacho.", "timestamp": "04:19-04:49"},
+          {"fact": "He blends everything together, starting the blender on slow speed and building up.", "timestamp": "06:13-06:25"},
+          {"fact": "It's finished and served with a bit of cracked pepper and olive oil on top.", "timestamp": "08:23-08:51"}
+        ]
+      },
+      "q_targeted": {
+        "text": "What gives this tomato soup its creamy texture if there's no cream or dairy in it?",
+        "gold_spans": ["04:19-04:55", "05:37-07:11"],
+        "required_facts": [
+          {"fact": "The creaminess comes from pureeing white sandwich bread into the soup, not from any dairy or cream.", "timestamp": "04:27-04:34"},
+          {"fact": "It's emulsified together with olive oil, similar to how a traditional Spanish gazpacho gets its body from bread and olive oil.", "timestamp": "04:34-04:49"},
+          {"fact": "Making it dairy-free keeps the tomato flavor 'cleaner' since dairy would otherwise mute it.", "timestamp": "05:18-05:31"},
+          {"fact": "To make it, he tears up the bread and adds it to the cooked tomato sauce, then blends it all with olive oil, starting the blender slow and building up speed.", "timestamp": "05:52-06:25"}
+        ]
+      }
+    }
+  ]
+}

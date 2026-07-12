@@ -1,0 +1,32 @@
+{
+  "PqtggjVAi8M": {
+    "coverage_span_iou": 0.928,
+    "targeted_span_iou": 0.0,
+    "a_targeted_q": "How many neurons are in the human brain, and how many other neurons does each on",
+    "b_targeted_q": "Why might a vivid memory become less accurate the more often you remember it?"
+  },
+  "vZdbbN3FCzE": {
+    "coverage_span_iou": 0.928,
+    "targeted_span_iou": 0.766,
+    "a_targeted_q": "How much did the original OnePlus One cost when it launched, and what made it su",
+    "b_targeted_q": "What made the original OnePlus One such a hit with phone enthusiasts?"
+  },
+  "gUV5DJb6KGs": {
+    "coverage_span_iou": 0.911,
+    "targeted_span_iou": 0.731,
+    "a_targeted_q": "What did the speaker say to the angry, suicidal voice in her head, and how did i",
+    "b_targeted_q": "How does the speaker say you can respond to a relentless destructive inner voice"
+  },
+  "Q10_srZ-pbs": {
+    "coverage_span_iou": 0.936,
+    "targeted_span_iou": 0.0,
+    "a_targeted_q": "What shape is actually the fastest path for an object sliding down under gravity",
+    "b_targeted_q": "Is the principle of least action always a true minimum, and what is the more pre"
+  },
+  "-Ud2cqoB7gE": {
+    "coverage_span_iou": 0.802,
+    "targeted_span_iou": 0.0,
+    "a_targeted_q": "What gives this tomato soup its creamy texture if there's no cream or dairy in i",
+    "b_targeted_q": "Which dried herbs does Kenji recommend for this tomato soup, which ones does he "
+  }
+}

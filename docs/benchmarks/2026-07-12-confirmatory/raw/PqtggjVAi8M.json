@@ -1,0 +1,220 @@
+{
+  "video": "PqtggjVAi8M",
+  "parity_a_is_evidence": true,
+  "prep": {
+    "ok": true,
+    "control_frames": 100,
+    "transcript_chars": 16684,
+    "notes": "watch.py exit 0. Control report at scratchpad/confirm/PqtggjVAi8M/control_report.txt (48.9K). 100 non-empty JPG frames in control/frames/. Ground-truth transcript copied unchanged to eval/transcript.txt (16684 bytes, matches source)."
+  },
+  "compile": [
+    {
+      "id": "q_coverage",
+      "transcript_chars": 16607,
+      "frames": 30
+    },
+    {
+      "id": "q_targeted",
+      "transcript_chars": 16606,
+      "frames": 4
+    }
+  ],
+  "ctlAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "This is a Kurzgesagt explainer on how human memory works. Main points:\n\nWhat a memory is [00:00]-[00:45]: Memories let you re-experience past moments by encoding, storing, and retrieving information [00:00]. Crucially, they are NOT static like photos [00:12] - the video's central metaphor is a diorama made of wax that can 'melt and change a tiny bit' each time attention shines on it [00:15]. This matters because memories are the 'lore' your identity and future decisions are based on [00:23].\n\nThe brain hardware ('Your Brain is Weird Madness') [00:45]-[04:07]: These are simplified scientific models, not perfect reality [00:54]. Thinking/feeling arises from ~86 billion neurons [01:00] signaling across synapses (tiny gaps where electrical signals convert to chemicals and back) [01:12]. A typical neuron connects to up to 10,000 others [01:25], forming hundreds of trillions of connections [01:31]. Neurons that fire at the same time strengthen their synapses ('become buddies') [01:48]. Neurons organize into local columns that each process a tiny sensory piece (light, texture, sound, etc.) [02:01]-[02:13], distributed across the cortex [02:19]. When many different columns fire together in a synchronized pattern, they form an 'assembly' [03:16] - and the assembly active right now IS your present conscious experience [03:35]. But an assembly is just activity, 'like ripples on a pond' [03:45]; without being made physical it fades, leaving you trapped in the present [03:48].\n\nStoring the past ('How To Store The Past') [04:07]-[09:42]: Many assemblies compete for dominance; one 'wins' and becomes what you're aware of [04:19]-[04:26]. When one wins, two things happen: its neurons are bathed in chemicals that make them changeable and strengthen their synapses [04:41], and the hippocampus (the brain's 'librarian') creates a rough blueprint and indexes the memory by context [04:50]-[05:14]. The exact process isn't fully understood [04:56]. A memory is thus an activation pattern of millions of neurons across brain regions; triggering part of it fires the whole thing, letting you relive the moment [05:21]. New memories are fragile - without reinforcement they fade, which is why you forget most of your life [05:36]-[05:47]. (Note: [06:09]-[07:10] is a paid Ground News sponsor segment, labeled 'Advertisement' on screen with a QR code, 'ground.news/nutshell', a 40% off offer, and an example 'Study: Menopause Linked to Brain Gray Matter Loss' with bias/coverage comparison - it is an ad, not memory science.) Memories are strengthened ('fight for their life') by three main mechanisms: novelty [07:20], reactivation/repetition (recalling and retelling, like study repetition) [07:42]-[07:52], and strong emotion, since the ancient brain flags emotional events as survival-important [07:56]-[08:23]. All three physically grow more synapses so neurons fire together better (the wax gears 'grow new teeth') [08:45]-[09:06]. Much of this consolidation happens during sleep, when the hippocampus replays the assembly - so too little sleep means you literally forget more [09:08]-[09:20].\n\nRemembering changes memories ('Why Remembering Changes Your Memories Forever') [09:42]-[13:00]: To recall, you need a cue (a smell, sound, word, image) that was part of the original assembly; the hippocampus searches its index and reactivates the pattern [09:45]-[10:04]. But recall is NOT like loading and playing a video [10:15] - under attention the 'wax' softens and becomes moldable again, and the neurons become able to change (reconsolidation) [10:19]-[10:31]. Because the current context differs from when the memory formed, that new context seeps in: new connections form, some synapses weaken, and the memory changes (e.g., a remembered event becomes funnier than it actually was) [10:38]-[11:25]. This happens with all memories - your brain adds/forgets details and updates your past to fit your present narrative [11:26]-[11:40]. The memory system is intertwined with learning and was never designed for accuracy [11:46]. Ironically, the more you actively remember something, the less of the original remains [11:58], and remembering something vividly does not make it correct [12:04]. This shift is slow, not sudden - your identity is safe today, but your future self will feel differently about today's experiences [12:14]-[12:31]. A practical upshot: therapy works partly this way - revisiting hurtful memories in a safe context literally rewires your brain, giving a chance to 'rewrite your lore' and be happier [12:31]-[12:57]. (The closing segment [13:02] onward is a kurzgesagt Art Prints ad, labeled 'Advertisement' on screen - not part of the science.)",
+      "cited_timestamps": [
+        "00:00",
+        "00:12",
+        "00:15",
+        "00:23",
+        "00:45",
+        "00:54",
+        "01:00",
+        "01:12",
+        "01:25",
+        "01:31",
+        "01:48",
+        "02:01",
+        "02:13",
+        "02:19",
+        "03:16",
+        "03:35",
+        "03:45",
+        "03:48",
+        "04:07",
+        "04:19",
+        "04:26",
+        "04:41",
+        "04:50",
+        "04:56",
+        "05:14",
+        "05:21",
+        "05:36",
+        "05:47",
+        "06:09",
+        "07:10",
+        "07:20",
+        "07:42",
+        "07:52",
+        "07:56",
+        "08:23",
+        "08:45",
+        "09:06",
+        "09:08",
+        "09:20",
+        "09:42",
+        "09:45",
+        "10:04",
+        "10:15",
+        "10:19",
+        "10:31",
+        "10:38",
+        "11:25",
+        "11:26",
+        "11:40",
+        "11:46",
+        "11:58",
+        "12:04",
+        "12:14",
+        "12:31",
+        "12:57",
+        "13:02"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "Per the video's narration: the human brain has about 86 billion neurons [01:00], and a typical neuron is connected with up to 10,000 others [01:25]. The video adds that together these form a network of hundreds of trillions of connections - stated as 'a hundred times more than galaxies in the observable universe' [01:31]-[01:35].\n\nThese figures come from the spoken narration; they are not shown as on-screen text in the sampled frames (the frames at this point show abstract neuron/synapse animations with no numeric labels). The video also flags up front that these are simplified scientific models, not a perfect reflection of reality [00:54]. There are no conflicting numbers stated elsewhere in the evidence.",
+      "cited_timestamps": [
+        "00:54",
+        "01:00",
+        "01:25",
+        "01:31",
+        "01:35"
+      ]
+    }
+  ],
+  "evAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "This is a Kurzgesagt-style explainer on how memories work. Main points:\n\n1) What a memory is and why it matters [00:00-00:34]: Memories let you re-experience past moments by letting your mind encode, store, and retrieve information about the world and yourself [00:00-00:07]. They are NOT static like photos; the video's core metaphor is a wax diorama that, each time it comes under 'the spotlight of your attention,' can melt and change a little [00:12-00:22]. Because memories are the 'personal lore' of your identity and the basis for future decisions, their changeability is unsettling [00:23-00:34].\n\n2) The brain hardware [00:45-01:43]: What makes you think and feel is a system of about 86 billion neurons (on-screen caption: '86 Billion Neurons' [01:05]) that send/receive signals across synapses, where an electrical signal becomes chemical, crosses the gap, and turns back into electricity [00:48-01:23]. A typical neuron connects to up to 10,000 others (on-screen caption: '10,000 Connections' [01:31]), forming hundreds of trillions of connections, ~100x more than galaxies in the observable universe [01:25-01:39].\n\n3) Strengthening and 'assemblies' [01:44-03:47]: When two neurons fire together, their synapse strengthens ('they become buddies') [01:44-01:58]. Neurons organize into local 'columns' that each process a tiny piece of sensory input; on-screen three panels are labeled 'Auditory Cortex,' 'Visual Cortex,' and 'Somatosensory Cortex' [02:23]. Columns are the 'gears' of the cortex [01:59-02:32], and when many connect together they form an 'assembly' - a synchronized activity pattern that produces your present conscious experience [03:12-03:40]. But an assembly is just fleeting activity, 'like ripples on a pond'; without memory you'd be trapped in the present [03:41-03:50].\n\n4) How a memory gets stored [04:07-05:35]: Many assemblies compete for dominance; the winning one is what you're aware of [04:10-04:28]. When the brain deems something important, the winning neurons are bathed in chemicals that tie them closer and strengthen their synapses, and the hippocampus (the brain's memory 'librarian') is activated [04:39-04:55]. The hippocampus makes a rough blueprint of the assembly and files it on an index of associated memories [05:01-05:18]. A memory is therefore an activation pattern of millions of neurons across brain regions; triggering any part makes the whole assembly fire so you relive the moment [05:21-05:35].\n\n5) Why you forget, and how memories are consolidated [05:36-09:40]: New memories are fragile; without reinforcement the assembly fades and synapses weaken, which is why you forget most moments of life [05:36-05:58]. (A sponsor segment for Ground News runs here, shown on-screen as an app screenshot and QR code both labeled 'Advertisement' [06:18, 06:58]; not about memory.) To survive, an assembly must 'fight for its life' via novelty [07:20-07:41], reactivation/repetition - rehearsing and retelling [07:42-07:55], and emotions [07:56-08:44]. These make the neurons change drastically: like warming wax, the 'gears grow new teeth,' neurons grow more synapses and fire together better [08:45-09:07]. Much of this happens during sleep, when the hippocampus replays the assembly to make it solid; too little sleep means forgetting more of your life and wasted studying [09:08-09:26]. The result is a long-term memory, a 'diorama of hardened wax' [09:27-09:37].\n\n6) Remembering changes memories [09:42-12:13]: To recall, you need a cue that belonged to the original assembly; the hippocampus searches its index and fires the assembly, retrieving the experience [09:45-10:08]. But recall is not like playing a video: under attention the wax softens and becomes moldable, and the neurons are again bathed in change-enabling chemicals [10:11-10:31]. Your current context seeps in (e.g., retelling the story on a fun night out vs. the tired, surprised mood when it formed), so new connections form, synapses reconfigure, and the memory shifts - becoming funnier and more absurd [10:32-11:12]. Every retrieval adds or drops information and folds in present emotions and expectations, updating your past to fit your present narrative [11:20-11:44]. The memory system is intertwined with learning and was never built for accuracy [11:46-11:53], so ironically the more you actively remember something, the less of the original remains, and remembering vividly does not mean the memory is correct [11:58-12:13].\n\n7) Implications [12:14-12:52]: Identity change is slow, not sudden - a gradual shift in overall patterns, so your future self will feel differently about today [12:14-12:30]. This is why therapy can help: revisiting hurtful memories in a safe context literally rewires your brain, letting you 'rewrite your lore' to be happier [12:31-12:52].\n\nNote on scope: The closing segment (13:02-13:33, on-screen 'Advertisement' [13:12]) is a kurzgesagt art-print ad, unrelated to how memories work.\n\nNo conflicting statements appear in the evidence; the on-screen captions ('86 Billion Neurons,' '10,000 Connections,' the cortex labels) agree with the narration.",
+      "cited_timestamps": [
+        "00:00",
+        "00:12",
+        "00:23",
+        "00:45",
+        "00:48",
+        "01:05",
+        "01:25",
+        "01:31",
+        "01:44",
+        "01:59",
+        "02:23",
+        "03:12",
+        "03:41",
+        "04:07",
+        "04:10",
+        "04:39",
+        "05:01",
+        "05:21",
+        "05:36",
+        "06:18",
+        "06:58",
+        "07:20",
+        "07:42",
+        "07:56",
+        "08:45",
+        "09:08",
+        "09:27",
+        "09:42",
+        "09:45",
+        "10:11",
+        "10:32",
+        "11:20",
+        "11:46",
+        "11:58",
+        "12:14",
+        "12:31",
+        "13:12"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "According to the narration in this video about how memories work:\n\n- Number of neurons in the human brain: about 86 billion. The narrator says what makes you think and feel is 'a complex system of about 86 billion neurons' [01:00].\n\n- Connections per neuron: up to 10,000 other neurons. The narrator states 'a typical neuron is connected with up to 10,000 others' [01:25].\n\nSupplementary figure (also from the narration): across all neurons this adds up to a network of 'hundreds of trillions of connections,' described as about a hundred times more than the galaxies in the observable universe [01:31].\n\nHow to read the two figures: '86 billion' is given as an approximation ('about'), and '10,000' is stated as an upper bound for a typical neuron ('up to 10,000'). No conflicting figures appear in the evidence.\n\nOn-screen note: The frames provided for this question show the video's intro (a diver in a bubble, 00:10), a character's face (04:26), a Ground News sponsor QR code labeled 'Advertisement' (06:58), and an art-print ad labeled 'Advertisement' (13:12); none of these frames visually display the neuron figures. Both numbers therefore come from the spoken narration at [01:00] and [01:25].",
+      "cited_timestamps": [
+        "01:00",
+        "01:25",
+        "01:31"
+      ]
+    }
+  ],
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts. Fact 1 (synchronized assembly, not static photos): A 'assembly - a synchronized activity pattern' + 'not static like photos'; B 'synchronized pattern... assembly' + 'not static like photos'. Fact 2 (86B neurons / thousands of connections): both cite [01:00] and up-to-10,000 [01:25], matching transcript lines 15 and 20. Fact 3 (remembering = reconstruction): A 'every retrieval adds or drops information... the more you actively remember, the less of the original remains'; B 'NOT like loading and playing a video... updates your past to fit your present narrative' - both match lines 158-187. Fact 4 (hippocampus as index over distributed regions): A 'files it on an index of associated memories' + 'millions of neurons across brain regions'; B 'creates a rough blueprint and indexes the memory by context' + 'across brain regions' - both match lines 72-80. Citation spot-checks pass for both: A's [05:01] blueprint (line 74), [10:11] recall (line 159), [04:39] chemicals (line 70) all accurate; A's on-screen caption claims (86 Billion Neurons [01:05], cortex labels [02:23]) are plausibly-visual and uncontradicted. B's [01:00]/[01:25]/[01:31]/[03:35]/[10:15]/[12:04] map exactly to transcript. Minor edges cancel: B bounds the Ground News ad more precisely (06:09-07:10, lines 92-109) while A structures the science into 7 timestamp-ranged sections and explicitly notes captions agree with narration. Equivalent quality; genuine tie."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 2,
+          "b_gold_facts_covered": 2,
+          "rationale": "Both cover both gold facts exactly. Fact 1 (about 86 billion neurons): A cites [01:00] 'about 86 billion neurons'; B cites [01:00] '~86 billion' - both match transcript line 15 verbatim. Fact 2 (each connects to thousands of others): A 'up to 10,000 others [01:25]'; B 'up to 10,000 others [01:25]' - both match line 20 (10,000 = thousands). Both add the same accurate supplementary figure ('hundreds of trillions of connections', line 21 [01:31]) and correctly note it is a network-level total, not per-neuron. Both correctly flag that the figures are spoken narration, not on-screen text, and both add sensible caveats (A: 'about' is approximate, '10,000' an upper bound; B: video calls these simplified models [00:54], line 13). Citation accuracy is clean on both. No factual slips in either. Fully equivalent; tie."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both answers are comprehensive, correct against the transcript, and cover all 4 gold facts. FACT 1 (synchronized-activity engrams, not static): both nail the wax-diorama/assembly framing and \"not static like photos\" [00:12, 03:22]. FACT 2 (86B neurons, thousands of connections): a='about 86 billion... up to 10,000 others', b='~86 billion... up to 10,000 others', both matching lines 15/20. FACT 3 (reconstruction/change-on-recall): a='recall is not like playing a video... updating your past to fit your present narrative', b='recall is NOT like loading and playing a video... updates your past to fit your present narrative' [09:42-11:44]. FACT 4 (hippocampus as index of cortex-distributed fragments): both describe the blueprint + index + searching the index for a cue, and 'millions of neurons across brain regions' [04:50-05:18, 09:52]. Both correctly quarantine the Ground News sponsor and the closing art-print ad. Spot-check of citations: a's [01:25], [05:01], [09:08] and b's [01:00], [01:25], [01:31], [03:35], [04:56], [09:20] all land on the correct transcript lines. Only soft spot: a attributes an on-screen caption '10,000 Connections' to [01:31], where the narration is actually 'hundreds of trillions of connections' (the 10,000 figure is at [01:25]) - a minor visual misattribution. This is offset by a's richer on-screen grounding (cortex labels). b is marginally more citation-precise (56 tightly-matched cites); a is marginally more readable with clean section scoping. Genuinely equivalent; tie."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 2,
+          "b_gold_facts_covered": 2,
+          "rationale": "Direct factual question answered correctly and completely by both. FACT 1 (about 86 billion neurons): a and b both give 'about 86 billion' cited to [01:00], matching transcript line 15 exactly. FACT 2 (each connects to thousands/synapses): both give 'up to 10,000 others' cited to [01:25], matching line 20 exactly (10,000 is consistent with the gold 'thousands'). Both add the supplementary 'hundreds of trillions of connections' [01:31] correctly and both responsibly flag that the figures come from narration rather than on-screen text. Citation spot-check: a's [01:00]/[01:25]/[01:31] and b's [00:54]/[01:00]/[01:25]/[01:31]/[01:35] are all accurate to the transcript. a notes specific sampled frames don't show the numbers; b notes the frames show abstract animations and adds the 'simplified models' caveat [00:54] - both plausibly-visual and uncontradicted. No factual error in either; scope, correctness, completeness, and citation accuracy are equivalent. Tie."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts. Synchronized-activity engram: A 'a synchronized activity pattern... A memory is an activation pattern of millions of neurons'; B 'synchronized pattern, they form an assembly... activation pattern of millions of neurons across regions' - both plus 'not static like photos'. 86B neurons / up to 10,000 connections: both state directly ([01:00],[01:25]). Reconstruction: A 'recall is not like playing a video... every retrieval adds or drops information'; B 'NOT like loading and playing a video... reconsolidation... updates your past to fit your present narrative'. Hippocampus-as-index over cortex-distributed fragments: A 'files it on an index of associated memories' + 'across brain regions'; B 'indexes the memory by context' + 'across brain regions' - both present, though neither uses the exact word 'cortex-distributed'. Spot-checked citations: A [00:00] line1-2 OK, [04:39/04:50] hippocampus lines 70-72 OK, [09:08] sleep replay lines 140-141 OK; B [00:12] line3 OK, [01:31] hundreds-of-trillions line 21 OK, [04:56] 'not fully understood' line 73 OK, [11:46] 'never designed for accuracy' lines 183-184 OK. Differentiators cancel: A is more granular (7 sections, range timestamps, explicit ad-scope notes) but takes mild citation risk placing an on-screen caption '10,000 Connections' at [01:31] where narration is actually 'hundreds of trillions' (plausibly-visual, not contradicted, so acceptable); B anchors every claim to exact narration timestamps for cleaner verifiability but is slightly less exhaustive. Net: equivalent quality, genuine tie.",
+          "b_score_note": ""
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 2,
+          "b_gold_facts_covered": 2,
+          "rationale": "Identical correctness. Both give 'about 86 billion neurons' [01:00, line 15] and 'up to 10,000 others' [01:25, line 20], satisfying both gold facts (86B; each connects to thousands). Both cite accurately and both correctly note the figures come from narration, not on-screen text. A adds the 'hundreds of trillions' supplement [01:31] and specific frame descriptions (diver/face/QR/art-print) asserting none show the numbers - plausibly-visual, acceptable. B adds the same 'hundreds of trillions / 100x galaxies' supplement [01:31-01:35, lines 21-22] plus the accurate 'simplified scientific models' caveat [00:54, line 13]. No factual or citation errors in either; both complete and precise. Tie."
+        }
+      ]
+    }
+  ]
+}

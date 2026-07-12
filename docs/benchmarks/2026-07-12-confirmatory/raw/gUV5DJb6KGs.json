@@ -1,0 +1,292 @@
+{
+  "video": "gUV5DJb6KGs",
+  "parity_a_is_evidence": true,
+  "prep": {
+    "ok": true,
+    "control_frames": 38,
+    "transcript_chars": 14249,
+    "notes": "watch.py exited 0. Control run: 38 JPEG frames in scratchpad/confirm/gUV5DJb6KGs/control/frames/, report at control_report.txt. Existing ground-truth transcript (14249 bytes) copied to eval/transcript.txt; byte counts of source and copy match."
+  },
+  "compile": [
+    {
+      "id": "q_coverage",
+      "transcript_chars": 14073,
+      "frames": 30
+    },
+    {
+      "id": "q_targeted",
+      "transcript_chars": 12389,
+      "frames": 3
+    }
+  ],
+  "ctlAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "Summary: This is a TEDx talk (the opening title card on screen reads \"TEDxKC - x = independently organized TED event - Shared with you by Ewing Marion Kauffman Foundation\" [00:00], and the frames throughout show the speaker alone on a red circular TEDx stage in front of \"EMERGE\" event branding, with no content slides). The speaker, who identifies her own mind as \"the mind of Karen Faith\" [02:41], is a focus group moderator and people researcher [00:44-00:48, 05:34]. She opens by rejecting the saying that you can't love anyone until you love yourself: \"I loved everybody before I loved myself\" [00:18-00:30]. She describes moderating focus groups full of mixed characters where her job is to make sure everyone gets heard [00:55-01:42], and says moderating rooms of strange and difficult voices taught her to welcome all the strange and difficult parts of herself [02:00-02:06]. She noticed she was arguing with herself and discovered \"there are quite a few of me\": a sentimental me, an analytical me, one who loves the stage, one who is shaky [03:03-03:29]. While conflicting feelings are easy to accept [03:42-04:04], thoughts like \"I'm worthless\" or \"I don't belong here\" are harder to live with [04:18-04:34], and she spent years trying to silence them through every therapy she'd heard of: talk therapy, energy healing, hypnotherapy, seven kinds of yoga, tea with a shaman [04:46-05:09], yet still found herself shouting \"Shut up!\" at her own mind [05:25]. Her core approach to inner voices is what she calls \"unconditional welcome,\" which is \"like a researcher's neutrality, but a little extra\" [07:31-07:36]: \"Total welcome as is - no comments, no notes,\" not tolerance, not even compassion [08:56-09:04]. She discovered it with an unpleasant research subject she was judging; by imagining a soap bubble of unconditional welcome enclosing them both [08:42-09:09], she suddenly saw \"a mother feeding her baby in a world that she didn't trust\" [09:15] and loved her instantly [09:38-09:44]. Two years later she applied the same practice inward [10:09]: when a frightened, angry, relentless part of her kept demanding to die, she became her own moderator [10:47-10:51], thanked the voice for sharing, reminded it of the agreement to be honest and reasonable [10:53-11:00], promised to take care of it while insisting \"I will listen to you, but I will not obey you\" [11:23-11:25], and it agreed and began to dialogue [11:29-11:33]. Her mind now works like a focus group: a round table of wildly mixed characters with one moderator keeping order through honesty, boundaries, kindness, and most importantly gratitude [11:45-12:00]. She thanks her selves no matter how bonkers they seem [12:03-12:08], sees her fragmented self as a prism rather than a broken mirror [12:11-12:16], welcomes every voice [12:18], and finds even the whiny, shamey voice helpful when asked to be clear and kind, but only when accepted exactly as she is [12:25-12:46]. She closes self-talk sessions with \"I love you. Thank you for helping me see what you see\" [13:00-13:03] and extends the practice outward: love is what happens when we stop trying to figure out who deserves it [09:48-09:56]; \"Love is a house you can crawl in through a window\" [13:28], so if you can't start with yourself, start by welcoming the person next to you [13:31-13:37], because everyone you show unconditional welcome may show you a part of yourself to love [14:10-14:13].",
+      "cited_timestamps": [
+        "00:00",
+        "00:18",
+        "00:30",
+        "00:44",
+        "00:55",
+        "01:42",
+        "02:00",
+        "02:06",
+        "02:41",
+        "03:03",
+        "03:29",
+        "03:42",
+        "04:04",
+        "04:18",
+        "04:34",
+        "04:46",
+        "05:09",
+        "05:25",
+        "05:34",
+        "07:31",
+        "07:36",
+        "08:42",
+        "08:56",
+        "09:04",
+        "09:09",
+        "09:15",
+        "09:38",
+        "09:44",
+        "09:48",
+        "09:56",
+        "10:09",
+        "10:47",
+        "10:51",
+        "10:53",
+        "11:00",
+        "11:23",
+        "11:25",
+        "11:29",
+        "11:33",
+        "11:45",
+        "12:00",
+        "12:03",
+        "12:08",
+        "12:11",
+        "12:16",
+        "12:18",
+        "12:25",
+        "12:46",
+        "13:00",
+        "13:03",
+        "13:28",
+        "13:31",
+        "13:37",
+        "14:10",
+        "14:13"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "The speaker (a focus group moderator who names her own mind \"the mind of Karen Faith\" [02:41]) describes a part of her that had become very chatty: \"a part that was afraid and angry, whiny, demanding, unreasonable and relentless\" [10:14-10:26]. The voice told her \"we were never going to get better\" and \"wanted out of here\" [10:26-10:29]. When she asked what she could do, \"she only told me she wanted to die, over and over and over and over\" [10:30-10:32]. At first the speaker \"begged her to shut up, and she did not\" [10:37]. Then, \"after weeks of harassment, whether out of exhaustion or epiphany, instead of shouting back,\" she took a deep breath and \"became my own moderator\" [10:41-10:51]. She said out loud, in a voice that surprised her: \"Thank you for sharing. I'm going to remind you of our agreement to be honest and reasonable\" [10:53-11:00], the same moderator-style opener she uses in focus groups and morning meditation (\"Thanks, everyone, for being here... I'll give you all the chance to speak... try to make any requests reasonable\") [02:11-02:32]. How the conversation went: the voice answered her [11:06]. She adds a caveat so the audience doesn't get spooked, \"This is all just thinking happening,\" while noting the asking part and the answering part \"did in fact seem like different parts\" [11:08-11:15]. The voice said she was in a lot of pain, and the speaker replied: \"I know. And I promise you I'm going to take care of you. But I need you to get on board. I will listen to you, but I will not obey you\" [11:18-11:25]. Then, \"as clearly as I'm speaking to you now, she said okay. And then we started to talk\" [11:29-11:33]. Continuing that dialogue, the speaker found more voices with more points of view [11:36-11:39], and her mind came to resemble a focus group round table with one moderator keeping order through honesty, boundaries, kindness, and gratitude [11:45-12:00]; today there isn't a voice in her head she doesn't welcome [12:18]. Note on the visual evidence: the frames show only the speaker on the TEDx stage (red circular carpet, \"EMERGE\" event branding, plus an opening \"TEDxKC / Ewing Marion Kauffman Foundation\" title card at [00:00]); there are no slides depicting this conversation, so all detail comes from her spoken account.",
+      "cited_timestamps": [
+        "00:00",
+        "02:11",
+        "02:32",
+        "02:41",
+        "10:14",
+        "10:26",
+        "10:29",
+        "10:30",
+        "10:32",
+        "10:37",
+        "10:41",
+        "10:51",
+        "10:53",
+        "11:00",
+        "11:06",
+        "11:08",
+        "11:15",
+        "11:18",
+        "11:25",
+        "11:29",
+        "11:33",
+        "11:36",
+        "11:39",
+        "11:45",
+        "12:00",
+        "12:18"
+      ]
+    }
+  ],
+  "evAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "Summary of the talk\n\nThis is a talk by Karen Faith, whose name appears as on-screen title-card text at the start of the video [00:10]; she identifies herself in speech at [02:41] (\"in the mind of Karen Faith\"). Wide stage shots show her speaking on a round red rug in front of a large \"EMERGE\" logo (on-screen stage branding visible in frames at [02:02], [02:47], and [05:13]), so this is an EMERGE-branded stage event; the evidence does not state the event's full name or date.\n\nHer through-line: she opens by rejecting the saying that \"you can't love anyone until you love yourself,\" saying she \"loved everybody before I loved myself\" and that \"love welcomes everyone unconditionally\" [00:18]-[00:39]. Her day job is focus group moderator and people researcher: focus groups gather a range of characters (the shy one, the chatty one, the grumpy one, the suspicious ex-military guy) and her job is to make sure they all get heard [00:55]-[01:42]. Moderating \"rooms of strange and difficult voices\" is what taught her to welcome \"all the strange and difficult parts of myself\" [02:00]-[02:06].\n\nShe describes noticing she was arguing with herself and realizing there are \"quite a few of me\": a sentimental me, an analytical me, a me who loves the stage, one who is shaky [03:03]-[03:29]. Conflicting feelings are normal [03:42]-[04:08], but darker thoughts (\"I'm worthless,\" \"I don't belong here,\" \"my mistakes are unforgivable\") are harder to live with [04:18]-[04:34]. She spent years trying to silence them, listing every therapy she tried (talk therapy, energy healing, hypnotherapy, seven kinds of yoga, \"special tea\" with a shaman) [04:46]-[05:21], and still found herself shouting \"Shut up!\" at her own mind [05:25]. She attributes both her splintered sense of self and her observational gifts to complex post-traumatic stress from \"an appalling upbringing\" [06:02]-[06:12], calling gifts and curses \"buy one, get one\" [06:55]-[07:11].\n\nHer approach to inner voices: \"unconditional welcome\"\n\nShe practices what she calls \"unconditional welcome,\" \"like a researcher's neutrality, but a little extra\" [07:31]-[07:36]. She discovered it with a research subject she was judging (an anti-vaccine, chain-smoking mother) [07:42]-[08:09]: she visualized her breath inflating a soap bubble \"filled with unconditional welcome. Not tolerance. Not even compassion. Total welcome as is - no comments, no notes,\" big enough to contain both of them [08:49]-[09:09]. She then saw \"a mother feeding her baby in a world that she didn't trust,\" they had a real conversation, and welcoming the woman unconditionally let her see her clearly and love her instantly [09:15]-[09:44]. Her thesis: \"Love is what happens when we stop trying to figure out who deserves it\" [09:52].\n\nTwo years later she applied this internally [10:09]. When a frightened, angry part of her repeatedly said she wanted to die, begging it to shut up failed [10:26]-[10:37]; instead she took a deep breath and \"became my own moderator\" [10:47]-[10:51], thanking the voice for sharing and setting terms: \"I will listen to you, but I will not obey you\" [10:57]-[11:25]. The voice agreed, and dialogue began [11:29]-[11:33]. Her mind became like a focus group: a round table of mixed characters with one moderator keeping order \"with honesty, boundaries, kindness, and most importantly, gratitude\" [11:45]-[12:03]. She thanks her selves no matter how \"bonkers or twisted\" [12:03]-[12:08], sees her fragmented self \"less like broken mirror and more like a prism\" [12:11]-[12:16], and today welcomes every voice in her head [12:18]. Even her \"whiny, shamey voice\" tells her what she needs to know when asked to be clear and kind, but only when accepted exactly as she is [12:25]-[12:40]. Where she runs her morning meditation with her focus-group opener (\"Thanks, everyone, for being here... Your input is valued\") [02:11]-[02:32], she closes self-talk differently: \"I love you. Thank you for helping me see what you see\" [13:00]-[13:03].\n\nShe closes by returning to the opening claim: \"Love is a house you can crawl in through a window\": if you can't start with yourself, start by welcoming the person next to you [13:23]-[13:37], because \"all of us are worthy of welcome,\" and everyone you show unconditional welcome \"may show you a part of yourself to love\" [14:07]-[14:13].\n\nNote on the frames: apart from the \"KAREN FAITH\" title card [00:10] and the \"EMERGE\" stage logo ([02:02], [02:47], [05:13], [05:40]), all sampled frames show the speaker (a woman in a pinstripe suit with a headset mic) speaking on stage with no slides or additional on-screen text, so the talk's content comes entirely from the spoken transcript.",
+      "cited_timestamps": [
+        "00:10",
+        "00:18",
+        "00:39",
+        "00:55",
+        "01:42",
+        "02:00",
+        "02:02",
+        "02:06",
+        "02:11",
+        "02:32",
+        "02:41",
+        "02:47",
+        "03:03",
+        "03:29",
+        "03:42",
+        "04:08",
+        "04:18",
+        "04:34",
+        "04:46",
+        "05:13",
+        "05:21",
+        "05:25",
+        "05:40",
+        "06:02",
+        "06:12",
+        "06:55",
+        "07:11",
+        "07:31",
+        "07:36",
+        "07:42",
+        "08:09",
+        "08:49",
+        "09:09",
+        "09:15",
+        "09:44",
+        "09:52",
+        "10:09",
+        "10:26",
+        "10:37",
+        "10:47",
+        "10:51",
+        "10:57",
+        "11:25",
+        "11:29",
+        "11:33",
+        "11:45",
+        "12:03",
+        "12:08",
+        "12:11",
+        "12:16",
+        "12:18",
+        "12:25",
+        "12:40",
+        "13:00",
+        "13:03",
+        "13:23",
+        "13:37",
+        "14:07",
+        "14:13"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "The speaker (Karen Faith, per her self-reference at [02:41] in her talk about welcoming inner voices) describes a part of herself that had become \"very chatty - a part that was afraid and angry, whiny, demanding, unreasonable and relentless\" [10:14]-[10:23]. This voice told her \"that we were never going to get better. She wanted out of here\" [10:26]-[10:29]. When the speaker asked the voice what she could do, \"she only told me she wanted to die, over and over and over and over\" [10:30]-[10:32].\n\nHow it went at first: badly. \"I begged her to shut up, and she did not\" [10:37]. This continued for \"weeks of harassment\" [10:41].\n\nThe turning point: \"whether out of exhaustion or epiphany, instead of shouting back, I took a deep breath. I became my own moderator\" [10:44]-[10:51]. Borrowing the technique she uses professionally as a focus group moderator, whose standard opener she quotes earlier: \"Thanks, everyone, for being here... Your input is valued... Just do your best to be completely present, honest, and try to make any requests reasonable\" [02:16]-[02:32], she said out loud, \"in a voice that surprised me\": \"Thank you for sharing. I'm going to remind you of our agreement to be honest and reasonable\" [10:53]-[11:00].\n\nThe conversation that followed: \"And she answered me - that voice\" [11:06]. (The speaker adds a caveat for the audience: \"Now, don't get spooked. This is all just thinking happening,\" though the asking part and the answering part \"did in fact seem like different parts\" [11:08]-[11:15].) The voice told her \"that she was in a lot of pain,\" and the speaker replied: \"I know. And I promise you I'm going to take care of you. But I need you to get on board. I will listen to you, but I will not obey you\" [11:18]-[11:25]. The outcome: \"as clearly as I'm speaking to you now, she said okay. And then we started to talk\" [11:29]-[11:33].\n\nLonger-term outcome: continuing this dialogue, she found more voices with more points of view [11:36]-[11:39], and her mind came to resemble a focus group round table with one moderator keeping order \"with honesty, boundaries, kindness, and most importantly, gratitude\" [11:45]-[12:00]. Today, she says, \"there isn't a voice in my head that I don't welcome\" [12:18]; even her \"whiny, shamey voice\" tells her what she needs to know when asked to be clear and kind, but \"only does this when I accept her exactly as she is in the moment\" [12:25]-[12:40]. She now closes her self-talk with: \"I love you. Thank you for helping me see what you see\" [13:00]-[13:03].\n\nOn-screen content: the evidence frames for this question ([00:28], [04:28], [10:19]) show only the speaker, a woman in a pinstripe suit with a headset mic, on a dark stage; there are no slides or on-screen text bearing on this exchange, so everything above comes from her spoken words.",
+      "cited_timestamps": [
+        "02:16",
+        "02:32",
+        "02:41",
+        "10:14",
+        "10:23",
+        "10:26",
+        "10:29",
+        "10:30",
+        "10:32",
+        "10:37",
+        "10:41",
+        "10:44",
+        "10:51",
+        "10:53",
+        "11:00",
+        "11:06",
+        "11:08",
+        "11:15",
+        "11:18",
+        "11:25",
+        "11:29",
+        "11:33",
+        "11:36",
+        "11:39",
+        "11:45",
+        "12:00",
+        "12:18",
+        "12:25",
+        "12:40",
+        "13:00",
+        "13:03",
+        "00:28",
+        "04:28",
+        "10:19"
+      ]
+    }
+  ],
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts (parts to welcome, unconditional welcome as core practice, suicidal voice responding once engaged, greet/listen/no-judgment method) with accurate quotes; spot-checked citations ([02:41], [09:52], [10:53]-[11:00], [06:55] for A; [00:44]/[05:34], [08:56]-[09:04], [13:28] for B) all match the transcript. A wins on completeness: it includes the complex-PTSD / appalling-upbringing origin, 'gifts and curses are buy one, get one', and the hypervigilance-to-observer thread, all real segments of the talk that B omits entirely. B's TEDxKC/Kauffman title-card claim is plausibly-visual and uncontradicted, so no penalty, but it does not offset the missing content. Neither answer contains a factual error."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both hit all 4 gold facts with near-identical, verbatim-accurate quotes and correct timestamps: welcomed instead of fighting ([10:47]-[10:51] deep breath, became her own moderator, 'Thank you for sharing'), asked what it needed ([10:30] 'I asked her what I could do'), the voice softened once its pain was heard ([11:18]-[11:25] 'a lot of pain' -> 'I promise I'm going to take care of you' -> [11:29] 'she said okay'), and both frame the exchange as the moderator/welcome practice applied inward. Spot-checked citations for both ([10:37], [10:41]-[10:51], [11:18]-[11:25], [10:30]-[10:32]) are all correct. A adds the 'I love you / thank you for helping me see what you see' closer and the shamey-voice follow-up; B is more compact but fully answers what was said and how it went. No errors in either; the marginal extra context in A is beyond the question's scope, so tie."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts: voices as parts to welcome not fight (A: 'welcome all the strange and difficult parts of myself' [02:00]-[02:06]; B same), unconditional welcome as the core practice (both quote 'researcher's neutrality, but a little extra' [07:31]-[07:36] and 'no comments, no notes'), the suicidal voice responding once engaged as her own moderator ('she said okay... started to talk' [11:29]-[11:33] in both), and the greet/ask/listen-without-judgment method (both include the moderator opener [02:11]-[02:32], 'I will listen to you, but I will not obey you' [11:25], and the whiny voice saying what she needs when accepted as-is [12:25]-[12:40/46]). All spot-checked citations land on the correct lines in both. Differentiators cancel out: A is better organized (headed sections) and honestly hedges the venue ('evidence does not state the event's full name'); B adds plausibly-visual TEDxKC/Kauffman title-card grounding and is denser but a single wall of text. No speech misquotes in either. Neither earns a 10 because both omit the explicit 'I asked her what I could do' beat from the suicidal-voice arc in this answer (present only in their targeted answers), which is the strongest illustration of gold fact 3."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts with verbatim-accurate quotes: welcoming instead of fighting (begging it to shut up failed [10:37], then 'became my own moderator' [10:51] and 'Thank you for sharing' [10:57]); asking what it needed ('I asked her what I could do' \u2192 'she only told me she wanted to die' [10:30]-[10:32], present in both); the voice softening once its pain was acknowledged ('she was in a lot of pain' / 'I know... I promise you I'm going to take care of you' [11:18]-[11:25], then 'she said okay. And then we started to talk' [11:29]-[11:33]); and the exchange modeling the welcome practice (both tie it to the focus-group moderator opener [02:11/02:16]-[02:32] and 'there isn't a voice in my head that I don't welcome' [12:18]). All spot-checked citations correct in both; both correctly relay her 'don't get spooked, this is all just thinking happening' caveat [11:08]-[11:15]. A adds slightly more aftermath (whiny-voice conditions [12:25]-[12:40], the 'I love you' closing [13:00]-[13:03]); B is leaner with one off-by-one-line citation ([11:23-11:25] for a promise spoken at [11:21]). These minor deltas offset: functionally equivalent, fully accurate answers."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts (parts welcomed not fought, unconditional welcome as core practice, the suicidal voice responding once engaged, and the greet/ask/listen method via the moderator opener, 'I will listen to you, but I will not obey you', and the whiny voice naming its needs when accepted as-is). Spot-checked citations are accurate for both: A's [00:18]-[00:39], [05:25], [09:52], [10:47]-[10:51], [12:11]-[12:16] all match the transcript verbatim; B's [00:44]-[00:48], [08:56]-[09:04], [09:15], [09:48]-[09:56], [13:28] also match. Visual claims (A: KAREN FAITH title card + EMERGE logo; B: TEDxKC/Kauffman title card) are plausibly visual and uncontradicted. A wins on completeness: it includes the complex-PTSD/appalling-upbringing origin ([06:02]-[06:12]) and 'gifts and curses are buy one, get one' arc that B skips entirely (B only cites 05:34 from that ~1.5-minute section), plus the meditation opener and the contrasting closings. B has two slightly loose range ends ([12:25-12:46] overshoots into the next section) but nothing wrong. Both are correct; A is the fuller summary."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both cover all 4 gold facts: welcoming instead of fighting (deep breath, 'became my own moderator', 'Thank you for sharing' instead of shouting back), asking what it needed ('I asked her what I could do' [10:30], answered 'she wanted to die' [10:32]), the voice softening when heard (it named its pain [11:18], she acknowledged it and promised care, and 'she said okay. And then we started to talk' [11:29]-[11:33]), and the tie to the unconditional-welcome/moderator practice (both quote the focus-group opener [02:11]-[02:32] and the 'not a voice in my head that I don't welcome' outcome [12:18]). Spot-checked citations all check out for both: [10:14]-[10:23] adjective list, [10:37] 'begged her to shut up', [10:41] 'weeks of harassment', [10:53]-[11:00] 'Thank you for sharing... honest and reasonable', [11:08]-[11:15] the 'just thinking happening' caveat, [11:18]-[11:25] 'I will listen to you, but I will not obey you'. Both correctly narrate the arc (begging failed first, then the moderator turn). A adds slightly more aftermath (whiny-voice detail, 'I love you' closing); B's [10:14-10:26] range end is one line loose. These are negligible; the answers are equivalently correct, complete, and well-cited."
+        }
+      ]
+    }
+  ]
+}

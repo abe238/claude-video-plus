@@ -1,0 +1,145 @@
+{
+  "videos": [
+    {
+      "id": "PqtggjVAi8M",
+      "q_coverage": {
+        "text": "Can you explain how memories are encoded, consolidated, retrieved, and altered over time?",
+        "gold_spans": ["00:00-00:37", "00:48-03:47", "04:10-05:55", "07:13-09:38", "09:45-12:52"],
+        "required_facts": [
+          "Memories let the mind encode, store, and retrieve information, but they are not static records. (00:00-00:23)",
+          "The brain has about 86 billion neurons; synapses strengthen when neurons fire together. (01:00-01:55)",
+          "Sensory and other brain columns form a synchronized assembly that creates the experience of a moment. (02:01-03:35)",
+          "The winning, attended assembly is chemically made more changeable, while the hippocampus stores a rough blueprint and index. (04:10-05:14)",
+          "A new memory is a distributed activation pattern, but it fades unless its synapses are reinforced. (05:21-05:55)",
+          "Novelty, repeated reactivation, and strong emotion make an assembly more likely to persist. (07:20-09:06)",
+          "During sleep the hippocampus replays the assembly, consolidating it; insufficient sleep means forgetting more. (09:08-09:25)",
+          "Retrieval makes a memory plastic again, so new context, emotions, and expectations can change it; vividness does not guarantee accuracy. (09:45-12:10)"
+        ]
+      },
+      "q_targeted": {
+        "text": "Why might a vivid memory become less accurate the more often you remember it?",
+        "gold_spans": ["09:45-12:10"],
+        "required_facts": [
+          "A cue such as a smell, sound, word, or image prompts the hippocampus to find and activate the stored assembly. (09:45-10:04)",
+          "Recalling is not replaying a fixed video: the involved neurons become changeable again. (10:11-10:31)",
+          "The context at recall differs from the context at formation, and that new context is incorporated into the memory. (10:32-10:58)",
+          "New connections form while some synapses weaken or reconfigure before the memory hardens in a new form. (10:58-11:20)",
+          "The brain adds information or forgets some, incorporating current emotions and expectations into the remembered past. (11:26-11:54)",
+          "Repeated active remembering can leave less of the original experience, and a strong vivid assembly is not necessarily correct. (11:58-12:10)"
+        ]
+      }
+    },
+    {
+      "id": "vZdbbN3FCzE",
+      "q_coverage": {
+        "text": "How did OnePlus evolve from a flagship-killer enthusiast brand into a mainstream brand, and why is that a qualified survival story?",
+        "gold_spans": ["00:02-01:31", "01:58-03:43", "04:00-06:58", "07:00-10:46", "10:51-14:46"],
+        "required_facts": [
+          "The video begins by rejecting an unsupported claim that OnePlus is being dismantled and frames the company as a case study in enthusiast-brand survival. (00:02-01:31)",
+          "The OnePlus One combined flagship specifications, a $300 price, a clean CyanogenMod experience, and an invite-only launch that still sold over one million units. (02:09-02:58)",
+          "Enthusiasts gave OnePlus early attention but are small, demanding, and quick to leave for slightly better specifications. (03:02-03:43)",
+          "The 5, 6, and 7 era represented peak enthusiast OnePlus, with strong value, fast charging, refined OxygenOS, and the 7T Pro as the reviewer's favorite. (05:21-06:58)",
+          "To scale, brands need mainstream buyers who value official IP ratings, carrier-store availability, and safer familiar choices rather than enthusiast cost-cutting. (08:03-09:23)",
+          "OnePlus shifted through glass designs, IP ratings, higher prices, Nord budget models, carrier deals, and a Hasselblad partnership, while becoming more like Oppo. (10:51-12:48)",
+          "The current OnePlus 15 is smooth with strong battery life and fast charging but is generic-looking with merely fine cameras, and enthusiasts have moved on. (12:50-13:19)",
+          "The reviewer calls OnePlus a technical, narrow success: it remains alive by slowly softening enthusiast edges while building mainstream appeal. (13:20-14:46)"
+        ]
+      },
+      "q_targeted": {
+        "text": "What made the original OnePlus One such a hit with phone enthusiasts?",
+        "gold_spans": ["02:09-02:58"],
+        "required_facts": [
+          "Before shipping, it promised flagship specifications including a latest-generation Snapdragon 800-series chip. (02:09-02:17)",
+          "It cost $300, far below the roughly $600-$700 Apple and Samsung flagships it challenged. (02:16-02:38)",
+          "It had a clean design with a distinctive sandstone finish. (02:19-02:23)",
+          "CyanogenMod provided a developer-friendly, clean, no-bloatware software experience. (02:23-02:30)",
+          "Buyers needed an invite, yet the phone still sold more than one million units and put OnePlus on the map. (02:43-02:58)"
+        ]
+      }
+    },
+    {
+      "id": "gUV5DJb6KGs",
+      "q_coverage": {
+        "text": "What does the talk argue about relating to our worst inner voices, and how did the speaker develop her practice of unconditional welcome?",
+        "gold_spans": ["00:18-02:37", "03:03-07:36", "07:42-10:09", "10:14-12:45", "13:02-14:19"],
+        "required_facts": [
+          "The speaker rejects the claim that a person must love themself before loving anyone else. (00:18-00:39)",
+          "Her work moderating focus groups taught her to ensure that strange, difficult, and diverse voices are heard, a model she uses in meditation. (01:34-02:37)",
+          "She treats inner conflict as different parts or voices, including ordinary conflicting feelings as well as painful self-condemning thoughts. (03:03-04:36)",
+          "Her attempts to silence the painful thoughts through many therapies and practices did not stop her from telling her own mind to shut up. (04:46-05:29)",
+          "Her complex trauma brought shame and a fragmented self but also hypervigilance that made her a keen observer of other people. (05:34-07:19)",
+          "She defines unconditional welcome as accepting someone exactly as they are, without comments or notes, and used it to understand a mother she had judged. (08:42-10:09)",
+          "She later used moderator-style dialogue and boundaries with a desperate inner voice: she would listen to it but not obey it. (10:14-11:33)",
+          "Her internal round table is guided by honesty, boundaries, kindness, and gratitude; the conclusion invites people to welcome others and themselves. (11:36-14:19)"
+        ]
+      },
+      "q_targeted": {
+        "text": "How does the speaker say you can respond to a relentless destructive inner voice without obeying it?",
+        "gold_spans": ["10:14-11:33"],
+        "required_facts": [
+          "The speaker describes a fearful, angry inner part that said they would never get better and repeatedly wanted to die. (10:14-10:37)",
+          "After unsuccessfully begging it to stop, she took a breath and became her own focus-group moderator. (10:37-10:53)",
+          "Her opening response was gratitude for sharing, coupled with a reminder to be honest and reasonable. (10:57-11:06)",
+          "She recognized the voice's pain and promised to take care of it. (11:18-11:23)",
+          "She set the key boundary: she would listen to the part but would not obey it. (11:23-11:29)",
+          "The talk treats this as internal thinking with distinct-seeming parts, after which a dialogue could begin. (11:06-11:35)"
+        ]
+      }
+    },
+    {
+      "id": "Q10_srZ-pbs",
+      "q_coverage": {
+        "text": "What is the principle of least or stationary action, how did it emerge from the fastest-descent and optics problems, and why is it powerful in physics?",
+        "gold_spans": ["00:51-10:32", "10:38-16:40", "17:01-26:43", "27:08-30:19"],
+        "required_facts": [
+          "The fastest-descent problem asks for the ramp shape that balances an initially steeper acceleration against path length to minimize travel time. (00:55-01:30)",
+          "Fermat explained refraction by proposing that light takes the path of shortest travel time, from which Snell's law follows when light changes speed between media. (04:47-07:13)",
+          "Bernoulli mapped the descent problem to layered optics and identified its solution as a cycloid, the brachistochrone; it is also tautochronous. (07:18-10:08)",
+          "Maupertuis proposed action as mass times velocity times distance and claimed nature selects the path that minimizes its total action. (10:38-12:24)",
+          "Euler made the idea more rigorous with an integral and found that total energy must be conserved and equal across the paths considered; Lagrange later supplied a general proof. (14:09-16:40)",
+          "In the modern Hamiltonian formulation, action is the time integral of the Lagrangian, kinetic energy minus potential energy, with fixed endpoints and endpoint times. (19:33-23:16)",
+          "Setting the first-order variation of action to zero yields Newton's second law and unifies mechanics with optical phenomena such as reflection and refraction. (23:25-26:43)",
+          "The Lagrangian method simplifies mechanics, handles multiple or convenient coordinates, and 'least action' is more accurately stationary action. (27:08-30:19)"
+        ]
+      },
+      "q_targeted": {
+        "text": "Is the principle of least action always a true minimum, and what is the more precise name for it?",
+        "gold_spans": ["29:33-30:19"],
+        "required_facts": [
+          "The video explicitly warns that the common name 'principle of least action' is misleading. (29:33-29:49)",
+          "Setting a derivative to zero in calculus does not by itself guarantee a function's minimum. (29:49-29:57)",
+          "The more accurate term is the principle of stationary action. (29:58-30:03)",
+          "Its laws of motion come from requiring a stationary point, expressed by setting the relevant derivative to zero and obtaining the Euler-Lagrange equation. (30:03-30:13)",
+          "The action is often a true minimum, but not always. (30:14-30:19)"
+        ]
+      }
+    },
+    {
+      "id": "-Ud2cqoB7gE",
+      "q_coverage": {
+        "text": "How does Kenji make a quick dairy-free, creamy tomato soup from pantry ingredients?",
+        "gold_spans": ["00:02-03:46", "03:53-05:37", "06:04-07:46"],
+        "required_facts": [
+          "The soup is presented as an approximately 15-minute pantry recipe using canned tomatoes, dried oregano, garlic, olive oil, red-pepper flakes, and bread. (00:02-00:13)",
+          "He starts the tomato base with olive oil, garlic, hot pepper flakes, and dried oregano. (00:44-01:21)",
+          "He recommends dried hardy herbs such as oregano, marjoram, thyme, and sage because their flavor survives drying better. (01:21-02:11)",
+          "The canned tomatoes are roughly chopped, salted, and cooked for about 10 to 12 minutes. (02:23-03:46)",
+          "The sauce becomes soup by pureeing it and emulsifying it with olive oil and bread rather than cream. (03:53-04:50)",
+          "Making it dairy-free keeps the tomato flavor cleaner instead of muting it with dairy. (05:18-05:37)",
+          "He tears white sandwich bread (or sourdough) into the cooked tomatoes, then starts the blender slowly and gradually increases speed. (05:37-07:25)"
+        ]
+      },
+      "q_targeted": {
+        "text": "Which dried herbs does Kenji recommend for this tomato soup, which ones does he avoid, and why?",
+        "gold_spans": ["01:21-02:11"],
+        "required_facts": [
+          "He says dried oregano works well, along with other hardy herbs such as marjoram, thyme, and sage. (01:21-01:30)",
+          "He contrasts them with delicate herbs including parsley, basil, and chives, which he says do not dry well. (01:31-02:06)",
+          "The hardy herbs' aromatic compounds are less volatile. (01:38-01:45)",
+          "He connects that trait to their growing in hotter climates, where those aromas are less prone to evaporating away. (01:45-01:53)",
+          "As a result, hardy-herb flavors persist better when dried, so he would use dried thyme, oregano, marjoram, or savory but not dried parsley, basil, chervil, or chives. (01:53-02:11)"
+        ]
+      }
+    }
+  ]
+}

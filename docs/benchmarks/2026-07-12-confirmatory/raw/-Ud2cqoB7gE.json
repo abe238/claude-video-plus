@@ -1,0 +1,293 @@
+{
+  "video": "-Ud2cqoB7gE",
+  "parity_a_is_evidence": true,
+  "prep": {
+    "ok": true,
+    "control_frames": 34,
+    "transcript_chars": 7078,
+    "notes": "watch.py exit 0. 34 frames in scratchpad/confirm/-Ud2cqoB7gE/control/frames/ (frame_0001.jpg..., all non-empty). control_report.txt written (19918 bytes). Existing transcript.txt (7078 chars, Kenji tomato soup video) copied unchanged to eval/transcript.txt."
+  },
+  "compile": [
+    {
+      "id": "q_coverage",
+      "transcript_chars": 7077,
+      "frames": 16
+    },
+    {
+      "id": "q_targeted",
+      "transcript_chars": 6909,
+      "frames": 5
+    }
+  ],
+  "ctlAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "Kenji's \"creamy cream-less tomato soup\" is a roughly 15-minute, all-pantry recipe: canned tomatoes, dried oregano, garlic, olive oil, red pepper flakes, and bread [00:02][00:04][00:07][00:11][00:13].\n\nMain steps:\n1. Start the base the same way as the pizza sauce from his other video [00:15][00:26]: heat olive oil with garlic in a pan [00:44] (a stainless pan on the stovetop is visible in frame_0002), then add hot pepper flakes [01:00] and dried oregano [01:21].\n2. Add canned tomatoes. He uses plain Italian-style whole tomatoes here; his usual picks are Cento DOP San Marzanos from Italy or Muir Glen from the US, which consistently win taste tests [02:31][02:33][02:41][02:49]. You can buy crushed tomatoes instead, or break whole ones up with a hand blender [02:23]; on camera he uses a pastry cutter (normally for cutting butter into flour for pie dough), which he says is great for a rough-textured tomato sauce [02:51][02:54][03:02].\n3. Season with salt [03:06]. Tip: he was restaurant-trained and salts generously; he believes most people under-season, but says to salt to your own taste [03:15][03:22][03:31][03:38].\n4. Simmer the tomatoes about 10 to 12 minutes [03:46]. Frames 0004-0005 show the red tomato mixture cooking down in a pot on the stove (on-screen content, no text overlays).\n5. The soup trick: this cooked tomato base is essentially the base of his creamy tomato soup [03:53][03:56][04:00]. To make it creamy without any cream, you puree it and emulsify it with olive oil, thickened with bread, like a hot gazpacho (which he describes as really an olive oil and bread soup flavored with tomatoes) [04:19][04:23][04:25][04:31][04:34][04:39][04:45][04:49].\n6. Tip on dairy-free: leaving out dairy keeps the tomato flavor cleaner; dairy can mute it [05:18][05:25][05:30][05:31].\n7. Bread choice: any generic white sandwich bread works (he uses potato bread), and sourdough is fine too [05:37][05:38][05:42][05:44]. Tear the bread into the blender with the cooked tomatoes [05:52][05:54][06:01][06:04]; frame_0019 shows torn bread chunks sitting in the blender pitcher with the tomato mixture (on-screen content).\n8. Ratios: his written recipes (versions on America's Test Kitchen and Serious Eats, slightly different from each other) have exact ratios, but he never follows them exactly at home [04:06][04:07][04:10][06:10][06:13].\n9. Blend with the olive oil, and always start the blender slow and slowly build up speed [06:15][06:18][06:21][06:25]. Frame_0024 shows the lid going on the blender and frames 0024-0025 show the smooth orange puree (on-screen content).\n10. Taste and check [07:11][07:13], then serve. He finishes the bowl with a little cracked pepper and olive oil [07:53][08:23]; frame_0034 shows the finished blue bowl with an olive-oil drizzle and a scattered garnish on top (on-screen content). He says it's good and heads back to the pizza video [08:51][08:58].\n\nNote: the frames are POV kitchen footage with no readable on-screen text or ingredient graphics, so all quantities beyond \"10 to 12 minutes\" simmer time come from his speech; exact ratios are not given in this video (he points to the written recipes instead [06:10][06:13]).",
+      "cited_timestamps": [
+        "00:02",
+        "00:04",
+        "00:07",
+        "00:11",
+        "00:13",
+        "00:15",
+        "00:26",
+        "00:44",
+        "01:00",
+        "01:21",
+        "02:23",
+        "02:31",
+        "02:33",
+        "02:41",
+        "02:49",
+        "02:51",
+        "02:54",
+        "03:02",
+        "03:06",
+        "03:15",
+        "03:22",
+        "03:31",
+        "03:38",
+        "03:46",
+        "03:53",
+        "03:56",
+        "04:00",
+        "04:06",
+        "04:07",
+        "04:10",
+        "04:19",
+        "04:23",
+        "04:25",
+        "04:31",
+        "04:34",
+        "04:39",
+        "04:45",
+        "04:49",
+        "05:18",
+        "05:25",
+        "05:30",
+        "05:31",
+        "05:37",
+        "05:38",
+        "05:42",
+        "05:44",
+        "05:52",
+        "05:54",
+        "06:01",
+        "06:04",
+        "06:10",
+        "06:13",
+        "06:15",
+        "06:18",
+        "06:21",
+        "06:25",
+        "07:11",
+        "07:13",
+        "07:53",
+        "08:23",
+        "08:51",
+        "08:58"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "For this soup Kenji uses dried oregano itself [00:07][01:21], and he says oregano is one of the herbs that actually works really well dried [01:21].\n\nHerbs he recommends dried (the \"hearty\" herbs): oregano, marjoram, thyme, and sage [01:22][01:24][01:26]. He restates the list later: \"I would definitely use... oregano, thyme, marjoram, savory\" [02:06][02:08][02:11], though he jokes he barely ever uses savory [02:16][02:19]. His explanation: hearty herbs grow in hotter climates, so their aroma compounds are less volatile and don't evaporate out, meaning their flavors stick as they dry [01:38][01:41][01:44][01:47][01:49][01:53].\n\nHerbs he says to avoid dried (the delicate ones): parsley, basil, and chives [01:31][01:34][01:38]. He repeats: \"I would never use like dried parsley or basil or treble or chives\" [02:01][02:03]; \"treble\" is almost certainly a transcription garble (plausibly \"chervil\"), so that fourth herb is uncertain from this evidence.\n\nOne ambiguity to flag: at [01:26]-[01:29] the transcript reads \"...thyme sage those tend to do pretty well when they're dried rosemary it's the herbs like parsley basil chives... that just don't do well dry.\" The word \"rosemary\" sits between the two lists with no punctuation. The more natural reading places rosemary with the hearty, dried-OK group (consistent with his hot-climate/hearty-herb rationale), but the garbled transcript makes its placement not fully certain, and rosemary does not appear in his later restated \"would definitely use\" list [02:06][02:08][02:11].\n\nThe video frames are POV kitchen footage with no readable labels or text overlays on the herb containers, so the frames add no additional herb evidence; everything above comes from his spoken remarks.",
+      "cited_timestamps": [
+        "00:07",
+        "01:21",
+        "01:22",
+        "01:24",
+        "01:26",
+        "01:29",
+        "01:31",
+        "01:34",
+        "01:38",
+        "01:41",
+        "01:44",
+        "01:47",
+        "01:49",
+        "01:53",
+        "02:01",
+        "02:03",
+        "02:06",
+        "02:08",
+        "02:11",
+        "02:16",
+        "02:19"
+      ]
+    }
+  ],
+  "evAnswers": [
+    {
+      "question_id": "q_coverage",
+      "answer": "Kenji describes this as his \"creamy cream-less tomato soup\": a roughly 15-minute, dairy-free recipe built almost entirely from pantry ingredients: canned tomatoes, dried oregano, garlic, olive oil, a little red pepper flake, and bread [00:02][00:04][00:07][00:11][00:13].\n\nMain steps:\n1. Start the base (same as his pizza sauce from another video [00:15][00:26]): heat olive oil with garlic and hot pepper flakes [00:44][01:00][01:09], then add dried oregano [01:21]. The frame at [01:31] shows him reaching into a spice area of the kitchen (labels not readable on screen).\n2. Add canned tomatoes. He says you can buy crushed tomatoes or use a hand blender [02:23], but he uses a pastry cutter (normally for cutting butter into flour) because it is great for chopping whole canned tomatoes into a rough-textured sauce right in the pot [02:51][02:54][03:02]. Frames at [02:06], [02:40], and [03:25] show him working the red tomatoes in a saucepan on the stove with a utensil.\n3. Season with salt [03:06]. Tip: he was restaurant-trained and thinks most people under-season; salt it to whatever level you like, though he likes plenty [03:15][03:31][03:38][03:39].\n4. Simmer: the tomatoes cook down for about 10 to 12 minutes [03:46]. Frame at [04:21] shows the cooked-down sauce in a pan on the counter.\n5. Blend with bread and olive oil: the cooked tomato sauce is essentially the base for his creamy tomato soup (he has published versions at America's Test Kitchen and Serious Eats, each slightly different [04:06][04:07][04:13]). The main idea: cook canned tomatoes down with oregano, pepper flakes, and garlic, then puree and emulsify with olive oil [04:16][04:19][04:23]. The trick to creaminess without any cream is bread [04:27][04:31]; he compares it to a hot gazpacho, which is really an olive oil and bread soup flavored with tomatoes, thickened with bread and emulsified with olive oil [04:34][04:39][04:45]. He tears white bread into the blender with the cooked tomatoes [05:54][06:04]; the frame at [05:28] shows him holding a bag of white sandwich bread and [06:02] shows bread in the blender jar. Bread tip: plain white sandwich bread (he uses potato bread), any generic white sandwich bread, or even sourdough works [05:37][05:38][05:42][05:44]. He notes exact ratios are in his written recipes online, but he never follows them exactly at home [06:10][06:13].\n6. Blender tip: put the lid on, add the olive oil, and always start the blender slow and slowly build up speed [06:15][06:18][06:21]. The frame at [06:35] shows him pouring olive oil into the blender while holding the lid.\n7. Taste and serve: he tastes it [07:11][07:13] and pours the smooth orange soup out of the blender (frame [07:21]); frame [07:43] shows it in a pan on the stove. He plates it in a bowl [07:46][07:53] and finishes with a little cracked pepper and olive oil [08:23]. The frames at [08:33] and [08:55] show the finished bowl of soup garnished with a drizzle of olive oil and fresh herb leaves. \"There you go, don't that look good\" [08:51].\n\nWhy dairy-free: he says the flavor is much cleaner, since the tomato flavor doesn't get muted the way dairy can make it [05:18][05:25][05:30][05:31].\n\nBonus herb tip along the way: hardy herbs like oregano, marjoram, thyme, and sage work well dried; delicate ones like parsley, basil, and chives do not [01:21][01:26][01:31].\n\nTomato tip: he is not picky, but usually buys Cento DOP San Marzanos from Italy or Muir Glen from the US, which consistently win taste tests [02:38][02:41][02:49].",
+      "cited_timestamps": [
+        "00:02",
+        "00:04",
+        "00:07",
+        "00:11",
+        "00:13",
+        "00:15",
+        "00:26",
+        "00:44",
+        "01:00",
+        "01:09",
+        "01:21",
+        "01:26",
+        "01:31",
+        "02:06",
+        "02:23",
+        "02:38",
+        "02:40",
+        "02:41",
+        "02:49",
+        "02:51",
+        "02:54",
+        "03:02",
+        "03:06",
+        "03:15",
+        "03:25",
+        "03:31",
+        "03:38",
+        "03:39",
+        "03:46",
+        "04:06",
+        "04:07",
+        "04:13",
+        "04:16",
+        "04:19",
+        "04:21",
+        "04:23",
+        "04:27",
+        "04:31",
+        "04:34",
+        "04:39",
+        "04:45",
+        "05:18",
+        "05:25",
+        "05:28",
+        "05:30",
+        "05:31",
+        "05:37",
+        "05:38",
+        "05:42",
+        "05:44",
+        "05:54",
+        "06:02",
+        "06:04",
+        "06:10",
+        "06:13",
+        "06:15",
+        "06:18",
+        "06:21",
+        "06:35",
+        "07:11",
+        "07:13",
+        "07:21",
+        "07:43",
+        "07:46",
+        "07:53",
+        "08:23",
+        "08:33",
+        "08:51",
+        "08:55"
+      ]
+    },
+    {
+      "question_id": "q_targeted",
+      "answer": "Dried herbs Kenji recommends: the recipe itself uses dried oregano as a core pantry ingredient [00:07], and when he adds it he says oregano is one of the herbs that actually works really well dried [01:21]. He generalizes: hardy-leaved herbs like oregano, marjoram, thyme, and sage tend to do pretty well when they're dried [01:24][01:26][01:29]. The transcript at [01:29] also has \"rosemary\" appearing right at the end of that hardy-herb list (\"...tend to do pretty well when they're dried rosemary\"); the auto-transcript is garbled here, but its placement groups rosemary with the herbs that dry well. He restates the recommended list a moment later: \"I would definitely use... oregano, thyme, marjoram, savory\" [02:06][02:08][02:11], joking that he doesn't know who actually uses savory and has probably used it twice in his life [02:16][02:19].\n\nDried herbs he says to avoid: the more delicate herbs, parsley, basil, and chives, \"just don't do well dry\" [01:31][01:34][01:38]. He repeats it emphatically: \"I would never use like dried parsley or basil or treble or chives\" [02:01][02:03]. The word transcribed as \"treble\" at [02:03] is garbled; it plausibly refers to chervil, but the evidence does not let me confirm that word, so I flag it as uncertain.\n\nWhy: the hardy herbs' aromatic volatiles are less volatile, because those plants grow in hotter climates and don't want their aromatics evaporating out, so their flavors stick through drying better than delicate herbs' do [01:38][01:41][01:47][01:49][01:53][02:01].\n\nOn-screen content: the frame at [01:31] shows a blurry shot of small spice containers near an open cupboard (consistent with him grabbing the dried oregano), but no labels are readable, and none of the other frames ([00:10] intro to camera, [03:25] stirring tomatoes on the stove, [03:56] counter with the sauce, [07:21] pouring the blended soup) show any readable herb names. So the herb lists above rest entirely on the spoken transcript.",
+      "cited_timestamps": [
+        "00:07",
+        "00:10",
+        "01:21",
+        "01:24",
+        "01:26",
+        "01:29",
+        "01:31",
+        "01:34",
+        "01:38",
+        "01:41",
+        "01:47",
+        "01:49",
+        "01:53",
+        "02:01",
+        "02:03",
+        "02:06",
+        "02:08",
+        "02:11",
+        "02:16",
+        "02:19",
+        "03:25",
+        "03:56",
+        "07:21"
+      ]
+    }
+  ],
+  "judges": [
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "a_gold_facts_covered": 5,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both answers are accurate against the transcript with correct citations (spot-checked 5+ each, all pass) and both give the full step sequence: olive-oil/garlic/pepper-flake/dried-oregano base, canned whole tomatoes crushed with a pastry cutter, salt, 10-12 min simmer, bread + olive oil blended in for dairy-free creaminess, gazpacho analogy, blender-speed tip, taste and garnish. Gold-fact notes: 'butter + onion' and 'adjust acidity/sweetness' are not in this transcript's speech (only olive oil + garlic; he only tastes), so both were credited for capturing the transcript-supported essence identically. A edges B on the 'dried herbs early in fat; fresh herbs finish' fact: A's garnish frames ([08:33][08:55]) report fresh herb leaves finishing the bowl (plausible visual, uncontradicted), while B reports only pepper and oil. A is also somewhat more complete (herb-drying digression, dairy-mutes-flavor rationale placed prominently, bread-type options). Minor demerit for A: the [02:06] frame claim of tomatoes already in the pan is timeline-questionable since tomatoes enter around [02:23], though not strictly contradicted. B's honesty note that frames carry no readable text is a genuine strength but does not offset the missing gold half-fact."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 3,
+          "b_gold_facts_covered": 3,
+          "rationale": "Both answers cover all three gold facts: dried oregano plus hardy herbs (oregano, marjoram, thyme, sage; later restated as oregano/thyme/marjoram/savory) recommended dried; delicate herbs (parsley, basil, chives) should never be used dried; and the mechanism that hardy herbs' aromatic volatiles are less volatile (hot-climate adaptation) so their flavor survives drying while delicate herbs' does not. All spot-checked citations are correct for both ([01:21]-[01:29] hardy list, [02:01]-[02:11] never-dried vs definitely-use lists, [01:38]-[01:53] volatiles rationale, [02:16]-[02:19] savory joke). Both correctly flag the transcript garble 'treble' (plausibly chervil) as uncertain rather than asserting it. On the ambiguous 'rosemary' at [01:29], A reads its placement as grouped with the dries-well herbs; B gives a slightly more thorough hedge, noting the placement is uncertain and that rosemary is absent from the later restated list. Both note the frames provide no readable herb labels, so evidence rests on speech. Neither says 'bloomed in fat' explicitly in this answer, and neither says 'taste dusty' (not in transcript), but both capture the transcript-supported substance of every gold fact. Quality, caution, and citation accuracy are effectively equal."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "a_gold_facts_covered": 4,
+          "b_gold_facts_covered": 3,
+          "rationale": "Both answers are accurate and well-cited; all spot-checked citations landed on the correct transcript lines (A: [01:21] oregano, [03:46] 10-12 min, [04:27]/[04:31] bread trick, [02:51] pastry cutter, [06:21] blender slow-start; B: [02:33] Italian-style tomatoes, [02:41]/[02:49] Cento/Muir Glen, [03:22] restaurant salt, [04:49] olive-oil emulsion). Gold fact 'butter + onion' is unsupported by the transcript (only olive oil, garlic, pepper flakes), so neither covers it and neither is penalized for omitting it. 'Adjust acidity/sweetness' is likewise absent from speech; both cover the supported 'blend smooth, taste at end' portion, credited to both. The differentiator: gold fact 'dried herbs bloom in fat early; fresh herbs finish' \u2014 both sequence dried oregano into the oil early, but only A completes the fact by noting the finished-bowl frames show fresh herb leaves in the garnish (plausible visual, uncontradicted); B describes only an unspecified 'scattered garnish'. A also carries slightly more transcript detail (dairy-free rationale, herb aside, tomato brands) with no fabricated quantities. B is marginally cleaner but covers one fewer gold fact."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "tie",
+          "a_score": 9,
+          "b_score": 9,
+          "a_gold_facts_covered": 3,
+          "b_gold_facts_covered": 3,
+          "rationale": "Both cover all three gold facts: dried oregano plus hardy herbs (oregano, marjoram, thyme, sage; restated as oregano/thyme/marjoram/savory at [02:06]-[02:11]) recommended dried; delicate herbs (parsley, basil, chives) never used dried ([01:31]-[01:38], [02:01]-[02:03]); and the loses-flavor rationale (hardy herbs' volatiles are less volatile because they grow in hot climates, so flavor sticks through drying [01:38]-[01:53]). Spot-checked citations all match the transcript for both. Both correctly flag the 'treble' ASR garble (plausibly chervil) as uncertain rather than asserting it. On the garbled 'rosemary' at [01:29], B's handling is slightly more rigorous (presents both readings and notes rosemary is absent from the later restated list), while A commits to the hardy grouping but flags the garble; A's lean is defensible. Neither answer fabricates 'taste dusty' language absent from the transcript, and both correctly note the frames add no readable herb-label evidence. Quality and correctness are effectively equal: tie."
+        }
+      ]
+    },
+    {
+      "per_question": [
+        {
+          "question_id": "q_coverage",
+          "winner": "A",
+          "a_score": 9,
+          "b_score": 8,
+          "a_gold_facts_covered": 5,
+          "b_gold_facts_covered": 4,
+          "rationale": "Both are accurate and densely cited with no citation errors found in spot-checks (A: [01:21],[03:46],[04:31],[05:44],[02:51],[08:23] all verified; B: [02:33],[03:53]-[04:00],[03:22],[06:25],[08:58] all verified). Both cover: whole canned tomatoes crushed with a pastry cutter (crushed/hand-blender alternatives), olive-oil+garlic+pepper-flake base with dried oregano added early, bread as the no-dairy creaminess trick with the gazpacho analogy, blend from slow to fast, taste at the end, 10-12 min simmer, dairy-free = cleaner tomato flavor. Gold facts 'butter+onion' and 'adjust acidity/sweetness' are not in this transcript (only olive oil/garlic and tasting), so both were credited with the transcript-consistent versions equally. The differentiator is gold fact 3: A's coverage answer includes the hardy-dried vs delicate-fresh herb tip plus a plausible fresh-herb-garnish frame claim ([08:33]/[08:55]), covering both halves; B's coverage answer only shows dried oregano going in early and never mentions the dried-vs-fresh distinction or a fresh-herb finish. A is also marginally more complete (tomato-brand tip with correct [02:41]/[02:49] cites). B's honest note that no on-screen ratios exist is good but does not offset the missing herb fact."
+        },
+        {
+          "question_id": "q_targeted",
+          "winner": "B",
+          "a_score": 8,
+          "b_score": 9,
+          "a_gold_facts_covered": 3,
+          "b_gold_facts_covered": 3,
+          "rationale": "Both cover all three gold facts with verified citations: recommends dried oregano and hardy herbs (oregano, marjoram, thyme, sage [01:24]-[01:29]; restated with savory [02:06]-[02:11]); says delicate herbs (parsley, basil, chives) don't do well dried and he'd never use them dried ([01:31]-[01:38],[02:01]-[02:03]); explains via volatiles that hardy herbs' aromas are less volatile because of hot climates so flavors survive drying ([01:38]-[01:53]). Both correctly flag 'treble' as a transcription garble (plausibly chervil). The differentiator is the garbled 'rosemary' at [01:29], which sits ambiguously between the two lists: A asserts its placement groups it with the dries-well herbs (with a garble flag), while B lays out both readings, notes the more natural hardy-group reading, AND observes that rosemary is absent from Kenji's later restated 'would definitely use' list ([02:06]-[02:11]) - a sharper, better-calibrated treatment of genuinely ambiguous evidence. B's answer is also organized more directly around the question's recommend/avoid structure. A's extra frame-survey paragraph adds honesty but no herb evidence. Neither answer contains an unsupported claim."
+        }
+      ]
+    }
+  ]
+}

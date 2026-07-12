@@ -1,0 +1,79 @@
+{
+  "repeat_grades": [
+    [
+      [
+        8,
+        9
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    [
+      [
+        8,
+        9
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    [
+      [
+        8,
+        9
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        8,
+        9
+      ]
+    ]
+  ],
+  "per_question_spread": "q1: A 8/8/8 B 9/9/9; q2: A 6/6/7 B 9/9/9; q3: A 8/8/8 B 9/9/9 (max spread 1 point)",
+  "winner_unanimity": "B (evidence answers) on all 3 questions in all 3 repeats",
+  "leak_probe": {
+    "guess_a": "ctlAns = control pipeline (100 uniformly-sampled frames + full raw ASR transcript). Verified, not just guessed: its quotes are verbatim from the raw ASR track video.en-orig.vtt (\"7,000 mA battery\" at [00:19], \"6.8-in super bright OLED\", opener cited [00:05] matching ASR cue timing), and its on-screen citations (00:13, 01:29+01:31, 04:20, 05:20, 05:49, 06:47, 10:07, 11:09, 11:15) are spread near-uniformly across the video and do not land on the evidence-retrieval frame grid.",
+    "guess_b": "evAns = question-scoped retrieved-evidence pipeline. Verified against battery/c347oYQO57A/evidence/*: every on-screen citation lands exactly on a retrieval frame filename (t00m10s, t00m37s, t04m46s, t06m53s, t07m15s, t08m30s, t09m20s, t10m10s, t10m35s, t11m24s, t12m39s, t13m04s), its transcript quotes/timestamps are verbatim from the evidence report's cleaned per-line transcript (\"[00:02] So this is peak slab phone?\", \"[00:19] ... 7,050mAh battery\"), and its q3 meta-note matches the q3 frame subset exactly.",
+    "confidence": "high",
+    "tells": [
+      "LABEL LEAK: the fixture keys themselves, 'ctlAns'/'evAns', are transparent abbreviations of control/evidence; the blinding is nominal only.",
+      "ARTIFACT CO-LOCATION LEAK: the fixture sits in the same scratchpad tree as the unblinded run artifacts (battery/c347oYQO57A/evidence/*/manifest.json, report.txt, frames/*.jpg, control/frames, control/download/*.vtt), so any judge with filesystem access can reconstruct identity exactly, as done here.",
+      "PIPELINE SELF-REFERENCE (evAns q3): 'the frames selected for this question show the phone itself [06:53] but do not include an image of the Hasselblad' names per-question frame selection, an architecture only the retrieval pipeline has; it also matches the real q3 frame set (9 frames, no t08m30s Hasselblad shot).",
+      "PIPELINE SELF-REFERENCE (ctlAns q3): '(Note: the transcript slightly garbles whether he says \"owned\" or \"own\" ...)' names a raw transcript as its input; 'garbles' implies unclean ASR, which only the control consumed.",
+      "CROSS-QUESTION REFERENCES (ctlAns q1): '(full spec list in Q2)' and '(details in Q3)' prove all three answers were generated in one shared context over full material; a per-question retrieval run cannot reference sibling answers. evAns has zero cross-references.",
+      "CITATION-GRID FINGERPRINT: evAns visual citations sit exactly on the retrieval grid (chapter-start frames at XX:10 plus deictic-cue frames: 00:10, 00:37, 04:46, 06:53, 07:15, 08:30, 09:20, 10:10, 10:35, 11:24, 12:39, 13:04 = tXXmYYs.jpg filenames). ctlAns visual citations are off-grid and near-uniformly dense (00:13, 01:29 and 01:31 only 2s apart, 04:20, 05:20, 05:49, 06:47, 10:07, 11:09, 11:15), consistent with a ~6s uniform 100-frame sample; two distinct visuals 2s apart are impossible under the sparse evidence set.",
+      "TRANSCRIPT-VARIANT FINGERPRINT: ctlAns reports the intro battery as '7,000 mA' [00:19] and reconciles it against 7,050 at [04:04]; the raw ASR track (video.en-orig.vtt) literally reads '7,000 mA battery' while the cleaned captions and the evidence report read '7,050mAh'. Only the raw-transcript pipeline can even see the 7,000 token, so the presence of a 7,000-vs-7,050 'reconciliation' identifies control; evAns says '7,050 in both mentions, no conflicts', identifying the cleaned evidence transcript.",
+      "VERBATIM UNIT ARTIFACTS: ctlAns q1 copies ASR spellings ('6.8-in super bright OLED', '7,000 mA'); evAns copies cleaned-caption spellings ('6.8-inch', '7,050mAh').",
+      "SYSTEMATIC TIMESTAMP OFFSETS: same quotes cited with 1-3s different anchors (opener [00:05] ctl vs [00:02] ev; 'never replace' [09:26-09:33] ctl vs [09:28-09:30] ev; HTC Thunderbolt [03:21] vs [03:20]; 'battle against physics' [06:38-06:44] vs [06:37-06:40]) because ASR cue segmentation differs from the evidence report's per-line timestamps. Offsets cluster by answer set, enabling blind classification.",
+      "QUESTION-ALIGNED VISUAL DETAIL ASYMMETRY: evAns reads the '200 MP F/1.5 MAIN CAMERA' caption card at [07:15] (a targeted retrieval frame) and notes f/1.5 is never spoken; ctlAns explicitly states aperture values are 'not in this evidence'. Conversely ctlAns surfaces broad off-question visuals the sparse evidence set never shows (battery settings screen [04:20], water-jet IP chamber [05:20], 17-iPhone grid [06:47], Oppo press release with readable 'Jul 22, 2025' date [11:09], full accessory kit [11:15]). Breadth-vs-alignment of visual inventory separates the pipelines.",
+      "STATE-TRACKING ON RETRIEVAL FRAMES (evAns q1): 'at [04:46] only GREAT DISPLAY is checked... by [10:35] all five boxes checked' cites exactly t04m46s.jpg and t10m35s.jpg; ctlAns instead pins the checklist to [04:38], the spoken 'Box checked' anchor, i.e. speech-anchored visual citation typical of transcript-led control.",
+      "TEMPLATED CONFLICT-AUDIT LINES (evAns): q2 ends 'No conflicts between moments' and q3 'No conflicting statements in the evidence: every relevant moment supports...'; the 'moments'/'evidence' audit phrasing mirrors the evidence-report prompt vocabulary and appears as a per-answer closing template; ctlAns embeds reconciliation inline instead.",
+      "FORMATTING FINGERPRINTS (clustering tells): ctlAns uses double quotes for all spoken quotes, '3X/10X' capital X, spaced units ('7,050 mAh', '200 MP', '100 W'), section style 'OVERVIEW:' first then numbered '1)...15)' and 'OVERALL ARGUMENT' last; evAns uses single quotes, lowercase '3x/10x', unspaced units ('7,050mAh', '200MP', '100W'), leads with 'OVERALL ARGUMENT' then '1.-14.' dot-numbered segments.",
+      "FALSE-FRIEND CAUTION: the word 'evidence' alone is NOT a discriminator; ctlAns also says 'in this evidence' / 'the figure the primary evidence supports' (q2). Both prompts apparently call their inputs evidence, so a judge keying on that word alone would misclassify; the reliable tells are the frame-grid match, transcript-variant artifacts, per-question frame meta-notes, and cross-question references."
+    ]
+  },
+  "defects_found": [
+    "transcript-variant mismatch: control answering agent consumed raw ASR (video.en-orig.vtt) while judges grade against cleaned captions - control penalized for a number its input genuinely contained",
+    "blinding leaks: fixture key names, filesystem co-location with unblinded artifacts, cross-question references in control answers, citation-grid fingerprints"
+  ],
+  "confirmatory_mitigations": [
+    "single cleaned caption track for both pipelines AND judges",
+    "neutral randomized pipeline_a/pipeline_b keys per video",
+    "isolated fixture directory; judges instructed to read only the two named files",
+    "answering agents instructed: each answer self-contained, no cross-question references"
+  ]
+}
