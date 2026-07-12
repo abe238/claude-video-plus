@@ -1,14 +1,13 @@
 ---
 name: watch
-version: "0.3.0"
 description: Watch a video (URL or local path). Downloads with yt-dlp, extracts auto-scaled frames with ffmpeg, pulls the transcript from captions (or Whisper API fallback), and hands the result to Claude so it can answer questions about what's in the video. With a question, evidence mode retrieves only the relevant chapters, numeric facts, and on-screen moments instead of sampling the whole timeline.
-argument-hint: "<video-url-or-path> [question]"
 allowed-tools: Bash, Read, AskUserQuestion
-homepage: https://abe238.github.io/claude-video-plus/
-repository: https://github.com/abe238/claude-video-plus
-author: abe238
 license: MIT
-user-invocable: true
+metadata:
+  version: "0.3.0"
+  homepage: https://abe238.github.io/claude-video-plus/
+  repository: https://github.com/abe238/claude-video-plus
+  author: abe238
 ---
 
 # /watch

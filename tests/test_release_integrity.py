@@ -14,7 +14,7 @@ def _json(path):
 
 def _skill_version():
     text = (ROOT / "skills/watch/SKILL.md").read_text(encoding="utf-8")
-    return re.search(r'^version: ["\']?([^"\'\n]+)', text, re.MULTILINE).group(1)
+    return re.search(r'^\s*version: ["\']?([^"\'\n]+)', text, re.MULTILINE).group(1)
 
 
 def test_release_versions_and_identity_are_canonical():

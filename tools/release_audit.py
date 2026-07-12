@@ -23,7 +23,7 @@ def run(command: list[str]) -> dict:
 
 def versions() -> dict:
     skill = (ROOT / "skills/watch/SKILL.md").read_text(encoding="utf-8")
-    skill_version = re.search(r'^version: ["\']?([^"\'\n]+)', skill, re.M).group(1)
+    skill_version = re.search(r'^\s*version: ["\']?([^"\'\n]+)', skill, re.M).group(1)
     claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["version"]
     codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())["version"]
     return {"skill": skill_version, "claude": claude, "codex": codex, "coherent": len({skill_version, claude, codex}) == 1}

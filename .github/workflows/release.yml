@@ -34,7 +34,7 @@ jobs:
           from pathlib import Path
           import re
           text = Path('skills/watch/SKILL.md').read_text(encoding='utf-8')
-          print(re.search(r'^version: ["'\'']?([^"'\'']+)', text, re.MULTILINE).group(1))
+          print(re.search(r'^\s*version: ["'\'']?([^"'\'']+)', text, re.MULTILINE).group(1))
           PY
           )"
           python -m pytest -q
