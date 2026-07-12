@@ -1,0 +1,12 @@
+video,mode,wall_s,exit
+PqtggjVAi8M,transcript,10.5,0
+PqtggjVAi8M,efficient,18.8,0
+PqtggjVAi8M,balanced,33.7,0
+PqtggjVAi8M,evidence,18.2,0
+Q10_srZ-pbs,transcript,11.2,0
+Q10_srZ-pbs,efficient,19.3,0
+Q10_srZ-pbs,balanced,32.1,0
+Q10_srZ-pbs,evidence,18.8,0
+preflight,check_ms_median,29,0
+preflight,check_ms_p95,31,0
+DONE

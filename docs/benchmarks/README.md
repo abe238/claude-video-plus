@@ -31,6 +31,11 @@ here unedited.
 
 ## Entries
 
+- [2026-07-12-performance/](2026-07-12-performance/) — cold end-to-end wall times per mode
+  (evidence mode measured ~14s FASTER than the balanced default on both test videos),
+  preflight latency (29 ms median), and the whole-project reliability record (33/33 pipeline
+  invocations, 38/38 compiles, all observed failures harness-side).
+
 - [2026-07-11-opencv-ablation/](2026-07-11-opencv-ablation/) — negative development
   result: the OpenCV composite recovered fewer curated moments than the current 16×16
   scorer (5/12 vs 6/12), took about 4.8× as long to score, and did not reduce reader

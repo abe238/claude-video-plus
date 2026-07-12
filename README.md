@@ -55,7 +55,7 @@ Everything else — the four original detail modes, focused `--start`/`--end` ra
 Direct answers, because you don't have time to discover these yourself:
 
 - **Evidence mode needs a question.** Without `--question`, the standard non-evidence path runs. Evidence mode is opt-in per invocation; behavioral conformance with the frozen upstream Control remains a v1.0 release gate.
-- **It can take slightly longer end-to-end.** Evidence compilation adds ~1.5–2s after download, and the reader is instructed to mine frames more carefully. You're trading a little wall time for a lot of tokens and (measured) better answers.
+- **It's actually faster cold than the default.** Measured at v1.0.2: evidence mode runs ~14s faster end-to-end than `balanced` (fewer frames to extract outweighs the ~2s compile), on par with `efficient`. Only `transcript` mode is quicker. Numbers in [docs/benchmarks/2026-07-12-performance/](docs/benchmarks/2026-07-12-performance/).
 - **URL sources with captions only, today.** Local files and caption-less videos automatically fall back to the original `balanced` mode — you lose nothing, but you also gain nothing there yet.
 - **Videos under 9 minutes use the original pipeline automatically.** The development battery showed evidence mode loses on short videos (they're already cheap to read in full), so the router now sends them to the original modes without you doing anything.
 - **Coverage/summary questions keep the full transcript by design** (top-k retrieval on a summary question is how you miss stories). Savings there come from smarter frames and transcript dedup (−60%), not retrieval; the big cuts (−77/79%) are on targeted questions.

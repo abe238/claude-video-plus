@@ -216,7 +216,7 @@
     <div class="stats up d5">
       <div class="stat tok"><b>50,941 → 10,555</b><span>pieces of text and images sent to the AI on the biggest saving</span></div>
       <div class="stat win"><b>8.33 → 9.33</b><span>answer score on that question, graded out of 10</span></div>
-      <div class="stat"><b>about +2 sec</b><span>extra time to choose the useful parts after download</span></div>
+      <div class="stat win"><b>~14 sec faster</b><span>cold end-to-end vs the standard mode — fewer screenshots to extract</span></div>
       <div class="stat win"><b>5 videos · 10 questions</b><span>sealed confirmation run: same quality, 56% less to read</span></div>
     </div>
     <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.1">1.0.1</a> is the current stable public release. It keeps API keys out of agent conversations and treats every video, caption, transcript, and frame as untrusted evidence. The full research program has also run, including a development battery and a one-time sealed confirmation run.</p>
@@ -307,7 +307,7 @@
       <li><b>You need to ask a question.</b> Without one, /watch runs the original method, unchanged. Evidence mode is pure opt-in.</li>
       <li><b>When anything goes wrong, it reverts by itself.</b> No captions, a local file, or any internal error → the original pipeline runs and you get the original result. There is no failure mode where you get less than the original.</li>
       <li><b>Short videos are handled for you.</b> Development testing showed evidence mode is not worth it under ~9 minutes, so videos shorter than that now use the original method automatically. You don't have to think about it.</li>
-      <li><b>It adds about two seconds after downloading.</b> The AI reads much less, but choosing the useful parts takes a little time.</li>
+      <li><b>It's actually faster than the default, not slower.</b> Measured: about 14 seconds faster end-to-end than the standard mode on both test videos, because extracting a handful of chosen screenshots costs less than extracting 100. Only transcript-only mode is quicker.</li>
       <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video; summary savings come from smarter screenshot selection instead.</li>
       <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required — and the fallback still catches the rest.</li>
       <li><b>The judges are AIs, and the sample is honest but modest.</b> Ten sealed questions plus twelve development questions, graded by repeatability-checked AI judges against a pre-frozen answer key written by two independent annotators (owner-approved in place of two humans). Real measurements you can audit — not a large-scale trial.</li>
