@@ -28,7 +28,7 @@ DEFAULT_MAX_BYTES = 64 * 1024 * 1024
 LOCK_STALE_SECONDS = 30.0
 LOCK_WAIT_SECONDS = 5.0
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
-_SENSITIVE_KINDS = {"transcript", "ocr", "embedding", "scout_index"}
+_SENSITIVE_KINDS = {"transcript", "ocr", "embedding", "scout", "scout_index"}
 _MEDIA_KINDS = {"audio", "video", "image", "frame", "frames", "crop", "media", "source_media"}
 _SECRET_KEY = re.compile(
     r"(?:api[_-]?key|authorization|cookie|secret|password|access[_-]?token|refresh[_-]?token|bearer[_-]?token)",

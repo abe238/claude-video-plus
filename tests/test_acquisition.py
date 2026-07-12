@@ -57,6 +57,18 @@ def test_default_success_is_first_and_does_not_retry(tmp_path: Path):
     assert result.attempts[0].outcome == "success"
 
 
+def test_stale_media_cannot_make_failed_attempt_succeed(tmp_path: Path):
+    (tmp_path / "video.mp4").write_bytes(b"stale partial")
+
+    def runner(cmd, **_kwargs):
+        return completed(cmd, code=1, stderr="private video; login required")
+
+    result = acquire(tmp_path, runner)
+    assert result.state == "fatal"
+    assert result.attempts[0].outcome == "failed"
+    assert not (tmp_path / "video.mp4").exists()
+
+
 def test_eligible_retry_ladder_is_bounded_and_itag18_is_last(tmp_path: Path):
     calls: list[list[str]] = []
     failures = [
@@ -134,6 +146,14 @@ def test_cookie_browser_is_explicit_and_attempt_details_are_redacted(tmp_path: P
     assert "Bearer-private" not in serialized
     assert "token=secret" not in serialized
     assert "<redacted>" in serialized
+
+
+def test_attempt_details_redact_private_absolute_paths():
+    text = "cookies at /Users/alice/Library/Chrome/Cookies and C:\\Users\\alice\\Cookies.db"
+    redacted = acquisition.redact_text(text)
+    assert "/Users/alice" not in redacted
+    assert "C:\\Users\\alice" not in redacted
+    assert "<redacted-path>" in redacted
 
 
 def test_language_order_controls_yt_dlp_and_subtitle_selection(tmp_path: Path):

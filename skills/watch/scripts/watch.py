@@ -23,6 +23,27 @@ from question import WatchRequest  # noqa: E402
 from transcription import transcribe as transcribe_pipeline, transcription_diagnostics  # noqa: E402
 
 
+def _portable_evidence_files(summary: dict, work: Path) -> dict[str, Path]:
+    """Create media-free, machine-independent manifest/report copies."""
+    import json
+
+    portable_dir = work / "portable-export"
+    portable_dir.mkdir(parents=True, exist_ok=True)
+    manifest = json.loads(Path(summary["manifest"]).read_text(encoding="utf-8"))
+    for item in manifest.get("evidence", []):
+        if item.get("frame"):
+            item["frame"] = f"frames/{Path(item['frame']).name}"
+            item["portable_media_omitted"] = True
+    manifest_path = portable_dir / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    report = Path(summary["report"]).read_text(encoding="utf-8")
+    report = report.replace(str(work / "evidence" / "frames") + "/", "frames/")
+    report = report.replace(str(work), ".")
+    report_path = portable_dir / "report.txt"
+    report_path.write_text(report, encoding="utf-8")
+    return {"manifest.json": manifest_path, "report.txt": report_path}
+
+
 def run_evidence(args) -> int:
     """--detail evidence: question-aware evidence compilation (chapter roll-up,
     numeric guard, facet sufficiency, deictic/guard frames). Raises on any
@@ -67,9 +88,9 @@ def run_evidence(args) -> int:
     if args.export_bundle:
         from portable import export_bundle
         export_bundle(
-            {"manifest.json": Path(summary["manifest"]), "report.txt": Path(summary["report"])},
+            _portable_evidence_files(summary, work),
             args.export_bundle,
-            tool_versions={"watch": "0.3.0"}, schema_versions={"evidence": 1},
+            tool_versions={"watch": "0.3.0-rc.1"}, schema_versions={"evidence": 1},
             evidence_budget={"text_chars": args.text_budget, "frames": args.max_frames},
             completeness_state="complete", provenance={"source_identity": dl.get("source_identity", "unknown")},
         )
@@ -360,7 +381,7 @@ def main() -> int:
                 video_path, work / "transcription",
                 start_seconds=start_sec, end_seconds=end_sec,
                 adapter=selected_adapter,
-                allow_remote=args.allow_remote_transcription,
+                allow_remote=True if args.allow_remote_transcription else None,
             )
             if transcript_result.usable:
                 transcript_segments = [segment.to_dict() for segment in transcript_result.segments]

@@ -20,7 +20,7 @@ def _skill_version():
 def test_release_versions_and_identity_are_canonical():
     claude = _json(".claude-plugin/plugin.json")
     codex = _json(".codex-plugin/plugin.json")
-    assert {_skill_version(), claude["version"], codex["version"]} == {"0.3.0"}
+    assert {_skill_version(), claude["version"], codex["version"]} == {"0.3.0-rc.1"}
     assert claude["repository"] == codex["repository"] == "https://github.com/abe238/claude-video-plus"
     assert claude["homepage"] == codex["homepage"] == "https://abe238.github.io/claude-video-plus/"
     assert claude["license"] == codex["license"] == "MIT"
@@ -45,10 +45,11 @@ def test_ci_and_release_workflows_cover_push_and_artifact():
     assert "python -m pytest -q" in tests
     assert "build-skill.sh" in release
     assert "watch.skill" in release
+    assert "prerelease: ${{ contains(github.ref_name, '-') }}" in release
 
 
 def test_changelog_distinguishes_unreleased_derivative_from_upstream():
     text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "## [0.3.0] — Unreleased" in text
-    assert "There is no `v0.3.0` tag or release artifact yet" in text
+    assert "## [0.3.0-rc.1] — Unreleased" in text
+    assert "There is no `v0.3.0-rc.1` tag or release artifact yet" in text
     assert "## [0.2.0] — 2026-06-30 (upstream)" in text

@@ -219,6 +219,8 @@ def classify_failure(stderr: str, exit_code: int) -> FailureClass | None:
 
 _AUTH_RE = re.compile(r"(?i)(authorization|cookie|set-cookie)(\s*[:=]\s*)\S+")
 _URL_QUERY_RE = re.compile(r"https?://[^\s]+")
+_POSIX_PATH_RE = re.compile(r"(?<!:)(?<!\w)/(?:[^\s'\"/]+/)+[^\s'\"]*")
+_WINDOWS_PATH_RE = re.compile(r"(?i)\b[A-Z]:\\(?:[^\s'\"\\]+\\)+[^\s'\"]*")
 
 
 def redact_text(text: str, secrets: tuple[str, ...] = ()) -> str:
@@ -237,7 +239,19 @@ def redact_text(text: str, secrets: tuple[str, ...] = ()) -> str:
         except ValueError:
             return "<redacted-url>"
 
-    return _URL_QUERY_RE.sub(clean_url, redacted)
+    redacted = _URL_QUERY_RE.sub(clean_url, redacted)
+    redacted = _WINDOWS_PATH_RE.sub("<redacted-path>", redacted)
+    return _POSIX_PATH_RE.sub("<redacted-path>", redacted)
+
+
+def _clear_attempt_artifacts(out_dir: Path) -> None:
+    """Remove only generated files so stale partial output cannot signal success."""
+    for path in out_dir.glob("video*"):
+        if path.is_file() or path.is_symlink():
+            try:
+                path.unlink()
+            except OSError:
+                pass
 
 
 def _compact_detail(stderr: str, secrets: tuple[str, ...]) -> str | None:
@@ -327,6 +341,7 @@ def acquire_url(
     for index, (strategy, client, final_format) in enumerate(strategies):
         if index and last_failure not in RETRYABLE_FAILURES:
             break
+        _clear_attempt_artifacts(out_dir)
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=captions_only,
             languages=languages, cookie_spec=cookie_spec, player_client=client,

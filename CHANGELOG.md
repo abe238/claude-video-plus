@@ -2,11 +2,11 @@
 
 All notable changes to `/watch` are documented here.
 
-## [0.3.0] — Unreleased
+## [0.3.0-rc.1] — Unreleased
 
 Pending maintenance release under the `abe238/claude-video-plus` derivative identity
 (fork of Brad Bonanno's `bradautomates/claude-video`; upstream history, license, and
-attribution preserved). There is no `v0.3.0` tag or release artifact yet; the release
+attribution preserved). There is no `v0.3.0-rc.1` tag or release artifact yet; the release
 workflow will refuse a tag whose value disagrees with the package manifests.
 
 ### Added
@@ -58,7 +58,7 @@ workflow will refuse a tag whose value disagrees with the package manifests.
 ## [0.2.0] — 2026-06-30 (upstream)
 
 Last release from the preserved `bradautomates/claude-video` history before the
-derivative `0.3.0` work. Added the self-contained `skills/watch/` layout, detail modes,
+derivative `0.3.0-rc.1` work. Added the self-contained `skills/watch/` layout, detail modes,
 frame deduplication, timestamp cues, Whisper chunking, and the cross-host manifests.
 The tag points to upstream commit `83da59f`.
 
