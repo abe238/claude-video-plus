@@ -477,6 +477,17 @@ def _terminate_process_group(process: subprocess.Popen[bytes], signal_number: si
             process.kill()
         else:
             process.terminate()
+    except PermissionError:
+        # Some hosted macOS runners refuse killpg after the leader exits. Kill
+        # same-user members individually using the recorded process-group id.
+        result = subprocess.run(["ps", "-axo", "pid=,pgid="], capture_output=True, text=True)
+        for line in result.stdout.splitlines():
+            try:
+                pid, group = (int(value) for value in line.split())
+                if group == process.pid and pid != os.getpid():
+                    os.kill(pid, signal_number)
+            except (ValueError, ProcessLookupError, PermissionError):
+                continue
     except ProcessLookupError:
         pass
 
@@ -486,7 +497,7 @@ def _process_group_exists(process_group: int) -> bool:
         return False
     try:
         os.killpg(process_group, 0)
-    except ProcessLookupError:
+    except (ProcessLookupError, PermissionError):
         return False
     return True
 
