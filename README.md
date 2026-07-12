@@ -5,7 +5,7 @@
 > [!NOTE]
 > This repository is a derivative of [bradautomates/claude-video](https://github.com/bradautomates/claude-video), created by Brad Bonanno and distributed under the MIT License. The full upstream Git history and license are preserved. We are grateful to Brad for designing and openly sharing the reliable foundation this work builds on — see [Gratitude](#gratitude-and-attribution).
 
-**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
+**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **What shipped and what remains:** [v1.0 release handoff](docs/V1.0-RELEASE-HANDOFF.md)
 
 > [!IMPORTANT]
 > **[`1.0.0`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0) is the first stable release.** It passes 335 deterministic local tests, the hosted macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` lifecycle, and bundle verification. Performance claims remain deliberately narrow: the published 60–79% savings come from one video and three questions, with raw evidence available for inspection. See the [status page](docs/V1-STATUS.md) and [benchmark data](docs/benchmarks/).
