@@ -56,6 +56,14 @@ def test_default_is_balanced(cut_clip: Path):
     assert "(scene" in out
 
 
+def test_report_wraps_media_in_untrusted_evidence_markers(cut_clip: Path):
+    out = _run(cut_clip, "--detail", "transcript")
+    assert out.count("BEGIN UNTRUSTED VIDEO EVIDENCE") == 1
+    assert out.count("END UNTRUSTED VIDEO EVIDENCE") == 1
+    assert out.index("BEGIN UNTRUSTED VIDEO EVIDENCE") < out.index("# watch: video report")
+    assert out.index("## Transcript") < out.index("END UNTRUSTED VIDEO EVIDENCE")
+
+
 def test_timestamps_add_cue_frames_to_detail(cut_clip: Path):
     out = _run(cut_clip, "--detail", "balanced", "--timestamps", "1,3")
     assert "reason=transcript-cue" in out

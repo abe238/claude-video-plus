@@ -10,7 +10,7 @@
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
 > [!IMPORTANT]
-> **[`1.0.0`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0) is the first stable release.** It passes 335 deterministic local tests, the hosted macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` lifecycle, and bundle verification. Performance claims remain deliberately narrow: the published 60–79% savings come from one video and three questions, with raw evidence available for inspection. See the [status page](docs/V1-STATUS.md) and [benchmark data](docs/benchmarks/).
+> **[`1.0.1`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.1) is the current stable release.** It removes agent-assisted secret handling, marks all media-derived content as untrusted evidence, passes 337 deterministic local tests, the hosted macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` lifecycle, and bundle verification. See the [status page](docs/V1-STATUS.md) and [benchmark data](docs/benchmarks/).
 
 ## Install
 
@@ -123,7 +123,7 @@ Frame budgets, dedup behavior, and focused-mode details are documented in [skill
 |---------|---------|
 | **Claude Code** | `/plugin marketplace add abe238/claude-video-plus` then `/plugin install watch@claude-video-plus` |
 | **Codex, Cursor, Copilot, Gemini CLI, +50 more** | `npx skills add abe238/claude-video-plus -g` |
-| **claude.ai** (web) | Download [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill) → Settings → Capabilities → Skills → `+` |
+| **claude.ai** (web) | Download [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.1/watch.skill) → Settings → Capabilities → Skills → `+` |
 | **Manual / dev** | `git clone https://github.com/abe238/claude-video-plus.git && ln -s "$(pwd)/claude-video-plus/skills/watch" ~/.claude/skills/watch` |
 
 Update later with `/plugin update watch@claude-video-plus` or `npx skills update watch -g`.

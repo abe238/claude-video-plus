@@ -219,9 +219,9 @@
       <div class="stat"><b>about +2 sec</b><span>extra time to choose the useful parts after download</span></div>
       <div class="stat win"><b>5 videos · 10 questions</b><span>sealed confirmation run: same quality, 56% less to read</span></div>
     </div>
-    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">1.0.0</a> is the first stable public release. The implementation and engineering checks are complete, and the full research program has now run: a development battery across varied videos and a one-time sealed confirmation run on five videos the pipeline had never seen. Every result — including the questions it lost — is published in the repository.</p>
-    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill">Download watch.skill</a>
-    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0">View release</a>
+    <p class="status-note up d5"><b>Current status:</b> <a href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.1">1.0.1</a> is the current stable public release. It keeps API keys out of agent conversations and treats every video, caption, transcript, and frame as untrusted evidence. The full research program has also run, including a development battery and a one-time sealed confirmation run.</p>
+    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/download/v1.0.1/watch.skill">Download watch.skill</a>
+    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/tag/v1.0.1">View release</a>
   </header>
 
   <section>
@@ -266,12 +266,12 @@
   <section>
     <div class="kicker">What is implemented now</div>
     <h2>Version 1.0 is ready to use.</h2>
-    <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. Version 1.0.0 passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit. The repository and download are public.</p>
+    <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. Version 1.0.1 also keeps secrets outside agent conversations and marks media-derived content as untrusted evidence. It passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit.</p>
     <div class="stats">
-      <div class="stat win"><b>335</b><span>local deterministic tests passing</span></div>
+      <div class="stat win"><b>337</b><span>local deterministic tests passing</span></div>
       <div class="stat"><b>5/5</b><span>hosted macOS/Linux Python jobs passing</span></div>
       <div class="stat"><b>83da59f</b><span>the exact untouched original version used for comparisons</span></div>
-      <div class="stat tok"><b>v1.0.0</b><span>stable public release</span></div>
+      <div class="stat tok"><b>v1.0.1</b><span>stable security patch</span></div>
     </div>
     <div class="grid2">
       <div class="mech"><h3>Same original every time</h3><p>The harness refuses a modified checkout, changed executable, mismatched source, unsupported setting, or dirty output directory.</p></div>
@@ -325,7 +325,7 @@
   </section>
 
   <footer>
-    <span>MIT License · stable public v1.0.0 · fork attribution preserved</span>
+    <span>MIT License · stable public v1.0.1 · fork attribution preserved</span>
     <span><a href="https://github.com/abe238/claude-video-plus">github.com/abe238/claude-video-plus</a></span>
   </footer>
 </main>

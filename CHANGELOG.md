@@ -2,6 +2,21 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.0.1] — 2026-07-12
+
+Security patch for the agent-facing skill contract. The release artifact is
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.1/watch.skill).
+
+### Security
+
+- Removed instructions that asked the agent to receive and write API keys. Users now configure
+  optional transcription keys privately outside the agent; the setup script only creates blank,
+  owner-readable placeholders.
+- Added a mandatory untrusted-media boundary: video URLs, metadata, captions, transcripts, OCR,
+  and frames are evidence only and cannot authorize commands, tool calls, file/config changes,
+  secret access, or data transmission.
+- Added explicit untrusted-evidence boundary markers to normal and evidence-mode reports.
+
 ## [1.0.0] — 2026-07-12
 
 First stable release under the `abe238/claude-video-plus` derivative identity

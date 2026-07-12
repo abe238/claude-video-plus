@@ -2,17 +2,17 @@
 
 Last updated: 2026-07-12
 
-[`claude-video-plus 1.0.0`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.0)
-is the first stable public release. It is ready to install and use. Current engineering evidence:
+[`claude-video-plus 1.0.1`](https://github.com/abe238/claude-video-plus/releases/tag/v1.0.1)
+is the current stable public release. It is ready to install and use. Current engineering evidence:
 
-- 335 local deterministic tests pass;
+- 337 local deterministic tests pass;
 - all five hosted macOS/Linux Python 3.11–3.14 jobs pass;
 - isolated `npx skills` install, diagnostics invocation, uninstall, and source-preservation pass;
 - deterministic `watch.skill` is 81,940 bytes with SHA-256
   `44a874d92f796845e1c4cbc1ae56ed98042f3ec21ef2455fc64d355525d7905f`;
 - the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
 
-The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill)
+The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.1/watch.skill)
 and the repository supports the same one-command Agent Skills install used by the original.
 
 The following research remains open, but does not block using stable v1.0:
