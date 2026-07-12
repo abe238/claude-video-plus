@@ -15,6 +15,7 @@ caller can fall back to the uniform control sampler.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -24,6 +25,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from transcribe import parse_vtt  # noqa: E402
+from retrieval import conflicts, lexical_rank, obligations, progressive_expand, scout_identity  # noqa: E402
+from semantic import hashed_local_rank, remote_rank, uncertainty  # noqa: E402
 
 SPAN_SECONDS = 30.0
 PAUSE_GAP_SECONDS = 2.0
@@ -428,7 +431,11 @@ def _coverage(segments: list[dict], chapters: list[dict], duration: float,
 def compile_evidence(vtt_path: str, video_path: str, info_path: str,
                      question: str, out_dir: Path, policy: str = "auto",
                      max_frames: int | None = None,
-                     text_budget: int = DEFAULT_TEXT_BUDGET) -> dict:
+                     text_budget: int = DEFAULT_TEXT_BUDGET,
+                     semantic_backend: str = "off",
+                     semantic_endpoint: str | None = None,
+                     semantic_model: str = "default",
+                     allow_remote_semantic: bool = False) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -440,6 +447,21 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
     chapters = load_chapters(info, segments, duration)
     attach_chapters(segments, chapters)
     spans = build_spans(segments, chapters)
+    lexical = lexical_rank(question, segments, limit=16)
+    required_obligations = obligations(question)
+    expanded = progressive_expand(question, lexical, segments,
+                                  {row["index"] for row in lexical[:8]})
+    semantic_receipt = None
+    semantic_scores: list[float] = []
+    if semantic_backend != "off" and uncertainty(lexical, required_obligations):
+        texts = [str(row["segment"].get("text", "")) for row in lexical]
+        if semantic_backend == "local":
+            semantic_scores, semantic_receipt = hashed_local_rank(question, texts)
+        elif semantic_backend == "remote" and semantic_endpoint:
+            semantic_scores, semantic_receipt = remote_rank(
+                semantic_endpoint, semantic_model, question, texts,
+                authorized=allow_remote_semantic,
+            )
 
     policy = resolve_policy(question, policy)
     if max_frames is None:
@@ -478,6 +500,9 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
             })
     evidence.extend(frame_entries)
 
+    source_identity = hashlib.sha256(
+        str(info.get("id") or info.get("webpage_url") or video_path).encode()
+    ).hexdigest()
     manifest = {
         "schema_version": 1,
         "policy": policy,
@@ -490,6 +515,25 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
         "evidence": evidence,
         "reader_cost": {"transcript_chars": transcript_chars,
                         "frames": len(frame_entries)},
+        "retrieval": {
+            "engine": "lexical-v1",
+            "obligations": required_obligations,
+            "ranked_segments": [
+                {"index": row["index"], "score": row["score"],
+                 "start": row["segment"].get("start"), "end": row["segment"].get("end")}
+                for row in lexical
+            ],
+            "conflicts": conflicts([row["segment"] for row in lexical]),
+            "scout_identity": scout_identity(source_identity, segments),
+            "progressive_verification": expanded,
+        },
+        "semantic": {
+            "requested": semantic_backend,
+            "triggered": semantic_receipt is not None,
+            "scores": semantic_scores,
+            "receipt": semantic_receipt.__dict__ if semantic_receipt else None,
+        },
+        "vision": {"backend": "ffmpeg-stdlib-v1", "opencv_included": False},
     }
     (out_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2), encoding="utf-8")
@@ -534,6 +578,10 @@ def main(argv: list[str] | None = None) -> int:
                         default="auto")
     parser.add_argument("--max-frames", type=int, default=None)
     parser.add_argument("--text-budget", type=int, default=DEFAULT_TEXT_BUDGET)
+    parser.add_argument("--semantic", choices=["off", "local", "remote"], default="off")
+    parser.add_argument("--semantic-endpoint")
+    parser.add_argument("--semantic-model", default="default")
+    parser.add_argument("--allow-remote-semantic", action="store_true")
     args = parser.parse_args(argv)
 
     try:
@@ -541,6 +589,10 @@ def main(argv: list[str] | None = None) -> int:
             args.vtt, args.video, args.info, args.question, Path(args.out_dir),
             policy=args.policy, max_frames=args.max_frames,
             text_budget=args.text_budget,
+            semantic_backend=args.semantic,
+            semantic_endpoint=args.semantic_endpoint,
+            semantic_model=args.semantic_model,
+            allow_remote_semantic=args.allow_remote_semantic,
         )
     except Exception as exc:  # fail-open: caller falls back to control sampler
         print(f"evidence: fail-open ({exc})", file=sys.stderr)

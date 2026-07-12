@@ -20,6 +20,7 @@ from download import download, fetch_captions, is_url  # noqa: E402
 from frames import MAX_FPS, auto_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 from transcribe import filter_range, format_transcript, parse_vtt  # noqa: E402
 from whisper import load_api_key, transcribe_video  # noqa: E402
+from question import WatchRequest  # noqa: E402
 
 
 def run_evidence(args) -> int:
@@ -54,6 +55,11 @@ def run_evidence(args) -> int:
         args.question,
         work / "evidence",
         max_frames=args.max_frames,
+        text_budget=args.text_budget,
+        semantic_backend=args.semantic,
+        semantic_endpoint=args.semantic_endpoint,
+        semantic_model=args.semantic_model,
+        allow_remote_semantic=args.allow_remote_semantic,
     )
     print((work / "evidence" / "report.txt").read_text(encoding="utf-8"))
     print(f"\n---\n_Work dir: `{work}` — delete when done._")
@@ -65,7 +71,8 @@ def main() -> int:
         prog="watch",
         description="Download a video, extract auto-scaled frames, and surface the transcript.",
     )
-    ap.add_argument("source", help="Video URL or local file path")
+    ap.add_argument("source", nargs="?", help="Video URL or local file path")
+    ap.add_argument("--request-json", help="Versioned JSON request file; avoids shell quoting ambiguity")
     ap.add_argument("--max-frames", type=int, default=None, help="Override frame cap")
     ap.add_argument("--resolution", type=int, default=512, help="Frame width in pixels (default 512)")
     ap.add_argument("--fps", type=float, default=None, help="Override auto-fps")
@@ -84,6 +91,13 @@ def main() -> int:
         default=None,
         help="The user's question about the video; drives --detail evidence selection.",
     )
+    ap.add_argument("--text-budget", type=int, default=24000, help="Evidence transcript-character budget")
+    ap.add_argument("--semantic", choices=["off", "local", "remote"], default="off",
+                    help="Optional semantic reranking; runs only when lexical retrieval is uncertain")
+    ap.add_argument("--semantic-endpoint", help="Explicit HTTPS endpoint for remote semantic scoring")
+    ap.add_argument("--semantic-model", default="default")
+    ap.add_argument("--allow-remote-semantic", action="store_true",
+                    help="Authorize transmission to the explicitly configured semantic endpoint")
     ap.add_argument(
         "--timestamps",
         type=str,
@@ -113,6 +127,18 @@ def main() -> int:
              "frames (static screen recordings, held slides) instead of collapsing them.",
     )
     args = ap.parse_args()
+
+    if args.request_json:
+        request = WatchRequest.from_file(args.request_json)
+        if args.source and args.source != request.source:
+            raise SystemExit("source conflicts with --request-json")
+        args.source = request.source
+        args.question = request.question or args.question
+        args.detail = request.detail
+        args.text_budget = request.text_budget
+        args.max_frames = request.max_frames
+    if not args.source:
+        ap.error("source is required unless supplied by --request-json")
 
     config = get_config()
     detail = args.detail or str(config["detail"])
