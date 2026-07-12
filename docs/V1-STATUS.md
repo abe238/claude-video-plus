@@ -2,24 +2,30 @@
 
 Last updated: 2026-07-12
 
-`claude-video-plus` is usable today, but v1.0 is not finished. The current checkpoint has:
+`claude-video-plus` is usable today, and the planned v1.0 implementation is now assembled on
+`main`. It is **not release-verified yet**. The remaining work is one integrated phase:
 
-- **2 of 35 execution packets complete**;
-- **4 of 45 release requirements complete**;
-- **146 automated tests passing**;
-- **33 packets remaining** before the v1.0 release gate.
+- run focused and complete deterministic tests;
+- exercise install/update/invoke/rollback/purge/uninstall and the deterministic bundle;
+- run the development benchmarks and repair failures;
+- validate the grader, open the sealed confirmation set once, and evaluate the frozen Candidate;
+- complete the final independent audit before any tag, artifact, public visibility change, or
+  broad superiority claim.
 
 The machine-readable source of truth is
 [`docs/execution/v1/REQUIREMENTS.json`](execution/v1/REQUIREMENTS.json). The full design and
 measurement rules live in [`V1.0-MASTER-PLAN.md`](plans/V1.0-MASTER-PLAN.md). This page is the
 human-readable view; if it ever disagrees with the registry, the registry wins.
 
-## Completed
+## Implemented foundations
 
 | Step | What it means | Evidence |
 | --- | --- | --- |
 | P00 | The owner-approved plan, requirements, test rules, and independent-review process are frozen. | [Issue #3](https://github.com/abe238/claude-video-plus/issues/3) · [plan evidence](evidence/v1/L0-plan-review/) |
 | P01 | The untouched original version has a strict comparison harness that pins sources, captions, tools, settings, raw output, and failures. | [Issue #1](https://github.com/abe238/claude-video-plus/issues/1) · [Control evidence](evidence/v1/P01-control/) |
+
+P02–P32 implementation is present as integrated runtime/tooling slices. Their issues remain open
+until the consolidated verification phase supplies passing evidence and final review.
 
 ## Next: prove the comparison itself
 

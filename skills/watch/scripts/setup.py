@@ -56,6 +56,18 @@ OPENAI_API_KEY=
 # Allowed values: transcript | efficient | balanced | token-burner
 # Keep the value on its own line with no trailing comment.
 # WATCH_DETAIL=balanced
+
+# Optional local-first transcription. Native captions and same-name .vtt/.srt
+# sidecars always run before these Adapters. Nothing is installed automatically.
+# WATCH_STT_ORDER=local-http,yap,groq,openai
+# WATCH_STT_URL=http://127.0.0.1:8082
+# WATCH_STT_MODEL=Systran/faster-whisper-medium
+# WATCH_LANGUAGE=auto
+# WATCH_STT_ALLOW_REMOTE=false
+
+# Acquisition recovery remains default-first. Cookies are explicit and optional.
+# WATCH_COOKIES_BROWSER=chrome
+# WATCH_YOUTUBE_CLIENTS=tv,mweb
 """
 
 

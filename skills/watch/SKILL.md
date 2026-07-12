@@ -149,6 +149,12 @@ Optional flags:
 - `--fps F` — override auto-fps (clamped to 2 fps max)
 - `--out-dir DIR` — keep working files somewhere specific (default: an auto-generated tmp dir)
 - `--whisper groq|openai` — force a specific Whisper backend (default: prefer Groq if both keys exist)
+- `--stt auto|sidecar|local-http|yap|groq|openai` — select the normalized transcription Adapter. `auto` tries local options before cloud.
+- `--allow-remote-transcription` — explicitly authorize sending audio to Groq/OpenAI. Without this, cloud Adapters remain unavailable.
+- `--diagnostics-json` — print secret-free Adapter/config diagnostics and exit.
+- `--request-json FILE` — transport a multiline or punctuation-heavy question and evidence budget without shell ambiguity.
+- `--semantic off|local|remote` — uncertainty-triggered semantic reranking. Remote also requires `--semantic-endpoint https://… --allow-remote-semantic`.
+- `--export-bundle FILE` / `--verify-bundle FILE` / `--replay-bundle FILE --out-dir DIR` — portable checksummed evidence without source media by default.
 - `--no-whisper` — disable the Whisper fallback entirely (frames-only if no captions)
 - `--no-dedup` — keep near-duplicate frames. By default a frame-delta pass drops frames that are visually near-identical to the previous kept one (held slides, static screen recordings, paused video) so the frame budget goes to distinct content; the report's **Frames** line notes how many were dropped. Pass this only if the user needs every sampled frame (e.g. judging subtle frame-to-frame motion).
 
@@ -225,14 +231,25 @@ Behavior:
 
 ## Transcription
 
-The script gets a timestamped transcript in one of two ways:
+The normalized transcript pipeline stops at the first usable source:
 
-1. **Native captions (free, preferred).** yt-dlp pulls manual or auto-generated subtitles from the source platform if available.
-2. **Whisper API fallback.** If no captions came back (or the source is a local file), the script extracts audio (`ffmpeg -vn -ac 1 -ar 16000 -b:a 64k`, ~0.5 MB/min) and uploads it to whichever Whisper API has a key configured:
-   - **Groq** — `whisper-large-v3`. Preferred default: cheaper, faster. Get a key at console.groq.com/keys.
-   - **OpenAI** — `whisper-1`. Fallback. Get a key at platform.openai.com/api-keys.
+1. native captions;
+2. same-basename `.vtt` or `.srt` sidecar;
+3. configured loopback OpenAI-compatible server (default `127.0.0.1:8082`);
+4. detected YAP on macOS;
+5. explicitly authorized Groq, then OpenAI;
+6. frames-only fail-open result.
 
-Both keys live in `~/.config/watch/.env`. The script prefers Groq when both are set; override with `--whisper openai` to force OpenAI. Use `--no-whisper` to skip the fallback entirely.
+Set `WATCH_STT_ORDER`, `WATCH_STT_URL`, `WATCH_STT_MODEL`, and `WATCH_LANGUAGE` in
+`~/.config/watch/.env`. YAP and local servers are detected, never installed. Cloud audio is never
+sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE=true`). Focused
+requests extract only the requested range before inference, restore absolute timestamps, split
+near silence, and reuse successful owner-only chunk receipts after interruption.
+
+Evidence mode adds dependency-free lexical retrieval, exact-number/negation/before-after guards,
+bounded sufficiency expansion, conflict reporting, and verified Scout reuse. Semantic reranking is
+optional and fail-open. Vision remains FFmpeg plus standard-library Python: the measured OpenCV
+prototype lost on recall, duplication, and scoring time, so no OpenCV dependency or Adapter ships.
 
 ## Failure modes and handling
 
