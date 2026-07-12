@@ -1,0 +1,27 @@
+{
+  "artifact_type": "p02_round3_machine_receipt",
+  "schema_version": 1,
+  "generation": "Actual frozen Control and Candidate watch.py commands through run_pair with pinned observer/audit wrappers; no synthetic arm command.",
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "fixture_modes": {
+    "success_and_runtime_fallback": {
+      "case_id": "p02-r3-smoke",
+      "observed_outcome": {"exit_class":"success","failure_class":null,"fallback_order":["scene","uniform"]},
+      "candidate":{"process_calls":13,"provider_network_calls":0,"raw_stdout_sha256":"0fca99be0512d5d54576d20368d43e1b46d3c2e1061e727208b9a79eca993687","raw_stderr_sha256":"5a066bbed029c324f4436312907c891e785fe45f5ccedbfd7651ec3451cc73e5"},
+      "control":{"process_calls":13,"provider_network_calls":0,"raw_stdout_sha256":"0fca99be0512d5d54576d20368d43e1b46d3c2e1061e727208b9a79eca993687","raw_stderr_sha256":"5a066bbed029c324f4436312907c891e785fe45f5ccedbfd7651ec3451cc73e5"}
+    },
+    "ffprobe_failure": {
+      "case_id":"p02-r3-failure", "fault":"pinned ffprobe wrapper returns P02_FAILURE:ffprobe after version verification",
+      "observed_outcome":{"exit_class":"failure","failure_class":"ffprobe","fallback_order":[]},
+      "candidate":{"process_calls":3,"provider_network_calls":0,"raw_stdout_sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","raw_stderr_sha256":"7749cf4e721470bf6b43daf92e13c5b64d1798c7f702f60aa226d4f0754c81f1"},
+      "control":{"process_calls":3,"provider_network_calls":0,"raw_stdout_sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","raw_stderr_sha256":"7749cf4e721470bf6b43daf92e13c5b64d1798c7f702f60aa226d4f0754c81f1"}
+    },
+    "ffprobe_timeout": {
+      "case_id":"p02-r3-timeout", "fault":"pinned ffprobe wrapper sleeps after version verification; watch process group is terminated at one second",
+      "observed_outcome":{"exit_class":"timeout","failure_class":"timeout","fallback_order":[]},
+      "candidate":{"process_calls":3,"provider_network_calls":0,"raw_stdout_sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","raw_stderr_sha256":"fb8edff021cd9f0709c71867a9f9da59ba3dbba321df4cd045f1e4a2af68d756"},
+      "control":{"process_calls":3,"provider_network_calls":0,"raw_stdout_sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","raw_stderr_sha256":"fb8edff021cd9f0709c71867a9f9da59ba3dbba321df4cd045f1e4a2af68d756"}
+    }
+  },
+  "audit_contract": "sitecustomize records subprocess, socket.connect, and urllib.request.urlopen events. Network is structurally blocked; arbitrary subprocess and os.system are structurally refused. The receipt contains no media, secret, private path, or symlink."
+}
