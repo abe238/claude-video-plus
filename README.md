@@ -8,7 +8,7 @@
 **Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Benchmark data:** [docs/benchmarks/](docs/benchmarks/)
 
 > [!IMPORTANT]
-> **`0.3.0-rc.1` is ready to publish as a clearly labeled prerelease.** The assembled implementation passes 327 local tests, the five-job macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` install/invoke/uninstall lifecycle, deterministic bundle verification, and an independent early-publish review. The 81,952-byte `watch.skill` SHA-256 is `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`. Stable v1.0 and broad superiority claims still require the multi-video benchmark, human-validated grader, and one sealed confirmation run. See the [RC audit](docs/evidence/v1/P32-release/RC-AUDIT.md), [status checklist](docs/V1-STATUS.md), and [master plan](docs/plans/V1.0-MASTER-PLAN.md).
+> **[`0.3.0-rc.1`](https://github.com/abe238/claude-video-plus/releases/tag/v0.3.0-rc.1) is the current private prerelease.** The assembled implementation passes 327 local tests, the five-job macOS/Linux Python 3.11–3.14 matrix, an isolated `npx skills` install/invoke/uninstall lifecycle, deterministic bundle verification, and an independent early-publish review. The 81,952-byte [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill) SHA-256 is `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`. Repository permission is required while the project remains private. Stable v1.0 and broad superiority claims still require the multi-video benchmark, human-validated grader, and one sealed confirmation run. See the [RC audit](docs/evidence/v1/P32-release/RC-AUDIT.md), [status checklist](docs/V1-STATUS.md), and [low-cost completion plan](docs/plans/V1.0-LOW-COST-COMPLETION.md).
 
 ## Install
 
@@ -121,10 +121,14 @@ Frame budgets, dedup behavior, and focused-mode details are documented in [skill
 |---------|---------|
 | **Claude Code** | `/plugin marketplace add abe238/claude-video-plus` then `/plugin install watch@claude-video-plus` |
 | **Codex, Cursor, Copilot, Gemini CLI, +50 more** | `npx skills add abe238/claude-video-plus -g` |
-| **claude.ai** (web) | Build `dist/watch.skill` via `bash skills/watch/scripts/build-skill.sh` → Settings → Capabilities → Skills → `+` |
+| **claude.ai** (web) | Download [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill) → Settings → Capabilities → Skills → `+` |
 | **Manual / dev** | `git clone https://github.com/abe238/claude-video-plus.git && ln -s "$(pwd)/claude-video-plus/skills/watch" ~/.claude/skills/watch` |
 
 Update later with `/plugin update watch@claude-video-plus` or `npx skills update watch -g`.
+
+The RC and repository are private for now, so each installer needs GitHub access to
+`abe238/claude-video-plus`. The same commands become public one-command installs if the owner later
+changes repository visibility.
 
 ## Structure
 

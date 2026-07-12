@@ -48,8 +48,10 @@ def test_ci_and_release_workflows_cover_push_and_artifact():
     assert "prerelease: ${{ contains(github.ref_name, '-') }}" in release
 
 
-def test_changelog_distinguishes_unreleased_derivative_from_upstream():
+def test_changelog_distinguishes_private_prerelease_from_upstream():
     text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "## [0.3.0-rc.1] — Unreleased" in text
-    assert "There is no `v0.3.0-rc.1` tag or release artifact yet" in text
+    assert "## [0.3.0-rc.1] — 2026-07-12" in text
+    assert "Private prerelease" in text
+    assert "releases/download/v0.3.0-rc.1/watch.skill" in text
+    assert "Repository permission is required" in text
     assert "## [0.2.0] — 2026-06-30 (upstream)" in text

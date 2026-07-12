@@ -2,12 +2,14 @@
 
 All notable changes to `/watch` are documented here.
 
-## [0.3.0-rc.1] — Unreleased
+## [0.3.0-rc.1] — 2026-07-12
 
-Pending maintenance release under the `abe238/claude-video-plus` derivative identity
+Private prerelease under the `abe238/claude-video-plus` derivative identity
 (fork of Brad Bonanno's `bradautomates/claude-video`; upstream history, license, and
-attribution preserved). There is no `v0.3.0-rc.1` tag or release artifact yet; the release
-workflow will refuse a tag whose value disagrees with the package manifests.
+attribution preserved). The tagged release includes the self-contained
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v0.3.0-rc.1/watch.skill)
+artifact. Repository permission is required while the project remains private. The release
+workflow refuses a tag whose value disagrees with the package manifests.
 
 RC verification: 327 local tests, five hosted macOS/Linux Python jobs, isolated Agent Skills
 install/invoke/uninstall, deterministic 81,952-byte bundle, and independent early-publish review.
