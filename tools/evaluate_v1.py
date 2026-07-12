@@ -851,7 +851,8 @@ def evaluate_fixture(data: dict) -> dict:
                 evidence[case["id"]]["before_after"] = before_after_match(
                     case["before"], case["after"], case.get("selected_times", [])
                 )
-    family_deltas = {family: sum(values) / len(values) for family, values in grouped.items()}
+    # Canonicalize harmless binary-float residue across supported Python builds.
+    family_deltas = {family: round(sum(values) / len(values), 12) for family, values in grouped.items()}
     return {
         "family_deltas": family_deltas,
         "quality": clustered_bootstrap(
