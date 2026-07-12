@@ -29,8 +29,8 @@ Every packet names:
 6. deterministic commands;
 7. evidence output paths;
 8. a maximum of two valid PROVE failures and three Sol review/fix rounds for implementation
-   packets; P00 has an owner-authorized eight-round ceiling because the owner explicitly
-   authorized byte-exact remediation after round seven found one remaining newline defect;
+   packets; P00 has standing owner authorization for read-only Sol review/remediation until
+   approval, without repeated per-pass authorization requests;
 9. stop conditions requiring escalation rather than invention.
 
 The executor receives the packet and only the references named by it. It does not receive

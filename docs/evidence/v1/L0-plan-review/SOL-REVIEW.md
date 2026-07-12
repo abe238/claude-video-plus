@@ -131,4 +131,5 @@ Verdict: **CHANGES_REQUIRED**
   rewrites of committed CRLF `SOL-REVIEW.md` and `EXIT.md` artifacts.
 
 The validator-level regression tests now use a real temporary Git repository and exercise both
-artifact paths. P00 is at its owner-authorized eight-review bound pending further direction.
+artifact paths. The owner has given standing authorization to continue Sol review/remediation
+until approval without repeated per-pass authorization requests.

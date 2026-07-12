@@ -18,9 +18,9 @@ RE-PLAN -> BUILD -> PIN -> PROVE -> MEASURE -> SOL REVIEW -> COMMIT/PUSH -> EXIT
 ```
 
 Maximum per implementation packet: two valid PROVE failures and three Sol review/fix rounds.
-P00 has an eight-round plan-review ceiling after the owner explicitly authorized a final
-byte-integrity remediation pass following round seven. At
-the bound, write an honest `AT_BOUND` exit and stop that packet.
+For P00, the owner has given standing authorization to continue bounded, read-only Sol
+review/remediation passes until approval. Do not ask for per-pass authorization; stop only for a
+genuine external blocker or a material scope-expansion decision.
 
 ## Chain
 
@@ -35,7 +35,7 @@ the bound, write an honest `AT_BOUND` exit and stop that packet.
   requirement mapped to exactly one owner packet or an explicit exclusion; measurement,
   Control, interface, privacy, support, provenance, and schema contracts frozen; 93-test
   baseline green.
-- **bound:** eight Sol review rounds; no feature execution before approval.
+- **bound:** owner-authorized review/remediation until approval; no feature execution before approval.
 - **exit →** L1.
 
 ### L1 — release integrity and canonical contracts
