@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 # build-skill.sh — package the watch skill as a claude.ai-upload-ready .skill file.
 # Usage: bash skills/watch/scripts/build-skill.sh   (run from anywhere)
-#
-# Produces dist/watch.skill, a zip with a single top-level `watch/` directory
-# containing SKILL.md and the scripts/ runtime from skills/watch. Archiving the
-# skills/watch subtree directly keeps the bundle to exactly one SKILL.md and
-# well under claude.ai's 200-file cap, with no post-hoc `zip -d` stripping.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
