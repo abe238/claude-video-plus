@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "artifact_type": "verify",
+  "created_at_utc": "2026-07-12T10:20:00Z",
+  "packet_id": "P03",
+  "requirement_ids": ["MEAS-001", "MEAS-002", "MEAS-003"],
+  "control_commit": "83da59fa78c3eee9e20f515fe75c438bb5166efd",
+  "candidate_commit": "a9b3de6252d6616f28a87f1423a21b5d75b5bca0",
+  "candidate_config_hash": "e56dbdc7b80e0d89b712f282e5187f19db2a86c7105f2cc97666ad00d7935620",
+  "plan_sha256": "a5bfae211d4e5a5760644b683a9cd119ad6dfe7382edc029031d4774e49a14f4",
+  "environment_id": "macos-arm64-python-3.14",
+  "tool_versions": {"python": "3.14.4", "evaluator": "v1"},
+  "command_or_protocol": "P03 owner-directed single final implementation pass; prior Sol findings are implementation inputs, focused verification only, and consolidated full-suite audit is deferred to P32. Standing authorization was recorded in PROTOCOL/CHAIN by the owner and those files were not modified by P03.",
+  "status": "provisional",
+  "checks": [
+    {"command": "python3 -m pytest -q tests/test_v1_evaluator.py tests/test_v1_evidence_schema.py tests/test_corpus_registry.py", "exit": 0, "result": "64 passed; asymmetric retry, benchmark-pair, development-token, and deterministic-order mutations included"},
+    {"command": "python3 -m pytest -q", "status": "not_run", "result": "Owner-directed policy defers consolidated full-suite audit to P32."},
+    {"command": "python3 -m compileall -q tools tests", "exit": 0},
+    {"command": "python3 tools/validate_v1_execution.py", "exit": 0, "result": "ok: 45 requirements, 35 packets"},
+    {"command": "python3 tools/corpus_registry.py docs/execution/v1/CORPUS-REGISTRY-v1.json --access-log docs/evidence/v1/P03-measurement/raw/access-log.jsonl", "exit": 0, "result": "seal and empty access-log state validated"},
+    {"command": "python3 tools/evaluate_v1.py docs/evidence/v1/P03-measurement/raw/jitter-fixture.json", "exit": 0, "result": "synthetic cold/warm jitter fixture replayed; see jitter-evaluator-output.json"},
+    {"command": "secret/private-path scan of P03-owned paths", "exit": 0, "result": "no API-key pattern, private path, or URL found; metric names containing token were reviewed as false positives"},
+    {"command": "git diff --check", "exit": 0},
+    {"command": "git status --short owned-path audit", "exit": 0, "result": "P03 changes confined to owned paths; pre-existing P02 staged/untracked files were neither modified nor staged"}
+  ],
+  "reviewed_tree": "1253cda9f9708bce54ad8f9e58c2673eaf7f6fa8",
+  "artifact_checksums": {
+    "EXIT.md": "8f80b4e5dc85b503480a9f76b8a5080e7e418e14df9f2f6d450f81f82b72ef11",
+    "SOL-REVIEW.md": "69da8926698283f72b7d8bccab57505069d74c24580a6008e5e183a6c57c78d2",
+    "TOOLING.md": "7c5e003e1534edab0d0da619fc72caece8a6750f90b741712aecb6fbd85fbf4f",
+    "corpus-registry-validation.json": "3dc70f76d52e83c686724199cd6e13f720045d112dc8328842fabfa9e0d9c6c6",
+    "jitter-evaluator-output.json": "a65f21888c9641b30602b58593e0d64934f737e28630c7cbce5ff57e9c2eb4f0",
+    "raw/access-log-template.json": "c5d13db8ecbbb4a9c75e7bd36d3fce56adb3fd30408a9c432470c47b89450998",
+    "raw/access-log.jsonl": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "raw/jitter-fixture.json": "1d2b619d9d40ee0885ce79c2da59cb4dfbd2c429e360b23ff99c24bbc6adcf33",
+    "../../execution/v1/CORPUS-REGISTRY-v1.json": "0505802c1faaee4d5a0cf74a569fee7fe85b10d254ed0da8d78cd4c6f294612d"
+  }
+}

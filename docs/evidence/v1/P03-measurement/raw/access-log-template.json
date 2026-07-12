@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "purpose": "Template only; append one canonical JSON object per line to a custodian-held access log.",
+  "required_fields": ["sequence", "actor_id", "action", "authorization_id", "identity_ids", "registry_seal_sha256", "frozen_epochs_sha256", "previous_hash", "record_hash"],
+  "actions": {"authorized_open": "authorized reserve opening without comparative outcome exposure", "exposure": "comparative outcome exposure; spends the confirmatory cohort"},
+  "genesis_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

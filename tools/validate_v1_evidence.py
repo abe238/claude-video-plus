@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 from typing import Any
@@ -75,7 +76,7 @@ def _positive_denominator_tree(value: Any) -> bool:
     if isinstance(value, bool):
         return False
     if isinstance(value, (int, float)):
-        return value >= 0
+        return math.isfinite(float(value)) and value > 0
     if isinstance(value, dict):
         return bool(value) and all(_positive_denominator_tree(item) for item in value.values())
     return False
@@ -115,6 +116,9 @@ def validate_record(record: dict[str, Any], schema: dict[str, Any]) -> list[str]
             item_type = spec.get("items")
             if item_type and any(not _type_ok(item, [item_type]) for item in value):
                 errors.append(f"{name} has invalid item type")
+        if "number" in spec["types"] or "integer" in spec["types"]:
+            if isinstance(value, (int, float)) and not isinstance(value, bool) and not math.isfinite(float(value)):
+                errors.append(f"{name} must be finite")
     packet_id = record.get("packet_id")
     if packet_id not in packets:
         errors.append(f"unknown packet_id {packet_id!r}")
@@ -134,7 +138,9 @@ def validate_record(record: dict[str, Any], schema: dict[str, Any]) -> list[str]
     for name in NONNEGATIVE_FIELDS:
         value = record.get(name)
         if isinstance(value, (int, float)) and not isinstance(value, bool):
-            if value < 0 or (name in POSITIVE_FIELDS and value < 1):
+            if name == "attempt" and artifact_type == "resource" and record.get("arm") == "noop" and value == 0:
+                continue
+            if not math.isfinite(float(value)) or value < 0 or (name in POSITIVE_FIELDS and value < 1):
                 errors.append(f"{name} is outside its allowed range")
     for name in PATH_FIELDS:
         value = record.get(name)
@@ -163,11 +169,14 @@ def validate_record(record: dict[str, Any], schema: dict[str, Any]) -> list[str]
                 if not isinstance(item, dict) or item.get("kind") not in {"point", "interval"}:
                     errors.append("gold_evidence items must be point or interval objects")
                     continue
-                if item["kind"] == "point" and not isinstance(item.get("time"), (int, float)):
+                if item["kind"] == "point" and (not isinstance(item.get("time"), (int, float))
+                                                  or not math.isfinite(float(item["time"]))):
                     errors.append("gold point requires numeric time")
                 if item["kind"] == "interval" and not (
                     isinstance(item.get("start"), (int, float))
                     and isinstance(item.get("end"), (int, float))
+                    and math.isfinite(float(item["start"]))
+                    and math.isfinite(float(item["end"]))
                     and item["end"] > item["start"]
                 ):
                     errors.append("gold interval requires numeric start < end")
@@ -185,17 +194,34 @@ def validate_record(record: dict[str, Any], schema: dict[str, Any]) -> list[str]
             errors.append("reported usage requires a provider measurement_source")
         if record.get("measurement_kind") == "estimated" and source.startswith("provider:"):
             errors.append("estimated usage cannot claim a provider-reported source")
+    if artifact_type in {"usage", "failure"} or (artifact_type == "resource" and record.get("arm") != "noop"):
+        attempt = record.get("attempt")
+        if not isinstance(attempt, int) or isinstance(attempt, bool) or attempt < 1:
+            errors.append(f"{artifact_type} requires a positive attempt identity")
+    if artifact_type == "resource":
+        if record.get("arm") == "noop" and record.get("attempt") != 0:
+            errors.append("noop resource requires benchmark attempt sentinel 0")
+        repeat_id = record.get("repeat_id")
+        if not isinstance(repeat_id, (str, int)) or isinstance(repeat_id, bool) or str(repeat_id) == "":
+            errors.append("resource requires repeat_id")
+        bucket = record.get("duration_bucket")
+        if not isinstance(bucket, str) or not bucket:
+            errors.append("resource requires declared duration_bucket")
+        if record.get("arm") == "noop":
+            if record.get("pair_id") not in (None, ""):
+                errors.append("noop resource must not carry pair_id")
     if artifact_type == "asr":
         if record.get("reference_words", 0) <= 0:
             errors.append("ASR reference_words must be positive")
-        if any(not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0
+        if any(not isinstance(value, (int, float)) or isinstance(value, bool)
+               or not math.isfinite(float(value)) or value < 0
                for value in record.get("boundary_errors_seconds", [])):
             errors.append("ASR boundary errors must be finite non-negative numbers")
     if artifact_type == "gate_result":
         denominators = record.get("denominators")
         gates = record.get("gates")
         if not isinstance(denominators, dict) or not denominators or not _positive_denominator_tree(denominators):
-            errors.append("gate_result requires non-empty positive denominators (zero leaves allowed)")
+            errors.append("gate_result requires non-empty positive denominators")
         if not isinstance(gates, dict) or not gates or any(not isinstance(value, bool) for value in gates.values()):
             errors.append("gate_result requires non-empty boolean gates")
         if record.get("status") != "complete":
