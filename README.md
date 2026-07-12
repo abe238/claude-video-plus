@@ -129,7 +129,7 @@ We also appreciate the maintainers whose tools make the runtime possible:
 - [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) and [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) — the entire media layer
 - Whisper transcription via [Groq](https://groq.com) or [OpenAI](https://openai.com)
 
-The evidence-mode design draws on published research (VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others), credited with transferability cautions in the [v1 master plan](docs/plans/V1.0-MASTER-PLAN.md). The bounded execution and independent-review process is inspired by Miguel Rios's [`miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills), especially Cascade and Parable.
+The evidence-mode design draws on published research (VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others).
 
 We are also grateful to the fork authors whose public work helped us identify mechanisms worth evaluating for v1.0. Credit here records design influence and evaluation provenance; it does **not** claim their source code or every listed feature currently ships. If a mechanism is promoted, its exact origin, revision, license, modifications, and release-note credit must be recorded first.
 
