@@ -8,8 +8,8 @@ is the first stable public release. It is ready to install and use. Current engi
 - 335 local deterministic tests pass;
 - all five hosted macOS/Linux Python 3.11–3.14 jobs pass;
 - isolated `npx skills` install, diagnostics invocation, uninstall, and source-preservation pass;
-- deterministic `watch.skill` is 81,952 bytes with SHA-256
-  `7636dbc7510736b2b71e3607af46ff115ff9a7d7b9eff1e0d55ea1d0e704981f`;
+- deterministic `watch.skill` is 81,940 bytes with SHA-256
+  `44a874d92f796845e1c4cbc1ae56ed98042f3ec21ef2455fc64d355525d7905f`;
 - the independent blocker re-review returned `APPROVE_EARLY_PUBLISH` for commit `c0efe18`.
 
 The release includes a self-contained [`watch.skill`](https://github.com/abe238/claude-video-plus/releases/download/v1.0.0/watch.skill)
