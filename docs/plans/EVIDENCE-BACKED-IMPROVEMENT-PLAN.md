@@ -1,5 +1,8 @@
 # Evidence-backed improvement plan
 
+> Historical record. Superseded by [V1.0-MASTER-PLAN.md](V1.0-MASTER-PLAN.md).
+> Its OpenCV proposals were tested and rejected; do not implement them.
+
 Status: Independently reviewed; ready for Phase 0 benchmark implementation
 
 Control: unmodified upstream commit `83da59f`

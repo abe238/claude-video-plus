@@ -30,6 +30,10 @@ here unedited.
 
 ## Entries
 
+- [2026-07-11-opencv-ablation/](2026-07-11-opencv-ablation/) — negative development
+  result: the OpenCV composite recovered fewer curated moments than the current 16×16
+  scorer (5/12 vs 6/12), took about 4.8× as long to score, and did not reduce reader
+  tokens. OpenCV was rejected for v1.0; the report includes limitations and raw JSON.
 - [2026-07-11-single-video-deep-dive/](2026-07-11-single-video-deep-dive/) — 38-min
   launch video ("AI News: GPT-5.6…", Matt Wolfe), 3 question classes, 5 iteration
   rounds. Final: coverage **win** (9.33 vs 8.33) at −60% tokens, targeted-cost **tie**
