@@ -83,3 +83,14 @@ def test_no_dedup_preserves_static_frames(static_clip: Path):
     out = _run(static_clip, "--no-dedup")
     assert "near-duplicate" not in out
     assert _frame_lines(out) > 1
+
+
+def test_diagnostics_does_not_require_source():
+    proc = subprocess.run(
+        [sys.executable, str(WATCH), "--diagnostics-json"],
+        capture_output=True, text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    payload = __import__("json").loads(proc.stdout)
+    assert payload["local_http"]["loopback_required"] is True
+    assert payload["yap"]["auto_install"] is False
