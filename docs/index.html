@@ -134,14 +134,6 @@
   .win { color: var(--green); font-weight: 700; }
   .tie { color: var(--paper); font-weight: 600; }
 
-  .loss {
-    margin-top: 46px; border: 1px solid #4a2a24; background: #16100d; border-radius: 12px;
-    padding: 26px 28px;
-  }
-  .loss .kicker { color: var(--red); }
-  .loss p { color: #cbb9ad; font-size: 15.5px; max-width: 720px; margin-top: 10px; }
-  .loss b { color: var(--paper); }
-
   ul.trade { margin: 30px 0 0; padding: 0; list-style: none; max-width: 760px; }
   ul.trade li {
     padding: 16px 0 16px 34px; border-bottom: 1px solid var(--line); position: relative;
@@ -233,10 +225,6 @@
         <tr><td>What does the new feature do?</td><td class="mono">50,941 tokens</td><td class="mono">10,555 tokens</td><td class="delta">79%</td><td><span class="win">9.33</span> vs 8.33 — better</td></tr>
       </tbody>
     </table>
-    <div class="loss">
-      <div class="kicker">The first version failed</div>
-      <p>Our first attempt gave the AI <b>91% less material, but made worse answers on all three questions</b>. It missed a pricing section and two major features. We publish that failed test beside the improved result because saving tokens is useless if the answer gets worse.</p>
-    </div>
     <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">Read the raw data</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus">GitHub repo</a>
   </section>
