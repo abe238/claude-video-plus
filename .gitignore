@@ -18,3 +18,10 @@ htmlcov/
 # Custodian-only development corpus locators/questions; never commit real sources.
 /tools/development-manifest.local.json
 /tools/development-candidate-config.local.json
+
+# Local cascade/loop bookkeeping — kept out of the repo by convention; this enforces it.
+# (docs/evidence/v1/ is the tracked evidence tree and is intentionally NOT ignored.)
+/docs/LOOP_CHAIN_*.md
+/docs/evidence/L*/
+/docs/evidence/ship-*/
+/docs/evidence/confirm-*/

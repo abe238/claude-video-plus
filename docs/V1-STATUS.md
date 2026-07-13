@@ -41,7 +41,7 @@ The full evidence index is [docs/benchmarks/](benchmarks/).
 
 ## What shipped
 
-All 33 planned requirement slices (P00–P32) are implemented, measured, and released:
+All 33 requirement slices (P00–P32) are implemented, measured, and released:
 the strict comparison harness against the untouched original; consistent download,
 retry, and caption handling; local-first transcription (sidecar subtitles, optional
 localhost endpoint, detected YAP, explicit cloud Whisper); range extraction and safe

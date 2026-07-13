@@ -1,4 +1,4 @@
-# /watch — claude-video-plus
+# /watch: claude-video-plus
 
 **Same answer quality. Half the tokens. Faster than the default.**
 
@@ -40,7 +40,7 @@ Development data tells the same story with more spread: 60–88% savings on targ
 ## How evidence mode works
 
 ```
-/watch <url> --detail evidence --question "what's actually new — skip the hype?"
+/watch <url> --detail evidence --question "what's actually new, skip the hype?"
 ```
 
 The original samples the whole timeline (50–100 frames plus the full transcript) no matter what you asked: ~50k tokens on a 40-minute video. Evidence mode retrieves instead: whole topical chapters (YouTube chapters, pause-gap fallback), a numeric guard that rescues pricing/benchmark/spec lines from anywhere in the video with a frame at each (numbers live on-screen), frames at chapter starts and "as you can see" moments, and a token budget. Every selection lands in a manifest with its timestamp, reason, and score, so you can audit exactly what the model saw and why.
@@ -71,13 +71,13 @@ Everything upstream still works: the four original detail modes, `--start`/`--en
 
 Knobs (passed to `scripts/watch.py`):
 
-- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial; `evidence` requires `--question`.
-- `--question "…"` — your question, verbatim; drives evidence-mode selection.
-- `--timestamps T1,T2,…` — grab a frame at each absolute timestamp.
-- `--max-frames N` / `--resolution W` / `--fps F` — budget and fidelity overrides.
-- `--whisper groq|openai` / `--no-whisper` — transcription backend control.
-- `--no-dedup` — keep near-duplicate frames.
-- `--out-dir DIR` — keep working files somewhere specific.
+- `--detail transcript|efficient|balanced|token-burner|evidence`, fidelity/speed dial; `evidence` requires `--question`.
+- `--question "…"`, your question, verbatim; drives evidence-mode selection.
+- `--timestamps T1,T2,…`, grab a frame at each absolute timestamp.
+- `--max-frames N` / `--resolution W` / `--fps F`, budget and fidelity overrides.
+- `--whisper groq|openai` / `--no-whisper`, transcription backend control.
+- `--no-dedup`, keep near-duplicate frames.
+- `--out-dir DIR`, keep working files somewhere specific.
 
 ## How it works
 
@@ -103,8 +103,8 @@ Update later with `/plugin update watch@claude-video-plus` or `npx skills update
 
 ```
 .
-├── skills/watch/                 # self-contained skill — this is the whole install package
-│   ├── SKILL.md                  # skill contract — source of truth across all hosts
+├── skills/watch/                 # self-contained skill, this is the whole install package
+│   ├── SKILL.md                  # skill contract, source of truth across all hosts
 │   └── scripts/                  # watch.py, evidence.py, download/frames/transcribe/whisper/setup/config
 ├── docs/benchmarks/              # supplemental evidence data (NOT in the install package)
 ├── docs/plans/                   # canonical v1 master plan plus historical review records
@@ -126,26 +126,26 @@ This fork exists because **Brad Bonanno** ([@bradautomates](https://github.com/b
 
 We also appreciate the maintainers whose tools make the runtime possible:
 
-- [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) and [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) — the entire media layer
+- [FFmpeg/FFmpeg](https://github.com/FFmpeg/FFmpeg) and [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp), the entire media layer
 - Whisper transcription via [Groq](https://groq.com) or [OpenAI](https://openai.com)
 
 The evidence-mode design draws on published research (VideoTree, Adaptive Keyframe Sampling, PixelRAG, and others).
 
 We are also grateful to the fork authors whose public work helped us identify mechanisms worth evaluating for v1.0. Credit here records design influence and evaluation provenance; it does **not** claim their source code or every listed feature currently ships. If a mechanism is promoted, its exact origin, revision, license, modifications, and release-note credit must be recorded first.
 
-- [`taeloautomates/claude-video`](https://github.com/taeloautomates/claude-video) — YouTube SABR/client and cookie-resilience concept.
-- [`thedirektor/claude-video`](https://github.com/thedirektor/claude-video) — classified acquisition retries, focused transcription, resume/cache, OCR, and testing ideas.
-- [`RadoslavSheytanov/claude-video`](https://github.com/RadoslavSheytanov/claude-video) — caption-coverage and Whisper-reliability ideas.
-- [`Tigertycoon/claude-video`](https://github.com/Tigertycoon/claude-video) and [`manojbadam/claude-video`](https://github.com/manojbadam/claude-video) — sidecar-first transcript ideas.
-- [`CJNA/claude-video`](https://github.com/CJNA/claude-video) — Fathom source exploration, deferred from v1.0.
-- [`sciencemj/claude-video-local`](https://github.com/sciencemj/claude-video-local) — local transcription and portable-bundle architecture.
-- [`troyshelton/claude-video`](https://github.com/troyshelton/claude-video), [`jsstn/claude-video`](https://github.com/jsstn/claude-video), and [`danielfrey63/claude-video`](https://github.com/danielfrey63/claude-video) — local and pluggable transcription patterns.
-- [`joweiser/claude-video`](https://github.com/joweiser/claude-video) and [`JoseBallestas/claude-video`](https://github.com/JoseBallestas/claude-video) — silence-aware chunks, focused transcription, bounded retries, and diagnostics.
-- [`finnvoor/yap`](https://github.com/finnvoor/yap) and the faster-whisper server ecosystem — optional local transcription references; neither is automatically installed.
-- [`DanielZYoffe/claude-video-lite`](https://github.com/DanielZYoffe/claude-video-lite) — PySceneDetect reference evaluated in the documented OpenCV ablation; that Adapter was rejected for v1.0.
+- [`taeloautomates/claude-video`](https://github.com/taeloautomates/claude-video), YouTube SABR/client and cookie-resilience concept.
+- [`thedirektor/claude-video`](https://github.com/thedirektor/claude-video), classified acquisition retries, focused transcription, resume/cache, OCR, and testing ideas.
+- [`RadoslavSheytanov/claude-video`](https://github.com/RadoslavSheytanov/claude-video), caption-coverage and Whisper-reliability ideas.
+- [`Tigertycoon/claude-video`](https://github.com/Tigertycoon/claude-video) and [`manojbadam/claude-video`](https://github.com/manojbadam/claude-video), sidecar-first transcript ideas.
+- [`CJNA/claude-video`](https://github.com/CJNA/claude-video), Fathom source exploration, deferred from v1.0.
+- [`sciencemj/claude-video-local`](https://github.com/sciencemj/claude-video-local), local transcription and portable-bundle architecture.
+- [`troyshelton/claude-video`](https://github.com/troyshelton/claude-video), [`jsstn/claude-video`](https://github.com/jsstn/claude-video), and [`danielfrey63/claude-video`](https://github.com/danielfrey63/claude-video), local and pluggable transcription patterns.
+- [`joweiser/claude-video`](https://github.com/joweiser/claude-video) and [`JoseBallestas/claude-video`](https://github.com/JoseBallestas/claude-video), silence-aware chunks, focused transcription, bounded retries, and diagnostics.
+- [`finnvoor/yap`](https://github.com/finnvoor/yap) and the faster-whisper server ecosystem, optional local transcription references; neither is automatically installed.
+- [`DanielZYoffe/claude-video-lite`](https://github.com/DanielZYoffe/claude-video-lite), PySceneDetect reference evaluated in the documented OpenCV ablation; that Adapter was rejected for v1.0.
 
 The canonical mechanism-by-mechanism disposition is maintained in [PROVENANCE.md](docs/execution/v1/PROVENANCE.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Original work © Brad Bonanno; derivative changes © Abe Diaz.
+MIT, see [LICENSE](LICENSE). Original work © Brad Bonanno; derivative changes © Abe Diaz.

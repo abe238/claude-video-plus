@@ -36,7 +36,7 @@
   "artifact_checksums": {
     "EXIT.md": "f5b84752be3bacbd39920910151bc79576d41e6c41d8f01aa0dab0b125ab7d9b",
     "live-local-control-snapshots/README.md": "e4afaadd67f1757a8cecac825372cb135630fb230ca192a9a09fe40f96f20142",
-    "live-local-control-snapshots/run.json": "60d8a2ddef7d45d1aa9bfb6fee0805dd96a730186a71ef0cc4b3c363cc769dbb",
+    "live-local-control-snapshots/run.json": "39b81507791f1842fd5b63b8f32dc26c57cf27f897620d46f7ddef1ce7f8137c",
     "live-local-control-snapshots/stdout.raw": "9a2742c5673e8de5b1f596ac719db8f1243cfdd1492347c6e3733128510be691",
     "live-local-control-snapshots/stderr.raw": "bdb3694f2723d8b0c34cd703b056e2aeaa2f103f9de5e5bdd9c063c5140dc8e0"
   }
