@@ -15,6 +15,8 @@ TS_VALUE = r"(?:(\d{1,2}):)?(\d{2}):(\d{2})[.,](\d{3})"
 TS_RE = re.compile(rf"^\s*{TS_VALUE}\s+-->\s+{TS_VALUE}(?:\s+.*)?$")
 TAG_RE = re.compile(r"<[^>]+>")
 
+MIN_OVERLAP = 8
+
 
 def _to_seconds(h: str | None, m: str, s: str, ms: str) -> float:
     return int(h or 0) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
@@ -61,7 +63,7 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
             segments.append({"start": round(start, 2), "end": round(end, 2), "text": cue_text})
         i += 1
 
-    result = _dedupe(segments)
+    result = dedupe_rolling(_dedupe(segments))
     if strict and text.strip() and not result:
         raise ValueError(f"no valid timestamped cues in {subtitle_path.name}")
     return result
@@ -76,7 +78,7 @@ def parse_srt(path: str) -> list[dict]:
 
 
 def _dedupe(segments: list[dict]) -> list[dict]:
-    """Collapse rolling duplicates common in YouTube auto-subs."""
+    """Collapse exact repeats and prefix-growth common in YouTube auto-subs."""
     out: list[dict] = []
     for seg in segments:
         if out and seg["text"] == out[-1]["text"]:
@@ -88,6 +90,41 @@ def _dedupe(segments: list[dict]) -> list[dict]:
             continue
         out.append(seg)
     return out
+
+
+def strip_overlap(prev: str, cur: str) -> str:
+    """Drop cur's leading words that repeat prev's tail (rolling captions
+    re-emit the previous line as the next cue's first line). ponytail: a
+    genuine >=8-char word-aligned self-repeat across a cue boundary would be
+    stripped too; rare enough to accept."""
+    for k in range(min(len(prev), len(cur)), MIN_OVERLAP - 1, -1):
+        if (k == len(cur) or cur[k] == " ") and prev.endswith(cur[:k]):
+            return cur[k:].lstrip()
+    return cur
+
+
+def dedupe_rolling(segments: list[dict]) -> list[dict]:
+    """Collapse rolling-caption overlap left over after _dedupe's exact-dup
+    pass: drop a cue contained in the previous one or whose first half is the
+    previous cue's tail, and strip any shorter repeated prefix. Merges a fully
+    dropped cue's time range into the keeper."""
+    clean: list[dict] = []
+    for seg in segments:
+        text = seg["text"]
+        if clean:
+            prev = clean[-1]["text"]
+            half = text[: len(text) // 2]
+            if text in prev or (half and prev.endswith(half)):
+                clean[-1]["end"] = max(clean[-1]["end"], seg["end"])
+                continue
+            text = strip_overlap(prev, text)
+            if not text:
+                clean[-1]["end"] = max(clean[-1]["end"], seg["end"])
+                continue
+        kept = dict(seg)
+        kept["text"] = text
+        clean.append(kept)
+    return clean
 
 
 def filter_range(

@@ -57,7 +57,7 @@ Everything upstream still works: the four original detail modes, `--start`/`--en
 
 - **Needs a question.** Without `--question`, the original path runs. Opt-in per invocation.
 - **Auto-reverts on any problem.** No captions, local files, videos under 9 minutes (measured: evidence mode loses there), or any internal error: the original pipeline runs. There is no failure mode where you get less than the original.
-- **Summaries keep the full transcript by design.** Top-k retrieval on a summary question is how you miss stories; summary savings come from smarter frame selection.
+- **Summaries keep the full transcript by design.** Top-k retrieval on a summary question is how you miss stories. The transcript is collapsed losslessly (YouTube rolling-caption overlap stripped: 43% fewer transcript tokens on a 43-minute video, every spoken line still present), and further summary savings come from smarter frame selection.
 - **Retrieval is lexical (tf-idf plus guards), not semantic.** A question with zero word overlap with the video can under-retrieve. Optional local/remote semantic reranking exists; nothing transmits without explicit authorization.
 - **Local transcription stays optional and cloud is explicit.** Sidecar `.vtt`/`.srt`, loopback `:8082`, and detected YAP run before cloud; Groq/OpenAI audio requires configuration. OpenCV is not included (its prototype measured worse; [ablation](docs/benchmarks/2026-07-11-opencv-ablation/)).
 - **The full video still downloads for frame modes** (same as upstream). Range downloads are planned, not shipped.

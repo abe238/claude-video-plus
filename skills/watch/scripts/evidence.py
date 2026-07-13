@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from transcribe import parse_vtt  # noqa: E402
+from transcribe import MIN_OVERLAP, dedupe_rolling, parse_vtt, strip_overlap  # noqa: E402,F401
 from retrieval import conflicts, lexical_rank, obligations, progressive_expand, scout_identity  # noqa: E402
 from semantic import hashed_local_rank, remote_rank, uncertainty  # noqa: E402
 from state import CacheKey, EvidenceState  # noqa: E402
@@ -40,7 +40,6 @@ NUMERIC_GUARD_CAP = 12
 FACET_EXPANSION_TOP = 3
 SPAN_RESCUE_TOP = 8
 SPAN_RESCUE_PER_CHAPTER = 2
-MIN_OVERLAP = 8
 QUESTION_TERM_WEIGHT = 2
 FRAME_DEDUPE_SECONDS = 20.0
 CHAPTER_FRAME_OFFSET = 10.0
@@ -90,41 +89,6 @@ def tokenize(text: str) -> list[str]:
 
 def fmt_ts(t: float) -> str:
     return f"{int(t) // 60:02d}:{int(t) % 60:02d}"
-
-
-def strip_overlap(prev: str, cur: str) -> str:
-    """Drop cur's leading words that repeat prev's tail (rolling captions
-    re-emit the previous line as the next cue's first line). ponytail: a
-    genuine >=8-char word-aligned self-repeat across a cue boundary would be
-    stripped too; rare enough to accept."""
-    for k in range(min(len(prev), len(cur)), MIN_OVERLAP - 1, -1):
-        if (k == len(cur) or cur[k] == " ") and prev.endswith(cur[:k]):
-            return cur[k:].lstrip()
-    return cur
-
-
-def dedupe_rolling(segments: list[dict]) -> list[dict]:
-    """Collapse rolling-caption overlap left over after parse_vtt's exact-dup
-    pass: drop a cue contained in the previous one or whose first half is the
-    previous cue's tail, and strip any shorter repeated prefix. Merges a fully
-    dropped cue's time range into the keeper."""
-    clean: list[dict] = []
-    for seg in segments:
-        text = seg["text"]
-        if clean:
-            prev = clean[-1]["text"]
-            half = text[: len(text) // 2]
-            if text in prev or (half and prev.endswith(half)):
-                clean[-1]["end"] = max(clean[-1]["end"], seg["end"])
-                continue
-            text = strip_overlap(prev, text)
-            if not text:
-                clean[-1]["end"] = max(clean[-1]["end"], seg["end"])
-                continue
-        kept = dict(seg)
-        kept["text"] = text
-        clean.append(kept)
-    return clean
 
 
 def resolve_policy(question: str, policy: str) -> str:

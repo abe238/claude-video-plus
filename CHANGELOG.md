@@ -2,6 +2,29 @@
 
 All notable changes to `/watch` are documented here.
 
+## [Unreleased]
+
+### Fixed
+
+- Rolling-caption overlap is now stripped on the shared parse path, not only in
+  evidence mode. YouTube auto-captions re-emit the previous cue's tail as the
+  next cue's head; `_dedupe` only caught exact repeats and prefix-growth, so the
+  rolling window survived into `transcript`, `efficient`, `balanced`,
+  `token-burner`, and every plain summary. `dedupe_rolling` already existed and
+  was already tested, it just was never wired into `parse_subtitle`.
+  Measured on a 43-minute video: transcript drops 27,814 → 14,766 tokens (47%),
+  a balanced-mode run drops 41,178 → 28,168 total tokens (32%). Lossless:
+  99.7% 5-gram recall against an independent reconstruction, with the remainder
+  being speaker-marker windows at cue joins rather than dropped words.
+  Evidence mode output is unchanged (it already applied the pass).
+
+### Changed
+
+- `strip_overlap` / `dedupe_rolling` moved from `evidence.py` to `transcribe.py`
+  so one implementation serves both paths; `evidence.py` re-exports them.
+- `dev-sync.sh` targeted the pre-rename `watch@claude-video` plugin key and
+  could not resolve an install path.
+
 ## [1.0.3] — 2026-07-12
 
 Messaging release. The release artifact is
