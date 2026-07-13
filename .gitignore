@@ -25,3 +25,10 @@ htmlcov/
 /docs/evidence/L*/
 /docs/evidence/ship-*/
 /docs/evidence/confirm-*/
+
+# Local-only P01 control-harness scratch: pinned-tools/ holds symlinks to this
+# machine's binaries (leak the home path, break the Pages build). Never commit.
+pinned-tools/
+/docs/evidence/v1/P01-control/live-local-control/
+/docs/evidence/v1/P01-control/live-local-control-final/
+/docs/evidence/v1/P01-control/live-local-control-caption-contract/
