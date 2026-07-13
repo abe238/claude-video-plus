@@ -2,7 +2,8 @@
 """Download a video via yt-dlp, or resolve a local file path.
 
 Also fetches subtitles (manual first, then auto-generated) in VTT format so
-transcribe.py can parse them without needing Whisper.
+transcribe.py can parse them without needing Whisper, and surfaces the
+author-supplied description from info.json as bounded, untrusted evidence.
 """
 from __future__ import annotations
 
@@ -126,6 +127,9 @@ def _read_info(info_path: Path, url: str) -> dict:
                 "uploader": raw.get("uploader") or raw.get("channel"),
                 "duration": raw.get("duration"),
                 "url": raw.get("webpage_url") or url,
+                # Author-supplied and untrusted, but it is the only place the
+                # exact spellings live: ASR renders "OmniRoute" as "Omniroot".
+                "description": raw.get("description"),
             }
         except Exception as exc:
             print(f"[watch] info.json parse failed: {exc}", file=sys.stderr)
@@ -162,6 +166,31 @@ def download(
     if is_url(source):
         return download_url(source, out_dir, audio_only=audio_only)
     return resolve_local(source)
+
+
+DESCRIPTION_CHAR_LIMIT = 2000
+
+
+def format_description(info: dict, limit: int = DESCRIPTION_CHAR_LIMIT) -> str | None:
+    """The author-supplied description, bounded, or None if there isn't one.
+
+    Worth surfacing because ASR cannot spell: on a repo-roundup video the
+    auto-captions recovered 1 of 13 repo names ("Omniroot" for OmniRoute), while
+    the description carried all 13 verbatim for ~540 tokens. Links, product
+    names, and URLs live here and nowhere else in the audio.
+
+    It is author-controlled text, so callers must render it inside the report's
+    untrusted-evidence markers and must never treat it as authoritative for what
+    happens on screen. ponytail: a character cap, not a token count -- ~4 chars
+    per token is close enough to keep a spam-stuffed description from crowding
+    out the transcript.
+    """
+    body = (info.get("description") or "").strip()
+    if not body:
+        return None
+    if len(body) <= limit:
+        return body
+    return body[:limit].rstrip() + f"\n\n[… truncated at {limit} characters]"
 
 
 if __name__ == "__main__":

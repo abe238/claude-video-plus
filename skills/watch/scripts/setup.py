@@ -22,32 +22,40 @@ import json
 import os
 import platform
 import shutil
+import socket
 import subprocess
 import sys
+import urllib.parse
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
-from config import get_config  # noqa: E402
+from config import DEFAULT_STT_URL, get_config  # noqa: E402
 
 
 REQUIRED_BINARIES = ["ffmpeg", "ffprobe", "yt-dlp"]
 CONFIG_DIR = Path.home() / ".config" / "watch"
 CONFIG_FILE = CONFIG_DIR / ".env"
-ENV_TEMPLATE = """# /watch API configuration
+ENV_TEMPLATE = """# /watch configuration
 #
-# Whisper transcription fallback — used only when yt-dlp cannot get captions
-# (or when you point /watch at a local file with no subtitles).
+# Transcription is only needed when yt-dlp cannot get captions (or you point
+# /watch at a local file with no subtitles). Adapters are tried in order:
 #
-# Groq is preferred: it runs whisper-large-v3 at a fraction of OpenAI's price
-# and is faster in practice. OpenAI is the compatible fallback.
+#   1. local-http   local OpenAI-compatible STT server (default 127.0.0.1:8082)
+#   2. yap          on-device Apple Speech, macOS only
+#                   (brew install finnvoor/tools/yap)
+#   3. groq/openai  cloud Whisper — audio leaves your machine
+#
+# Local Adapters are detected, never installed. Leave everything blank and
+# /watch still works: caption-less video just comes back frames-only.
+#
+# A cloud key on its own does NOTHING. The cloud Adapters refuse unless you
+# also pass --allow-remote-transcription (or set WATCH_STT_ALLOW_REMOTE=true
+# below). That is deliberate: audio is never uploaded without explicit consent.
 #
 # Get a Groq key:  https://console.groq.com/keys
 # Get an OpenAI key:  https://platform.openai.com/api-keys
-#
-# Leave both blank to disable Whisper — /watch will still work, but videos
-# without native captions will come back frames-only.
 
 GROQ_API_KEY=
 OPENAI_API_KEY=
@@ -131,6 +139,43 @@ def _have_api_key() -> tuple[bool, str | None]:
     if _read_env_key("OPENAI_API_KEY"):
         return True, "openai"
     return False, None
+
+
+def _loopback_listening(url: str) -> bool:
+    """True if something is accepting connections at `url`'s host:port."""
+    try:
+        parts = urllib.parse.urlsplit(url if "://" in url else f"http://{url}")
+        host = parts.hostname
+        port = parts.port or (443 if parts.scheme == "https" else 80)
+        if not host:
+            return False
+        # ponytail: a TCP connect, not an HTTP probe. The runtime Adapter does
+        # the real handshake and fails open; setup only needs "is anything
+        # there". Localhost refuses instantly, so --check stays sub-100ms.
+        with socket.create_connection((host, port), timeout=0.25):
+            return True
+    except (OSError, ValueError):
+        return False
+
+
+def _local_stt_backends() -> list[str]:
+    """Local transcription Adapters available right now, in runtime order.
+
+    Mirrors config.DEFAULT_STT_ORDER's local half (local-http, yap). Detection
+    only — /watch never installs either. A local backend fully satisfies
+    transcription, which is why its presence makes setup `ready` with no cloud
+    key: the cloud Adapters refuse without explicit remote authorization
+    anyway, so a key alone would not transcribe anything.
+    """
+    found: list[str] = []
+    url = _read_env_key("WATCH_STT_URL") or DEFAULT_STT_URL
+    if _loopback_listening(url):
+        found.append("local-http")
+    if platform.system() == "Darwin":
+        yap = _read_env_key("WATCH_YAP_PATH") or "yap"
+        if shutil.which(yap):
+            found.append("yap")
+    return found
 
 
 def is_first_run() -> bool:
@@ -240,18 +285,24 @@ def _status() -> dict:
     """
     missing = _check_binaries()
     has_key, backend = _have_api_key()
+    local_stt = _local_stt_backends()
     setup_complete = not is_first_run()
 
-    if not missing and has_key:
+    # A reachable local Adapter transcribes on its own, so it satisfies the
+    # transcription requirement exactly as a cloud key does (better, in fact:
+    # cloud refuses without WATCH_STT_ALLOW_REMOTE / --allow-remote-transcription).
+    has_transcription = has_key or bool(local_stt)
+
+    if not missing and has_transcription:
         status = "ready"
-    elif missing and not has_key:
+    elif missing and not has_transcription:
         status = "needs_install_and_key"
     elif missing:
         status = "needs_install"
     else:
         status = "needs_key"
 
-    can_proceed = (not missing) and (has_key or setup_complete)
+    can_proceed = (not missing) and (has_transcription or setup_complete)
 
     cfg = get_config()
     return {
@@ -262,6 +313,7 @@ def _status() -> dict:
         "missing_binaries": missing,
         "whisper_backend": backend,
         "has_api_key": has_key,
+        "local_stt": local_stt,
         "config_file": str(CONFIG_FILE),
         "watch_detail": cfg["detail"],
         "platform": platform.system(),
@@ -287,8 +339,8 @@ def cmd_check() -> int:
     parts = []
     if s["missing_binaries"]:
         parts.append(f"missing binaries: {', '.join(s['missing_binaries'])}")
-    if not s["has_api_key"] and not s["setup_complete"]:
-        parts.append("no Whisper API key (GROQ_API_KEY or OPENAI_API_KEY)")
+    if not s["has_api_key"] and not s["local_stt"] and not s["setup_complete"]:
+        parts.append("no transcription backend (install yap, run a local STT server, or set a cloud key)")
     installer = Path(__file__).resolve()
     sys.stderr.write(
         f"[watch] setup incomplete ({'; '.join(parts)}). "
@@ -352,13 +404,26 @@ def cmd_install() -> int:
         return 0
 
     print("")
-    print("[setup] one step left: add a Whisper API key.")
+    print("[setup] optional: add a transcription backend for caption-less video.")
     print("")
-    print(f"  Edit {CONFIG_FILE} and set either:")
-    print("    GROQ_API_KEY=...    (preferred — cheaper, faster; get one at console.groq.com/keys)")
-    print("    OPENAI_API_KEY=...  (fallback; get one at platform.openai.com/api-keys)")
+    print("  Native captions and .vtt/.srt sidecars always run first, so most")
+    print("  YouTube links need nothing here. A backend only matters for local")
+    print("  files and videos with no captions. /watch tries them in this order:")
     print("")
-    print("  Without a key, /watch still works but videos without captions come back frames-only.")
+    if platform.system() == "Darwin":
+        print("    1. local-http  a local OpenAI-compatible STT server, default 127.0.0.1:8082")
+        print("    2. yap         on-device Apple Speech (brew install finnvoor/tools/yap)")
+    else:
+        print("    1. local-http  a local OpenAI-compatible STT server, default 127.0.0.1:8082")
+        print("       (yap is macOS-only and is skipped on this platform)")
+    print("    3. groq / openai  cloud Whisper, and ONLY with explicit authorization:")
+    print("       a key alone does nothing without --allow-remote-transcription")
+    print("       (or WATCH_STT_ALLOW_REMOTE=true). Audio leaves your machine.")
+    print("")
+    print("  Local backends are detected, never installed. Nothing is uploaded by default.")
+    print(f"  Cloud keys, if you want them, go in {CONFIG_FILE} (GROQ_API_KEY / OPENAI_API_KEY).")
+    print("")
+    print("  With no backend at all, /watch still works: caption-less video comes back frames-only.")
     return 3
 
 
