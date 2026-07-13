@@ -15,7 +15,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_KEY="watch@claude-video"
+PLUGIN_KEY="watch@claude-video-plus"
 INSTALLED_JSON="${HOME}/.claude/plugins/installed_plugins.json"
 
 DRY_RUN=()
