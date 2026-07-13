@@ -16,7 +16,7 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from config import frame_cap, get_config  # noqa: E402
-from download import download, fetch_captions, format_description, is_url  # noqa: E402
+from download import download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from frames import MAX_FPS, auto_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 
 
@@ -541,7 +541,9 @@ def main() -> int:
             print(f"_Source: {label}._")
         print()
         print("```")
-        print(transcript_text)
+        # Manual captions are uploaded by the author, so the transcript is
+        # uploader-controlled text just like the description.
+        print(sanitize_for_report(transcript_text))
         print("```")
     elif detail == "transcript":
         print(

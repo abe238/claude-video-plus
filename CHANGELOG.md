@@ -2,6 +2,82 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.0.6] — 2026-07-13
+
+Hardening release, ported from an adversarial audit done on a local fork. Each
+item below was reproduced as a real defect in this repo before being fixed;
+changes that were local-only policy (removing cloud transcription) were not
+taken, and one claimed fix was rejected as wrong for this codebase.
+
+### Security
+
+- **Untrusted-media boundary escape (introduced in 1.0.5).** Adding the
+  description to the report meant printing uploader-controlled text inside the
+  `BEGIN/END UNTRUSTED VIDEO EVIDENCE` markers with nothing neutralizing the
+  markers themselves. An uploader could close the block from inside their own
+  description and have everything after it read as trusted context.
+
+  `sanitize_for_report()` now neutralizes, with zero-width spaces: the marker
+  phrase (matched loosely — `<!-- END  UNTRUSTED  VIDEO  EVIDENCE -->` is just
+  as effective against an LLM as the exact string, so an exact-match replace is
+  trivially bypassed); GFM fence openers, since the description is rendered
+  inside a fence; and fences hidden behind non-LF line terminators (`\r`,
+  U+2028, U+2029, `\f`, U+0085) that markdown readers treat as line breaks but
+  `str.split("\n")` does not.
+
+  Applied to every uploader-controlled surface, not just the description: the
+  title, the uploader name, chapter titles, and the transcript (manual captions
+  are uploaded by the author).
+
+- **Redirect SSRF in the loopback transcription adapter.** It used `urlopen`,
+  which follows 3xx. The loopback URL was validated to point at localhost, but a
+  compromised machine-local STT server could answer `302` and send the audio to
+  an external host — silently breaking the skill's central guarantee that audio
+  never leaves the machine without consent. All loopback requests now go through
+  an opener that refuses every redirect.
+
+### Fixed
+
+- **yap was broken for any explicit language.** `yap --locale en` is rejected
+  outright (`Locale "en" is not supported`) and **yap exits 0 while doing so**,
+  so its error text was handed to the subtitle parser as if it were a
+  transcript. `WATCH_LANGUAGE` is now normalized to an Apple locale
+  (`en` → `en_US`), and success requires actual `WEBVTT` output rather than a
+  zero exit code.
+- **Audio preparation could hang forever.** `extract_audio_range`,
+  `audio_duration`, and `detect_silence_boundaries` ran ffmpeg/ffprobe with no
+  timeout; a stalled network mount or malformed container blocked the pipeline
+  indefinitely. Bounded at 300s / 30s / 300s (silence detection degrades to even
+  chunking rather than failing).
+- **A failed receipt write discarded completed work.** A disk-full `OSError`
+  from the receipt store aborted the whole adapter and threw away every chunk
+  already transcribed. The receipt is a resume cache, not the product: it is now
+  best-effort and transcription continues.
+- **Chunk retry warnings name the cause** (`… (TimeoutExpired)`) instead of a
+  generic "unavailable after bounded retries".
+
+### Performance
+
+- **Chunk cap 24MB → 1.5MB.** 24MB was never a transcription bound — it is the
+  cloud Whisper *upload* limit, inherited from when cloud was the only backend.
+  Local adapters run first now, so that cap handed a CPU-bound model roughly 50
+  minutes of audio in a single request, which cannot finish inside
+  `WATCH_STT_TIMEOUT`. A failed chunk now costs ~3 minutes of rework, not 50.
+- **Receipt store I/O.** Every `put()` rewrote and `fsync`ed the entire JSON
+  file, so a 100-chunk video did 100 full-file rewrites of a monotonically
+  growing file. Receipts now flush every 5 chunks plus a final flush. Dropping
+  `sort_keys` also makes eviction true FIFO — sorted keys meant a reloaded store
+  evicted in hash order rather than oldest-first.
+
+### Not taken
+
+- Removing `CloudWhisperAdapter` and the `--allow-remote-transcription` flag.
+  Correct for a local-only fork, but a breaking regression here: cloud is
+  already opt-in and consent-gated, and some users want it.
+- Switching yap from `--vtt` to `--srt`. Verified against the installed yap:
+  `--txt/--srt/--vtt/--json` are all supported, so `--vtt` is fine. That fix was
+  specific to an older yap build.
+
 ## [1.0.5] — 2026-07-13
 
 Evidence and setup release. The video description is now evidence, and the

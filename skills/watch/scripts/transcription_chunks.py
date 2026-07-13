@@ -22,7 +22,18 @@ from typing import Iterable, Mapping
 
 RECEIPT_SCHEMA = 1
 MAX_RECEIPT_ENTRIES = 512
-DEFAULT_MAX_CHUNK_BYTES = 24 * 1024 * 1024
+RECEIPT_FLUSH_EVERY = 5
+
+# Audio is prepared at 64 kbps mono, so ~480 KB per minute. 1.5 MB is roughly a
+# 3-minute chunk.
+#
+# This was 24 MB, which is not a transcription bound at all -- it is the cloud
+# Whisper *upload* limit, inherited from when cloud was the only backend. Local
+# adapters are tried first now, so that limit handed a CPU-bound model a ~50
+# minute chunk in a single request, which cannot finish inside WATCH_STT_TIMEOUT.
+# The cloud path is unaffected in correctness: it simply makes more, smaller
+# requests, and a failed chunk now costs 3 minutes of rework instead of 50.
+DEFAULT_MAX_CHUNK_BYTES = 1536 * 1024
 SILENCE_RE = re.compile(r"silence_(start|end):\s*(-?\d+(?:\.\d+)?)")
 
 
@@ -51,8 +62,22 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+# Audio prep must not be able to hang the pipeline forever. A stalled network
+# mount or a malformed container previously blocked with no output and no
+# timeout; ffmpeg is not guaranteed to exit on its own.
+FFMPEG_TIMEOUT_SECONDS = 300
+FFPROBE_TIMEOUT_SECONDS = 30
+
+
 def _run_ffmpeg(command: list[str], *, failure: str) -> None:
-    result = subprocess.run(command, capture_output=True, text=True)
+    try:
+        result = subprocess.run(
+            command, capture_output=True, text=True, timeout=FFMPEG_TIMEOUT_SECONDS
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"{failure}: ffmpeg timed out after {FFMPEG_TIMEOUT_SECONDS}s"
+        ) from exc
     if result.returncode != 0:
         raise RuntimeError(f"{failure}: ffmpeg exited {result.returncode}")
 
@@ -60,14 +85,20 @@ def _run_ffmpeg(command: list[str], *, failure: str) -> None:
 def audio_duration(path: Path) -> float:
     if shutil.which("ffprobe") is None:
         raise RuntimeError("ffprobe is unavailable")
-    result = subprocess.run(
-        [
-            "ffprobe", "-v", "quiet", "-print_format", "json", "-show_format",
-            str(path.resolve()),
-        ],
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe", "-v", "quiet", "-print_format", "json", "-show_format",
+                str(path.resolve()),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=FFPROBE_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"ffprobe timed out after {FFPROBE_TIMEOUT_SECONDS}s"
+        ) from exc
     if result.returncode != 0:
         raise RuntimeError("ffprobe could not determine audio duration")
     try:
@@ -117,14 +148,18 @@ def detect_silence_boundaries(audio_path: Path) -> tuple[float, ...]:
     """Return silence midpoints; failure safely degrades to even chunking."""
     if shutil.which("ffmpeg") is None:
         return ()
-    result = subprocess.run(
-        [
-            "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
-            "-af", "silencedetect=noise=-35dB:d=0.40", "-f", "null", "-",
-        ],
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            [
+                "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
+                "-af", "silencedetect=noise=-35dB:d=0.40", "-f", "null", "-",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=FFMPEG_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        return ()  # silence detection is an optimization; degrade to even chunking
     if result.returncode != 0:
         return ()
     starts: list[float] = []
@@ -255,6 +290,7 @@ class ChunkReceiptStore:
         self.path = path
         self.enabled = enabled
         self._data = self._read()
+        self._pending = 0
 
     def _read(self) -> dict:
         empty = {"schema_version": RECEIPT_SCHEMA, "entries": {}}
@@ -317,9 +353,26 @@ class ChunkReceiptStore:
             "segments": [dict(segment) for segment in segments],
         }
         if len(entries) > MAX_RECEIPT_ENTRIES:
+            # dict preserves insertion order, so this is true FIFO -- but only
+            # because _write() no longer sorts the keys on the way out. Sorting
+            # made a reloaded store evict in hash order instead of oldest-first.
             for key in tuple(entries)[: len(entries) - MAX_RECEIPT_ENTRIES]:
                 del entries[key]
+
+        # Batch the flush. Every put used to rewrite the whole JSON file and
+        # fsync it, so a 100-chunk video did 100 full-file rewrites of a file
+        # that only grows -- quadratic I/O for a resume cache. Crash exposure is
+        # now at most RECEIPT_FLUSH_EVERY - 1 chunks of rework.
+        self._pending += 1
+        if self._pending >= RECEIPT_FLUSH_EVERY:
+            self.flush()
+
+    def flush(self) -> None:
+        """Persist any buffered receipts. Safe to call when nothing is pending."""
+        if not self.enabled or not self._pending:
+            return
         self._write()
+        self._pending = 0
 
     def _write(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -328,7 +381,9 @@ class ChunkReceiptStore:
         except OSError:
             pass
         temporary = self.path.with_name(f".{self.path.name}.{os.getpid()}.{id(self)}.tmp")
-        payload = json.dumps(self._data, sort_keys=True, separators=(",", ":")) + "\n"
+        # No sort_keys: insertion order IS the eviction order (FIFO). Sorting
+        # here made a reloaded store evict by key hash rather than oldest-first.
+        payload = json.dumps(self._data, separators=(",", ":")) + "\n"
         try:
             descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
             with os.fdopen(descriptor, "w", encoding="utf-8") as handle:

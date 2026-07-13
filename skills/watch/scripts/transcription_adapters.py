@@ -11,7 +11,7 @@ import time
 import urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 import whisper
 from transcribe import filter_range, parse_subtitle
@@ -110,19 +110,33 @@ def _run_chunked(
                 cached = None
 
         chunk_values: list[dict] | None = None
+        last_error: BaseException | None = None
         for _attempt in range(request.max_attempts):
             try:
                 chunk_values = transcribe_one(chunk)
                 if chunk_values:
                     break
-            except (Exception, SystemExit):
+            except (Exception, SystemExit) as exc:
+                # Keep the cause: "unavailable after bounded retries" alone gives
+                # no way to tell a timeout from a missing binary from bad audio.
+                last_error = exc
                 chunk_values = None
         if not chunk_values:
             failed += 1
-            warnings.append(f"chunk {chunk.index + 1} unavailable after bounded retries")
+            detail = type(last_error).__name__ if last_error else "no output"
+            warnings.append(
+                f"chunk {chunk.index + 1} unavailable after bounded retries ({detail})"
+            )
             continue
         processed += 1
-        receipts.put(adapter, model, request.language, chunk, chunk_values)
+        try:
+            receipts.put(adapter, model, request.language, chunk, chunk_values)
+        except OSError as exc:
+            # A receipt is a resume optimization, not the product. A full disk
+            # used to abort the adapter here and discard every chunk already
+            # transcribed; losing the receipt is strictly cheaper than losing
+            # the work.
+            warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
         segments.extend(
             _local_segments(
                 chunk_values,
@@ -132,6 +146,13 @@ def _run_chunked(
                 language=request.language,
             )
         )
+
+    # Receipts are flushed in batches, so the tail must be persisted explicitly
+    # or the last <5 chunks would be re-transcribed on resume.
+    try:
+        receipts.flush()
+    except OSError as exc:
+        warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
 
     if not segments:
         state = "unavailable"
@@ -241,6 +262,47 @@ class SidecarAdapter:
         )
 
 
+# yap takes an Apple locale and rejects a bare language code outright:
+#   $ yap transcribe a.wav --locale en
+#   Locale "en" is not supported. Supported locales: ["fr_FR", ... "en_US" ...]
+# and it exits 0 while doing so. WATCH_LANGUAGE=en is the most natural thing a
+# user would set, so map bare codes onto yap's default region for that language.
+_YAP_DEFAULT_REGION = {
+    "en": "en_US", "fr": "fr_FR", "de": "de_DE", "it": "it_IT", "es": "es_ES",
+    "pt": "pt_BR", "ko": "ko_KR", "ja": "ja_JP", "zh": "zh_CN", "yue": "yue_CN",
+}
+
+
+def _yap_locale(language: str) -> str:
+    """Normalize a WATCH_LANGUAGE value to an Apple locale yap will accept."""
+    value = language.strip().replace("-", "_")
+    if "_" in value:  # already regioned, e.g. en-GB -> en_GB
+        base, _, region = value.partition("_")
+        return f"{base.lower()}_{region.upper()}"
+    return _YAP_DEFAULT_REGION.get(value.lower(), value)
+
+
+class _NoRedirects(HTTPRedirectHandler):
+    """Refuse every 3xx.
+
+    The loopback URL is validated to point at localhost, but urlopen follows
+    redirects by default, so a compromised or malicious machine-local server
+    could answer 302 and send the audio to an external host. That would silently
+    break the skill's central guarantee: audio never leaves the machine without
+    explicit consent. Validating the URL and then following wherever it points
+    is not a guarantee at all.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise urllib.error.URLError(
+            f"refusing HTTP {code} redirect from local STT server to {newurl!r}"
+        )
+
+
+# Redirect-refusing opener, used for every loopback request.
+_LOOPBACK_OPENER = build_opener(_NoRedirects())
+
+
 def _loopback_endpoint(value: str) -> tuple[str, str]:
     parsed = urlsplit(value)
     if parsed.scheme not in {"http", "https"} or not parsed.hostname:
@@ -288,7 +350,7 @@ class LoopbackHTTPAdapter:
         except ValueError:
             return AdapterAvailability(False, "non_loopback_url", "local HTTP URL rejected")
         try:
-            with urlopen(Request(models_endpoint, method="GET"), timeout=self.probe_timeout):
+            with _LOOPBACK_OPENER.open(Request(models_endpoint, method="GET"), timeout=self.probe_timeout):
                 pass
         except urllib.error.HTTPError as exc:
             if exc.code not in {401, 403, 404, 405}:
@@ -313,7 +375,7 @@ class LoopbackHTTPAdapter:
             method="POST",
         )
         try:
-            with urlopen(http_request, timeout=request.timeout) as response:
+            with _LOOPBACK_OPENER.open(http_request, timeout=request.timeout) as response:
                 payload = response.read().decode("utf-8", errors="replace")
         except urllib.error.HTTPError as exc:
             raise RuntimeError(f"local transcription HTTP {exc.code}") from None
@@ -353,15 +415,20 @@ class YapAdapter:
     def _transcribe_one(self, request: TranscriptionRequest, chunk: AudioChunk) -> list[dict]:
         command = [self.executable, "transcribe", str(chunk.path), "--vtt"]
         if request.language != "auto":
-            command += ["--locale", request.language]
+            command += ["--locale", _yap_locale(request.language)]
         result = subprocess.run(
             command,
             capture_output=True,
             text=True,
             timeout=request.timeout,
         )
-        if result.returncode != 0 or not result.stdout.strip():
-            raise RuntimeError("YAP did not return timestamped output")
+        # yap exits 0 even when it rejects the locale, printing an error where the
+        # captions should be. Trusting the exit code would hand that error text to
+        # the parser as if it were a transcript.
+        if result.returncode != 0 or "WEBVTT" not in (result.stdout or ""):
+            detail = (result.stdout or result.stderr or "").strip().splitlines()
+            hint = f": {detail[0][:80]}" if detail else ""
+            raise RuntimeError(f"YAP did not return timestamped output{hint}")
         output = request.work_dir / "yap" / f"chunk_{chunk.index:03d}.vtt"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(result.stdout, encoding="utf-8")

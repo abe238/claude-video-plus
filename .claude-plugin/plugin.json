@@ -1,6 +1,6 @@
 {
   "name": "watch",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Fork of Brad Bonanno's bradautomates/claude-video. Adds opt-in question-aware evidence retrieval; an initial one-video, three-question benchmark used 60-79% fewer estimated reader tokens and tied or won blind paired judging. Broader testing is in progress.",
   "author": {
     "name": "Abe Diaz"

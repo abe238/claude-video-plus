@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from download import format_description  # noqa: E402
+from download import format_description, sanitize_for_report  # noqa: E402
 from transcribe import MIN_OVERLAP, dedupe_rolling, parse_vtt, strip_overlap  # noqa: E402,F401
 from retrieval import conflicts, lexical_rank, obligations, progressive_expand, scout_identity  # noqa: E402
 from semantic import hashed_local_rank, remote_rank, uncertainty  # noqa: E402
@@ -547,13 +547,19 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
     ]
     for ch in chapters:
         if ch["id"] in selected_set:
-            lines.append(f"- {ch['title']} [{fmt_ts(ch['start'])}-{fmt_ts(ch['end'])}]")
+            lines.append(
+                f"- {sanitize_for_report(ch['title'])} "
+                f"[{fmt_ts(ch['start'])}-{fmt_ts(ch['end'])}]"
+            )
     lines += ["", "## Frames"]
     for e in frame_entries:
         lines.append(f"- t={e['t_start']} {e['frame']} ({e['reason']})")
     lines += ["", "## Transcript evidence"]
     for _, header, text in sorted(blocks, key=lambda b: b[0]):
-        lines += ["", f"### {header}", text]
+        # Chapter titles and transcript text are both author-controlled (chapters
+        # come from info.json, manual captions are uploaded), so neither may be
+        # allowed to close the untrusted-evidence block.
+        lines += ["", f"### {sanitize_for_report(header)}", sanitize_for_report(text)]
     (out_dir / "report.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     return {

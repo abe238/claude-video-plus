@@ -72,11 +72,13 @@ def test_loopback_probe_is_mocked_and_never_contacts_remote(monkeypatch, tmp_pat
         def __exit__(self, *args):
             return False
 
-    def fake_urlopen(request, timeout):
+    def fake_open(request, timeout):
         seen.append(request.full_url)
         return Response()
 
-    monkeypatch.setattr(adapters, "urlopen", fake_urlopen)
+    # Loopback requests go through a redirect-refusing opener, not urlopen: a
+    # hostile local server must not be able to 302 the audio off the machine.
+    monkeypatch.setattr(adapters._LOOPBACK_OPENER, "open", fake_open)
     adapter = LoopbackHTTPAdapter(url="http://[::1]:8082", model="local", probe_timeout=0.1)
     assert adapter.probe(_prepared_request(tmp_path)).available is True
     assert seen == ["http://[::1]:8082/v1/models"]

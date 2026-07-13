@@ -8,6 +8,7 @@ author-supplied description from info.json as bounded, untrusted evidence.
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -122,13 +123,19 @@ def _read_info(info_path: Path, url: str) -> dict:
     if info_path.exists():
         try:
             raw = json.loads(info_path.read_text(encoding="utf-8"))
+            # Title and uploader are author-controlled and land in the report
+            # header, outside the description's fence -- sanitize at the source
+            # so every consumer gets a marker-safe value.
+            title = raw.get("title")
+            uploader = raw.get("uploader") or raw.get("channel")
             info = {
-                "title": raw.get("title"),
-                "uploader": raw.get("uploader") or raw.get("channel"),
+                "title": sanitize_for_report(title) if title else title,
+                "uploader": sanitize_for_report(uploader) if uploader else uploader,
                 "duration": raw.get("duration"),
                 "url": raw.get("webpage_url") or url,
                 # Author-supplied and untrusted, but it is the only place the
                 # exact spellings live: ASR renders "OmniRoute" as "Omniroot".
+                # format_description() sanitizes on the way out.
                 "description": raw.get("description"),
             }
         except Exception as exc:
@@ -170,6 +177,51 @@ def download(
 
 DESCRIPTION_CHAR_LIMIT = 2000
 
+ZWSP = "​"
+
+# The report wraps media-derived text in BEGIN/END UNTRUSTED VIDEO EVIDENCE
+# markers. Match the *distinguishing phrase* rather than the exact marker
+# string: an LLM will honor "<!-- END  UNTRUSTED   VIDEO  EVIDENCE -->" as the
+# boundary just as readily, so an exact-string replace is trivially bypassed.
+_MARKER_RE = re.compile(r"UNTRUSTED\s+VIDEO\s+EVIDENCE", re.IGNORECASE)
+
+# CommonMark and LLM readers treat all of these as line breaks; str.split("\n")
+# does not, so a fence hidden behind one would evade a naive line scanner.
+_LINE_BREAKS = ("\r\n", "\r", " ", " ", "\f", "\x85")
+
+
+def sanitize_for_report(text: str) -> str:
+    """Neutralize sequences in uploader-controlled text that could escape the
+    report's structure when an agent reads it.
+
+    Everything media-derived is attacker-controlled: the description, the title,
+    the uploader name, and the transcript (manual captions are uploaded by the
+    author). Without this, a description containing the END marker closes the
+    untrusted block early and everything after it reads as trusted context.
+
+    Three vectors:
+      1. the BEGIN/END UNTRUSTED VIDEO EVIDENCE markers, matched loosely;
+      2. lines opening a GFM fence (3+ backticks or tildes) -- the description
+         is rendered inside a fence, so one would close it and let the rest
+         render as report structure;
+      3. fences hidden behind non-LF line terminators.
+
+    ponytail: zero-width spaces, not deletion. The text stays readable and the
+    exact spellings survive (the whole reason the description is in the report),
+    but the token no longer reads as a marker or a fence.
+    """
+    for terminator in _LINE_BREAKS:
+        text = text.replace(terminator, "\n")
+
+    text = _MARKER_RE.sub(lambda m: ZWSP.join(m.group(0)), text)
+
+    lines = text.split("\n")
+    for i, line in enumerate(lines):
+        stripped = line.lstrip()
+        if stripped.startswith("```") or stripped.startswith("~~~"):
+            lines[i] = ZWSP + line
+    return "\n".join(lines)
+
 
 def format_description(info: dict, limit: int = DESCRIPTION_CHAR_LIMIT) -> str | None:
     """The author-supplied description, bounded, or None if there isn't one.
@@ -188,9 +240,11 @@ def format_description(info: dict, limit: int = DESCRIPTION_CHAR_LIMIT) -> str |
     body = (info.get("description") or "").strip()
     if not body:
         return None
-    if len(body) <= limit:
-        return body
-    return body[:limit].rstrip() + f"\n\n[… truncated at {limit} characters]"
+    if len(body) > limit:
+        body = body[:limit].rstrip() + f"\n\n[… truncated at {limit} characters]"
+    # Sanitize last: truncation could otherwise slice a neutralized marker back
+    # into a live one.
+    return sanitize_for_report(body)
 
 
 if __name__ == "__main__":
