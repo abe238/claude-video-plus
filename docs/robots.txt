@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abe238.github.io/claude-video-plus/sitemap.xml

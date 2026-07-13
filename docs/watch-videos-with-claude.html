@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask Claude to Watch a Video — claude-video-plus (56% fewer tokens)</title>
+<meta name="description" content="Give Claude Code, Codex, or Cursor a YouTube link or local video and ask a question. claude-video-plus retrieves only the evidence that answers it — matching the original claude-video's answer quality at 56% fewer tokens in a sealed benchmark.">
+<link rel="canonical" href="https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="claude watch video, claude-video, claude code video skill, ask claude about a youtube video, agent skill video, reduce token cost video analysis, yt-dlp claude, transcribe video claude, claude-video alternative">
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ask Claude to Watch a Video — claude-video-plus">
+<meta property="og:description" content="Ask a video a question. Evidence retrieval matches the original's answer quality at 56% fewer tokens — with sealed benchmark data.">
+<meta property="og:url" content="https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html">
+<meta property="og:image" content="https://abe238.github.io/claude-video-plus/assets/watch-demo.gif">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ask Claude to Watch a Video — claude-video-plus">
+<meta name="twitter:description" content="Ask a video a question. Same answer quality as claude-video at 56% fewer tokens, with sealed benchmark data.">
+<meta name="twitter:image" content="https://abe238.github.io/claude-video-plus/assets/watch-demo.gif">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "claude-video-plus (/watch)",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS, Linux, Windows",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "An Agent Skill that lets Claude Code, Codex, Cursor and other agents answer questions about a video by retrieving only the relevant chapters, numeric facts, and on-screen moments instead of reading the whole timeline.",
+  "url": "https://github.com/abe238/claude-video-plus",
+  "license": "https://opensource.org/licenses/MIT",
+  "isBasedOn": "https://github.com/bradautomates/claude-video"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Can Claude watch a YouTube video?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. With the /watch skill installed, you paste a YouTube URL (or any yt-dlp-supported link, or a local file) and ask a question. The skill fetches captions, extracts frames with ffmpeg, and hands Claude the evidence so it can answer with cited timestamps." } },
+    { "@type": "Question", "name": "How do I reduce the token cost of video analysis with an AI agent?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Retrieve instead of reading everything. claude-video-plus's evidence mode selects only the chapters, on-screen numbers, and moments that answer your question, which sent 56% fewer tokens than the original full-timeline pipeline in a sealed benchmark while matching its answer quality." } },
+    { "@type": "Question", "name": "Does it work in Codex, Cursor, and other agents?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is an Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other Agent Skills hosts via 'npx skills add abe238/claude-video-plus -g'." } },
+    { "@type": "Question", "name": "Is claude-video-plus free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, it is open source under the MIT license. Captions cover most public videos at no cost; a Whisper API key is only needed for videos that have no captions." } },
+    { "@type": "Question", "name": "What is the difference between claude-video and claude-video-plus?",
+      "acceptedAnswer": { "@type": "Answer", "text": "claude-video-plus is an attributed MIT fork of Brad Bonanno's claude-video. It adds an opt-in evidence mode that answers questions with far fewer tokens, and falls back to the original pipeline whenever there is no question, no captions, a local file, a short video, or any error." } }
+  ]
+}
+</script>
+<style>
+  :root{--ink:#0c0e0b;--panel:#12150f;--line:#232920;--paper:#f2efe4;--dim:#9aa38e;--amber:#ffb224;--green:#3ddc84;--red:#ff6b5e;--mono:"IBM Plex Mono",ui-monospace,monospace;--disp:"Bricolage Grotesque",system-ui,sans-serif;}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--paper);font-family:var(--disp);line-height:1.6;-webkit-font-smoothing:antialiased}
+  main{max-width:820px;margin:0 auto;padding:0 28px 100px}
+  a{color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(255,178,36,.35)}
+  a:hover{border-bottom-color:var(--amber)}
+  .crumb{font:500 12px var(--mono);color:var(--amber);letter-spacing:.16em;text-transform:uppercase}
+  .crumb a{color:var(--dim);border:none}
+  header{padding:64px 0 8px}
+  h1{font-size:clamp(34px,6vw,58px);font-weight:780;line-height:1.02;letter-spacing:-.02em;margin:16px 0 14px}
+  .sub{font-size:19px;color:#cfd5c4;max-width:640px}
+  .sub b{color:var(--paper)}
+  h2{font-size:clamp(24px,3.4vw,34px);font-weight:740;letter-spacing:-.01em;margin:56px 0 14px}
+  h3{font-size:19px;font-weight:700;margin:26px 0 6px}
+  p{color:#c8cfbc;margin:12px 0}
+  section{margin-top:8px}
+  img.demo{width:100%;max-width:820px;border:1px solid var(--line);border-radius:12px;margin:30px 0}
+  pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow-x:auto;font:500 13.5px/1.7 var(--mono);color:var(--green);margin:16px 0}
+  code{font:500 13px var(--mono);color:var(--amber)}
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15.5px}
+  th{font:600 11px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.12em;text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  td{padding:13px 12px;border-bottom:1px solid var(--line);color:#c8cfbc}
+  td.win{color:var(--green);font-weight:700}
+  td.mono{font:500 14px var(--mono)}
+  ul{margin:12px 0 12px 2px;padding-left:20px}
+  li{color:#c8cfbc;margin:7px 0}
+  .lede-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:26px 0}
+  details{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:14px 18px;margin:12px 0}
+  summary{cursor:pointer;color:var(--paper);font-weight:650}
+  details p{margin-top:10px;color:#aeb7a1;font-size:15px}
+  footer{margin-top:70px;padding-top:26px;border-top:1px solid var(--line);font:400 13px var(--mono);color:var(--dim);display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+  @media (prefers-color-scheme: light){
+    :root{--ink:#f4f2e9;--panel:#fbf9f1;--line:#e2ddca;--paper:#171812;--dim:#6f7460}
+    body{color:var(--paper)} p,li,td{color:#33362a} .sub{color:#3d4030}
+  }
+  :root[data-theme="dark"]{--ink:#0c0e0b;--panel:#12150f;--line:#232920;--paper:#f2efe4;--dim:#9aa38e}
+  :root[data-theme="light"]{--ink:#f4f2e9;--panel:#fbf9f1;--line:#e2ddca;--paper:#171812;--dim:#6f7460}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="crumb"><a href="./">claude-video-plus</a> / ask a video a question</div>
+    <h1>Ask Claude to watch a video</h1>
+    <p class="sub">Give Claude Code, Codex, or Cursor a YouTube link or a local file and ask a question. <b>/watch</b> retrieves only the evidence that answers it — so you get the same answer for a fraction of the tokens.</p>
+  </header>
+
+  <img class="demo" src="assets/watch-demo.gif" alt="Terminal demo: /watch --detail evidence --question about pricing retrieves 9 frames and 4 transcript spans and sends 11,505 tokens instead of 50,941, a 77% reduction on a targeted question">
+
+  <section>
+    <p>Most tools that let an AI agent "watch" a video feed it the <em>whole</em> thing — dozens of frames plus the full transcript — no matter how small your question is. That is roughly 50,000 tokens on a 40-minute video, every time. <a href="https://github.com/abe238/claude-video-plus">claude-video-plus</a> takes a different path: when you ask a question, it <b>retrieves only the parts of the video that answer it</b>.</p>
+  </section>
+
+  <section>
+    <h2>Install in one command</h2>
+    <p><b>Claude Code</b> (auto-updates via the plugin marketplace):</p>
+    <pre>/plugin marketplace add abe238/claude-video-plus
+/plugin install watch@claude-video-plus</pre>
+    <p><b>Codex, Cursor, GitHub Copilot, Gemini CLI</b>, or any of 50+ <a href="https://agentskills.io">Agent Skills</a> hosts:</p>
+    <pre>npx skills add abe238/claude-video-plus -g</pre>
+    <p>Then just talk to it: <code>/watch https://youtu.be/… what did they say about pricing?</code></p>
+  </section>
+
+  <section>
+    <h2>How evidence mode works</h2>
+    <p>Instead of sampling the entire timeline, evidence mode reads your question and builds a small, auditable set of evidence:</p>
+    <ul>
+      <li><b>Whole topical chapters</b> — from YouTube's own chapter markers, with a pause-gap fallback when there are none.</li>
+      <li><b>A numeric guard</b> that rescues pricing, benchmark, and spec lines from anywhere in the video and grabs a frame at each, because numbers live on screen.</li>
+      <li><b>Deictic frames</b> at chapter starts and "as you can see" moments, where the speaker is pointing at something visual.</li>
+      <li><b>A token budget</b>, so long videos stay cheap.</li>
+    </ul>
+    <p>Every selection lands in a manifest with its timestamp, reason, and score, so you can audit exactly what the model saw and why. It also mines on-screen tables from frames (content nobody reads aloud) and reconciles conflicting claims.</p>
+  </section>
+
+  <section>
+    <h2>claude-video-plus vs. the original claude-video</h2>
+    <p>This project is a grateful, attributed MIT fork of <a href="https://github.com/bradautomates/claude-video">Brad Bonanno's claude-video</a>, whose caption-first, fail-open design it inherits wholesale. The fork adds one thing: an opt-in evidence mode, measured in a sealed benchmark on five unseen videos.</p>
+    <table>
+      <thead><tr><th>On a question</th><th>Original claude-video</th><th>claude-video-plus (evidence)</th></tr></thead>
+      <tbody>
+        <tr><td>Blind answer quality (1–10)</td><td class="mono">8.80</td><td class="mono win">8.83 — same</td></tr>
+        <tr><td>Required facts covered</td><td class="mono">3.57</td><td class="mono win">3.67 — same</td></tr>
+        <tr><td>Tokens sent to the model</td><td class="mono">100%</td><td class="mono win">44% (56% less)</td></tr>
+        <tr><td>Cold end-to-end wall time</td><td class="mono">32–34 s</td><td class="mono win">18–19 s</td></tr>
+      </tbody>
+    </table>
+    <div class="lede-card">
+      <p style="margin:0"><b>When the original is the right choice, it runs automatically.</b> No question, no captions, a local file, a video under 9 minutes, or any internal error, and /watch falls back to the untouched original pipeline. There is no case where you get a worse result than claude-video — evidence mode is pure upside, opt-in per question.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The measured results</h2>
+    <p>The headline numbers come from a sealed, receipt-gated run that can only happen once. On individual targeted questions in development testing, savings ran deeper — one pricing question dropped from 50,941 tokens to 11,505 (−77%) with no loss of quality, and a feature question from 50,941 to 10,555 (−79%) while the answer quality actually went up. Every loss is published, unedited.</p>
+    <p>All raw data, judge transcripts, and the negative results live in <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">docs/benchmarks/</a>.</p>
+  </section>
+
+  <section>
+    <h2>Frequently asked questions</h2>
+    <details><summary>Can Claude watch a YouTube video?</summary><p>Yes. With /watch installed, paste a YouTube URL (or any yt-dlp-supported link, or a local file) and ask a question. It fetches captions, extracts frames with ffmpeg, and answers with cited timestamps.</p></details>
+    <details><summary>How do I reduce the token cost of video analysis?</summary><p>Retrieve instead of reading everything. Evidence mode selects only the chapters, on-screen numbers, and moments that answer your question — 56% fewer tokens than the full-timeline default in a sealed benchmark, at the same answer quality.</p></details>
+    <details><summary>Does it work in Codex, Cursor, and other agents?</summary><p>Yes. It is a portable Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other hosts with <code>npx skills add abe238/claude-video-plus -g</code>.</p></details>
+    <details><summary>Does it handle local video files, not just YouTube?</summary><p>Yes — pass a local path like <code>~/Movies/screen-recording.mp4</code>. Local files use the original pipeline (evidence mode needs captions to retrieve against).</p></details>
+    <details><summary>Is it free?</summary><p>Yes, MIT-licensed and open source. Captions cover most public videos for free; a Whisper API key is only needed when a video has none.</p></details>
+  </section>
+
+  <footer>
+    <span><a href="https://github.com/abe238/claude-video-plus">github.com/abe238/claude-video-plus</a></span>
+    <span><a href="./">Home</a> · <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">Benchmark data</a> · MIT</span>
+  </footer>
+</main>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+</script>
+</body>
+</html>

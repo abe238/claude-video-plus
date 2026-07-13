@@ -4,10 +4,14 @@
 
 Ask a video a question and `/watch` fetches only the evidence that answers it. In a sealed, receipt-gated benchmark on five videos it had never seen, evidence mode matched the original's blind-judged answer quality (8.83 vs 8.80) while sending the AI **56% less material**, and it ran **~14 seconds faster** end-to-end than the default mode. Zero risk to adopt: it only runs when you ask a question, and on any problem (no captions, local file, short video, any error) it runs the original pipeline instead.
 
+<p align="center">
+  <img src="docs/assets/watch-demo.gif" alt="/watch evidence mode: ask a video a question and it retrieves only the chapters, numeric facts, and on-screen moments that answer it — 50,941 tokens down to 11,505 on a targeted question" width="820">
+</p>
+
 > [!NOTE]
 > This is a fork of Brad Bonanno's [bradautomates/claude-video](https://github.com/bradautomates/claude-video), not the original repository. Upstream history, MIT license, and authorship are preserved; see [Gratitude](#gratitude-and-attribution).
 
-**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **All benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **Status:** [`v1.0.3`](https://github.com/abe238/claude-video-plus/releases/latest) stable, 338 deterministic tests, hosted macOS/Linux matrix, isolated install lifecycle ([status page](docs/V1-STATUS.md))
+**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Guide:** [Ask Claude to watch a video](https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html) · **All benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **Status:** [`v1.0.3`](https://github.com/abe238/claude-video-plus/releases/latest) stable, 338 deterministic tests, hosted macOS/Linux matrix, isolated install lifecycle ([status page](docs/V1-STATUS.md))
 
 ## Install
 
