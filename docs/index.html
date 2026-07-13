@@ -98,6 +98,7 @@
   .stat:last-child { border-right: none; }
   .stat b { display: block; font-size: 34px; font-weight: 760; letter-spacing: -.02em; }
   .stat.win b { color: var(--green); }
+  .stat.bad b { color: var(--red); }
   .stat.tok b { color: var(--amber); }
   .stat span { font: 400 11.5px/1.5 var(--mono); color: var(--dim); }
   .status-note {
@@ -253,7 +254,7 @@
     <h2>Version 1.0 is ready to use.</h2>
     <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. It keeps secrets outside agent conversations, marks media-derived content as untrusted evidence, and passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit.</p>
     <div class="stats">
-      <div class="stat win"><b data-gh="tests">passing</b><span>deterministic suite on <code>main</code>, live from CI</span></div>
+      <div class="stat"><b data-gh="tests">see&nbsp;CI</b><span>deterministic suite on <code>main</code>, live from CI</span></div>
       <div class="stat"><b>5/5</b><span>hosted macOS/Linux Python jobs passing</span></div>
       <div class="stat"><b>83da59f</b><span>the exact untouched original version used for comparisons</span></div>
       <div class="stat tok"><b data-gh="version">latest</b><span>current stable release</span></div>
@@ -336,7 +337,13 @@ async function loadRepoFacts() {
       const data = await r.json();
       const run = (data.workflow_runs || [])[0];
       if (run && run.conclusion) {
-        setFact('tests', run.conclusion === 'success' ? 'passing' : run.conclusion, run.html_url);
+        const ok = run.conclusion === 'success';
+        setFact('tests', ok ? 'passing' : run.conclusion, run.html_url);
+        // Only claim green once CI actually said so. The static fallback is
+        // deliberately neutral ("see CI") so a rate-limited API can never make
+        // this page assert a passing suite it did not verify.
+        const tile = document.querySelector('[data-gh="tests"]')?.closest('.stat');
+        if (tile) tile.classList.add(ok ? 'win' : 'bad');
       }
     }
   } catch (e) { /* keep the fallback text */ }
