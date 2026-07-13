@@ -2,7 +2,12 @@
 
 All notable changes to `/watch` are documented here.
 
-## [Unreleased]
+## [1.0.4] — 2026-07-12
+
+Transcript release. The release artifact is
+[`watch.skill`](https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill).
+Every non-evidence mode now costs roughly half the transcript tokens it used to,
+losslessly. Evidence mode is unchanged.
 
 ### Fixed
 
@@ -24,6 +29,16 @@ All notable changes to `/watch` are documented here.
   so one implementation serves both paths; `evidence.py` re-exports them.
 - `dev-sync.sh` targeted the pre-rename `watch@claude-video` plugin key and
   could not resolve an install path.
+
+### Repository
+
+- Pinned the v1 execution chain as tag `execution/v1-record`. A history rewrite
+  orphaned the commits `REQUIREMENTS.json`, `PROVENANCE.md`, and the P00/P01
+  packets attest to (`plan_commit` edc2ce6, `candidate_base` 75f3189, P01
+  a97724f). No ref reached them, so they survived only as unreferenced objects
+  subject to garbage collection, and the registry validator had been failing in
+  CI since the P01 untrack commit. The tag makes the chain reachable and
+  GC-safe; the registry still points at the original, reviewed SHAs.
 
 ## [1.0.3] — 2026-07-12
 
