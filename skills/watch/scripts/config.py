@@ -13,10 +13,15 @@ DEFAULT_DETAIL = "balanced"
 
 DETAILS = {"transcript", "efficient", "balanced", "token-burner"}
 
-DEFAULT_STT_ORDER = ("local-http", "yap", "groq", "openai")
+# Every local adapter is tried before any cloud adapter. whisper-cli sits last
+# among the local ones: it is the heaviest (it loads a model per chunk) but it is
+# the only local option that exists on a bare Linux box, where local-http needs a
+# server the user runs themselves and yap is macOS-only.
+DEFAULT_STT_ORDER = ("local-http", "yap", "whisper-cli", "groq", "openai")
 STT_ADAPTERS = frozenset(DEFAULT_STT_ORDER)
 DEFAULT_STT_URL = "http://127.0.0.1:8082"
 DEFAULT_STT_MODEL = "Systran/faster-whisper-medium"
+DEFAULT_WHISPER_CLI_MODEL = "small"
 DEFAULT_LANGUAGE = "auto"
 
 
@@ -129,9 +134,20 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         _config_value("WATCH_STT_MODEL", file_values, overrides, DEFAULT_STT_MODEL)
     ).strip() or DEFAULT_STT_MODEL
     yap_path = str(_config_value("WATCH_YAP_PATH", file_values, overrides, "yap")).strip() or "yap"
+    whisper_cli_path = str(
+        _config_value("WATCH_WHISPER_CLI_PATH", file_values, overrides, "whisper")
+    ).strip() or "whisper"
+    whisper_cli_model = str(
+        _config_value("WATCH_WHISPER_CLI_MODEL", file_values, overrides, DEFAULT_WHISPER_CLI_MODEL)
+    ).strip() or DEFAULT_WHISPER_CLI_MODEL
 
     try:
-        timeout = float(_config_value("WATCH_STT_TIMEOUT", file_values, overrides, 300.0))
+        # 600s, not 300s. A chunk is ~3.3 min of audio. Apple Silicon
+        # faster-whisper does one in ~93s (0.46x realtime, measured), but
+        # CPU-only openai-whisper -- the hardware whisper-cli exists for -- runs
+        # slower than realtime, so 300s would time out on every chunk. This is a
+        # ceiling, not a wait: a fast backend still returns as soon as it is done.
+        timeout = float(_config_value("WATCH_STT_TIMEOUT", file_values, overrides, 600.0))
         probe_timeout = float(
             _config_value("WATCH_STT_PROBE_TIMEOUT", file_values, overrides, 1.0)
         )
@@ -158,6 +174,8 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         "model": stt_model,
         "language": language,
         "yap_path": yap_path,
+        "whisper_cli_path": whisper_cli_path,
+        "whisper_cli_model": whisper_cli_model,
         "allow_remote": allow_remote,
         "timeout": timeout,
         "probe_timeout": probe_timeout,

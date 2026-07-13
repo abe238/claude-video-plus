@@ -174,7 +174,9 @@ def main() -> int:
         default=None,
         help="Force a specific Whisper backend. Default: prefer Groq, fall back to OpenAI.",
     )
-    ap.add_argument("--stt", choices=["auto", "sidecar", "local-http", "yap", "groq", "openai"],
+    ap.add_argument("--stt",
+                    choices=["auto", "sidecar", "local-http", "yap", "whisper-cli",
+                             "groq", "openai"],
                     default="auto", help="Select a normalized transcription Adapter")
     ap.add_argument("--allow-remote-transcription", action="store_true",
                     help="Explicitly authorize audio transmission to Groq/OpenAI")

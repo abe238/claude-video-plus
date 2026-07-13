@@ -282,6 +282,20 @@ def _yap_locale(language: str) -> str:
     return _YAP_DEFAULT_REGION.get(value.lower(), value)
 
 
+def _whisper_language(language: str) -> str | None:
+    """Normalize WATCH_LANGUAGE for the openai-whisper CLI, or None to autodetect.
+
+    Exactly inverse to yap: whisper takes a bare code ('en') and rejects locale
+    forms ('en-US'), while yap rejects bare codes and demands the locale. One
+    WATCH_LANGUAGE value has to satisfy both, so each adapter normalizes on the
+    way out rather than constraining what the user may configure.
+    """
+    if language.strip().lower() == "auto":
+        return None
+    base = language.strip().replace("_", "-").split("-")[0].lower()
+    return base if len(base) == 2 else None
+
+
 class _NoRedirects(HTTPRedirectHandler):
     """Refuse every 3xx.
 
@@ -446,6 +460,79 @@ class YapAdapter:
             receipts,
             adapter=self.name,
             model="apple-speech",
+            transcribe_one=lambda chunk: self._transcribe_one(request, chunk),
+            remote=False,
+        )
+
+
+class WhisperCliAdapter:
+    """A real speech model running on this machine, via the `openai-whisper` CLI.
+
+    Closes the gap that pushed Linux users to the cloud: local-http needs a
+    server they must run themselves, and yap is macOS-only, so a Linux box with
+    no server had no local option at all and fell through to cloud Whisper --
+    quietly contradicting the local-first promise. No daemon, no network, just a
+    subprocess. Detected, never installed (`pip install openai-whisper`).
+
+    `small` by default: on CPU it stays usable, where medium/large cost several
+    times the wall time for marginal gains without a GPU.
+    """
+
+    name = "whisper-cli"
+    requires_audio = True
+    is_remote = False
+
+    def __init__(self, *, executable: str = "whisper", model: str = "small"):
+        self.executable = executable
+        self.model = model
+
+    def probe(self, request: TranscriptionRequest) -> AdapterAvailability:
+        del request
+        if shutil.which(self.executable) is None:
+            return AdapterAvailability(False, "whisper_cli_not_installed")
+        return AdapterAvailability(True)
+
+    def _transcribe_one(self, request: TranscriptionRequest, chunk: AudioChunk) -> list[dict]:
+        out_dir = request.work_dir / "whisper-cli"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        output = out_dir / f"{chunk.path.stem}.srt"
+        # A killed prior run can leave an .srt behind. Delete it first, so the
+        # file's presence is a signal about THIS invocation and not a fossil.
+        if output.exists():
+            output.unlink()
+
+        command = [
+            self.executable, str(chunk.path),
+            "--model", self.model,
+            "--output_format", "srt",
+            "--output_dir", str(out_dir),
+        ]
+        language = _whisper_language(request.language)
+        if language:
+            command += ["--language", language]
+
+        subprocess.run(command, capture_output=True, text=True, timeout=request.timeout)
+
+        # The whisper CLI can exit 0 having produced nothing (its internal ffmpeg
+        # failing on the input, for one). The output file is the only honest
+        # success signal; the return code is not. Same trap as yap, which exits 0
+        # while rejecting a locale.
+        if not output.is_file():
+            raise RuntimeError("whisper CLI did not produce an output file")
+        try:
+            return parse_subtitle(output, strict=True)
+        finally:
+            try:
+                output.unlink()
+            except OSError:
+                pass
+
+    def transcribe(self, request: TranscriptionRequest, receipts: ChunkReceiptStore) -> TranscriptResult:
+        return _run_chunked(
+            request,
+            receipts,
+            adapter=self.name,
+            model=self.model,
             transcribe_one=lambda chunk: self._transcribe_one(request, chunk),
             remote=False,
         )

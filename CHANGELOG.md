@@ -2,6 +2,43 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.0.7] — 2026-07-13
+
+Local-first everywhere. Completes the port from the local fork's audit.
+
+### Added
+
+- **`whisper-cli` adapter.** A real speech model running on the user's own
+  machine via the pip-installable `openai-whisper` CLI: no daemon, no server, no
+  network, any platform. Detected, never installed.
+
+  This closes a hole in the local-first promise. `local-http` needs a server the
+  user must run themselves and `yap` is macOS-only, so a bare Linux box had **no
+  local option at all** and fell through to cloud Whisper. The default order is
+  now `local-http → yap → whisper-cli → groq → openai`: every local adapter is
+  tried before anything leaves the machine. Configure with
+  `WATCH_WHISPER_CLI_PATH` / `WATCH_WHISPER_CLI_MODEL` (default `small`, which
+  stays usable on CPU where medium/large cost several times the wall time for
+  marginal gain without a GPU).
+
+  Success is detected by **output-file presence, not exit code** — the whisper
+  CLI can exit 0 having produced nothing — and a stale `.srt` from a killed prior
+  run is deleted first so it can never be misread as a fresh result. Same class
+  of trap as yap, which exits 0 while rejecting a locale.
+
+### Fixed
+
+- **`WATCH_STT_TIMEOUT` 300s → 600s.** 1.0.6 cut the chunk size to ~3.3 minutes
+  of audio but left the timeout at 300s, taking half of a paired change.
+  Measured: Apple Silicon faster-whisper transcribes a full chunk in 93s (0.46x
+  realtime), so 300s was fine there — but CPU-only `openai-whisper`, the exact
+  hardware `whisper-cli` exists for, runs *slower* than realtime and would have
+  timed out on every chunk. The timeout is a ceiling, not a wait: a fast backend
+  still returns as soon as it is done.
+- `WATCH_LANGUAGE` now normalizes per adapter in both directions. yap rejects a
+  bare code and needs `en_US`; the whisper CLI rejects a locale and needs `en`.
+  One configured value now satisfies both instead of breaking one of them.
+
 ## [1.0.6] — 2026-07-13
 
 Hardening release, ported from an adversarial audit done on a local fork. Each

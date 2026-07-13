@@ -161,11 +161,11 @@ def _loopback_listening(url: str) -> bool:
 def _local_stt_backends() -> list[str]:
     """Local transcription Adapters available right now, in runtime order.
 
-    Mirrors config.DEFAULT_STT_ORDER's local half (local-http, yap). Detection
-    only — /watch never installs either. A local backend fully satisfies
-    transcription, which is why its presence makes setup `ready` with no cloud
-    key: the cloud Adapters refuse without explicit remote authorization
-    anyway, so a key alone would not transcribe anything.
+    Mirrors config.DEFAULT_STT_ORDER's local half (local-http, yap, whisper-cli).
+    Detection only — /watch never installs any of them. A local backend fully
+    satisfies transcription, which is why its presence makes setup `ready` with
+    no cloud key: the cloud Adapters refuse without explicit remote
+    authorization anyway, so a key alone would not transcribe anything.
     """
     found: list[str] = []
     url = _read_env_key("WATCH_STT_URL") or DEFAULT_STT_URL
@@ -175,6 +175,10 @@ def _local_stt_backends() -> list[str]:
         yap = _read_env_key("WATCH_YAP_PATH") or "yap"
         if shutil.which(yap):
             found.append("yap")
+    # The only local option on a bare Linux box.
+    whisper_cli = _read_env_key("WATCH_WHISPER_CLI_PATH") or "whisper"
+    if shutil.which(whisper_cli):
+        found.append("whisper-cli")
     return found
 
 
@@ -410,13 +414,14 @@ def cmd_install() -> int:
     print("  YouTube links need nothing here. A backend only matters for local")
     print("  files and videos with no captions. /watch tries them in this order:")
     print("")
+    print("    1. local-http   a local OpenAI-compatible STT server, default 127.0.0.1:8082")
     if platform.system() == "Darwin":
-        print("    1. local-http  a local OpenAI-compatible STT server, default 127.0.0.1:8082")
-        print("    2. yap         on-device Apple Speech (brew install finnvoor/tools/yap)")
+        print("    2. yap          on-device Apple Speech (brew install finnvoor/tools/yap)")
     else:
-        print("    1. local-http  a local OpenAI-compatible STT server, default 127.0.0.1:8082")
         print("       (yap is macOS-only and is skipped on this platform)")
-    print("    3. groq / openai  cloud Whisper, and ONLY with explicit authorization:")
+    print("    3. whisper-cli  a real speech model on this machine, any platform:")
+    print("                    pip install openai-whisper")
+    print("    4. groq / openai  cloud Whisper, and ONLY with explicit authorization:")
     print("       a key alone does nothing without --allow-remote-transcription")
     print("       (or WATCH_STT_ALLOW_REMOTE=true). Audio leaves your machine.")
     print("")

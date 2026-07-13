@@ -4,7 +4,7 @@ description: Watch a video (URL or local path). Downloads with yt-dlp, extracts 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.0.6"
+  version: "1.0.7"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -253,11 +253,12 @@ The normalized transcript pipeline stops at the first usable source:
 2. same-basename `.vtt` or `.srt` sidecar;
 3. configured loopback OpenAI-compatible server (default `127.0.0.1:8082`);
 4. detected YAP on macOS;
-5. explicitly authorized Groq, then OpenAI;
-6. frames-only fail-open result.
+5. detected `openai-whisper` CLI, any platform (`pip install openai-whisper`) — a real speech model on this machine, no server and no network. Often the only local option on Linux;
+6. explicitly authorized Groq, then OpenAI;
+7. frames-only fail-open result.
 
-Set `WATCH_STT_ORDER`, `WATCH_STT_URL`, `WATCH_STT_MODEL`, and `WATCH_LANGUAGE` in
-`~/.config/watch/.env`. YAP and local servers are detected, never installed. Cloud audio is never
+Every local option is exhausted before anything leaves the machine. Set `WATCH_STT_ORDER`, `WATCH_STT_URL`, `WATCH_STT_MODEL`, `WATCH_WHISPER_CLI_PATH`, `WATCH_WHISPER_CLI_MODEL`, and `WATCH_LANGUAGE` in
+`~/.config/watch/.env`. `WATCH_LANGUAGE` is normalized per adapter (yap needs `en_US`, the whisper CLI needs `en`), so set it once in whichever form you like. YAP, local servers, and the whisper CLI are detected, never installed. Cloud audio is never
 sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE=true`). Focused
 requests extract only the requested range before inference, restore absolute timestamps, split
 near silence, and reuse successful owner-only chunk receipts after interruption.

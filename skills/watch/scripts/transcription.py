@@ -224,6 +224,7 @@ def build_default_adapters(config: Mapping[str, object]) -> dict[str, Transcript
         CloudWhisperAdapter,
         LoopbackHTTPAdapter,
         SidecarAdapter,
+        WhisperCliAdapter,
         YapAdapter,
     )
 
@@ -235,6 +236,10 @@ def build_default_adapters(config: Mapping[str, object]) -> dict[str, Transcript
             probe_timeout=float(config.get("probe_timeout") or 1.0),
         ),
         "yap": YapAdapter(executable=str(config.get("yap_path") or "yap")),
+        "whisper-cli": WhisperCliAdapter(
+            executable=str(config.get("whisper_cli_path") or "whisper"),
+            model=str(config.get("whisper_cli_model") or "small"),
+        ),
         "groq": CloudWhisperAdapter("groq"),
         "openai": CloudWhisperAdapter("openai"),
     }
