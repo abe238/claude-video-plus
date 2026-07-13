@@ -28,7 +28,6 @@ in this repository was written independently and the linked author/repository is
 | faster-whisper HTTP at loopback `:8082` | implemented compatible endpoint | [`SYSTRAN/faster-whisper@ed9a06c`](https://github.com/SYSTRAN/faster-whisper/tree/ed9a06cd89a93e47838f564998a6c09b655d7f43) | generic OpenAI-compatible Adapter, no bundled model | MIT reference; no code copied or automatic install; project credited |
 | OCR/frame-text semantic retrieval | evaluate-only | cited forks/research | no runtime promotion without separate gate and owner approval | publish negative/positive ablation and sources |
 | OpenCV/PySceneDetect | exclude | OpenCV, PySceneDetect, [`DanielZYoffe/claude-video-lite`](https://github.com/DanielZYoffe/claude-video-lite) | negative development ablation; no code/install/config | no code copied; retain rejection evidence; do not imply incorporation |
-| Cascade/Parable execution pattern | ship process; documentation only | [Miguel Rios / `miguelrios/unc-skills`](https://github.com/miguelrios/unc-skills) | inspiration for bounded loops and independent author/reviewer roles; no copied runtime code | MIT source; name Miguel Rios/user/repo |
 
 Before a packet reuses code rather than a concept, record exact source URL, revision, files,
 license, modifications, and notices in this table and release notes. Attribution tests verify

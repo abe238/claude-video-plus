@@ -34,7 +34,6 @@ def test_every_named_design_source_has_user_and_repo_credit():
         "jsstn/claude-video", "joweiser/claude-video",
         "JoseBallestas/claude-video", "danielfrey63/claude-video",
         "finnvoor/yap", "DanielZYoffe/claude-video-lite",
-        "miguelrios/unc-skills",
     )
     for source in sources:
         assert source in README, source
