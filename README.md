@@ -11,7 +11,17 @@ Ask a video a question and `/watch` fetches only the evidence that answers it. I
 > [!NOTE]
 > This is a fork of Brad Bonanno's [bradautomates/claude-video](https://github.com/bradautomates/claude-video), not the original repository. Upstream history, MIT license, and authorship are preserved; see [Gratitude](#gratitude-and-attribution).
 
-**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Guide:** [Ask Claude to watch a video](https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html) · **All benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **Status:** [`v1.0.3`](https://github.com/abe238/claude-video-plus/releases/latest) stable, 338 deterministic tests, hosted macOS/Linux matrix, isolated install lifecycle ([status page](docs/V1-STATUS.md))
+[![Latest release](https://img.shields.io/github/v/release/abe238/claude-video-plus?label=release&color=ffb224)](https://github.com/abe238/claude-video-plus/releases/latest)
+[![Tests](https://img.shields.io/github/actions/workflow/status/abe238/claude-video-plus/tests.yml?branch=main&label=tests)](https://github.com/abe238/claude-video-plus/actions/workflows/tests.yml)
+[![License](https://img.shields.io/github/license/abe238/claude-video-plus?color=blue)](LICENSE)
+[![Release date](https://img.shields.io/github/release-date/abe238/claude-video-plus?label=released)](https://github.com/abe238/claude-video-plus/releases/latest)
+
+**Website:** [abe238.github.io/claude-video-plus](https://abe238.github.io/claude-video-plus/) · **Guide:** [Ask Claude to watch a video](https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html) · **All benchmark data:** [docs/benchmarks/](docs/benchmarks/) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Status:** stable, deterministic suite on a hosted macOS/Linux matrix, isolated install lifecycle ([status page](docs/V1-STATUS.md))
+
+<!-- The badges above are live. Do not hardcode a version number or a test count
+     in this file or in docs/*.html — tests/test_no_hardcoded_version.py fails the
+     build if you do. Per-release detail belongs in CHANGELOG.md. -->
+
 
 ## Install
 
