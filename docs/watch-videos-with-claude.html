@@ -47,7 +47,7 @@
     { "@type": "Question", "name": "Does it work in Codex, Cursor, and other agents?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is an Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other Agent Skills hosts via 'npx skills add abe238/claude-video-plus -g'." } },
     { "@type": "Question", "name": "Is claude-video-plus free?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes, it is open source under the MIT license. Captions cover most public videos at no cost; a Whisper API key is only needed for videos that have no captions." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, it is open source under the MIT license, and it never asks for an API key. Captions cover most public videos at no cost. When a video has none, transcription runs locally on your own machine first (a loopback speech server, YAP on macOS, or the openai-whisper CLI on any platform). Cloud Whisper is opt-in and requires explicit authorization, so audio never leaves your machine by accident." } },
     { "@type": "Question", "name": "What is the difference between claude-video and claude-video-plus?",
       "acceptedAnswer": { "@type": "Answer", "text": "claude-video-plus is an attributed MIT fork of Brad Bonanno's claude-video. It adds an opt-in evidence mode that answers questions with far fewer tokens, and falls back to the original pipeline whenever there is no question, no captions, a local file, a short video, or any error." } }
   ]
@@ -159,7 +159,7 @@
     <details><summary>How do I reduce the token cost of video analysis?</summary><p>Retrieve instead of reading everything. Evidence mode selects only the chapters, on-screen numbers, and moments that answer your question — 56% fewer tokens than the full-timeline default in a sealed benchmark, at the same answer quality.</p></details>
     <details><summary>Does it work in Codex, Cursor, and other agents?</summary><p>Yes. It is a portable Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other hosts with <code>npx skills add abe238/claude-video-plus -g</code>.</p></details>
     <details><summary>Does it handle local video files, not just YouTube?</summary><p>Yes — pass a local path like <code>~/Movies/screen-recording.mp4</code>. Local files use the original pipeline (evidence mode needs captions to retrieve against).</p></details>
-    <details><summary>Is it free?</summary><p>Yes, MIT-licensed and open source. Captions cover most public videos for free; a Whisper API key is only needed when a video has none.</p></details>
+    <details><summary>Is it free?</summary><p>Yes, MIT-licensed and open source, and it never asks you for an API key. Captions cover most public videos for free. When a video has none, transcription runs on your own machine first: a loopback speech server, YAP on macOS, or the <code>openai-whisper</code> CLI on any platform. Cloud Whisper (Groq or OpenAI) is available but doubly opt-in, and a key alone does nothing without <code>--allow-remote-transcription</code>, so your audio never leaves your machine by accident.</p></details>
   </section>
 
   <footer>

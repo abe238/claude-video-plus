@@ -250,6 +250,38 @@
   </section>
 
   <section>
+    <div class="kicker">Beyond the token count</div>
+    <h2>Four things it does that the original does not.</h2>
+    <p class="lede">Cheaper is the headline, but it is not the only difference. These shipped after the sealed run, so the numbers above do not account for them.</p>
+
+    <div class="grid2">
+      <div class="mech">
+        <h3>It reads the description, because speech recognition cannot spell</h3>
+        <p>A name the model has never heard comes out of the audio mangled: <code>OmniRoute</code> becomes "Omniroot", <code>strix</code> becomes "stricks". On a video about 13 GitHub repos, the transcript recovered <b>1 of the 13 names the video was about</b>. The author's description carried all 13, verbatim, and it was already on disk — downloaded and thrown away. Now it is read on every run, for about 600 tokens.</p>
+        <p>It is bounded, labeled untrusted, and never authoritative for what <i>happens</i>: the video still owns that. The description owns exact spellings, product names, and the author's own links. Answering from the description alone is precisely what a hostile uploader would want, so it is not allowed.</p>
+      </div>
+
+      <div class="mech">
+        <h3>No API key. Your audio never leaves your machine.</h3>
+        <p>It never asks you for a key, and a key on its own does nothing. Transcription exhausts every local option first: a same-name subtitle sidecar, a loopback speech server, YAP on macOS, and the <code>openai-whisper</code> CLI on any platform. All are detected, never installed.</p>
+        <p>Cloud Whisper exists and is doubly opt-in — it needs both a key <i>and</i> <code>--allow-remote-transcription</code>. Nothing is uploaded by accident, and on Linux there is now a real local model rather than a fall-through to the cloud.</p>
+      </div>
+
+      <div class="mech">
+        <h3>Half the transcript, losslessly</h3>
+        <p>YouTube's auto-captions restate the tail of each line in the next one. Collapsing that overlap cut a 43-minute transcript from <b>27,814 to 14,766 tokens</b> with every spoken line still present (99.7% recall against an independent reconstruction; the remainder are speaker-change markers, not words).</p>
+        <p>This lands on plain summaries and the four original detail modes — the paths that ask no question and therefore cannot benefit from evidence mode at all.</p>
+      </div>
+
+      <div class="mech">
+        <h3>Anything the video says is treated as hostile</h3>
+        <p>The description, title, uploader name, chapter titles, and transcript are all written by whoever uploaded the video. Every one of them is neutralized before the model reads it: none can forge the report's trust markers or break out of its code fences to impersonate instructions.</p>
+        <p>The local speech server is held to the same standard — it is refused if it tries to redirect your audio somewhere else.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <div class="kicker">What is implemented now</div>
     <h2>Version 1.0 is ready to use.</h2>
     <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. It keeps secrets outside agent conversations, marks media-derived content as untrusted evidence, and passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit.</p>
@@ -286,7 +318,7 @@
   <section>
     <div class="kicker">Gratitude</div>
     <h2>Built on someone else's good decisions.</h2>
-    <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a>. Its caption-first design, simple installation, and reliable backup behavior made this project possible. The upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a>, check them out. The media tools are <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>; transcription uses <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>. Research credits and links are in the improvement plan.</p>
+    <p class="grat">This fork exists because <a href="https://github.com/bradautomates">Brad Bonanno</a> built and openly shared <a href="https://github.com/bradautomates/claude-video">claude-video</a>. Its caption-first design, simple installation, and reliable backup behavior made this project possible. The upstream history, MIT license, and authorship are preserved. Brad makes content about building with AI on <a href="https://www.youtube.com/@bradbonanno">YouTube</a>, check them out. The media tools are <a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>. Transcription is local-first: a loopback STT server, <a href="https://github.com/finnvoor/yap">YAP</a> on macOS, or the <a href="https://github.com/openai/whisper">openai-whisper</a> CLI anywhere, all run before <a href="https://groq.com">Groq</a> or <a href="https://openai.com">OpenAI</a>, which need explicit authorization before any audio leaves your machine. Research credits and links are in the improvement plan.</p>
     <details class="credits">
       <summary>Other projects whose ideas are being evaluated and credited</summary>
       <p>No credit here implies that code was copied or that a listed feature shipped. The <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/execution/v1/PROVENANCE.md">provenance record</a> documents whether each source inspired a design, contributed an adapted mechanism, was deferred, or was rejected after testing: <a href="https://github.com/taeloautomates/claude-video">taeloautomates/claude-video</a>, <a href="https://github.com/thedirektor/claude-video">thedirektor/claude-video</a>, <a href="https://github.com/RadoslavSheytanov/claude-video">RadoslavSheytanov/claude-video</a>, <a href="https://github.com/Tigertycoon/claude-video">Tigertycoon/claude-video</a>, <a href="https://github.com/manojbadam/claude-video">manojbadam/claude-video</a>, <a href="https://github.com/CJNA/claude-video">CJNA/claude-video</a>, <a href="https://github.com/sciencemj/claude-video-local">sciencemj/claude-video-local</a>, <a href="https://github.com/troyshelton/claude-video">troyshelton/claude-video</a>, <a href="https://github.com/jsstn/claude-video">jsstn/claude-video</a>, <a href="https://github.com/joweiser/claude-video">joweiser/claude-video</a>, <a href="https://github.com/JoseBallestas/claude-video">JoseBallestas/claude-video</a>, <a href="https://github.com/danielfrey63/claude-video">danielfrey63/claude-video</a>, and <a href="https://github.com/finnvoor/yap">finnvoor/yap</a>.</p>

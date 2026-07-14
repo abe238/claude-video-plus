@@ -36,7 +36,9 @@ Codex, Cursor, Copilot, Gemini CLI, or any of 50+ [Agent Skills](https://agentsk
 npx skills add abe238/claude-video-plus -g
 ```
 
-Zero config to start: `yt-dlp` and `ffmpeg` install on first run via `brew` on macOS (Linux/Windows print exact commands). Captions cover most public videos for free; a Whisper API key is only needed when a video has none.
+Zero config to start: `yt-dlp` and `ffmpeg` install on first run via `brew` on macOS (Linux/Windows print exact commands). Captions cover most public videos for free.
+
+**No API key required, and none is asked for.** When a video has no captions, transcription falls to the local backends first — a loopback STT server, YAP on macOS, or the `openai-whisper` CLI on any platform — and audio never leaves your machine. Cloud Whisper exists but is doubly opt-in: a key alone does nothing without `--allow-remote-transcription`.
 
 ## The numbers
 
@@ -69,7 +71,8 @@ Everything upstream still works: the four original detail modes, `--start`/`--en
 - **Auto-reverts on any problem.** No captions, local files, videos under 9 minutes (measured: evidence mode loses there), or any internal error: the original pipeline runs. There is no failure mode where you get less than the original.
 - **Summaries keep the full transcript by design.** Top-k retrieval on a summary question is how you miss stories. The transcript is collapsed losslessly (YouTube rolling-caption overlap stripped: 43% fewer transcript tokens on a 43-minute video, every spoken line still present), and further summary savings come from smarter frame selection.
 - **Retrieval is lexical (tf-idf plus guards), not semantic.** A question with zero word overlap with the video can under-retrieve. Optional local/remote semantic reranking exists; nothing transmits without explicit authorization.
-- **Local transcription stays optional and cloud is explicit.** Sidecar `.vtt`/`.srt`, loopback `:8082`, and detected YAP run before cloud; Groq/OpenAI audio requires configuration. OpenCV is not included (its prototype measured worse; [ablation](docs/benchmarks/2026-07-11-opencv-ablation/)).
+- **Transcription is local-first, and cloud is doubly explicit.** Every local backend is exhausted before anything leaves the machine: captions, then a same-name `.vtt`/`.srt` sidecar, then a loopback STT server on `:8082`, then YAP on macOS, then the `openai-whisper` CLI on any platform. All are detected, never installed. Groq/OpenAI need both a key *and* `--allow-remote-transcription` — a key on its own transmits nothing. OpenCV is not included (its prototype measured worse; [ablation](docs/benchmarks/2026-07-11-opencv-ablation/)).
+- **Media-derived text is treated as hostile.** The description, title, uploader, chapter titles, and transcript are all author-controlled, so they are neutralized before the model reads them: they cannot forge the report's untrusted-evidence markers or escape its code fences. The description is bounded, labeled, and never authoritative for what *happens* in the video — only for what the author published (exact spellings, their own links).
 - **The full video still downloads for frame modes** (same as upstream). Range downloads are planned, not shipped.
 - **Judges are AIs and the sample is modest.** Repeatability-validated (max 1-point drift), blinding hardened after an adversarial audit, answer keys frozen by two independent model annotators (owner-approved in place of two humans). Real, auditable measurements, not a large-scale trial.
 
@@ -89,7 +92,10 @@ Knobs (passed to `scripts/watch.py`):
 - `--question "…"`, your question, verbatim; drives evidence-mode selection.
 - `--timestamps T1,T2,…`, grab a frame at each absolute timestamp.
 - `--max-frames N` / `--resolution W` / `--fps F`, budget and fidelity overrides.
-- `--whisper groq|openai` / `--no-whisper`, transcription backend control.
+- `--stt auto|sidecar|local-http|yap|whisper-cli|groq|openai`, pick a transcription backend; `auto` tries every local one before cloud.
+- `--allow-remote-transcription`, required before any audio may go to Groq/OpenAI. Without it, a key is inert.
+- `--no-whisper`, skip transcription entirely (frames only).
+- `--no-description`, omit the author-supplied description from the report.
 - `--no-dedup`, keep near-duplicate frames.
 - `--out-dir DIR`, keep working files somewhere specific.
 
@@ -98,7 +104,7 @@ Knobs (passed to `scripts/watch.py`):
 1. You paste a video and a question: URL (anything yt-dlp supports) or local path.
 2. `yt-dlp` checks captions first; at `transcript` detail, captioned URLs return without downloading video.
 3. Frames extract at the chosen detail. Original modes sample the timeline; `evidence` selects per question (chapters → spans → tf-idf + facet expansion → numeric guard → sufficiency check → chapter/cue/guard frames).
-4. Transcript from captions, Whisper as fallback (Groq preferred, OpenAI supported).
+4. Transcript from captions, falling back through every local backend (sidecar → loopback `:8082` → YAP → `openai-whisper` CLI) before cloud is even considered. The author's description is read too, bounded and labeled untrusted: speech recognition cannot spell a name it has never heard, so links, repos, and product names come from there while the video stays authoritative for what happens.
 5. Frames plus transcript (or evidence manifest) go to the model, which Reads every frame as an image, mines on-screen tables, and reconciles conflicts.
 6. The model answers grounded in what's on screen and in the audio, citing timestamps.
 
