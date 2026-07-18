@@ -52,8 +52,11 @@ V2_FLOOR_CAP_SHARE = 0.30       # gap-fill may consume at most this share of the
 
 
 def resolve_engine() -> str:
-    """Frame-engine selector: env var wins, then user config, default v1.
-    Unknown values fall back to v1 — an experiment flag must never brick /watch."""
+    """Frame-engine selector: env var wins, then user config, default v2
+    (flipped after the L3 ablation gate passed: coverage floor holds exactly,
+    A-B-A dupes collapse, cost within the cap share — docs/evidence/L3-gate/).
+    v1 remains a supported opt-out (WATCH_FRAME_ENGINE=v1). Unknown values fall
+    back to the default — an experiment flag must never brick /watch."""
     value = (os.environ.get("WATCH_FRAME_ENGINE") or "").strip().lower()
     if value in ("v1", "v2"):
         return value
@@ -62,7 +65,7 @@ def resolve_engine() -> str:
         value = str(read_env_file().get("WATCH_FRAME_ENGINE") or "").strip().lower()
     except Exception:
         value = ""
-    return value if value in ("v1", "v2") else "v1"
+    return value if value in ("v1", "v2") else "v2"
 
 
 def resolve_user_fps(fps: float) -> float:

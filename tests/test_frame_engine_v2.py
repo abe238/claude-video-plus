@@ -150,8 +150,15 @@ def test_v2_floor_noop_when_gaps_are_small():
 
 # --- flag routing --------------------------------------------------------------
 
-def test_engine_defaults_to_v1(monkeypatch):
+def test_engine_defaults_to_v2(monkeypatch):
+    """Default flipped after the L3 gate passed (ablation evidence in
+    docs/evidence/L3-gate/). v1 stays available as an explicit opt-out."""
     monkeypatch.delenv("WATCH_FRAME_ENGINE", raising=False)
+    assert frames.resolve_engine() == "v2"
+
+
+def test_engine_v1_opt_out_still_works(monkeypatch):
+    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v1")
     assert frames.resolve_engine() == "v1"
 
 
@@ -160,19 +167,22 @@ def test_engine_env_selects_v2(monkeypatch):
     assert frames.resolve_engine() == "v2"
 
 
-def test_engine_unknown_value_falls_back_to_v1(monkeypatch):
+def test_engine_unknown_value_falls_back_to_default(monkeypatch):
     monkeypatch.setenv("WATCH_FRAME_ENGINE", "turbo")
-    assert frames.resolve_engine() == "v1"
+    assert frames.resolve_engine() == "v2"
 
 
-def test_flag_off_pipeline_is_unchanged(static_clip, tmp_path, monkeypatch):
-    """With the flag off, selected timestamps must be identical to the v1
-    engine's — byte-for-byte equivalence of the selection decision."""
+def test_flag_unset_equals_v2_and_v1_opt_out_differs_in_route(static_clip, tmp_path, monkeypatch):
+    """Post-flip: unset == v2; the v1 opt-out routes through the legacy engine."""
     monkeypatch.delenv("WATCH_FRAME_ENGINE", raising=False)
-    a, _ = frames.extract_scene_or_uniform(str(static_clip), tmp_path / "a", fps=1.0, target_frames=8)
-    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v1")
-    b, _ = frames.extract_scene_or_uniform(str(static_clip), tmp_path / "b", fps=1.0, target_frames=8)
+    a, meta_a = frames.extract_scene_or_uniform(str(static_clip), tmp_path / "a", fps=1.0, target_frames=8)
+    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v2")
+    b, meta_b = frames.extract_scene_or_uniform(str(static_clip), tmp_path / "b", fps=1.0, target_frames=8)
     assert [f["timestamp_seconds"] for f in a] == [f["timestamp_seconds"] for f in b]
+    assert meta_a["frame_engine"] == meta_b["frame_engine"] == "v2"
+    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v1")
+    c, meta_c = frames.extract_scene_or_uniform(str(static_clip), tmp_path / "c", fps=1.0, target_frames=8)
+    assert meta_c["frame_engine"] == "v1"
 
 
 def test_flag_on_pipeline_runs(cut_clip, tmp_path, monkeypatch):
