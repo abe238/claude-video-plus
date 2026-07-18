@@ -80,13 +80,17 @@ def run_evidence(args) -> int:
             f"video is {duration:.0f}s, under the {MIN_EVIDENCE_SECONDS}s evidence-mode "
             "cutoff — short videos are already cheap to read in full"
         )
+    # The caption path was just validated above; the media download re-picks
+    # subtitles and can transiently come back with None when YouTube's timedtext
+    # endpoint flakes on the second fetch. Never let that overwrite a good path.
+    caption_path = dl["subtitle_path"]
     print("[watch] downloading video via yt-dlp…", file=sys.stderr)
     dl = download(args.source, work / "download")
 
     from evidence import compile_evidence  # noqa: E402 — same-dir sibling
 
     summary = compile_evidence(
-        dl["subtitle_path"],
+        dl.get("subtitle_path") or caption_path,
         dl["video_path"],
         str(work / "download" / "video.info.json"),
         args.question,

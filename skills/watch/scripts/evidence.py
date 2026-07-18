@@ -404,6 +404,12 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
                      semantic_model: str = "default",
                      allow_remote_semantic: bool = False,
                      acquisition: dict | None = None) -> dict:
+    if not vtt_path:
+        # A transient sub-fetch failure on the media re-download can hand us
+        # None even though captions were validated moments earlier. Without this
+        # guard, str(None) became open('None') and the fail-open wrapper logged
+        # a baffling "[Errno 2] ... 'None'" (found by L1 calibration).
+        raise ValueError("evidence mode requires a subtitle path; media download returned none")
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 

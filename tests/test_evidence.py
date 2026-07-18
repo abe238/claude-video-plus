@@ -299,3 +299,18 @@ def test_fail_open_exits_3_on_bad_vtt(tmp_path: Path, capsys):
     ])
     assert rc == 3
     assert "fail-open" in capsys.readouterr().err
+
+
+# --- L1 calibration finding: None subtitle path must fail loudly, not open('None')
+
+def test_compile_evidence_rejects_missing_subtitle_path(tmp_path):
+    """The media re-download can transiently return subtitle_path=None even when
+    captions were fetched moments earlier (YouTube timedtext flake). That None
+    used to be stringified into open('None') -> FileNotFoundError, which the
+    fail-open wrapper reported as a confusing "[Errno 2] ... 'None'". It must be
+    a clear ValueError so the fallback message says what actually happened."""
+    with pytest.raises(ValueError, match="subtitle path"):
+        evidence.compile_evidence(
+            None, str(tmp_path / "v.mp4"), str(tmp_path / "i.json"),
+            "what happens?", tmp_path / "out",
+        )
