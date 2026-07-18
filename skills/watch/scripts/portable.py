@@ -154,6 +154,59 @@ def _validate_manifest(manifest: Any) -> None:
         raise BundleRefused("bundle manifest has no files")
 
 
+def collect_evidence_artifacts(
+    manifest_path: Path | str,
+    report_path: Path | str,
+    work_dir: Path | str,
+    *,
+    include_media: bool = False,
+    transcript: str | None = None,
+) -> dict[str, bytes]:
+    """Turn a compile_evidence output dir into machine-independent bundle artifacts.
+
+    Frame references are rewritten to bundle-relative ``frames/<name>`` paths.
+    With ``include_media=True`` the frame bytes ride along so every rewritten
+    reference resolves after replay; otherwise entries are marked
+    ``portable_media_omitted`` (the pre-existing media-free behavior).
+    ``transcript`` is uploader-controlled text and is sanitized before it
+    becomes a bundle surface.
+    """
+    work = str(Path(work_dir))
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    artifacts: dict[str, bytes] = {}
+    frame_dirs: list[str] = []
+    for item in manifest.get("evidence", []):
+        if not item.get("frame"):
+            continue
+        source = Path(item["frame"])
+        name = f"frames/{source.name}"
+        parent = str(source.parent)
+        if parent not in frame_dirs:
+            frame_dirs.append(parent)
+        if include_media:
+            content = _read_source(source)
+            if name in artifacts and artifacts[name] != content:
+                raise BundleRefused(f"conflicting frame contents for {name}")
+            artifacts[name] = content
+            item["frame"] = name
+        else:
+            item["frame"] = name
+            item["portable_media_omitted"] = True
+    artifacts["manifest.json"] = (
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+    report = Path(report_path).read_text(encoding="utf-8")
+    for parent in frame_dirs:
+        report = report.replace(parent + "/", "frames/")
+    report = report.replace(work, ".")
+    artifacts["report.txt"] = report.encode("utf-8")
+    if transcript is not None:
+        from download import sanitize_for_report  # ponytail: lazy sibling import keeps module stdlib-pure
+
+        artifacts["transcript.txt"] = sanitize_for_report(transcript).encode("utf-8")
+    return artifacts
+
+
 def export_bundle(
     artifacts: Mapping[str, Path | str | bytes],
     output: Path | str,
