@@ -92,7 +92,13 @@ def _run_chunked(
     warnings: list[str] = []
     started = time.monotonic()
 
+    silent_chunks = 0
     for chunk in request.prepared_audio.chunks:
+        if getattr(chunk, "silent", False):
+            # Classified at the chunk layer: skipped, not failed, never cached.
+            # A silent chunk must never suppress speech elsewhere in the file.
+            silent_chunks += 1
+            continue
         cached = receipts.get(adapter, model, request.language, chunk)
         if cached is not None:
             try:
@@ -183,6 +189,7 @@ def _run_chunked(
         failure_code=failure_code,
         diagnostics={
             "remote_transmission": remote and processed > 0,
+            "silent_chunks": silent_chunks,
             "processed_chunks": processed,
             "reused_chunks": reused,
             "failed_chunks": failed,

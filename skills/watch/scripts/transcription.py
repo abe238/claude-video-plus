@@ -18,7 +18,7 @@ from transcribe import filter_range
 from transcription_chunks import ChunkReceiptStore, PreparedAudio, prepare_audio
 
 
-TRANSCRIPT_STATES = frozenset({"success", "degraded", "partial", "unavailable", "fatal"})
+TRANSCRIPT_STATES = frozenset({"success", "degraded", "partial", "unavailable", "fatal", "no_speech"})
 USABLE_STATES = frozenset({"success", "degraded", "partial"})
 
 
@@ -283,6 +283,39 @@ class TranscriptionPipeline:
         for name in order:
             adapter = adapters[name]
             started = time.monotonic()
+            # R2a-1: audio is prepared (and silence-classified) BEFORE any
+            # adapter contact. Adapter order is local-http -> yap -> whisper-cli
+            # -> cloud, so gating inside one adapter can never protect the
+            # pipeline: silence used to reach the first adapter and hallucinate,
+            # and a zero-segment result read as "unavailable", falling through
+            # toward cloud. no_speech is terminal: nothing probes, nothing runs,
+            # nothing uploads. Sidecar (requires_audio=False) is untouched --
+            # a silent video with real subtitles still returns them.
+            if adapter.requires_audio and prepared is None:
+                try:
+                    prepared = prepare_audio(
+                        request.media_path,
+                        request.work_dir / "transcription-audio",
+                        start_seconds=request.start_seconds,
+                        end_seconds=request.end_seconds,
+                    )
+                    request = replace(request, prepared_audio=prepared)
+                except (OSError, RuntimeError, ValueError) as exc:
+                    return TranscriptResult(
+                        state="fatal",
+                        language=request.language,
+                        attempts=tuple(attempts),
+                        failure_code="audio_preparation_failed",
+                        warnings=(f"audio preparation failed: {type(exc).__name__}",),
+                    )
+            if adapter.requires_audio and prepared is not None and prepared.all_silent:
+                return TranscriptResult(
+                    state="no_speech",
+                    language=request.language,
+                    attempts=tuple(attempts),
+                    warnings=("no speech detected in the audio",),
+                    diagnostics={"silent_chunks": len(prepared.chunks)},
+                )
             if adapter.is_remote and not request.allow_remote:
                 attempts.append(
                     TranscriptAttempt(
@@ -314,23 +347,6 @@ class TranscriptionPipeline:
                 )
                 continue
 
-            if adapter.requires_audio and prepared is None:
-                try:
-                    prepared = prepare_audio(
-                        request.media_path,
-                        request.work_dir / "transcription-audio",
-                        start_seconds=request.start_seconds,
-                        end_seconds=request.end_seconds,
-                    )
-                    request = replace(request, prepared_audio=prepared)
-                except (OSError, RuntimeError, ValueError) as exc:
-                    return TranscriptResult(
-                        state="fatal",
-                        language=request.language,
-                        attempts=tuple(attempts),
-                        failure_code="audio_preparation_failed",
-                        warnings=(type(exc).__name__,),
-                    )
 
             try:
                 result = adapter.transcribe(request, receipts)
@@ -417,6 +433,14 @@ def transcribe(
         config=config,
     )
     return TranscriptionPipeline(adapters).run(request)
+
+
+def transcript_status_label(result: "TranscriptResult") -> str | None:
+    """Report wording: silence is a finding, not a failure. Returns a label for
+    states that need distinct phrasing; None keeps the existing message path."""
+    if result is not None and getattr(result, "state", None) == "no_speech":
+        return "no speech detected in the audio"
+    return None
 
 
 def transcription_diagnostics(**config_overrides: object) -> dict[str, object]:

@@ -44,6 +44,10 @@ class AudioChunk:
     source_offset: float
     duration: float
     sha256: str
+    # R2a-1: silence-classified at the shared chunk layer, BEFORE any adapter.
+    # Never cached in receipts — recomputed each run, so a threshold change can
+    # never serve a stale classification.
+    silent: bool = False
 
 
 @dataclass(frozen=True)
@@ -52,6 +56,12 @@ class PreparedAudio:
     chunks: tuple[AudioChunk, ...]
     source_start: float
     source_end: float
+
+    @property
+    def all_silent(self) -> bool:
+        """Whole-input no_speech ONLY when every chunk is silent (binding
+        aggregation rule: a silent chunk must never suppress speech elsewhere)."""
+        return bool(self.chunks) and all(c.silent for c in self.chunks)
 
 
 def _sha256(path: Path) -> str:
@@ -175,6 +185,79 @@ def detect_silence_boundaries(audio_path: Path) -> tuple[float, ...]:
     return tuple(sorted(set(round(value, 3) for value in boundaries if value > 0)))
 
 
+# R2a-1 classifier thresholds. Not stored in receipts because no_speech is
+# never cached (see AudioChunk.silent) — a change here takes effect on the very
+# next run with no invalidation machinery needed.
+SILENCE_CLASSIFIER_VERSION = 1
+MIN_SPEECH_SECONDS = 0.5
+MIN_SPEECH_FRACTION = 0.02
+
+
+def silence_intervals(audio_path: Path) -> tuple[tuple[float, float], ...] | None:
+    """(start, end) silence spans from ffmpeg silencedetect, audio-local time.
+    ``None`` means the classifier itself failed — callers must treat that as
+    speech everywhere (a broken instrument never gates)."""
+    if shutil.which("ffmpeg") is None:
+        return None
+    try:
+        result = subprocess.run(
+            [
+                "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
+                "-af", "silencedetect=noise=-35dB:d=0.40", "-f", "null", "-",
+            ],
+            capture_output=True, text=True, timeout=FFMPEG_TIMEOUT_SECONDS,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+    if result.returncode != 0:
+        return None
+    spans: list[tuple[float, float]] = []
+    start: float | None = None
+    for kind, raw in SILENCE_RE.findall(result.stderr or ""):
+        value = max(0.0, float(raw))
+        if kind == "start":
+            start = value
+        elif start is not None:
+            spans.append((start, value))
+            start = None
+    if start is not None:  # silence ran to EOF
+        spans.append((start, float("inf")))
+    return tuple(spans)
+
+
+def classify_chunk_silence(
+    chunks: tuple[AudioChunk, ...],
+    intervals: tuple[tuple[float, float], ...] | None,
+    *,
+    source_start: float,
+    total_duration: float,
+) -> tuple[AudioChunk, ...]:
+    """Mark chunks silent when silence covers them almost entirely.
+
+    A chunk is silent iff its non-silent time is under
+    max(MIN_SPEECH_SECONDS, MIN_SPEECH_FRACTION * chunk duration) — quiet
+    speech above the silencedetect threshold therefore always counts as speech
+    (false-negative guard). ``intervals=None`` (classifier failure) marks
+    nothing silent."""
+    if intervals is None:
+        return chunks
+    from dataclasses import replace
+    out = []
+    for chunk in chunks:
+        local_start = chunk.source_offset - source_start
+        local_end = min(local_start + chunk.duration, total_duration)
+        silent_time = 0.0
+        for s, e in intervals:
+            e = min(e, local_end)
+            s = max(s, local_start)
+            if e > s:
+                silent_time += e - s
+        speech_time = max(0.0, (local_end - local_start) - silent_time)
+        threshold = max(MIN_SPEECH_SECONDS, MIN_SPEECH_FRACTION * chunk.duration)
+        out.append(replace(chunk, silent=speech_time < threshold))
+    return tuple(out)
+
+
 def plan_silence_aware_chunks(
     duration: float,
     total_bytes: int,
@@ -266,14 +349,22 @@ def prepare_audio(
         end_seconds=end_seconds,
     )
     duration = source_end - source_start
+    intervals = silence_intervals(audio_path)
+    boundaries: tuple[float, ...] = ()
+    if intervals:
+        finite = [(s, e) for s, e in intervals if e != float("inf")]
+        boundaries = tuple(sorted(round((s + e) / 2.0, 3) for s, e in finite if (s + e) / 2.0 > 0))
     plan = plan_silence_aware_chunks(
         duration,
         audio_path.stat().st_size,
         max_bytes=max_chunk_bytes,
-        silence_boundaries=detect_silence_boundaries(audio_path),
+        silence_boundaries=boundaries,
     )
     chunks = _materialize_chunks(
         audio_path, work_dir / "chunks", plan, source_start=source_start
+    )
+    chunks = classify_chunk_silence(
+        chunks, intervals, source_start=source_start, total_duration=duration
     )
     return PreparedAudio(
         audio_path=audio_path,
