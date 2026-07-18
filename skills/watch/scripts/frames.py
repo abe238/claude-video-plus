@@ -9,6 +9,7 @@ zooming in for detail).
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -37,6 +38,40 @@ MAX_READ_DIMENSION = 1998
 DEDUP_THUMB = 16
 DEDUP_THRESHOLD = 2.0
 SHOWINFO_TS_RE = re.compile(r"pts_time:([0-9.]+)")
+
+# --- frame-engine v2 (WATCH_FRAME_ENGINE=v2; default v1) ----------------------
+# Prior art for the mechanisms: HUANGCHIHHUNGLeo/claude-real-video (MIT) —
+# reimplemented from the ideas, no code copied. Constants share units and are
+# tuned jointly (see tests/test_frame_engine_v2.py).
+V2_CELL_TOLERANCE = 25          # per-pixel max-channel delta that marks a cell changed
+V2_CHANGED_PCT_THRESHOLD = 2.0  # % of changed cells at/below which frames are duplicates
+V2_WINDOW_SIZE = 4              # kept-frame memory: catches A-B-A cutaways
+V2_WINDOW_HORIZON_SECONDS = 90.0  # a return to a shot beyond this is kept (new segment)
+V2_FLOOR_INTERVAL_SECONDS = 30.0  # target max uncovered stretch on slow content
+V2_FLOOR_CAP_SHARE = 0.30       # gap-fill may consume at most this share of the cap
+
+
+def resolve_engine() -> str:
+    """Frame-engine selector: env var wins, then user config, default v1.
+    Unknown values fall back to v1 — an experiment flag must never brick /watch."""
+    value = (os.environ.get("WATCH_FRAME_ENGINE") or "").strip().lower()
+    if value in ("v1", "v2"):
+        return value
+    try:
+        from config import read_env_file  # same-dir sibling; optional at runtime
+        value = str(read_env_file().get("WATCH_FRAME_ENGINE") or "").strip().lower()
+    except Exception:
+        value = ""
+    return value if value in ("v1", "v2") else "v1"
+
+
+def resolve_user_fps(fps: float) -> float:
+    """An explicit --fps is an informed opt-out of the MAX_FPS clamp (fast-action
+    clips need it — upstream's most-requested capability). Auto-fps stays capped;
+    only a user-supplied value passes through. Nonpositive is a usage error."""
+    if fps is None or fps <= 0:
+        raise ValueError("--fps must be a positive number")
+    return float(fps)
 
 
 def _scale_filter(resolution: int) -> str:
@@ -421,9 +456,9 @@ def _frame_delta(a: bytes, b: bytes) -> float:
     return sum(abs(x - y) for x, y in zip(a, b)) / len(a)
 
 
-def _thumb_frames(paths: list[Path]) -> list[bytes]:
-    """Decode every frame in ``paths`` to a small grayscale thumbnail via one
-    ffmpeg pass over the JPEG sequence.
+def _thumb_frames(paths: list[Path], pixel_format: str = "gray") -> list[bytes]:
+    """Decode every frame in ``paths`` to a small thumbnail via one ffmpeg pass
+    over the JPEG sequence (``gray`` for the v1 engine, ``rgb24`` for v2).
 
     ffmpeg does the pixel decode (keeps us pure-stdlib); we slice the raw
     grayscale stream into one ``DEDUP_THUMB``-square thumbnail per frame.
@@ -445,7 +480,7 @@ def _thumb_frames(paths: list[Path]) -> list[bytes]:
         "-loglevel", "error",
         "-start_number", str(int(digits)),
         "-i", pattern,
-        "-vf", f"scale={DEDUP_THUMB}:{DEDUP_THUMB},format=gray",
+        "-vf", f"scale={DEDUP_THUMB}:{DEDUP_THUMB},format={pixel_format}",
         "-f", "rawvideo",
         "-",
     ]
@@ -453,7 +488,7 @@ def _thumb_frames(paths: list[Path]) -> list[bytes]:
     if result.returncode != 0:
         return []
 
-    chunk = DEDUP_THUMB * DEDUP_THUMB
+    chunk = DEDUP_THUMB * DEDUP_THUMB * (3 if pixel_format == "rgb24" else 1)
     data = result.stdout
     if len(data) != chunk * len(paths):
         return []
@@ -507,6 +542,143 @@ def _dedupe_by_deltas(
     return kept, len(dropped)
 
 
+# --- v2 engine mechanisms ------------------------------------------------------
+
+def _changed_cell_pct(a: bytes, b: bytes) -> float:
+    """% of rgb24 thumbnail cells whose max-channel delta exceeds the tolerance.
+
+    Replaces v1's grayscale mean for the v2 engine: a mean is blind to
+    equal-luma color cuts and averages a caption swap (few very-changed cells)
+    down to ~zero. Counting decisively-changed cells sees both. Mismatched or
+    non-rgb24 lengths are maximally different (fail-open: a decode hiccup must
+    never collapse distinct frames — same contract as :func:`_frame_delta`)."""
+    if not a or len(a) != len(b) or len(a) % 3:
+        return float("inf")
+    changed = 0
+    for i in range(0, len(a), 3):
+        delta = max(abs(a[i] - b[i]), abs(a[i + 1] - b[i + 1]), abs(a[i + 2] - b[i + 2]))
+        if delta > V2_CELL_TOLERANCE:
+            changed += 1
+    return changed * 100.0 / (len(a) // 3)
+
+
+def _window_partition(
+    candidates: list[dict], thumbs: list[bytes]
+) -> tuple[list[dict], list[dict]]:
+    """Partition chronological candidates into (kept, dropped) using a memory of
+    the last ``V2_WINDOW_SIZE`` kept thumbnails bounded by a time horizon.
+
+    v1 compared against the single last-kept frame, so an A-B-A cutaway re-sent
+    A every time. The window catches the return-to-A; the horizon keeps a
+    *later* return (revisited slide, new segment) from being suppressed forever."""
+    if len(thumbs) != len(candidates) or len(candidates) <= 1:
+        return list(candidates), []
+    kept = [candidates[0]]
+    window: list[tuple[bytes, float]] = [(thumbs[0], float(candidates[0]["timestamp_seconds"]))]
+    dropped: list[dict] = []
+    for cand, thumb in zip(candidates[1:], thumbs[1:]):
+        ts = float(cand["timestamp_seconds"])
+        duplicate = any(
+            (ts - seen_ts) <= V2_WINDOW_HORIZON_SECONDS
+            and _changed_cell_pct(thumb, seen) <= V2_CHANGED_PCT_THRESHOLD
+            for seen, seen_ts in window
+        )
+        if duplicate:
+            dropped.append(cand)
+        else:
+            kept.append(cand)
+            window.append((thumb, ts))
+            if len(window) > V2_WINDOW_SIZE:
+                window.pop(0)
+    return kept, dropped
+
+
+def _dedupe_windowed(
+    candidates: list[dict], thumbs: list[bytes], *, delete: bool = True
+) -> list[dict]:
+    """v2 dedup entry: window partition, then the same cleanup contract as
+    :func:`_dedupe_by_deltas` (delete dropped JPEGs, reindex survivors)."""
+    kept, dropped = _window_partition(candidates, thumbs)
+    if delete:
+        for cand in dropped:
+            if cand.get("path"):
+                try:
+                    Path(cand["path"]).unlink()
+                except OSError:
+                    pass
+        for i, frame in enumerate(kept):
+            frame["index"] = i
+    return kept
+
+
+def _gap_fill(
+    survivors: list[dict], dropped: list[dict], floor_interval: float, max_fill: int
+) -> list[dict]:
+    """Density floor: reinstate dropped frames into gaps wider than
+    ``floor_interval`` so slow screencasts keep coverage, hard-bounded by
+    ``max_fill`` so the floor can never starve scene selection. Fills the
+    widest-first equivalent greedily (nearest-to-gap-middle pick)."""
+    if not survivors or floor_interval <= 0 or max_fill <= 0:
+        return survivors
+    out = list(survivors)
+    pool = sorted(dropped, key=lambda c: float(c["timestamp_seconds"]))
+    fills = 0
+    while fills < max_fill:
+        out.sort(key=lambda c: float(c["timestamp_seconds"]))
+        pick = None
+        for a, b in zip(out, out[1:]):
+            a_ts, b_ts = float(a["timestamp_seconds"]), float(b["timestamp_seconds"])
+            if b_ts - a_ts > floor_interval:
+                inside = [c for c in pool if a_ts < float(c["timestamp_seconds"]) < b_ts]
+                if inside:
+                    mid = (a_ts + b_ts) / 2
+                    pick = min(inside, key=lambda c: abs(float(c["timestamp_seconds"]) - mid))
+                    break
+        if pick is None:
+            break
+        pool.remove(pick)
+        out.append(pick)
+        fills += 1
+    out.sort(key=lambda c: float(c["timestamp_seconds"]))
+    return out
+
+
+def _dedupe_v2_pipeline(
+    candidates: list[dict],
+    max_frames: int | None,
+    start_seconds: float | None,
+    end_seconds: float | None,
+) -> tuple[list[dict], int]:
+    """v2 scene-path dedup: window partition, then the density floor (full-video
+    runs only — focused ranges are already dense), then the shared cleanup
+    contract. Returns ``(survivors, dropped_count)`` like :func:`dedupe_perceptual`."""
+    thumbs = _thumb_frames([Path(c["path"]) for c in candidates], "rgb24")
+    kept, dropped = _window_partition(candidates, thumbs)
+    if dropped and start_seconds is None and end_seconds is None:
+        span = float(candidates[-1]["timestamp_seconds"]) - float(candidates[0]["timestamp_seconds"])
+        budget = max_frames if max_frames else len(candidates)
+        max_fill = int(V2_FLOOR_CAP_SHARE * budget)
+        if max_fill > 0 and span > 0:
+            # Plan formula: interval auto-widens so the floor can never demand
+            # more than its cap share even on very long videos.
+            interval = max(V2_FLOOR_INTERVAL_SECONDS, span / max_fill)
+            kept = _gap_fill(kept, dropped, interval, max_fill)
+    reinstated = {id(c) for c in kept}
+    removed = 0
+    for cand in dropped:
+        if id(cand) in reinstated:
+            continue
+        removed += 1
+        if cand.get("path"):
+            try:
+                Path(cand["path"]).unlink()
+            except OSError:
+                pass
+    for i, frame in enumerate(kept):
+        frame["index"] = i
+    return kept, removed
+
+
 def extract_scene_or_uniform(
     video_path: str,
     out_dir: Path,
@@ -539,12 +711,21 @@ def extract_scene_or_uniform(
         end_seconds=end_seconds,
     )
     scene_count = len(scene_frames)
+    frame_engine = resolve_engine()
     if scene_count >= SCENE_MIN_FRAMES:
-        deduped, n_dropped = dedupe_perceptual(scene_frames) if dedup else (scene_frames, 0)
+        if dedup and frame_engine == "v2":
+            deduped, n_dropped = _dedupe_v2_pipeline(
+                scene_frames, max_frames, start_seconds, end_seconds
+            )
+        elif dedup:
+            deduped, n_dropped = dedupe_perceptual(scene_frames)
+        else:
+            deduped, n_dropped = scene_frames, 0
         cap = len(deduped) if max_frames is None else max_frames
         selected = _even_sample(deduped, cap)
         return selected, {
             "engine": "scene",
+            "frame_engine": frame_engine,
             "candidate_count": scene_count,
             "deduped_count": n_dropped,
             "selected_count": len(selected),
@@ -562,10 +743,16 @@ def extract_scene_or_uniform(
         end_seconds=end_seconds,
     )
     n_dropped = 0
-    if dedup:
+    if dedup and frame_engine == "v2":
+        thumbs = _thumb_frames([Path(c["path"]) for c in frames], "rgb24")
+        before = len(frames)
+        frames = _dedupe_windowed(frames, thumbs)
+        n_dropped = before - len(frames)
+    elif dedup:
         frames, n_dropped = dedupe_perceptual(frames)
     return frames, {
         "engine": "uniform",
+        "frame_engine": frame_engine,
         "candidate_count": scene_count,
         "deduped_count": n_dropped,
         "selected_count": len(frames),
@@ -733,7 +920,9 @@ if __name__ == "__main__":
     else:
         fps, target = auto_fps(effective_duration, max_frames=max_frames)
     if fps_override is not None:
-        fps = fps_override
+        # Same contract as watch.py: explicit fps is validated and honored
+        # unclamped (the frame-budget cap still bounds output downstream).
+        fps = resolve_user_fps(fps_override)
         target = max(1, int(round(fps * effective_duration)))
 
     frames = extract(
