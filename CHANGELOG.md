@@ -2,6 +2,43 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.1.0] — 2026-07-18
+
+Frame-engine release. A four-agent competitive field survey (upstream + five
+forks, code-read not README-read) fed a three-times-reviewed plan
+(docs/plans/COMPETITIVE-PLAN-2026-07.md); this ships its Release 1.
+
+### Added
+
+- **Frame-engine v2, now the default** (`WATCH_FRAME_ENGINE=v1` opts out):
+  - RGB max-channel changed-cell comparator — sees equal-luma color cuts and
+    caption swaps that the v1 grayscale mean was mathematically blind to;
+    grain still collapses.
+  - Sliding-window dedup (last 4 kept frames, 90s horizon) — A-B-A interview
+    cutaways collapse; a genuine return to a shot later than the horizon is
+    kept.
+  - Two-half density floor — a select-stage `prev_selected_t` term guarantees
+    candidates exist even in static stretches, and a bounded gap-fill (≤30% of
+    the frame cap) reinstates where coverage demands. Ablation on a 3-video
+    corpus: max uncovered gap 480s→87s, 166s→45s, 63s→30s, each exactly at its
+    computed interval.
+- **`--fps` above 2 is honored** when explicitly requested (the most-requested
+  upstream capability, PRs #60/#37): fast-action clips can sample densely; the
+  frame budget still bounds output. Nonpositive values rejected; auto-fps
+  unchanged and still capped.
+
+### Fixed
+
+- Evidence mode silently fell back to balanced when YouTube's timedtext
+  endpoint flaked on the media re-download (validated caption path was
+  overwritten with None). Found by the release's own calibration loop.
+
+### Credits
+
+Mechanism prior art: [claude-real-video](https://github.com/HUANGCHIHHUNGLeo/claude-real-video)
+(MIT) for the density-floor and windowed-dedup ideas — reimplemented, no code
+copied. `--fps` opt-out: upstream community PRs #60/#37.
+
 ## [1.0.7] — 2026-07-13
 
 Local-first everywhere. Completes the port from the local fork's audit.

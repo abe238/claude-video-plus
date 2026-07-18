@@ -65,6 +65,10 @@ OPENAI_API_KEY=
 # Keep the value on its own line with no trailing comment.
 # WATCH_DETAIL=balanced
 
+# Frame engine (default v2: color-aware dedup + coverage floor). Set v1 to
+# restore the previous engine.
+# WATCH_FRAME_ENGINE=v2
+
 # Optional local-first transcription. Native captions and same-name .vtt/.srt
 # sidecars always run before these Adapters. Nothing is installed automatically.
 # WATCH_STT_ORDER=local-http,yap,groq,openai
