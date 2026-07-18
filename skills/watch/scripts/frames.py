@@ -257,6 +257,7 @@ def extract_scene_candidates(
     start_seconds: float | None = None,
     end_seconds: float | None = None,
     threshold: float = SCENE_THRESHOLD,
+    floor_interval: float | None = None,
 ) -> list[dict]:
     """Extract first frame plus ffmpeg scene-change frames.
 
@@ -284,7 +285,16 @@ def extract_scene_candidates(
     if end_seconds is not None:
         cmd += ["-to", f"{end_seconds:.3f}"]
 
-    vf = f"select='eq(n\\,0)+gt(scene\\,{threshold})',{_scale_filter(resolution)},showinfo"
+    select = f"eq(n\\,0)+gt(scene\\,{threshold})"
+    if floor_interval and floor_interval > 0:
+        # Select-stage density floor (v2 engine): guarantee a candidate whenever
+        # ``floor_interval`` elapses since the LAST SELECTED frame, so a static
+        # stretch that never crosses the scene threshold still yields material —
+        # a post-dedup gap-fill can only reinstate candidates that exist. The L3
+        # ablation proved the post-hoc-only variant leaves multi-minute holes
+        # (480s on the 43-min corpus talk). ``prev_selected_t`` needs no fps math.
+        select += f"+gte(t-prev_selected_t\\,{floor_interval:.2f})"
+    vf = f"select='{select}',{_scale_filter(resolution)},showinfo"
     cmd += [
         "-i", str(Path(video_path).resolve()),
         "-vf", vf,
@@ -648,21 +658,22 @@ def _dedupe_v2_pipeline(
     max_frames: int | None,
     start_seconds: float | None,
     end_seconds: float | None,
+    floor_interval: float | None = None,
 ) -> tuple[list[dict], int]:
-    """v2 scene-path dedup: window partition, then the density floor (full-video
-    runs only — focused ranges are already dense), then the shared cleanup
-    contract. Returns ``(survivors, dropped_count)`` like :func:`dedupe_perceptual`."""
+    """v2 scene-path dedup: window partition, then the density floor gap-fill
+    (full-video runs only — focused ranges are already dense), then the shared
+    cleanup contract. The floor has two halves: select-stage candidates
+    (``floor_interval`` passed to :func:`extract_scene_candidates` guarantees
+    material exists even in static stretches) and this gap-fill (reinstates
+    window-collapsed floor candidates where coverage demands it).
+    Returns ``(survivors, dropped_count)`` like :func:`dedupe_perceptual`."""
     thumbs = _thumb_frames([Path(c["path"]) for c in candidates], "rgb24")
     kept, dropped = _window_partition(candidates, thumbs)
-    if dropped and start_seconds is None and end_seconds is None:
-        span = float(candidates[-1]["timestamp_seconds"]) - float(candidates[0]["timestamp_seconds"])
+    if dropped and floor_interval and start_seconds is None and end_seconds is None:
         budget = max_frames if max_frames else len(candidates)
         max_fill = int(V2_FLOOR_CAP_SHARE * budget)
-        if max_fill > 0 and span > 0:
-            # Plan formula: interval auto-widens so the floor can never demand
-            # more than its cap share even on very long videos.
-            interval = max(V2_FLOOR_INTERVAL_SECONDS, span / max_fill)
-            kept = _gap_fill(kept, dropped, interval, max_fill)
+        if max_fill > 0:
+            kept = _gap_fill(kept, dropped, floor_interval, max_fill)
     reinstated = {id(c) for c in kept}
     removed = 0
     for cand in dropped:
@@ -702,6 +713,17 @@ def extract_scene_or_uniform(
     drop the tail of long videos (and could even fall below ``SCENE_MIN_FRAMES``
     and misfire the uniform fallback on a cut-heavy clip).
     """
+    frame_engine = resolve_engine()
+    floor_interval: float | None = None
+    if frame_engine == "v2" and dedup and start_seconds is None and end_seconds is None:
+        try:
+            duration = float(get_metadata(video_path).get("duration_seconds") or 0)
+        except Exception:
+            duration = 0.0
+        budget = max_frames if max_frames else target_frames
+        max_fill = int(V2_FLOOR_CAP_SHARE * budget) if budget else 0
+        if duration > 0 and max_fill > 0:
+            floor_interval = max(V2_FLOOR_INTERVAL_SECONDS, duration / max_fill)
     scene_frames = extract_scene_candidates(
         video_path,
         out_dir,
@@ -709,13 +731,14 @@ def extract_scene_or_uniform(
         max_frames=None,
         start_seconds=start_seconds,
         end_seconds=end_seconds,
+        floor_interval=floor_interval,
     )
     scene_count = len(scene_frames)
-    frame_engine = resolve_engine()
     if scene_count >= SCENE_MIN_FRAMES:
         if dedup and frame_engine == "v2":
             deduped, n_dropped = _dedupe_v2_pipeline(
-                scene_frames, max_frames, start_seconds, end_seconds
+                scene_frames, max_frames, start_seconds, end_seconds,
+                floor_interval=floor_interval,
             )
         elif dedup:
             deduped, n_dropped = dedupe_perceptual(scene_frames)

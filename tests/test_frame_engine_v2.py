@@ -252,3 +252,18 @@ def test_v2_delete_contract_removes_files_and_reindexes(tmp_path):
     assert [c["index"] for c in kept] == [0, 1]
     assert paths[0].exists() and paths[1].exists()
     assert not paths[2].exists()  # dropped A-return unlinked
+
+
+def test_v2_floor_interval_is_computed_from_real_duration(cut_clip, tmp_path, monkeypatch):
+    """L3 gate run 2 regression: the floor read a nonexistent metadata key
+    ('duration' vs 'duration_seconds'), computed interval=None, and silently
+    disabled BOTH halves of the density floor. Pin the plumbing."""
+    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v2")
+    seen = {}
+    real = frames.extract_scene_candidates
+    def spy(*args, **kwargs):
+        seen["floor_interval"] = kwargs.get("floor_interval")
+        return real(*args, **kwargs)
+    monkeypatch.setattr(frames, "extract_scene_candidates", spy)
+    frames.extract_scene_or_uniform(str(cut_clip), tmp_path / "o", fps=1.0, target_frames=8, max_frames=100)
+    assert seen["floor_interval"] and seen["floor_interval"] > 0
