@@ -99,7 +99,7 @@ are **8 families**. Families, not cases, are the resampling unit (§7).
 
 | Arm | Repo | Pinned commit | Notes |
 |---|---|---|---|
-| `ours` | `abe238/claude-video-plus` | `b878491c275cd5048cd8892e43c846ceac4d3b2b` (tag `v1.1.0`) | frame-engine v2 default |
+| `ours` | `abe238/claude-video-plus` | `cc57e0986b2eba58045a3c20d71969623af81d1e` (tag `v1.2.0`) | frame-engine v2 default + transcript-correctness release |
 | `upstream` | `bradautomates/claude-video` | `83da59fa78c3eee9e20f515fe75c438bb5166efd` | the repo's frozen control |
 | `real-video` | `HUANGCHIHHUNGLeo/claude-real-video` | `6f6c25fa9cd7a1b9bac2dbbd526a8a4f6f42cfbb` (master @ 2026-07-18) | |
 | `video-vision` | `jordanrendric/claude-video-vision` | `5c8bc7ba32b727c7f97e9a7b336a775e0c6cd911` (main @ 2026-07-18) | |
