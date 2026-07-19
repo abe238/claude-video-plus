@@ -184,16 +184,16 @@ def _fake_run_writing_json(tmp_path, commands, *, fail_when_vad=False):
     return fake_run
 
 
-def test_vad_flags_added_when_model_file_exists(tmp_path, monkeypatch):
-    chunk, request = _vad_fixtures(tmp_path)
-    model = tmp_path / "silero.bin"
-    model.write_bytes(b"model")
-    commands: list[list[str]] = []
-    monkeypatch.setattr(ta.subprocess, "run", _fake_run_writing_json(tmp_path, commands))
+def test_vad_flags_never_composed_after_withdrawal(tmp_path, monkeypatch):
+    """1.2.1: the 1.2.0 VAD tier composed whisper.cpp flags against the pip
+    openai-whisper CLI — it could never engage and the fail-open catch hid it
+    (L6 review, three independent angles). Withdrawn until composed against a
+    capability-probed CLI that supports it."""
+    model = tmp_path / "ggml-silero-v5.1.2.bin"
+    model.write_bytes(b"x")
     adapter = ta.WhisperCliAdapter(vad=True, vad_model_path=str(model))
-    adapter._transcribe_one(request, chunk)
-    assert "--vad" in commands[0]
-    assert commands[0][commands[0].index("--vad-model") + 1] == str(model)
+    assert adapter._vad_args() == []
+
 
 
 def test_absent_model_file_means_no_vad_flags(tmp_path, monkeypatch):
@@ -216,35 +216,10 @@ def test_vad_off_config_wins_even_with_model_present(tmp_path, monkeypatch):
     assert "--vad" not in commands[0]
 
 
-def test_failed_vad_run_falls_back_to_plain_run(tmp_path, monkeypatch):
-    """Fail-open: a --vad failure retries without VAD in the same call, and the
-    adapter stops attempting VAD for subsequent chunks (no repeated waste)."""
-    chunk, request = _vad_fixtures(tmp_path)
-    model = tmp_path / "silero.bin"
-    model.write_bytes(b"model")
-    commands: list[list[str]] = []
-    monkeypatch.setattr(
-        ta.subprocess, "run",
-        _fake_run_writing_json(tmp_path, commands, fail_when_vad=True),
-    )
-    adapter = ta.WhisperCliAdapter(vad=True, vad_model_path=str(model))
-    values = adapter._transcribe_one(request, chunk)
-    assert values and values[0]["text"] == "ok"
-    assert "--vad" in commands[0] and "--vad" not in commands[1]
-    # Next chunk: VAD is known-broken, skip it outright.
-    adapter._transcribe_one(request, chunk)
-    assert "--vad" not in commands[2]
-    assert len(commands) == 3
+
+def test_registry_still_accepts_vad_config_keys():
+    """Config keys survive as documented-future; wiring them must not crash."""
+    adapters = transcription.build_default_adapters(config.get_transcription_config())
+    assert "whisper-cli" in adapters
 
 
-def test_registry_wires_vad_config_into_whisper_cli(tmp_path):
-    model = tmp_path / "silero.bin"
-    model.write_bytes(b"model")
-    adapters = transcription.build_default_adapters(
-        {"vad": True, "vad_model_path": str(model)}
-    )
-    assert adapters["whisper-cli"]._vad_args() == ["--vad", "--vad-model", str(model)]
-    adapters_off = transcription.build_default_adapters(
-        {"vad": False, "vad_model_path": str(model)}
-    )
-    assert adapters_off["whisper-cli"]._vad_args() == []

@@ -322,39 +322,6 @@ class TranscriptionPipeline:
         for name in order:
             adapter = adapters[name]
             started = time.monotonic()
-            # R2a-1: audio is prepared (and silence-classified) BEFORE any
-            # adapter contact. Adapter order is local-http -> yap -> whisper-cli
-            # -> cloud, so gating inside one adapter can never protect the
-            # pipeline: silence used to reach the first adapter and hallucinate,
-            # and a zero-segment result read as "unavailable", falling through
-            # toward cloud. no_speech is terminal: nothing probes, nothing runs,
-            # nothing uploads. Sidecar (requires_audio=False) is untouched --
-            # a silent video with real subtitles still returns them.
-            if adapter.requires_audio and prepared is None:
-                try:
-                    prepared = prepare_audio(
-                        request.media_path,
-                        request.work_dir / "transcription-audio",
-                        start_seconds=request.start_seconds,
-                        end_seconds=request.end_seconds,
-                    )
-                    request = replace(request, prepared_audio=prepared)
-                except (OSError, RuntimeError, ValueError) as exc:
-                    return TranscriptResult(
-                        state="fatal",
-                        language=request.language,
-                        attempts=tuple(attempts),
-                        failure_code="audio_preparation_failed",
-                        warnings=(f"audio preparation failed: {type(exc).__name__}",),
-                    )
-            if adapter.requires_audio and prepared is not None and prepared.all_silent:
-                return TranscriptResult(
-                    state="no_speech",
-                    language=request.language,
-                    attempts=tuple(attempts),
-                    warnings=("no speech detected in the audio",),
-                    diagnostics={"silent_chunks": len(prepared.chunks)},
-                )
             if adapter.is_remote and not request.allow_remote:
                 attempts.append(
                     TranscriptAttempt(
@@ -386,6 +353,41 @@ class TranscriptionPipeline:
                 )
                 continue
 
+            if adapter.requires_audio and prepared is None:
+                # Lazy (L6 review): probes are local and upload nothing, so
+                # preparing AFTER a successful probe keeps the zero-work path on
+                # machines with no available backend, while the silence gate
+                # below still runs BEFORE transcribe — the no-upload guarantee
+                # is enforced where upload actually happens.
+                try:
+                    prepared = prepare_audio(
+                        request.media_path,
+                        request.work_dir / "transcription-audio",
+                        start_seconds=request.start_seconds,
+                        end_seconds=request.end_seconds,
+                    )
+                    request = replace(request, prepared_audio=prepared)
+                except (OSError, RuntimeError, ValueError) as exc:
+                    return TranscriptResult(
+                        state="fatal",
+                        language=request.language,
+                        attempts=tuple(attempts),
+                        failure_code="audio_preparation_failed",
+                        warnings=(f"audio preparation failed: {type(exc).__name__}",),
+                    )
+            if (
+                adapter.requires_audio
+                and prepared is not None
+                and prepared.all_silent
+                and bool(request.config.get("no_speech_gate", True))
+            ):
+                return TranscriptResult(
+                    state="no_speech",
+                    language=request.language,
+                    attempts=tuple(attempts),
+                    warnings=("no speech detected in the audio",),
+                    diagnostics={"silent_chunks": len(prepared.chunks)},
+                )
 
             try:
                 result = adapter.transcribe(request, receipts)

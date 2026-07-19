@@ -136,6 +136,23 @@ def _run_chunked(
                 f"chunk {chunk.index + 1} unavailable after bounded retries ({detail})"
             )
             continue
+        # Validate BEFORE caching: a malformed value crashing here used to
+        # happen after receipts.put, so the poisoned cache made every rerun
+        # crash identically (L6 review finding).
+        try:
+            built = _local_segments(
+                chunk_values,
+                chunk=chunk,
+                adapter=adapter,
+                model=model,
+                language=request.language,
+            )
+        except (TypeError, ValueError) as exc:
+            failed += 1
+            warnings.append(
+                f"chunk {chunk.index + 1} produced invalid segments ({type(exc).__name__})"
+            )
+            continue
         processed += 1
         try:
             receipts.put(adapter, model, request.language, chunk, chunk_values)
@@ -145,15 +162,7 @@ def _run_chunked(
             # transcribed; losing the receipt is strictly cheaper than losing
             # the work.
             warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
-        segments.extend(
-            _local_segments(
-                chunk_values,
-                chunk=chunk,
-                adapter=adapter,
-                model=model,
-                language=request.language,
-            )
-        )
+        segments.extend(built)
 
     # Receipts are flushed in batches, so the tail must be persisted explicitly
     # or the last <5 chunks would be re-transcribed on resume.
@@ -505,7 +514,7 @@ class WhisperCliAdapter:
         self.vad_model_path = vad_model_path
         # Set after a --vad invocation fails: VAD is best-effort, so one
         # failure disables it for the rest of this adapter's lifetime.
-        self._vad_broken = False
+        self._vad_withdrawn = False
 
     def probe(self, request: TranscriptionRequest) -> AdapterAvailability:
         del request
@@ -514,17 +523,14 @@ class WhisperCliAdapter:
         return AdapterAvailability(True)
 
     def _vad_args(self) -> list[str]:
-        """R2a-2 Silero VAD flags — composed ONLY when the model file already
-        exists (detected, never downloaded; a future release may add a
-        pinned-SHA download) and config allows it. Fail-open everywhere."""
-        if self._vad_broken or not self.vad or not self.vad_model_path:
-            return []
-        try:
-            if not Path(self.vad_model_path).is_file():
-                return []
-        except OSError:
-            return []
-        return ["--vad", "--vad-model", self.vad_model_path]
+        """WITHDRAWN (1.2.1). The 1.2.0 tier composed whisper.cpp flags
+        (--vad/--vad-model + a ggml Silero model) but this adapter invokes the
+        pip openai-whisper CLI, which rejects them — the feature could never
+        engage, and the fail-open catch hid that permanently (found by the L6
+        review, three independent angles). Config keys are retained as
+        documented-future; VAD returns only when composed against a CLI that
+        actually supports it (capability-probed, not assumed)."""
+        return []
 
     def _parse_json_output(self, output: Path) -> list[dict]:
         data = json.loads(output.read_text(encoding="utf-8"))
@@ -533,9 +539,17 @@ class WhisperCliAdapter:
             text = str(seg.get("text") or "").strip()
             if not text:
                 continue
+            start = round(float(seg.get("start") or 0.0), 2)
+            end = round(float(seg.get("end") or 0.0), 2)
+            if end < start or start < 0:
+                # Same strictness parse_subtitle(strict=True) gave the old srt
+                # path: a malformed cue is dropped HERE, inside the per-chunk
+                # retry boundary — not later in _local_segments where a
+                # ValueError would kill the whole adapter and poison receipts.
+                continue
             value = {
-                "start": round(float(seg.get("start") or 0.0), 2),
-                "end": round(float(seg.get("end") or 0.0), 2),
+                "start": start,
+                "end": end,
                 "text": text,
             }
             words = whisper._clean_words(seg.get("words"))
@@ -584,14 +598,6 @@ class WhisperCliAdapter:
                 except OSError:
                     pass
 
-        vad_args = self._vad_args()
-        if vad_args:
-            try:
-                return attempt(vad_args)
-            except (Exception, SystemExit):
-                # Fail-open: VAD must never cost a transcript. Disable it and
-                # fall through to a plain run within this same call.
-                self._vad_broken = True
         return attempt([])
 
     def transcribe(self, request: TranscriptionRequest, receipts: ChunkReceiptStore) -> TranscriptResult:

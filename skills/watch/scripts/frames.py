@@ -68,6 +68,31 @@ def resolve_engine() -> str:
     return value if value in ("v1", "v2") else "v2"
 
 
+def coverage_bounded_fps(user_fps: float, duration_seconds: float, cap: int | None) -> float:
+    """Coverage beats density: an explicit fps that would exceed the frame cap
+    over the window is reduced so the WHOLE window is still covered — the
+    uniform-fallback path bounds output with ffmpeg -frames:v (head truncation,
+    not even-sampling), so an unbounded fps silently covered only the first
+    seconds (L6 review). With no cap (token-burner) a sanity ceiling applies.
+    """
+    if duration_seconds <= 0:
+        return user_fps
+    if cap:
+        return min(user_fps, max(cap / duration_seconds, 0.001))
+    # token-burner + explicit fps: explicit opt-in to volume, but not unbounded
+    # disk — ceiling keeps a 60-minute static screencast from requesting 108k
+    # JPEGs. 5000 frames ≈ 50 balanced runs; loud enough to be deliberate.
+    ceiling = 5000
+    if user_fps * duration_seconds > ceiling:
+        print(
+            f"[watch] --fps {user_fps:g} over {duration_seconds:.0f}s would exceed "
+            f"{ceiling} frames; sampling at {ceiling / duration_seconds:.3f} fps instead",
+            file=sys.stderr,
+        )
+        return ceiling / duration_seconds
+    return user_fps
+
+
 def resolve_user_fps(fps: float) -> float:
     """An explicit --fps is an informed opt-out of the MAX_FPS clamp (fast-action
     clips need it — upstream's most-requested capability). Auto-fps stays capped;
@@ -737,7 +762,17 @@ def extract_scene_or_uniform(
         floor_interval=floor_interval,
     )
     scene_count = len(scene_frames)
-    if scene_count >= SCENE_MIN_FRAMES:
+    # Floor-injected candidates must not defeat the static-video fallback (L6
+    # review): a fully static long clip yields duration/floor_interval floor
+    # candidates and zero real scene cuts — v1 gave it dense uniform sampling.
+    # Gate on the count with the floor's contribution estimated out.
+    effective_scene_count = scene_count
+    if floor_interval:
+        try:
+            effective_scene_count = scene_count - int(duration / floor_interval)
+        except Exception:
+            pass
+    if effective_scene_count >= SCENE_MIN_FRAMES:
         if dedup and frame_engine == "v2":
             deduped, n_dropped = _dedupe_v2_pipeline(
                 scene_frames, max_frames, start_seconds, end_seconds,
@@ -946,9 +981,11 @@ if __name__ == "__main__":
     else:
         fps, target = auto_fps(effective_duration, max_frames=max_frames)
     if fps_override is not None:
-        # Same contract as watch.py: explicit fps is validated and honored
-        # unclamped (the frame-budget cap still bounds output downstream).
-        fps = resolve_user_fps(fps_override)
+        try:
+            fps = resolve_user_fps(fps_override)
+        except ValueError as exc:
+            raise SystemExit(str(exc))
+        fps = coverage_bounded_fps(fps, effective_duration, max_frames)
         target = max(1, int(round(fps * effective_duration)))
 
     frames = extract(

@@ -245,8 +245,16 @@ def redact_text(text: str, secrets: tuple[str, ...] = ()) -> str:
 
 
 def _clear_attempt_artifacts(out_dir: Path) -> None:
-    """Remove only generated files so stale partial output cannot signal success."""
+    """Remove only generated MEDIA files so stale partial output cannot signal
+    success. Caption files (.vtt/.srt) are deliberately preserved: a prior
+    captions-only fetch may have written them into this same directory, and
+    deleting them made the evidence-mode caption fallback point at a dead path
+    exactly when the media attempt's subtitle re-fetch flaked (L6 review).
+    Stale-caption risk is nil — same source, same content; a successful
+    re-fetch overwrites them anyway."""
     for path in out_dir.glob("video*"):
+        if path.suffix.lower() in {".vtt", ".srt"}:
+            continue
         if path.is_file() or path.is_symlink():
             try:
                 path.unlink()

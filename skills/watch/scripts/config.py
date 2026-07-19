@@ -171,6 +171,10 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         _config_value("WATCH_STT_RECEIPTS", file_values, overrides, True),
         name="WATCH_STT_RECEIPTS",
     )
+    no_speech_gate = _bool_value(
+        _config_value("WATCH_NO_SPEECH", file_values, overrides, True),
+        name="WATCH_NO_SPEECH",
+    )
     vad = _bool_value(
         _config_value("WATCH_VAD", file_values, overrides, True),
         name="WATCH_VAD",
@@ -192,6 +196,7 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         "probe_timeout": probe_timeout,
         "max_attempts": max_attempts,
         "receipts": receipts,
+        "no_speech_gate": no_speech_gate,
         "vad": vad,
         "vad_model_path": vad_model_path,
         "config_file": str(CONFIG_FILE),

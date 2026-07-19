@@ -160,7 +160,10 @@ def test_all_silent_short_circuits_before_any_adapter(silent_wav, tmp_path):
     )
     result = pipeline.run(request)
     assert result.state == "no_speech"
-    assert spy.probed == 0 and spy.transcribed == 0  # nothing ran, nothing uploaded
+    # L6 review relaxation: probes are local and upload nothing, so lazy
+    # prepare-after-probe restores the zero-work path on backend-less machines.
+    # The binding guarantee is enforced where upload happens: transcribe.
+    assert spy.transcribed == 0  # nothing transcribed, nothing uploaded
 
 
 class _ChunkedSpyAdapter(_SpyAdapter):

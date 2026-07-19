@@ -277,3 +277,28 @@ def test_v2_floor_interval_is_computed_from_real_duration(cut_clip, tmp_path, mo
     monkeypatch.setattr(frames, "extract_scene_candidates", spy)
     frames.extract_scene_or_uniform(str(cut_clip), tmp_path / "o", fps=1.0, target_frames=8, max_frames=100)
     assert seen["floor_interval"] and seen["floor_interval"] > 0
+
+
+# --- L6 review fixes (v1.2.1) ---------------------------------------------------
+
+def test_coverage_bounded_fps_prefers_window_coverage():
+    """--fps 10 over a 500s window with cap 100 must cover the WHOLE window
+    (0.2 fps), not the first 10 seconds at 10 fps (head truncation)."""
+    assert frames.coverage_bounded_fps(10.0, 500.0, 100) == pytest.approx(0.2)
+    assert frames.coverage_bounded_fps(10.0, 10.0, 100) == 10.0  # dense when it fits
+
+
+def test_coverage_bounded_fps_token_burner_ceiling():
+    """No cap (token-burner) still cannot request unbounded frames."""
+    fps = frames.coverage_bounded_fps(30.0, 3600.0, None)
+    assert fps * 3600.0 <= 5000 + 1
+
+
+def test_static_video_floor_does_not_defeat_uniform_fallback(monkeypatch, static_clip, tmp_path):
+    """Floor-injected candidates must not clear the SCENE_MIN gate on a static
+    video — v1 gave such clips dense uniform sampling; v2 must too."""
+    monkeypatch.setenv("WATCH_FRAME_ENGINE", "v2")
+    kept, meta = frames.extract_scene_or_uniform(
+        str(static_clip), tmp_path / "s", fps=1.0, target_frames=8, max_frames=100
+    )
+    assert meta["engine"] == "uniform"  # fell back despite floor candidates

@@ -196,8 +196,11 @@ def detect_silence_boundaries(audio_path: Path) -> tuple[float, ...]:
 # never cached (see AudioChunk.silent) — a change here takes effect on the very
 # next run with no invalidation machinery needed.
 SILENCE_CLASSIFIER_VERSION = 1
+# Flat threshold ONLY. 1.2.0 also used max(0.5s, 2% of chunk duration), which
+# on a ~180s chunk discarded up to 3.6s of genuine speech — a chunk holding one
+# short sentence was classified silent (L6 review finding). Any utterance
+# longer than this constant keeps its chunk.
 MIN_SPEECH_SECONDS = 0.5
-MIN_SPEECH_FRACTION = 0.02
 
 
 # R2c loose fallback thresholds: used for chunk PLANNING only (never for the
@@ -281,8 +284,7 @@ def classify_chunk_silence(
             if e > s:
                 silent_time += e - s
         speech_time = max(0.0, (local_end - local_start) - silent_time)
-        threshold = max(MIN_SPEECH_SECONDS, MIN_SPEECH_FRACTION * chunk.duration)
-        out.append(replace(chunk, silent=speech_time < threshold))
+        out.append(replace(chunk, silent=speech_time < MIN_SPEECH_SECONDS))
     return tuple(out)
 
 

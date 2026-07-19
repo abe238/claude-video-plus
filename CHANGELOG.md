@@ -2,6 +2,66 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.2.1] — 2026-07-18
+
+Correctness release: every item found by the chain's own closing review (eight
+independent finder angles + verification over the full 911efdf..HEAD diff; all
+ten findings confirmed). Two are errata for 1.2.0 claims.
+
+### Errata
+
+- **The 1.2.0 Silero VAD tier never worked and is withdrawn.** It composed
+  whisper.cpp flags (`--vad`/`--vad-model`, ggml model) but the adapter invokes
+  the pip `openai-whisper` CLI, which rejects them — and the fail-open catch hid
+  the failure permanently. Config keys remain as documented-future; VAD returns
+  only when composed against a capability-probed CLI that supports it.
+- **1.2.0's "hard_cut warnings surfaced" was aspirational**: the warnings died
+  inside the result object. They now actually render in the report.
+
+### Fixed
+
+- **no_speech now reaches the report** — it said "none available" and told the
+  user to configure Whisper for a video with no speech; it now states the
+  finding and documents the `WATCH_NO_SPEECH=off` bypass.
+- **Silence classifier no longer discards sparse narration**: the 2%-of-chunk
+  threshold (up to ~3.6s of real speech judged "silent") is replaced by a flat
+  0.5s rule, and `WATCH_NO_SPEECH=off` bypasses the gate entirely for
+  quiet-recording edge cases.
+- **Malformed whisper-cli JSON can no longer poison receipts or kill the
+  adapter**: invalid segments are dropped inside the per-chunk retry, and
+  validation now happens BEFORE caching.
+- **Bundle export can no longer destroy an evidence run**: `BundleRefused` is
+  surfaced and skips only the bundle; and the leak scanner now distinguishes
+  video-derived content (spoken paths, URLs with query strings are legitimate)
+  from machine-generated artifacts (still strict).
+- **--fps semantics: coverage beats density.** An explicit fps that would
+  overflow the frame budget is reduced to cover the whole window (the uniform
+  fallback head-truncates, it does not even-sample); token-burner+fps gets a
+  5000-frame sanity ceiling; `--fps 0` is a one-line usage error, not a
+  traceback.
+- **Static long videos keep dense sampling under v2**: floor-injected
+  candidates no longer defeat the uniform fallback (they cleared the
+  scene-count gate, delivering ~30% of v1's material on fully static content).
+- **Evidence-mode caption fallback fixed at the root**: acquisition no longer
+  deletes fetched caption files at the start of media attempts, so the
+  fallback path can actually exist when the subtitle re-fetch flakes.
+- **Audio preparation is lazy again**: it runs after a successful adapter
+  probe (probes are local and upload nothing), so machines with no
+  transcription backend return in milliseconds instead of paying full audio
+  extraction; the silence gate still runs before transcribe, where upload
+  actually happens.
+- Bundle provenance version is read from SKILL.md frontmatter instead of a
+  fourth hand-written literal (which had already drifted once).
+
+### Measurement honesty
+
+- The 1.1.0 frame-engine ablation evidence is now published at
+  docs/benchmarks/2026-07-18-frame-engine-ablation/ (it was gitignored
+  local-only). To be explicit about its scope: it is a descriptive v2-vs-v1
+  coverage ablation on 3 videos — the judged comparison against upstream
+  control 83da59f is preregistered (docs/benchmarks/2026-07-bakeoff/) and has
+  not yet run.
+
 ## [1.2.0] — 2026-07-18
 
 Transcript-correctness release (competitive plan Release 2, all five items).

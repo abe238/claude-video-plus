@@ -4,7 +4,7 @@ description: Watch a video (URL or local path). Downloads with yt-dlp, extracts 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238

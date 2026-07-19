@@ -77,6 +77,15 @@ def _scan_value(value: Any, *, location: str = "metadata") -> None:
         raise BundleRefused(f"{location} is not JSON-serializable")
 
 
+# Video-DERIVED text (the transcript) legitimately contains spoken paths like
+# /usr/local/bin and URLs with query strings — refusing those destroyed real
+# bundles (L6 review). The scanner's purpose is OUR machine's leaks, so content
+# artifacts are held to a home-directory + secrets standard, while
+# machine-GENERATED artifacts (manifest/report) keep the strict rules.
+_CONTENT_ARTIFACTS = {"transcript.txt"}
+_HOME_PATH = re.compile(r"(?:^|[\s\"'=])(/Users/[^\s\"'/]+/|/home/[^\s\"'/]+/|~/)")
+
+
 def _scan_text_payload(path: str, content: bytes) -> None:
     if PurePosixPath(path).suffix.lower() in _MEDIA_SUFFIXES:
         return
@@ -86,6 +95,10 @@ def _scan_text_payload(path: str, content: bytes) -> None:
         raise BundleRefused(f"non-media artifact is not UTF-8: {path}")
     if _SECRET_TEXT.search(text):
         raise BundleRefused(f"artifact contains secret-like text: {path}")
+    if PurePosixPath(path).name in _CONTENT_ARTIFACTS:
+        if _HOME_PATH.search(text):
+            raise BundleRefused(f"artifact contains a home-directory path: {path}")
+        return
     try:
         structured = json.loads(text)
     except json.JSONDecodeError:
