@@ -2,6 +2,18 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.2.4] — 2026-07-19
+
+### Security
+
+- Cloud Whisper API keys are no longer read from the working directory's
+  `.env`. /watch frequently runs inside cloned repositories, and a hostile
+  repo could plant an attacker-owned key there, routing any authorized audio
+  upload to the attacker's provider console. Keys now load only from the
+  user-owned `~/.config/watch/.env` (0600) or the process environment.
+  Independently found by the Vex audit in troybelden-ct's fork of upstream;
+  surfaced by our fork-watch scan. Thanks!
+
 ## [1.2.3] — 2026-07-18
 
 Fixes the one loss in the corpus-9 blind bake-off: evidence mode scored 2/4 on

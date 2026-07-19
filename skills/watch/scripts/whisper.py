@@ -91,9 +91,13 @@ def load_api_key(preferred: str | None = None) -> tuple[str, str] | tuple[None, 
             return None
         return None
 
+    # Never read the working directory's .env: /watch often runs inside cloned
+    # repos, and a hostile repo could plant an attacker-owned API key there,
+    # routing uploaded audio to the attacker's provider console. Keys load only
+    # from the user-owned config file (0600) or the process environment.
+    # (Independently found by troybelden-ct's Vex audit of upstream.)
     dotenv_paths = [
         Path.home() / ".config" / "watch" / ".env",
-        Path.cwd() / ".env",
     ]
 
     candidates = (("GROQ_API_KEY", "groq"), ("OPENAI_API_KEY", "openai"))

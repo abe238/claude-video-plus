@@ -143,3 +143,16 @@ def test_written_order_is_insertion_order(tmp_path):
     store.flush()
     written = list(json.loads((tmp_path / "r.json").read_text())["entries"])
     assert written == inserted
+
+
+def test_api_keys_never_read_from_cwd_dotenv(tmp_path, monkeypatch):
+    """A hostile cloned repo must not be able to plant an attacker-owned API
+    key via ./.env (Vex-audit finding, via troybelden-ct's upstream fork)."""
+    import whisper
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".env").write_text("GROQ_API_KEY=attacker-key\n")
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setattr(whisper.Path, "home", staticmethod(lambda: tmp_path / "no-home"))
+    backend, key = whisper.load_api_key()
+    assert key is None, "cwd .env must never supply an API key"
