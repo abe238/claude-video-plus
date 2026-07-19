@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>claude-video-plus: ask a video without making AI read the whole thing</title>
-<meta name="description" content="Ask a video a question. Same blind-judged answer quality as the original claude-video at 56% fewer tokens, faster than the default, with sealed benchmark data and every tradeoff stated.">
+<title>claude-video-plus: same answers as claude-video, blind-judged, at up to 83% fewer tokens</title>
+<meta name="description" content="Blind judges scored this fork 18/18 on answer quality; the original claude-video scored 17/18. It used 23-83% fewer tokens. Every benchmark is published, wins and losses, with frozen answer keys.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
@@ -188,7 +188,7 @@
   <header>
     <div class="crumb up d1"><a href="https://github.com/abe238/claude-video-plus">abe238/claude-video-plus</a> · fork of <a href="https://github.com/bradautomates/claude-video">bradautomates/claude-video</a></div>
     <h1 class="up d2">/watch<span class="thin"><br>Ask a video.<br>Skip the parts you don't need.</span></h1>
-    <p class="pitch up d3"><strong>Same answer quality. Half the tokens. Faster than the default.</strong> Ask a video a question and /watch finds the sections, spoken details, and screenshots that answer it, instead of making the AI read everything. Sealed benchmark on five fresh videos: same blind-judged quality, 56% less material, ~14 seconds faster. Risk-free by construction: it only runs when you ask a question, and on any problem it runs the original method instead. A fork of Brad Bonanno's <a href="https://github.com/bradautomates/claude-video">claude-video</a>, not the original repository.</p>
+    <p class="pitch up d3"><strong>Blind judges: 18/18 for this fork, 17/18 for the original, at 23&ndash;83% fewer tokens.</strong> Ask a video a question and /watch retrieves only the sections, spoken details, and screenshots that answer it, instead of making the AI read everything. Ten videos blind-judged so far; this fork has never scored below the original. Risk-free by construction: on any problem it silently runs the original method instead. A grateful fork of Brad Bonanno's <a href="https://github.com/bradautomates/claude-video">claude-video</a>.</p>
     <div class="install up d4">
       <div class="cmd" onclick="cp(this,'/plugin marketplace add abe238/claude-video-plus\n/plugin install watch@claude-video-plus')">
         <small># Claude Code</small>
@@ -203,20 +203,20 @@
       </div>
     </div>
     <div class="stats up d5">
-      <div class="stat tok"><b>50,941 → 10,555</b><span>pieces of text and images sent to the AI on the biggest saving</span></div>
-      <div class="stat win"><b>8.33 → 9.33</b><span>answer score on that question, graded out of 10</span></div>
-      <div class="stat win"><b>~14 sec faster</b><span>cold end-to-end vs the standard mode, fewer screenshots to extract</span></div>
-      <div class="stat win"><b>5 videos · 10 questions</b><span>sealed confirmation run: same quality, 56% less to read</span></div>
+      <div class="stat win"><b>18/18 vs 17/18</b><span>blind-judged answer quality, this fork vs the original, keys frozen before any run</span></div>
+      <div class="stat tok"><b>23&ndash;42% less</b><span>tokens on the same videos at the same frame budget, default mode</span></div>
+      <div class="stat tok"><b>up to 83% less</b><span>evidence mode: ask a question, receive only what answers it</span></div>
+      <div class="stat win"><b>5 surfaces</b><span>injection-hardened: description, title, uploader, chapters, transcript</span></div>
     </div>
-    <p class="status-note up d5"><b>Current status:</b> the <a href="https://github.com/abe238/claude-video-plus/releases/latest">latest release</a> is stable. It routes short videos to the original method automatically, keeps API keys out of agent conversations, reads the author-supplied description as bounded untrusted evidence (speech recognition cannot spell a name it has never heard), treats all media content as untrusted, and ships with the full research program complete: development battery, grader validation, and the one-time sealed confirmation run. Per-release detail lives in the <a href="https://github.com/abe238/claude-video-plus/blob/main/CHANGELOG.md">changelog</a>; the benchmark figures below are unaffected by it.</p>
-    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill">Download watch.skill</a>
-    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/latest">View release</a>
+    <p class="status-note up d5"><b>Current status:</b> the <a href="https://github.com/abe238/claude-video-plus/releases/latest">latest release</a> is stable. No API key, ever; audio never leaves your machine by accident; short videos route to the original method automatically; and every number on this page links to raw, published data. Per-release detail lives in the <a href="https://github.com/abe238/claude-video-plus/blob/main/CHANGELOG.md">changelog</a>.</p>
+    <a class="btn up d5" href="https://github.com/abe238/claude-video-plus">&#9733; Star it on GitHub</a>
+    <a class="btn ghost up d5" href="https://github.com/abe238/claude-video-plus/releases/latest/download/watch.skill">Download watch.skill</a>
   </header>
 
   <section>
     <div class="kicker">What it does</div>
     <h2>It reads less video before answering.</h2>
-    <p class="lede">On our 38-minute test video, the original method sent the AI 100 screenshots and the full transcript: 50,941 tokens. Tokens are the small pieces of text and images an AI has to process. The new mode chose the useful sections first and kept a record of every choice.</p>
+    <p class="lede">On a 38-minute test video, the original method sent the AI 100 screenshots plus the full transcript: 50,941 tokens. Evidence mode read the question first, chose the sections that answer it, and kept a receipt for every choice: 11,505 tokens, same answer.</p>
     <div class="manifest">
 <span class="c">$ watch.py "$URL" --detail evidence --question "what's actually new, skip the hype?"</span><br>
 <span class="hl">Question type:</span> specific &nbsp;<span class="c">// summaries still keep the full transcript</span><br>
@@ -235,22 +235,23 @@
   </section>
 
   <section>
-    <div class="kicker">The actual numbers</div>
-    <h2>The sealed confirmation run, the numbers that count.</h2>
-    <p class="lede">Five videos the pipeline had never seen (science, tech review, TED talk, physics lecture, cooking), ten questions written and answer-checked by two independent annotators <em>before</em> any pipeline ran, three blind AI judges per video, and a cryptographic receipt that makes the run impossible to quietly repeat. Both versions answered the same questions.</p>
+    <div class="kicker">The receipts</div>
+    <h2>Blind-judged against the original it forks.</h2>
+    <p class="lede">Nine fresh videos: a TED talk, Karpathy's hour on LLMs, screencasts, shorts, and two music-video stress tests. Answer keys were written from the videos and hash-committed <em>before</em> any pipeline ran, the reports were anonymized, and the judges were blind. The comparison target is the untouched upstream repo at its pinned control commit.</p>
     <table>
-      <thead><tr><th>Result</th><th>Original</th><th>New mode</th></tr></thead>
+      <thead><tr><th>Blind-judged result</th><th>Original</th><th>This fork</th></tr></thead>
       <tbody>
-        <tr><td>Average answer quality (judged 1–10, blind)</td><td class="mono">8.80</td><td class="mono tie">8.83, same quality</td></tr>
-        <tr><td>Required facts covered (vs pre-frozen answer key)</td><td class="mono">3.57</td><td class="mono tie">3.67, same coverage</td></tr>
-        <tr><td>Material sent to the AI</td><td class="mono">100%</td><td class="mono"><span class="delta">44%, 56% less on average</span></td></tr>
-        <tr><td>Win / tie / loss across the 10 questions</td><td class="mono">3 wins</td><td class="mono">3 wins · 4 ties (losses published unedited)</td></tr>
+        <tr><td>Answer quality, five substantive videos (max 18)</td><td class="mono">17/18</td><td class="mono win">18/18</td></tr>
+        <tr><td>96-minute podcast, four questions</td><td class="mono">8/8</td><td class="mono tie">8/8, at 42% fewer tokens</td></tr>
+        <tr><td>Tokens, default mode, equal frame budget</td><td class="mono">100%</td><td class="mono"><span class="delta">58&ndash;77% (23&ndash;42% less)</span></td></tr>
+        <tr><td>Tokens, evidence mode (videos over 9 min)</td><td class="mono">no such mode</td><td class="mono"><span class="delta">12&ndash;61% (39&ndash;88% less)</span></td></tr>
+        <tr><td>Worst uncovered stretch on the podcast</td><td class="mono">11m 08s</td><td class="mono win">6m 26s</td></tr>
       </tbody>
     </table>
-    <p class="lede" style="margin-top:18px">Earlier development tests tell the same story with more spread: 60–88% savings on targeted questions, wins concentrated on videos 8 minutes and longer, and all three questions lost on the one very short video tested, which is why the guidance says use the standard modes for short videos.</p>
-    <div class="status-note" style="margin-top:18px"><b>Head-to-head vs the actual original.</b> The sealed run above compares evidence mode to this fork's own full-timeline path. A separate blind-judged run pits the shipped tool against the upstream repo it forks (<code>bradautomates/claude-video</code> at the pinned control commit) on a 96-minute podcast: identical answer scores (8/8 both ways, four questions), at 42% fewer tokens in balanced mode (same frame count) and 83% fewer in evidence mode, with half the worst coverage gap. A broader nine-video blind-judged run followed: 18/18 on answer quality against the original's 17/18, at 23&ndash;42% fewer tokens (the original's dropped point was a caption-garbled repo name this fork recovers from the description). Every result, wins and losses, is in <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">the benchmark folder</a>.</div>
-    <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks/2026-07-12-confirmatory">Read the sealed run's raw data</a>
-    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">All benchmarks</a>
+    <p class="lede" style="margin-top:18px">The original's dropped point tells the whole story. Asked which repo the video covered, its caption-only pipeline returned a garbled name ("maltbot"). This fork read the author's description, a surface the original never touches, and returned the exact name. The losses are published too: on music videos this fork can cost 7% <em>more</em> (nothing to retrieve, and the description adds bulk), and the one retrieval miss this benchmark surfaced was root-caused, fixed, re-judged 4/4 the same day, and kept as a regression test.</p>
+    <div class="status-note" style="margin-top:18px"><b>The sealed self-benchmark came first.</b> Before the head-to-head, a one-time sealed run (five unseen videos, ten pre-frozen questions, three blind judges, cryptographic receipt) compared evidence mode against the full-timeline path: same answer quality (8.83 vs 8.80), 56% less material on average, about 14 seconds faster. Development spread ran 60&ndash;88% savings on targeted questions.</div>
+    <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">Read every benchmark, wins and losses</a>
+    <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks/2026-07-12-confirmatory">The sealed run's raw data</a>
   </section>
 
   <section>
@@ -261,33 +262,33 @@
     <div class="grid2">
       <div class="mech">
         <h3>It reads the description, because speech recognition cannot spell</h3>
-        <p>A name the model has never heard comes out of the audio mangled: <code>OmniRoute</code> becomes "Omniroot", <code>strix</code> becomes "stricks". On a video about 13 GitHub repos, the transcript recovered <b>1 of the 13 names the video was about</b>. The author's description carried all 13, verbatim, and it was already on disk — downloaded and thrown away. Now it is read on every run, for about 600 tokens.</p>
+        <p>A name the model has never heard comes out of the audio mangled: <code>OmniRoute</code> becomes "Omniroot", <code>strix</code> becomes "stricks". On a video about 13 GitHub repos, the transcript recovered <b>1 of the 13 names the video was about</b>. The author's description carried all 13, verbatim, and it was already on disk, downloaded and thrown away. Now it is read on every run, for about 600 tokens.</p>
         <p>It is bounded, labeled untrusted, and never authoritative for what <i>happens</i>: the video still owns that. The description owns exact spellings, product names, and the author's own links. Answering from the description alone is precisely what a hostile uploader would want, so it is not allowed.</p>
       </div>
 
       <div class="mech">
         <h3>No API key. Your audio never leaves your machine.</h3>
         <p>It never asks you for a key, and a key on its own does nothing. Transcription exhausts every local option first: a same-name subtitle sidecar, a loopback speech server, YAP on macOS, and the <code>openai-whisper</code> CLI on any platform. All are detected, never installed.</p>
-        <p>Cloud Whisper exists and is doubly opt-in — it needs both a key <i>and</i> <code>--allow-remote-transcription</code>. Nothing is uploaded by accident, and on Linux there is now a real local model rather than a fall-through to the cloud.</p>
+        <p>Cloud Whisper exists and is doubly opt-in: it needs both a key <i>and</i> <code>--allow-remote-transcription</code>. Nothing is uploaded by accident, and on Linux there is now a real local model rather than a fall-through to the cloud.</p>
       </div>
 
       <div class="mech">
         <h3>Half the transcript, losslessly</h3>
         <p>YouTube's auto-captions restate the tail of each line in the next one. Collapsing that overlap cut a 43-minute transcript from <b>27,814 to 14,766 tokens</b> with every spoken line still present (99.7% recall against an independent reconstruction; the remainder are speaker-change markers, not words).</p>
-        <p>This lands on plain summaries and the four original detail modes — the paths that ask no question and therefore cannot benefit from evidence mode at all.</p>
+        <p>This lands on plain summaries and the four original detail modes, the paths that ask no question and therefore cannot benefit from evidence mode at all.</p>
       </div>
 
       <div class="mech">
         <h3>Anything the video says is treated as hostile</h3>
-        <p>The description, title, uploader name, chapter titles, and transcript are all written by whoever uploaded the video. Every one of them is neutralized before the model reads it: none can forge the report's trust markers or break out of its code fences to impersonate instructions. Of the six video skills we code-reviewed in July 2026, only one other treats video text as an injection surface at all — and it covers the transcript only.</p>
-        <p>Don't take our word for it: <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/does-your-video-skill-pass-this.md">run the 30-second fixture</a> against any video tool, including ours. The local speech server is held to the same standard — it is refused if it tries to redirect your audio somewhere else.</p>
+        <p>The description, title, uploader name, chapter titles, and transcript are all written by whoever uploaded the video. Every one of them is neutralized before the model reads it: none can forge the report's trust markers or break out of its code fences to impersonate instructions. Of the six video skills we code-reviewed in July 2026, only one other treats video text as an injection surface at all, and it covers the transcript only.</p>
+        <p>Don't take our word for it: <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/does-your-video-skill-pass-this.md">run the 30-second fixture</a> against any video tool, including ours. The local speech server is held to the same standard: it is refused if it tries to redirect your audio somewhere else.</p>
       </div>
     </div>
   </section>
 
   <section>
     <div class="kicker">What is implemented now</div>
-    <h2>Version 1.0 is ready to use.</h2>
+    <h2>Ready to use, verified end to end.</h2>
     <p class="lede">The code includes resilient video fetching, local-first transcription, safe reuse, portable evidence, optional semantic search, and dependency-free visual scoring. It keeps secrets outside agent conversations, marks media-derived content as untrusted evidence, and passes the complete local suite, hosted macOS/Linux matrix, isolated installation lifecycle, and deterministic bundle audit.</p>
     <div class="stats">
       <div class="stat"><b data-gh="tests">see&nbsp;CI</b><span>deterministic suite on <code>main</code>, live from CI</span></div>
@@ -315,7 +316,7 @@
       <li><b>It's actually faster than the default, not slower.</b> Measured: about 14 seconds faster end-to-end than the standard mode on both test videos, because extracting a handful of chosen screenshots costs less than extracting 100. Only transcript-only mode is quicker.</li>
       <li><b>Full summaries still keep the transcript.</b> Throwing away most of a transcript is risky when you asked about the entire video; summary savings come from smarter screenshot selection instead.</li>
       <li><b>The default path mostly matches words.</b> A question phrased very differently from the video can miss a section. Optional semantic search is available but not required, and the fallback still catches the rest.</li>
-      <li><b>The judges are AIs, and the sample is honest but modest.</b> Ten sealed questions plus twelve development questions, graded by repeatability-checked AI judges against a pre-frozen answer key written by two independent annotators (owner-approved in place of two humans). Real measurements you can audit, not a large-scale trial.</li>
+      <li><b>The judges are AIs, and the sample is honest but modest.</b> Ten sealed questions, twelve development questions, and the nine-video head-to-head corpus, all graded blind against answer keys frozen and hash-committed before any run. Real measurements you can audit, not a large-scale trial.</li>
     </ul>
   </section>
 
@@ -338,7 +339,7 @@
 /* Live repo facts. Nothing about the release is hardcoded in this page: the
    version and CI status are read from the GitHub API at load. The markup ships
    sensible fallback text, so a rate-limited API, an offline reader, or no JS
-   still renders a truthful page — it just says "latest" instead of the number.
+   still renders a truthful page; it just says "latest" instead of the number.
    api.github.com sends Access-Control-Allow-Origin: *, so no proxy is needed. */
 const REPO = 'abe238/claude-video-plus';
 

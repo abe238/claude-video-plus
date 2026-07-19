@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ask Claude to Watch a Video — claude-video-plus (56% fewer tokens)</title>
-<meta name="description" content="Give Claude Code, Codex, or Cursor a YouTube link or local video and ask a question. claude-video-plus retrieves only the evidence that answers it — matching the original claude-video's answer quality at 56% fewer tokens in a sealed benchmark.">
+<title>Ask Claude to Watch a Video: claude-video-plus (blind-judged 18/18 vs the original, up to 83% fewer tokens)</title>
+<meta name="description" content="Give Claude Code, Codex, or Cursor a YouTube link or local video and ask a question. Blind judges scored claude-video-plus 18/18 on answer quality; the original claude-video scored 17/18. It used 23-83% fewer tokens. Every benchmark published.">
 <link rel="canonical" href="https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html">
 <meta name="robots" content="index, follow">
 <meta name="keywords" content="claude watch video, claude-video, claude code video skill, ask claude about a youtube video, agent skill video, reduce token cost video analysis, yt-dlp claude, transcribe video claude, claude-video alternative">
 <!-- Open Graph / Twitter -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ask Claude to Watch a Video — claude-video-plus">
-<meta property="og:description" content="Ask a video a question. Evidence retrieval matches the original's answer quality at 56% fewer tokens — with sealed benchmark data.">
+<meta property="og:title" content="Ask Claude to Watch a Video: claude-video-plus">
+<meta property="og:description" content="Ask a video a question. Blind-judged 18/18 vs the original claude-video's 17/18, at 23-83% fewer tokens. Wins and losses published.">
 <meta property="og:url" content="https://abe238.github.io/claude-video-plus/watch-videos-with-claude.html">
 <meta property="og:image" content="https://abe238.github.io/claude-video-plus/assets/watch-demo.gif">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Ask Claude to Watch a Video — claude-video-plus">
-<meta name="twitter:description" content="Ask a video a question. Same answer quality as claude-video at 56% fewer tokens, with sealed benchmark data.">
+<meta name="twitter:title" content="Ask Claude to Watch a Video: claude-video-plus">
+<meta name="twitter:description" content="Ask a video a question. Blind-judged 18/18 vs claude-video's 17/18, at 23-83% fewer tokens. Wins and losses published.">
 <meta name="twitter:image" content="https://abe238.github.io/claude-video-plus/assets/watch-demo.gif">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,13 +43,13 @@
     { "@type": "Question", "name": "Can Claude watch a YouTube video?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes. With the /watch skill installed, you paste a YouTube URL (or any yt-dlp-supported link, or a local file) and ask a question. The skill fetches captions, extracts frames with ffmpeg, and hands Claude the evidence so it can answer with cited timestamps." } },
     { "@type": "Question", "name": "How do I reduce the token cost of video analysis with an AI agent?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Retrieve instead of reading everything. claude-video-plus's evidence mode selects only the chapters, on-screen numbers, and moments that answer your question, which sent 56% fewer tokens than the original full-timeline pipeline in a sealed benchmark while matching its answer quality." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Retrieve instead of reading everything. claude-video-plus's evidence mode selects only the chapters, on-screen numbers, and moments that answer your question: 39-88% fewer tokens than the original tool in a blind-judged head-to-head, at equal or better answer quality." } },
     { "@type": "Question", "name": "Does it work in Codex, Cursor, and other agents?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is an Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other Agent Skills hosts via 'npx skills add abe238/claude-video-plus -g'." } },
     { "@type": "Question", "name": "Is claude-video-plus free?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes, it is open source under the MIT license, and it never asks for an API key. Captions cover most public videos at no cost. When a video has none, transcription runs locally on your own machine first (a loopback speech server, YAP on macOS, or the openai-whisper CLI on any platform). Cloud Whisper is opt-in and requires explicit authorization, so audio never leaves your machine by accident." } },
     { "@type": "Question", "name": "What is the difference between claude-video and claude-video-plus?",
-      "acceptedAnswer": { "@type": "Answer", "text": "claude-video-plus is an attributed MIT fork of Brad Bonanno's claude-video. It adds an opt-in evidence mode that answers questions with far fewer tokens, and falls back to the original pipeline whenever there is no question, no captions, a local file, a short video, or any error." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "claude-video-plus is an attributed MIT fork of Brad Bonanno's claude-video. Blind judges scored it 18/18 on answer quality vs the original's 17/18, at 23-83% fewer tokens. It adds an opt-in evidence mode, reads the author's description for exact spellings, hardens five injection surfaces, and falls back to the original pipeline on any problem." } },
     { "@type": "Question", "name": "Is it safe to point an AI agent at untrusted videos?",
       "acceptedAnswer": { "@type": "Answer", "text": "Only if the tool treats video-derived text as hostile. The description, title, captions, and chapter names are written by whoever uploaded the video, and a malicious uploader can hide instructions or forged trust markers in them. claude-video-plus neutralizes every one of those surfaces before the model reads them, and publishes a 30-second fixture anyone can run against any video tool to test this." } }
   ]
@@ -101,13 +101,13 @@
   <header>
     <div class="crumb"><a href="./">claude-video-plus</a> / ask a video a question</div>
     <h1>Ask Claude to watch a video</h1>
-    <p class="sub">Give Claude Code, Codex, or Cursor a YouTube link or a local file and ask a question. <b>/watch</b> retrieves only the evidence that answers it — so you get the same answer for a fraction of the tokens.</p>
+    <p class="sub">Give Claude Code, Codex, or Cursor a YouTube link or a local file and ask a question. <b>/watch</b> retrieves only the evidence that answers it. Blind judges: <b>18/18 for this fork, 17/18 for the original</b>, at 23&ndash;83% fewer tokens.</p>
   </header>
 
   <img class="demo" src="assets/watch-demo.gif" alt="Terminal demo: /watch --detail evidence --question about pricing retrieves 9 frames and 4 transcript spans and sends 11,505 tokens instead of 50,941, a 77% reduction on a targeted question">
 
   <section>
-    <p>Most tools that let an AI agent "watch" a video feed it the <em>whole</em> thing — dozens of frames plus the full transcript — no matter how small your question is. That is roughly 50,000 tokens on a 40-minute video, every time. <a href="https://github.com/abe238/claude-video-plus">claude-video-plus</a> takes a different path: when you ask a question, it <b>retrieves only the parts of the video that answer it</b>.</p>
+    <p>Most tools that let an AI agent "watch" a video feed it the <em>whole</em> thing (dozens of frames plus the full transcript) no matter how small your question is. That is roughly 50,000 tokens on a 40-minute video, every time. <a href="https://github.com/abe238/claude-video-plus">claude-video-plus</a> takes a different path: when you ask a question, it <b>retrieves only the parts of the video that answer it</b>.</p>
   </section>
 
   <section>
@@ -124,7 +124,7 @@
     <h2>How evidence mode works</h2>
     <p>Instead of sampling the entire timeline, evidence mode reads your question and builds a small, auditable set of evidence:</p>
     <ul>
-      <li><b>Whole topical chapters</b> — from YouTube's own chapter markers, with a pause-gap fallback when there are none.</li>
+      <li><b>Whole topical chapters</b>, from YouTube's own chapter markers, with a pause-gap fallback when there are none.</li>
       <li><b>A numeric guard</b> that rescues pricing, benchmark, and spec lines from anywhere in the video and grabs a frame at each, because numbers live on screen.</li>
       <li><b>Deictic frames</b> at chapter starts and "as you can see" moments, where the speaker is pointing at something visual.</li>
       <li><b>A token budget</b>, so long videos stay cheap.</li>
@@ -134,35 +134,43 @@
 
   <section>
     <h2>claude-video-plus vs. the original claude-video</h2>
-    <p>This project is a grateful, attributed MIT fork of <a href="https://github.com/bradautomates/claude-video">Brad Bonanno's claude-video</a>, whose caption-first, fail-open design it inherits wholesale. The fork adds one thing: an opt-in evidence mode, measured in a sealed benchmark on five unseen videos.</p>
+    <p>This project is a grateful, attributed MIT fork of <a href="https://github.com/bradautomates/claude-video">Brad Bonanno's claude-video</a>, whose caption-first, fail-open design it inherits wholesale. The fork was blind-judged head-to-head against the untouched upstream at its pinned control commit: ten videos, answer keys frozen and hash-committed before any run, reports anonymized.</p>
     <table>
-      <thead><tr><th>On a question</th><th>Original claude-video</th><th>claude-video-plus (evidence)</th></tr></thead>
+      <thead><tr><th>Blind-judged result</th><th>Original claude-video</th><th>claude-video-plus</th></tr></thead>
       <tbody>
-        <tr><td>Blind answer quality (1–10)</td><td class="mono">8.80</td><td class="mono win">8.83 — same</td></tr>
-        <tr><td>Required facts covered</td><td class="mono">3.57</td><td class="mono win">3.67 — same</td></tr>
-        <tr><td>Tokens sent to the model</td><td class="mono">100%</td><td class="mono win">44% (56% less)</td></tr>
-        <tr><td>Cold end-to-end wall time</td><td class="mono">32–34 s</td><td class="mono win">18–19 s</td></tr>
+        <tr><td>Answer quality, five substantive videos (max 18)</td><td class="mono">17/18</td><td class="mono win">18/18</td></tr>
+        <tr><td>96-minute podcast, four questions</td><td class="mono">8/8</td><td class="mono win">8/8, at 42% fewer tokens</td></tr>
+        <tr><td>Tokens, default mode, equal frame budget</td><td class="mono">100%</td><td class="mono win">58&ndash;77% (23&ndash;42% less)</td></tr>
+        <tr><td>Tokens, evidence mode (videos over 9 min)</td><td class="mono">no such mode</td><td class="mono win">12&ndash;61% (39&ndash;88% less)</td></tr>
+        <tr><td>Worst uncovered stretch on the podcast</td><td class="mono">11m 08s</td><td class="mono win">6m 26s</td></tr>
       </tbody>
     </table>
+    <p>The one point the original dropped: asked which repo a video covered, its caption-only pipeline returned a garbled name ("maltbot"). This fork read the author's description, a surface the original never touches, and returned the exact name.</p>
     <div class="lede-card">
-      <p style="margin:0"><b>When the original is the right choice, it runs automatically.</b> No question, no captions, a local file, a video under 9 minutes, or any internal error, and /watch falls back to the untouched original pipeline. There is no case where you get a worse result than claude-video — evidence mode is pure upside, opt-in per question.</p>
+      <p style="margin:0"><b>When the original is the right choice, it runs automatically.</b> No question, no captions, a local file, a video under 9 minutes, or any internal error, and /watch falls back to the untouched original pipeline. There is no case where you get a worse result than claude-video: evidence mode is pure upside, opt-in per question.</p>
     </div>
   </section>
 
   <section>
     <h2>The measured results</h2>
-    <p>The headline numbers come from a sealed, receipt-gated run that can only happen once. On individual targeted questions in development testing, savings ran deeper — one pricing question dropped from 50,941 tokens to 11,505 (−77%) with no loss of quality, and a feature question from 50,941 to 10,555 (−79%) while the answer quality actually went up. Every loss is published, unedited.</p>
+    <p>Beyond the head-to-head, a one-time sealed run (five unseen videos, ten pre-frozen questions, three blind judges, cryptographic receipt) measured evidence mode against the full-timeline path: same quality, 56% less material, about 14 seconds faster. Individual targeted questions ran deeper: one pricing question dropped from 50,941 tokens to 11,505 with no loss of quality. Every loss is published unedited, including the two music videos where this fork costs up to 7% <em>more</em> (nothing to retrieve, and the description adds bulk).</p>
     <p>All raw data, judge transcripts, and the negative results live in <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">docs/benchmarks/</a>.</p>
   </section>
 
   <section>
     <h2>Frequently asked questions</h2>
     <details><summary>Can Claude watch a YouTube video?</summary><p>Yes. With /watch installed, paste a YouTube URL (or any yt-dlp-supported link, or a local file) and ask a question. It fetches captions, extracts frames with ffmpeg, and answers with cited timestamps.</p></details>
-    <details><summary>How do I reduce the token cost of video analysis?</summary><p>Retrieve instead of reading everything. Evidence mode selects only the chapters, on-screen numbers, and moments that answer your question — 56% fewer tokens than the full-timeline default in a sealed benchmark, at the same answer quality.</p></details>
+    <details><summary>Is it actually as good as the original claude-video?</summary><p>Blind judges say equal or better on every video tested: 18/18 vs the original's 17/18 across the nine-video corpus, 8/8 both ways on a 96-minute podcast, with answer keys frozen before any run. It has never scored below the original in any judged run, while using 23&ndash;83% fewer tokens.</p></details>
+    <details><summary>How do I reduce the token cost of video analysis?</summary><p>Retrieve instead of reading everything. Evidence mode selects only the chapters, on-screen numbers, and moments that answer your question: 39&ndash;88% fewer tokens than the original tool in the blind-judged head-to-head, at equal or better answer quality.</p></details>
     <details><summary>Does it work in Codex, Cursor, and other agents?</summary><p>Yes. It is a portable Agent Skill and installs across Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, and 50+ other hosts with <code>npx skills add abe238/claude-video-plus -g</code>.</p></details>
-    <details><summary>Does it handle local video files, not just YouTube?</summary><p>Yes — pass a local path like <code>~/Movies/screen-recording.mp4</code>. Local files use the original pipeline (evidence mode needs captions to retrieve against).</p></details>
-    <details><summary>Is it safe to point an AI agent at untrusted videos?</summary><p>Only if the tool treats video text as hostile — the description, title, captions, and chapter names are written by whoever uploaded the video, and a malicious uploader can hide instructions or forged trust markers in them. /watch neutralizes every one of those surfaces before the model reads them (loose-matched marker defusing, code-fence defanging, exotic line-terminator normalization). Most video skills don't do this at all. <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/does-your-video-skill-pass-this.md">Here is a 30-second fixture</a> you can run against any video tool, including this one.</p></details>
+    <details><summary>Does it handle local video files, not just YouTube?</summary><p>Yes: pass a local path like <code>~/Movies/screen-recording.mp4</code>. Local files use the original pipeline (evidence mode needs captions to retrieve against).</p></details>
+    <details><summary>Is it safe to point an AI agent at untrusted videos?</summary><p>Only if the tool treats video text as hostile: the description, title, captions, and chapter names are written by whoever uploaded the video, and a malicious uploader can hide instructions or forged trust markers in them. /watch neutralizes every one of those surfaces before the model reads them. Of six video skills code-reviewed in July 2026, only one other treated any of this as an injection surface. <a href="https://github.com/abe238/claude-video-plus/blob/main/docs/does-your-video-skill-pass-this.md">Here is a 30-second fixture</a> you can run against any video tool, including this one.</p></details>
     <details><summary>Is it free?</summary><p>Yes, MIT-licensed and open source, and it never asks you for an API key. Captions cover most public videos for free. When a video has none, transcription runs on your own machine first: a loopback speech server, YAP on macOS, or the <code>openai-whisper</code> CLI on any platform. Cloud Whisper (Groq or OpenAI) is available but doubly opt-in, and a key alone does nothing without <code>--allow-remote-transcription</code>, so your audio never leaves your machine by accident.</p></details>
+  </section>
+
+  <section>
+    <h2>If it saves you tokens, star it</h2>
+    <p>Agent-skill directories rank by GitHub stars, so <a href="https://github.com/abe238/claude-video-plus">a star</a> is how the next person finds this instead of paying full price per video. Every claim above links to raw data; if you find a video where the original beats this fork, open an issue and it goes in the published losses.</p>
   </section>
 
   <footer>
