@@ -56,6 +56,9 @@
   .d1 { animation-delay: .05s } .d2 { animation-delay: .15s } .d3 { animation-delay: .25s }
   .d4 { animation-delay: .35s } .d5 { animation-delay: .5s }
 
+  p a, li a, td a, .status-note a { color: var(--amber); text-decoration: none; border-bottom: 1px solid rgba(255,178,36,.35); }
+  p a:hover, li a:hover, td a:hover, .status-note a:hover { border-bottom-color: var(--amber); }
+
   header { padding: 72px 0 24px; }
   .crumb { font: 500 12px var(--mono); color: var(--amber); letter-spacing: .18em; text-transform: uppercase; }
   .crumb a { color: var(--dim); text-decoration: none; }
@@ -245,7 +248,7 @@
       </tbody>
     </table>
     <p class="lede" style="margin-top:18px">Earlier development tests tell the same story with more spread: 60–88% savings on targeted questions, wins concentrated on videos 8 minutes and longer, and all three questions lost on the one very short video tested, which is why the guidance says use the standard modes for short videos.</p>
-    <div class="status-note" style="margin-top:18px"><b>Head-to-head vs the actual original.</b> The sealed run above compares evidence mode to this fork's own full-timeline path. A separate blind-judged run pits the shipped tool against the upstream repo it forks (<code>bradautomates/claude-video</code> at the pinned control commit) on a 96-minute podcast: identical answer scores (8/8 both ways, four questions), at 42% fewer tokens in balanced mode (same frame count) and 83% fewer in evidence mode, with half the worst coverage gap. One video, descriptive; a broader multi-video judged run is underway and every result, wins and losses, lands in <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">the benchmark folder</a>.</div>
+    <div class="status-note" style="margin-top:18px"><b>Head-to-head vs the actual original.</b> The sealed run above compares evidence mode to this fork's own full-timeline path. A separate blind-judged run pits the shipped tool against the upstream repo it forks (<code>bradautomates/claude-video</code> at the pinned control commit) on a 96-minute podcast: identical answer scores (8/8 both ways, four questions), at 42% fewer tokens in balanced mode (same frame count) and 83% fewer in evidence mode, with half the worst coverage gap. A broader nine-video blind-judged run followed: 18/18 on answer quality against the original's 17/18, at 23&ndash;42% fewer tokens (the original's dropped point was a caption-garbled repo name this fork recovers from the description). Every result, wins and losses, is in <a href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">the benchmark folder</a>.</div>
     <a class="btn" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks/2026-07-12-confirmatory">Read the sealed run's raw data</a>
     <a class="btn ghost" href="https://github.com/abe238/claude-video-plus/tree/main/docs/benchmarks">All benchmarks</a>
   </section>
