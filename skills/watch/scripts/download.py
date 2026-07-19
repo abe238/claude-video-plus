@@ -163,6 +163,7 @@ def download_url(
     result = acquire_url(
         url, out_dir, audio_only=audio_only,
         languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
+        max_filesize=cfg["max_filesize"],
         player_clients=cfg["player_clients"], runner=subprocess.run,
         pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
         read_metadata=_read_info,

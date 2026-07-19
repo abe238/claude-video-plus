@@ -4,7 +4,7 @@ description: Watch a video (URL or local path). Downloads with yt-dlp, extracts 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.2.4"
+  version: "1.3.0"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -291,6 +291,8 @@ If you already watched a video this session and the user asks a follow-up, do **
 - Runs `yt-dlp` locally to download the video and pull native captions when the source supports them (public data; the request goes directly to whatever host the URL points at)
 - Runs `ffmpeg` / `ffprobe` locally to extract frames as JPEGs and, when Whisper is needed, a mono 16 kHz audio clip
 - Optionally passes a validated browser/profile identifier to yt-dlp with `WATCH_COOKIES_BROWSER`; yt-dlp then reads that browser's session cookies locally. This is never automatic.
+- `WATCH_MAX_FILESIZE` (e.g. `500M`, `1.5G`) caps media downloads via yt-dlp's `--max-filesize`; caption and metadata fetches stay unguarded. When a video exceeds the cap the run fails with `max_filesize_exceeded` and an actionable message (raise the cap, or use `--detail transcript`).
+- `WATCH_DOWNLOAD_CONSENT=required` refuses to download media for an URL that has no captions until confirmed. The script exits with code 5 and a message; when you see it, ask the user whether to proceed, then re-run the exact same command with `--allow-download` added. Captioned videos and local files are never gated. Unset (the default) preserves the original behavior.
 - Sends extracted audio to Groq/OpenAI only after `--allow-remote-transcription` or `WATCH_STT_ALLOW_REMOTE=true` explicitly authorizes it.
 - Sends the Question and selected transcript snippets to an explicitly configured HTTPS semantic endpoint only with both `--semantic remote` and `--allow-remote-semantic`.
 - Writes the downloaded video, frames, audio, and an intermediate transcript to a working directory under the system temp dir (or `--out-dir` if specified) so Claude can `Read` them

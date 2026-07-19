@@ -7,6 +7,7 @@ then Reads each frame path to see the video.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -15,7 +16,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from config import frame_cap, get_config  # noqa: E402
+from config import frame_cap, get_config, read_env_file  # noqa: E402
 from download import download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from frames import MAX_FPS, auto_fps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 
@@ -130,6 +131,19 @@ def run_evidence(args) -> int:
     return 0
 
 
+def download_consent_blocked(*, url_source: bool, has_captions: bool,
+                             allow_flag: bool) -> bool:
+    """WATCH_DOWNLOAD_CONSENT=required refuses to download media for an
+    uncaptioned URL until the agent confirms with the user (--allow-download).
+    Captioned videos are the documented normal flow and stay ungated; local
+    files never download anything. Default (unset) preserves old behavior."""
+    if not url_source or has_captions or allow_flag:
+        return False
+    value = (os.environ.get("WATCH_DOWNLOAD_CONSENT")
+             or read_env_file().get("WATCH_DOWNLOAD_CONSENT", ""))
+    return value.strip().lower() == "required"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         prog="watch",
@@ -178,6 +192,12 @@ def main() -> int:
     ap.add_argument("--start", type=str, default=None, help="Range start (SS, MM:SS, or HH:MM:SS)")
     ap.add_argument("--end", type=str, default=None, help="Range end (SS, MM:SS, or HH:MM:SS)")
     ap.add_argument("--out-dir", type=str, default=None, help="Working directory (default: tmp)")
+    ap.add_argument(
+        "--allow-download",
+        action="store_true",
+        help="Confirm downloading media for an uncaptioned URL when "
+             "WATCH_DOWNLOAD_CONSENT=required is set.",
+    )
     ap.add_argument(
         "--no-whisper",
         action="store_true",
@@ -291,6 +311,16 @@ def main() -> int:
     if detail == "transcript" and transcript_segments and not cue_timestamps:
         video_path = None
     else:
+        if download_consent_blocked(url_source=url_source,
+                                    has_captions=bool(transcript_segments),
+                                    allow_flag=args.allow_download):
+            print(
+                "[watch] This URL has no captions, and WATCH_DOWNLOAD_CONSENT=required "
+                "is set: downloading media needs explicit confirmation.\n"
+                "[watch] Agent: confirm with the user, then re-run this exact command "
+                "with --allow-download.",
+            )
+            return 5
         if url_source:
             print(
                 "[watch] downloading audio via yt-dlp…" if audio_only

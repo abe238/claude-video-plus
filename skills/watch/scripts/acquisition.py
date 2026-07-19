@@ -31,6 +31,7 @@ class FailureClass(str, Enum):
     UNSUPPORTED_EXTRACTOR = "unsupported_extractor"
     COOKIE_VALIDATION = "cookie_validation"
     INTEGRITY_REFUSAL = "integrity_refusal"
+    MAX_FILESIZE_EXCEEDED = "max_filesize_exceeded"
     UNKNOWN = "unknown"
 
 
@@ -113,9 +114,14 @@ class AcquisitionError(SystemExit):
 
     def __init__(self, result: AcquisitionResult):
         self.result = result
-        super().__init__(
-            f"acquisition failed: {result.failure_class or FailureClass.UNKNOWN.value}"
-        )
+        message = f"acquisition failed: {result.failure_class or FailureClass.UNKNOWN.value}"
+        if result.failure_class == FailureClass.MAX_FILESIZE_EXCEEDED.value:
+            message += (
+                " -- the media exceeds WATCH_MAX_FILESIZE. Raise or unset the cap"
+                " in ~/.config/watch/.env, or use --detail transcript (no media"
+                " download) for this video."
+            )
+        super().__init__(message)
 
 
 def validate_cookie_browser(value: str | None) -> str | None:
@@ -131,6 +137,15 @@ def validate_cookie_browser(value: str | None) -> str | None:
     if separator and (not profile or not PROFILE_RE.fullmatch(profile)):
         raise ValueError("WATCH_COOKIES_BROWSER contains an invalid profile")
     return browser + (f":{profile}" if separator else "")
+
+
+def validate_max_filesize(value: str | None) -> str | None:
+    """Validate the yt-dlp --max-filesize subset we accept (e.g. 500M, 1.5G)."""
+    if value is None:
+        return None
+    if not re.fullmatch(r"[0-9]+(\.[0-9]+)?[KMGkmg]?", value):
+        raise ValueError("WATCH_MAX_FILESIZE must look like 500M, 1.5G, or bytes")
+    return value
 
 
 def validate_languages(value: str | None) -> tuple[str, ...]:
@@ -156,6 +171,7 @@ def acquisition_config(file_values: dict[str, str]) -> dict[str, object]:
         return value or None
 
     cookie_spec = validate_cookie_browser(configured("WATCH_COOKIES_BROWSER"))
+    max_filesize = validate_max_filesize(configured("WATCH_MAX_FILESIZE"))
     languages = validate_languages(configured("WATCH_LANGUAGE"))
     clients_value = configured("WATCH_YOUTUBE_CLIENTS") or "tv,mweb"
     clients = tuple(part.strip() for part in clients_value.split(",") if part.strip())
@@ -164,7 +180,8 @@ def acquisition_config(file_values: dict[str, str]) -> dict[str, object]:
     )
     if not clients or len(clients) > 3 or any(not safe(part) for part in clients):
         raise ValueError("WATCH_YOUTUBE_CLIENTS must contain one to three safe client names")
-    return {"cookie_spec": cookie_spec, "languages": languages, "player_clients": clients}
+    return {"cookie_spec": cookie_spec, "languages": languages, "player_clients": clients,
+            "max_filesize": max_filesize}
 
 
 def source_identity(source: str) -> str:
@@ -201,6 +218,7 @@ def is_youtube_url(url: str) -> bool:
 def classify_failure(stderr: str, exit_code: int) -> FailureClass | None:
     text = stderr.lower()
     patterns: tuple[tuple[FailureClass, tuple[str, ...]], ...] = (
+        (FailureClass.MAX_FILESIZE_EXCEEDED, ("larger than max-filesize",)),
         (FailureClass.LOGIN_REQUIRED, ("sign in to confirm", "login required", "authentication required")),
         (FailureClass.REGION_LOCKED, ("not available in your country", "geo-restricted", "region")),
         (FailureClass.PRIVATE_OR_DELETED, ("private video", "video unavailable", "has been removed", "deleted")),
@@ -293,6 +311,7 @@ def build_yt_dlp_command(
     player_client: str | None = None,
     final_format_fallback: bool = False,
     json3_captions: bool = False,
+    max_filesize: str | None = None,
 ) -> list[str]:
     normal = "ba/bestaudio" if audio_only else "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
     if final_format_fallback and not audio_only:
@@ -302,6 +321,9 @@ def build_yt_dlp_command(
         cmd.append("--skip-download")
     else:
         cmd += ["-N", "8", "-f", normal, "--merge-output-format", "mp4"]
+        if max_filesize:
+            # media only: caption/metadata fetches are tiny and stay unguarded
+            cmd += ["--max-filesize", max_filesize]
     cmd += [
         "--write-info-json", "--write-subs", "--write-auto-subs",
         "--sub-langs", _caption_patterns(languages),
@@ -324,6 +346,7 @@ def acquire_url(
     captions_only: bool = False,
     languages: tuple[str, ...] = ("en",),
     cookie_spec: str | None = None,
+    max_filesize: str | None = None,
     player_clients: tuple[str, ...] = ("tv", "mweb"),
     runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
     pick_media: Callable[[Path], Path | None],
@@ -352,7 +375,7 @@ def acquire_url(
         _clear_attempt_artifacts(out_dir)
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=captions_only,
-            languages=languages, cookie_spec=cookie_spec, player_client=client,
+            languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, player_client=client,
             final_format_fallback=final_format,
         )
         completed = runner(cmd, capture_output=True, text=True)
@@ -382,7 +405,7 @@ def acquire_url(
     ):
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=True,
-            languages=languages, cookie_spec=cookie_spec, json3_captions=True,
+            languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
         )
         completed = runner(cmd, capture_output=True, text=True)
         stderr = (completed.stderr or "") + (completed.stdout or "")
@@ -405,7 +428,7 @@ def acquire_url(
     if selected and not subtitles and caption_failure == FailureClass.HTTP_429:
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=True,
-            languages=languages, cookie_spec=cookie_spec, json3_captions=True,
+            languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
         )
         completed = runner(cmd, capture_output=True, text=True)
         stderr = (completed.stderr or "") + (completed.stdout or "")

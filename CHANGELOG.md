@@ -2,6 +2,29 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.0] — 2026-07-19
+
+Two opt-in download guards absorbed from the fork ecosystem (found by the
+daily fork-watch scan; both verified live before release).
+
+### Added
+
+- `WATCH_MAX_FILESIZE` (e.g. `500M`): caps media downloads via yt-dlp's
+  `--max-filesize`, validated, media-only (caption/metadata fetches are tiny
+  and stay unguarded). Oversized videos fail with a classified
+  `max_filesize_exceeded` error and an actionable remedy instead of a generic
+  failure. Credit: aidenlim-dev/AIOFFICE-VideoPro.
+- `WATCH_DOWNLOAD_CONSENT=required` + `--allow-download`: refuses to download
+  media for an uncaptioned URL until the agent confirms with the user (exit
+  code 5 with re-run instructions). Captioned videos and local files are never
+  gated; unset preserves original behavior. Credit: EmilyYoung71415.
+
+Also verified this cycle, no code needed (parallel evolution already shipped):
+focused-section transcription clips audio before STT (120.0s extracted from a
+3587.7s file, live), `WATCH_LANGUAGE` drives caption-track selection
+(`es` picked the Spanish TED track, live), and `WATCH_COOKIES_BROWSER`
+predates both forks' cookie support with stricter validation.
+
 ## [1.2.4] — 2026-07-19
 
 ### Security
