@@ -75,13 +75,20 @@ def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) ->
     ordered: list[Path] = []
     for language in languages:
         base = language.split("-", 1)[0].lower()
+        # Exact-language track before the "-orig" ASR track: when both exist the
+        # exact one is the human-written upload, and ASR garbles proper nouns
+        # ("jillian lynn" for Gillian Lynne), which starves lexical retrieval.
+        exact: list[Path] = []
+        asr_orig: list[Path] = []
         for candidate in candidates:
             name = candidate.name.lower()
-            if candidate not in ordered and (
-                f".{language.lower()}." in name or f".{base}." in name
-                or f".{base}-orig." in name
-            ):
-                ordered.append(candidate)
+            if candidate in ordered:
+                continue
+            if f".{language.lower()}." in name or f".{base}." in name:
+                exact.append(candidate)
+            elif f".{base}-orig." in name:
+                asr_orig.append(candidate)
+        ordered.extend(exact + asr_orig)
     ordered.extend(candidate for candidate in candidates if candidate not in ordered)
     return ordered
 

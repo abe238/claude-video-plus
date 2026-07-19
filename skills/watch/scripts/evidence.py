@@ -42,6 +42,7 @@ FACET_EXPANSION_TOP = 3
 SPAN_RESCUE_TOP = 8
 SPAN_RESCUE_PER_CHAPTER = 2
 QUESTION_TERM_WEIGHT = 2
+FUZZY_MIN_LEN = 5
 FRAME_DEDUPE_SECONDS = 20.0
 CHAPTER_FRAME_OFFSET = 10.0
 # Reader evidence-token cap is ~26.5k; stay under it with rough estimates
@@ -83,8 +84,31 @@ STOP = set(
 )
 
 
+def _norm(w: str) -> str:
+    """Suffix-normalize so 'schools' matches 'school' and 'robinson's' matches
+    'robinson'. Applied to docs and queries alike, so the mapping stays
+    consistent even where the strip is imperfect."""
+    if w.endswith("'s"):
+        w = w[:-2]
+    if len(w) >= 4 and w.endswith("s") and not w.endswith(("ss", "us", "is")):
+        w = w[:-1]
+    return w
+
+
+def _lev1(a: str, b: str) -> bool:
+    """Edit distance <= 1 (substitution or single indel)."""
+    if abs(len(a) - len(b)) > 1:
+        return False
+    if a == b:
+        return True
+    i = 0
+    while i < min(len(a), len(b)) and a[i] == b[i]:
+        i += 1
+    return a[i + 1:] == b[i + 1:] or a[i:] == b[i + 1:] or a[i + 1:] == b[i:]
+
+
 def tokenize(text: str) -> list[str]:
-    return [w for w in re.findall(r"[a-z0-9.']+", text.lower())
+    return [_norm(w) for w in re.findall(r"[a-z0-9.']+", text.lower())
             if w not in STOP and len(w) > 1]
 
 
@@ -173,6 +197,7 @@ def build_spans(segments: list[dict], chapters: list[dict]) -> list[dict]:
 
 def score_spans(spans: list[dict], query_terms: list[str]) -> list[float]:
     """idf-weighted term overlap normalized by span length (v1 scorer)."""
+    query_terms = [_norm(t) for t in query_terms]
     docs = [tokenize(sp["text"]) for sp in spans]
     df: dict[str, int] = {}
     for d in docs:
@@ -258,6 +283,28 @@ def rollup_chapters(ranked: list[int], ch_scores: dict[int, list[float]],
 def _targeted(question: str, segments: list[dict], chapters: list[dict],
               spans: list[dict], text_budget: int, duration: float):
     q_tokens = tokenize(question)
+    notes: list[str] = []
+
+    # ASR-spelling rescue: a question term absent from the ENTIRE transcript is
+    # usually a proper noun the speech recognizer spelled differently (Gillian ->
+    # "jillian"). Map it to the closest transcript token (edit distance <= 1)
+    # so the answer chapter can score at all. Zero-hit-gated: a term with any
+    # exact match anywhere is never fuzzed, so healthy videos are unaffected.
+    vocab: set[str] = set()
+    for sp in spans:
+        vocab.update(tokenize(sp["text"]))
+    fuzzy_map: dict[str, str] = {}
+    for t in dict.fromkeys(q_tokens):
+        if len(t) >= FUZZY_MIN_LEN and t not in vocab:
+            match = next((v for v in sorted(vocab) if _lev1(t, v)), None)
+            if match:
+                fuzzy_map[t] = match
+    if fuzzy_map:
+        q_tokens = [fuzzy_map.get(t, t) for t in q_tokens]
+        for src, dst in list(fuzzy_map.items())[:3]:
+            notes.append(f"question term '{src}' not in transcript; "
+                         f"matched transcript spelling '{dst}'")
+
     facets = [f for f, lex in FACETS.items() if any(t in lex for t in q_tokens)]
     # Question terms outweigh facet-lexicon terms so lexicon-dense but
     # off-topic chapters cannot outrank chapters that answer the question.
@@ -371,7 +418,23 @@ def _targeted(question: str, segments: list[dict], chapters: list[dict],
         if seg["chapter"] in selected_set and DEICTIC_RE.search(seg["text"]):
             frame_specs.append(
                 (seg["start"], "deictic-cue", chapters[seg["chapter"]]["title"]))
-    return evidence, blocks, selected_set, frame_specs
+
+    # Unmet-term honesty: a proper-noun question term that appears nowhere in
+    # the selected evidence means retrieval may have missed the answer -- say
+    # so instead of letting the reader assume coverage. Restricted to terms
+    # capitalized mid-question (names, products): framing words like
+    # "teaching" or "episode" fired false alarms on every healthy video.
+    covered_terms: set[str] = set()
+    for _, _, text in blocks:
+        covered_terms.update(tokenize(text))
+    cap_terms = {_norm(w.lower()) for w in re.findall(r"[A-Za-z][a-z0-9']+", question)[1:]
+                 if w[0].isupper()}
+    unmet = [t for t in dict.fromkeys(q_tokens)
+             if len(t) >= FUZZY_MIN_LEN and t in cap_terms and t not in covered_terms]
+    for t in unmet[:3]:
+        notes.append(f"question term '{t}' not found in selected evidence; "
+                     "retrieval may be incomplete -- consider --detail balanced")
+    return evidence, blocks, selected_set, frame_specs, notes
 
 
 def _coverage(segments: list[dict], chapters: list[dict], duration: float,
@@ -458,11 +521,12 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
         max_frames = DEFAULT_TARGETED_FRAMES if policy == "targeted" else DEFAULT_COVERAGE_FRAMES
 
     if policy == "targeted":
-        evidence, blocks, selected_set, frame_specs = _targeted(
+        evidence, blocks, selected_set, frame_specs, retrieval_notes = _targeted(
             question, segments, chapters, spans, text_budget, duration)
     else:
         evidence, blocks, selected_set, frame_specs = _coverage(
             segments, chapters, duration, max_frames)
+        retrieval_notes = []
 
     # Frames: dedupe within FRAME_DEDUPE_SECONDS in priority order, then cap.
     # The cap shrinks when the transcript already eats most of the token budget.
@@ -511,6 +575,7 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
                 for row in lexical
             ],
             "conflicts": conflicts([row["segment"] for row in lexical]),
+            "notes": retrieval_notes,
             "scout_identity": scout_identity(source_identity, segments),
             "scout_reuse": scout_reuse,
             "progressive_verification": expanded,
@@ -557,6 +622,9 @@ def compile_evidence(vtt_path: str, video_path: str, info_path: str,
                 f"- {sanitize_for_report(ch['title'])} "
                 f"[{fmt_ts(ch['start'])}-{fmt_ts(ch['end'])}]"
             )
+    if retrieval_notes:
+        lines += ["", "## Retrieval notes"]
+        lines += [f"- {sanitize_for_report(n)}" for n in retrieval_notes]
     lines += ["", "## Frames"]
     for e in frame_entries:
         lines.append(f"- t={e['t_start']} {e['frame']} ({e['reason']})")
