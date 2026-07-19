@@ -38,3 +38,12 @@ Balanced = equal frame budget both sides. Evidence engages only on videos >9min.
   just before the Gillian Lynne story (15:20) that the question explicitly asked about.
   A real retrieval miss, under analysis. Elsewhere evidence mode was 4/4/4/2 at -39% to -88%.
 - Prior judged video (_cmpIveXnvE): 8/8 all three arms.
+
+## Post-fix retest (v1.2.3, same frozen keys)
+The Ken Robinson evidence-mode loss was root-caused (ASR caption track chosen
+over the manual one + lexical retrieval blind to ASR spelling "jillian lynn")
+and fixed in v1.2.3: manual-track preference, suffix normalization, zero-hit
+fuzzy term matching, retrieval notes. Blind re-judge vs the frozen key: **4/4**
+(was 2/4), at 6,089 tokens (-43% vs original). Other four evidence arms re-ran
+with key-content probes intact and no spurious notes. Post-fix evidence-mode
+corpus total: **18/18**. Detail: fix/ROOT-CAUSE.md.
