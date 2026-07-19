@@ -216,21 +216,25 @@ def split_audio(
     return chunks
 
 
-def build_multipart(fields: dict[str, str], file_path: Path) -> tuple[bytes, str]:
+def build_multipart(fields: dict[str, object], file_path: Path) -> tuple[bytes, str]:
     """Assemble a multipart/form-data body the Whisper APIs accept.
 
     Whisper's multipart upload is small and predictable — doing it by hand
     keeps us on pure stdlib instead of pulling requests/groq/openai SDKs.
+    A list/tuple value emits one part per item (repeated-field form syntax,
+    e.g. ``timestamp_granularities[]``).
     """
     boundary = f"----WatchBoundary{uuid.uuid4().hex}"
     eol = b"\r\n"
     buf = io.BytesIO()
 
     for name, value in fields.items():
-        buf.write(f"--{boundary}".encode()); buf.write(eol)
-        buf.write(f'Content-Disposition: form-data; name="{name}"'.encode()); buf.write(eol)
-        buf.write(eol)
-        buf.write(str(value).encode()); buf.write(eol)
+        items = value if isinstance(value, (list, tuple)) else (value,)
+        for item in items:
+            buf.write(f"--{boundary}".encode()); buf.write(eol)
+            buf.write(f'Content-Disposition: form-data; name="{name}"'.encode()); buf.write(eol)
+            buf.write(eol)
+            buf.write(str(item).encode()); buf.write(eol)
 
     mimetype = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
     buf.write(f"--{boundary}".encode()); buf.write(eol)
@@ -267,10 +271,14 @@ def _post_whisper(
 ) -> dict:
     if not 1 <= max_attempts <= MAX_ATTEMPTS:
         raise ValueError(f"max_attempts must be between 1 and {MAX_ATTEMPTS}")
-    fields = {
+    fields: dict[str, object] = {
         "model": model,
         "response_format": "verbose_json",
         "temperature": "0",
+        # R2b: word-level timestamps. Both Groq and OpenAI accept this with
+        # verbose_json; "segment" is requested too so segments keep coming back.
+        # Responses without words parse fine (fail-open to segment-only).
+        "timestamp_granularities[]": ["word", "segment"],
     }
     if language and language != "auto":
         fields["language"] = language
@@ -376,22 +384,65 @@ def shift_segments(segments: list[dict], offset_seconds: float) -> list[dict]:
         value = dict(segment)
         value["start"] = round(float(segment["start"]) + offset_seconds, 2)
         value["end"] = round(float(segment["end"]) + offset_seconds, 2)
+        if isinstance(value.get("words"), list):
+            # R2b: nested word timestamps shift with their segment, or they'd
+            # silently keep chunk-local time while the segment moved.
+            value["words"] = [
+                {
+                    **word,
+                    "start": round(float(word["start"]) + offset_seconds, 2),
+                    "end": round(float(word["end"]) + offset_seconds, 2),
+                }
+                for word in value["words"]
+            ]
         shifted.append(value)
     return shifted
 
 
+def _clean_words(raw: object) -> list[dict]:
+    """Normalize a backend word list to {word, start, end}; drop malformed entries."""
+    words: list[dict] = []
+    if not isinstance(raw, list):
+        return words
+    for entry in raw:
+        if not isinstance(entry, dict) or not str(entry.get("word") or "").strip():
+            continue
+        try:
+            words.append({
+                "word": str(entry["word"]),
+                "start": round(float(entry["start"]), 3),
+                "end": round(float(entry["end"]), 3),
+            })
+        except (KeyError, TypeError, ValueError):
+            continue
+    return words
+
+
 def segments_from_response(data: dict) -> list[dict]:
-    """Convert Whisper verbose_json into our {start, end, text} segment format."""
+    """Convert Whisper verbose_json into our {start, end, text[, words]} format.
+
+    Word timestamps (R2b) are fail-open: nested per-segment words are used when
+    a backend provides them; otherwise top-level ``words`` (OpenAI/Groq
+    ``timestamp_granularities[]`` style) are assigned to segments by start time;
+    absent words simply yield segment-only output.
+    """
+    top_words = _clean_words(data.get("words"))
     out: list[dict] = []
     for seg in data.get("segments") or []:
         text = (seg.get("text") or "").strip()
         if not text:
             continue
-        out.append({
+        value = {
             "start": round(float(seg.get("start") or 0.0), 2),
             "end": round(float(seg.get("end") or 0.0), 2),
             "text": text,
-        })
+        }
+        words = _clean_words(seg.get("words"))
+        if not words and top_words:
+            words = [w for w in top_words if value["start"] <= w["start"] < value["end"]]
+        if words:
+            value["words"] = words
+        out.append(value)
 
     if not out:
         full = (data.get("text") or "").strip()

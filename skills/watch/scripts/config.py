@@ -23,6 +23,10 @@ DEFAULT_STT_URL = "http://127.0.0.1:8082"
 DEFAULT_STT_MODEL = "Systran/faster-whisper-medium"
 DEFAULT_WHISPER_CLI_MODEL = "small"
 DEFAULT_LANGUAGE = "auto"
+# R2a-2: Silero VAD for whisper-cli only. The model is DETECTED at this path,
+# never downloaded automatically — a future release may add a pinned-SHA
+# download. WATCH_VAD=off disables even when the file exists.
+DEFAULT_VAD_MODEL_PATH = str(CONFIG_DIR / "models" / "ggml-silero-v5.1.2.bin")
 
 
 def read_env_file(path: Path | None = None) -> dict[str, str]:
@@ -167,6 +171,13 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         _config_value("WATCH_STT_RECEIPTS", file_values, overrides, True),
         name="WATCH_STT_RECEIPTS",
     )
+    vad = _bool_value(
+        _config_value("WATCH_VAD", file_values, overrides, True),
+        name="WATCH_VAD",
+    )
+    vad_model_path = str(
+        _config_value("WATCH_VAD_MODEL_PATH", file_values, overrides, DEFAULT_VAD_MODEL_PATH)
+    ).strip() or DEFAULT_VAD_MODEL_PATH
 
     return {
         "order": order,
@@ -181,6 +192,8 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         "probe_timeout": probe_timeout,
         "max_attempts": max_attempts,
         "receipts": receipts,
+        "vad": vad,
+        "vad_model_path": vad_model_path,
         "config_file": str(CONFIG_FILE),
     }
 

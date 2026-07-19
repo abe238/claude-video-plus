@@ -23,6 +23,40 @@ USABLE_STATES = frozenset({"success", "degraded", "partial"})
 
 
 @dataclass(frozen=True)
+class TranscriptWord:
+    """One word with absolute timestamps. Best-effort: absent on most backends."""
+
+    word: str
+    start: float
+    end: float
+
+
+def _parse_words(value: object, *, offset: float) -> tuple[TranscriptWord, ...]:
+    """Coerce an optional backend 'words' list, shifting by the segment offset.
+
+    Fail-open: malformed entries are dropped, never raised — words are an
+    enrichment, and a bad word list must not cost the segment."""
+    if not isinstance(value, (list, tuple)):
+        return ()
+    words: list[TranscriptWord] = []
+    for entry in value:
+        if not isinstance(entry, Mapping):
+            continue
+        text = str(entry.get("word") or "").strip()
+        if not text:
+            continue
+        try:
+            start = round(float(entry.get("start")) + offset, 3)
+            end = round(float(entry.get("end")) + offset, 3)
+        except (TypeError, ValueError):
+            continue
+        if start < 0 or end < start:
+            continue
+        words.append(TranscriptWord(word=str(entry.get("word")), start=start, end=end))
+    return tuple(words)
+
+
+@dataclass(frozen=True)
 class TranscriptSegment:
     start: float
     end: float
@@ -32,6 +66,8 @@ class TranscriptSegment:
     model: str | None = None
     confidence: float | None = None
     warnings: tuple[str, ...] = ()
+    # R2b: word-level timestamps, absent-tolerant (empty on backends without them).
+    words: tuple[TranscriptWord, ...] = ()
 
     def __post_init__(self) -> None:
         if self.start < 0 or self.end < self.start:
@@ -68,6 +104,7 @@ class TranscriptSegment:
                 if isinstance(value.get("warnings"), str)
                 else tuple(str(item) for item in value.get("warnings") or ())
             ),
+            words=_parse_words(value.get("words"), offset=offset),
         )
 
     def to_dict(self) -> dict[str, object]:
@@ -239,6 +276,8 @@ def build_default_adapters(config: Mapping[str, object]) -> dict[str, Transcript
         "whisper-cli": WhisperCliAdapter(
             executable=str(config.get("whisper_cli_path") or "whisper"),
             model=str(config.get("whisper_cli_model") or "small"),
+            vad=bool(config.get("vad", True)),
+            vad_model_path=str(config.get("vad_model_path") or ""),
         ),
         "groq": CloudWhisperAdapter("groq"),
         "openai": CloudWhisperAdapter("openai"),

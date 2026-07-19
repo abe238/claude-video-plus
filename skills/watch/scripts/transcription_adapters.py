@@ -89,7 +89,9 @@ def _run_chunked(
     failed = 0
     processed = 0
     reused = 0
-    warnings: list[str] = []
+    # R2c: audio-preparation caveats (hard_cut boundaries) surface on every
+    # adapter's result so the watch report can propagate them.
+    warnings: list[str] = list(getattr(request.prepared_audio, "warnings", ()))
     started = time.monotonic()
 
     silent_chunks = 0
@@ -489,9 +491,21 @@ class WhisperCliAdapter:
     requires_audio = True
     is_remote = False
 
-    def __init__(self, *, executable: str = "whisper", model: str = "small"):
+    def __init__(
+        self,
+        *,
+        executable: str = "whisper",
+        model: str = "small",
+        vad: bool = True,
+        vad_model_path: str = "",
+    ):
         self.executable = executable
         self.model = model
+        self.vad = vad
+        self.vad_model_path = vad_model_path
+        # Set after a --vad invocation fails: VAD is best-effort, so one
+        # failure disables it for the rest of this adapter's lifetime.
+        self._vad_broken = False
 
     def probe(self, request: TranscriptionRequest) -> AdapterAvailability:
         del request
@@ -499,40 +513,86 @@ class WhisperCliAdapter:
             return AdapterAvailability(False, "whisper_cli_not_installed")
         return AdapterAvailability(True)
 
+    def _vad_args(self) -> list[str]:
+        """R2a-2 Silero VAD flags — composed ONLY when the model file already
+        exists (detected, never downloaded; a future release may add a
+        pinned-SHA download) and config allows it. Fail-open everywhere."""
+        if self._vad_broken or not self.vad or not self.vad_model_path:
+            return []
+        try:
+            if not Path(self.vad_model_path).is_file():
+                return []
+        except OSError:
+            return []
+        return ["--vad", "--vad-model", self.vad_model_path]
+
+    def _parse_json_output(self, output: Path) -> list[dict]:
+        data = json.loads(output.read_text(encoding="utf-8"))
+        values: list[dict] = []
+        for seg in data.get("segments") or []:
+            text = str(seg.get("text") or "").strip()
+            if not text:
+                continue
+            value = {
+                "start": round(float(seg.get("start") or 0.0), 2),
+                "end": round(float(seg.get("end") or 0.0), 2),
+                "text": text,
+            }
+            words = whisper._clean_words(seg.get("words"))
+            if words:
+                value["words"] = words
+            values.append(value)
+        return values
+
     def _transcribe_one(self, request: TranscriptionRequest, chunk: AudioChunk) -> list[dict]:
         out_dir = request.work_dir / "whisper-cli"
         out_dir.mkdir(parents=True, exist_ok=True)
-        output = out_dir / f"{chunk.path.stem}.srt"
-        # A killed prior run can leave an .srt behind. Delete it first, so the
-        # file's presence is a signal about THIS invocation and not a fossil.
-        if output.exists():
-            output.unlink()
-
-        command = [
-            self.executable, str(chunk.path),
-            "--model", self.model,
-            "--output_format", "srt",
-            "--output_dir", str(out_dir),
-        ]
+        # json, not srt: it is the only whisper CLI output format that carries
+        # word-level timestamps (R2b), and parsing it is no harder than srt.
+        output = out_dir / f"{chunk.path.stem}.json"
         language = _whisper_language(request.language)
-        if language:
-            command += ["--language", language]
 
-        subprocess.run(command, capture_output=True, text=True, timeout=request.timeout)
-
-        # The whisper CLI can exit 0 having produced nothing (its internal ffmpeg
-        # failing on the input, for one). The output file is the only honest
-        # success signal; the return code is not. Same trap as yap, which exits 0
-        # while rejecting a locale.
-        if not output.is_file():
-            raise RuntimeError("whisper CLI did not produce an output file")
-        try:
-            return parse_subtitle(output, strict=True)
-        finally:
-            try:
+        def attempt(extra_args: list[str]) -> list[dict]:
+            # A killed prior run can leave output behind. Delete it first, so
+            # the file's presence is a signal about THIS invocation, not a fossil.
+            if output.exists():
                 output.unlink()
-            except OSError:
-                pass
+            command = [
+                self.executable, str(chunk.path),
+                "--model", self.model,
+                "--output_format", "json",
+                "--output_dir", str(out_dir),
+                "--word_timestamps", "True",
+                *extra_args,
+            ]
+            if language:
+                command += ["--language", language]
+            subprocess.run(command, capture_output=True, text=True, timeout=request.timeout)
+            # The whisper CLI can exit 0 having produced nothing (its internal
+            # ffmpeg failing on the input, for one). The output file is the only
+            # honest success signal; the return code is not. Same trap as yap,
+            # which exits 0 while rejecting a locale.
+            if not output.is_file():
+                raise RuntimeError("whisper CLI did not produce an output file")
+            try:
+                return self._parse_json_output(output)
+            except (OSError, UnicodeError, ValueError) as exc:
+                raise RuntimeError("whisper CLI produced invalid JSON output") from exc
+            finally:
+                try:
+                    output.unlink()
+                except OSError:
+                    pass
+
+        vad_args = self._vad_args()
+        if vad_args:
+            try:
+                return attempt(vad_args)
+            except (Exception, SystemExit):
+                # Fail-open: VAD must never cost a transcript. Disable it and
+                # fall through to a plain run within this same call.
+                self._vad_broken = True
+        return attempt([])
 
     def transcribe(self, request: TranscriptionRequest, receipts: ChunkReceiptStore) -> TranscriptResult:
         return _run_chunked(

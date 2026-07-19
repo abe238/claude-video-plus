@@ -140,3 +140,111 @@ def test_default_timeout_fits_a_full_chunk_on_a_slow_cpu():
     adapter exists for -- runs slower than realtime. 300s would time out there."""
     cfg = config.get_transcription_config()
     assert cfg["timeout"] >= 600.0
+
+
+# --- R2a-2: Silero VAD tier (whisper-cli only, detect-never-download) ----------
+#
+# Best-effort and fail-open: the VAD flags are composed ONLY when the model
+# file already exists on disk and config allows it. A failing --vad run falls
+# back to a plain run so VAD can never cost a transcript.
+
+import json
+
+
+def _vad_fixtures(tmp_path):
+    class Chunk:
+        index = 0
+        path = tmp_path / "chunk_000.wav"
+        source_offset = 0.0
+        duration = 1.0
+
+    Chunk.path.write_bytes(b"")
+
+    class Request:
+        work_dir = tmp_path
+        language = "auto"
+        timeout = 5.0
+
+    return Chunk(), Request()
+
+
+def _fake_run_writing_json(tmp_path, commands, *, fail_when_vad=False):
+    def fake_run(command, **kwargs):
+        commands.append(list(command))
+        if fail_when_vad and "--vad" in command:
+            return subprocess.CompletedProcess(command, 1, "", "vad failed")
+        out_dir = tmp_path / "whisper-cli"
+        out_dir.mkdir(exist_ok=True)
+        (out_dir / "chunk_000.json").write_text(
+            json.dumps({"segments": [{"start": 0.0, "end": 1.0, "text": "ok"}]}),
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    return fake_run
+
+
+def test_vad_flags_added_when_model_file_exists(tmp_path, monkeypatch):
+    chunk, request = _vad_fixtures(tmp_path)
+    model = tmp_path / "silero.bin"
+    model.write_bytes(b"model")
+    commands: list[list[str]] = []
+    monkeypatch.setattr(ta.subprocess, "run", _fake_run_writing_json(tmp_path, commands))
+    adapter = ta.WhisperCliAdapter(vad=True, vad_model_path=str(model))
+    adapter._transcribe_one(request, chunk)
+    assert "--vad" in commands[0]
+    assert commands[0][commands[0].index("--vad-model") + 1] == str(model)
+
+
+def test_absent_model_file_means_no_vad_flags(tmp_path, monkeypatch):
+    chunk, request = _vad_fixtures(tmp_path)
+    commands: list[list[str]] = []
+    monkeypatch.setattr(ta.subprocess, "run", _fake_run_writing_json(tmp_path, commands))
+    adapter = ta.WhisperCliAdapter(vad=True, vad_model_path=str(tmp_path / "missing.bin"))
+    adapter._transcribe_one(request, chunk)
+    assert "--vad" not in commands[0]
+
+
+def test_vad_off_config_wins_even_with_model_present(tmp_path, monkeypatch):
+    chunk, request = _vad_fixtures(tmp_path)
+    model = tmp_path / "silero.bin"
+    model.write_bytes(b"model")
+    commands: list[list[str]] = []
+    monkeypatch.setattr(ta.subprocess, "run", _fake_run_writing_json(tmp_path, commands))
+    adapter = ta.WhisperCliAdapter(vad=False, vad_model_path=str(model))
+    adapter._transcribe_one(request, chunk)
+    assert "--vad" not in commands[0]
+
+
+def test_failed_vad_run_falls_back_to_plain_run(tmp_path, monkeypatch):
+    """Fail-open: a --vad failure retries without VAD in the same call, and the
+    adapter stops attempting VAD for subsequent chunks (no repeated waste)."""
+    chunk, request = _vad_fixtures(tmp_path)
+    model = tmp_path / "silero.bin"
+    model.write_bytes(b"model")
+    commands: list[list[str]] = []
+    monkeypatch.setattr(
+        ta.subprocess, "run",
+        _fake_run_writing_json(tmp_path, commands, fail_when_vad=True),
+    )
+    adapter = ta.WhisperCliAdapter(vad=True, vad_model_path=str(model))
+    values = adapter._transcribe_one(request, chunk)
+    assert values and values[0]["text"] == "ok"
+    assert "--vad" in commands[0] and "--vad" not in commands[1]
+    # Next chunk: VAD is known-broken, skip it outright.
+    adapter._transcribe_one(request, chunk)
+    assert "--vad" not in commands[2]
+    assert len(commands) == 3
+
+
+def test_registry_wires_vad_config_into_whisper_cli(tmp_path):
+    model = tmp_path / "silero.bin"
+    model.write_bytes(b"model")
+    adapters = transcription.build_default_adapters(
+        {"vad": True, "vad_model_path": str(model)}
+    )
+    assert adapters["whisper-cli"]._vad_args() == ["--vad", "--vad-model", str(model)]
+    adapters_off = transcription.build_default_adapters(
+        {"vad": False, "vad_model_path": str(model)}
+    )
+    assert adapters_off["whisper-cli"]._vad_args() == []

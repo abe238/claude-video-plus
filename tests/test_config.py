@@ -29,6 +29,29 @@ def test_get_config_keys(monkeypatch, tmp_path):
     assert set(cfg) == {"detail", "config_file"}
 
 
+def test_vad_defaults_on_with_a_detect_only_model_path(monkeypatch, tmp_path):
+    """R2a-2: WATCH_VAD defaults on, but activation still requires the model
+    file to already exist (detected, never downloaded)."""
+    monkeypatch.delenv("WATCH_VAD", raising=False)
+    monkeypatch.delenv("WATCH_VAD_MODEL_PATH", raising=False)
+    monkeypatch.setattr(config, "CONFIG_FILE", tmp_path / "missing.env")
+    cfg = config.get_transcription_config()
+    assert cfg["vad"] is True
+    assert cfg["vad_model_path"]  # a concrete default location exists
+
+
+def test_watch_vad_off_disables(monkeypatch, tmp_path):
+    monkeypatch.setenv("WATCH_VAD", "off")
+    monkeypatch.setattr(config, "CONFIG_FILE", tmp_path / "missing.env")
+    assert config.get_transcription_config()["vad"] is False
+
+
+def test_watch_vad_model_path_override(monkeypatch, tmp_path):
+    monkeypatch.setenv("WATCH_VAD_MODEL_PATH", str(tmp_path / "silero.bin"))
+    monkeypatch.setattr(config, "CONFIG_FILE", tmp_path / "missing.env")
+    assert config.get_transcription_config()["vad_model_path"] == str(tmp_path / "silero.bin")
+
+
 def test_frame_cap_mapping():
     assert config.frame_cap("efficient") == 50
     assert config.frame_cap("balanced") == 100

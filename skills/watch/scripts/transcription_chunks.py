@@ -20,7 +20,11 @@ from pathlib import Path
 from typing import Iterable, Mapping
 
 
-RECEIPT_SCHEMA = 1
+# 2: R2b word-level timestamps — cached segment payloads may now carry a
+# "words" list. Old segment-only receipts would silently mask the feature on
+# resume, so the bump invalidates them wholesale (file-level via _read, and
+# key-level because _key hashes the schema number).
+RECEIPT_SCHEMA = 2
 MAX_RECEIPT_ENTRIES = 512
 RECEIPT_FLUSH_EVERY = 5
 
@@ -56,6 +60,9 @@ class PreparedAudio:
     chunks: tuple[AudioChunk, ...]
     source_start: float
     source_end: float
+    # R2c: planning caveats (e.g. hard_cut boundaries with no silence nearby),
+    # propagated into TranscriptResult.warnings by _run_chunked.
+    warnings: tuple[str, ...] = ()
 
     @property
     def all_silent(self) -> bool:
@@ -193,7 +200,18 @@ MIN_SPEECH_SECONDS = 0.5
 MIN_SPEECH_FRACTION = 0.02
 
 
-def silence_intervals(audio_path: Path) -> tuple[tuple[float, float], ...] | None:
+# R2c loose fallback thresholds: used for chunk PLANNING only (never for the
+# no_speech classifier) when the tight pass finds no silence near a needed cut.
+LOOSE_SILENCE_NOISE = "-30dB"
+LOOSE_SILENCE_DURATION = 0.2
+
+
+def silence_intervals(
+    audio_path: Path,
+    *,
+    noise: str = "-35dB",
+    min_duration: float = 0.40,
+) -> tuple[tuple[float, float], ...] | None:
     """(start, end) silence spans from ffmpeg silencedetect, audio-local time.
     ``None`` means the classifier itself failed — callers must treat that as
     speech everywhere (a broken instrument never gates)."""
@@ -203,7 +221,7 @@ def silence_intervals(audio_path: Path) -> tuple[tuple[float, float], ...] | Non
         result = subprocess.run(
             [
                 "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
-                "-af", "silencedetect=noise=-35dB:d=0.40", "-f", "null", "-",
+                "-af", f"silencedetect=noise={noise}:d={min_duration}", "-f", "null", "-",
             ],
             capture_output=True, text=True, timeout=FFMPEG_TIMEOUT_SECONDS,
         )
@@ -223,6 +241,16 @@ def silence_intervals(audio_path: Path) -> tuple[tuple[float, float], ...] | Non
     if start is not None:  # silence ran to EOF
         spans.append((start, float("inf")))
     return tuple(spans)
+
+
+def _interval_midpoints(
+    intervals: tuple[tuple[float, float], ...] | None,
+) -> tuple[float, ...]:
+    """Silence-span midpoints usable as chunk-planning boundaries."""
+    if not intervals:
+        return ()
+    finite = [(s, e) for s, e in intervals if e != float("inf")]
+    return tuple(sorted(round((s + e) / 2.0, 3) for s, e in finite if (s + e) / 2.0 > 0))
 
 
 def classify_chunk_silence(
@@ -266,28 +294,52 @@ def plan_silence_aware_chunks(
     silence_boundaries: Iterable[float] = (),
 ) -> tuple[tuple[float, float], ...]:
     """Plan contiguous chunks, moving even cuts to nearby silence when safe."""
+    return _plan_with_hard_cuts(
+        duration, total_bytes, max_bytes=max_bytes, silence_boundaries=silence_boundaries
+    )[0]
+
+
+def _plan_with_hard_cuts(
+    duration: float,
+    total_bytes: int,
+    *,
+    max_bytes: int = DEFAULT_MAX_CHUNK_BYTES,
+    silence_boundaries: Iterable[float] = (),
+) -> tuple[tuple[tuple[float, float], ...], tuple[float, ...]]:
+    """Plan chunks and report the even-cut targets that had NO nearby silence.
+
+    Returns (plan, hard_cut_targets). A hard cut lands mid-audio and may split
+    a word; callers can retry with looser silence detection or surface a
+    warning (R2c).
+    """
     if duration <= 0:
         raise ValueError("audio duration must be positive")
     count = max(1, math.ceil(total_bytes / max_bytes))
     if count == 1:
-        return ((0.0, round(duration, 3)),)
+        return ((0.0, round(duration, 3)),), ()
 
     silences = tuple(sorted(float(value) for value in silence_boundaries if 0 < value < duration))
     ideal = duration / count
     cuts = [0.0]
+    hard: list[float] = []
     for index in range(1, count):
         target = ideal * index
         window = min(15.0, max(2.0, ideal * 0.20))
         candidates = [point for point in silences if abs(point - target) <= window]
-        cut = min(candidates, key=lambda point: abs(point - target)) if candidates else target
+        if candidates:
+            cut = min(candidates, key=lambda point: abs(point - target))
+        else:
+            cut = target
+            hard.append(round(target, 3))
         minimum = cuts[-1] + min(1.0, ideal * 0.10)
         maximum = duration - (count - index) * min(1.0, ideal * 0.10)
         cuts.append(min(max(cut, minimum), maximum))
     cuts.append(duration)
-    return tuple(
+    plan = tuple(
         (round(cuts[index], 3), round(cuts[index + 1] - cuts[index], 3))
         for index in range(len(cuts) - 1)
     )
+    return plan, tuple(hard)
 
 
 def _materialize_chunks(
@@ -349,17 +401,38 @@ def prepare_audio(
         end_seconds=end_seconds,
     )
     duration = source_end - source_start
+    # One tight silencedetect scan is SHARED between the no_speech classifier
+    # and chunk planning — never rescanned. The loose pass below is planning-
+    # only and on-demand, so silencedetect runs at most twice per prepare.
     intervals = silence_intervals(audio_path)
-    boundaries: tuple[float, ...] = ()
-    if intervals:
-        finite = [(s, e) for s, e in intervals if e != float("inf")]
-        boundaries = tuple(sorted(round((s + e) / 2.0, 3) for s, e in finite if (s + e) / 2.0 > 0))
-    plan = plan_silence_aware_chunks(
+    boundaries = _interval_midpoints(intervals)
+    plan, hard = _plan_with_hard_cuts(
         duration,
         audio_path.stat().st_size,
         max_bytes=max_chunk_bytes,
         silence_boundaries=boundaries,
     )
+    warnings: tuple[str, ...] = ()
+    if hard:
+        # R2c: the tight pass (-35dB/0.40s) left cuts with no usable silence.
+        # Retry planning with a looser scan; classification keeps the tight
+        # intervals (quiet speech must never become no_speech).
+        loose = silence_intervals(
+            audio_path, noise=LOOSE_SILENCE_NOISE, min_duration=LOOSE_SILENCE_DURATION
+        )
+        loose_boundaries = _interval_midpoints(loose)
+        if loose_boundaries:
+            plan, hard = _plan_with_hard_cuts(
+                duration,
+                audio_path.stat().st_size,
+                max_bytes=max_chunk_bytes,
+                silence_boundaries=tuple(sorted(set(boundaries) | set(loose_boundaries))),
+            )
+        warnings = tuple(
+            f"hard_cut: no silence near {target:.1f}s even at loose threshold; "
+            "chunk boundary may split audio mid-word"
+            for target in hard
+        )
     chunks = _materialize_chunks(
         audio_path, work_dir / "chunks", plan, source_start=source_start
     )
@@ -371,6 +444,7 @@ def prepare_audio(
         chunks=chunks,
         source_start=round(source_start, 3),
         source_end=round(source_end, 3),
+        warnings=warnings,
     )
 
 
