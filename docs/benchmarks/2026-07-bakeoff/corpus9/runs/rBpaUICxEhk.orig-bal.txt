@@ -1,0 +1,149 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=rBpaUICxEhk
+- **Title:** Life is NOT a Journey - Alan Watts
+- **Uploader:** After Skool
+- **Duration:** 04:01 (240.6s)
+- **Resolution:** 1280x720 (av1)
+- **Detail:** balanced
+- **Frames:** 38 selected from 38 candidates (scene, full range, budget 80, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 82 segments (via captions)
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=first-frame)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0002.jpg` (t=00:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0003.jpg` (t=00:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0004.jpg` (t=00:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0005.jpg` (t=00:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0006.jpg` (t=00:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0007.jpg` (t=00:30, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0008.jpg` (t=00:38, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0009.jpg` (t=00:44, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0010.jpg` (t=00:45, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0011.jpg` (t=00:46, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0012.jpg` (t=01:04, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0013.jpg` (t=01:30, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0014.jpg` (t=01:34, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0015.jpg` (t=01:37, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0016.jpg` (t=01:37, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0017.jpg` (t=01:40, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0018.jpg` (t=01:46, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0019.jpg` (t=01:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0020.jpg` (t=01:57, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0021.jpg` (t=02:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0022.jpg` (t=02:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0023.jpg` (t=02:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0024.jpg` (t=02:13, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0025.jpg` (t=02:15, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0026.jpg` (t=02:22, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0027.jpg` (t=02:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0028.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0029.jpg` (t=02:31, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0030.jpg` (t=02:35, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0031.jpg` (t=02:42, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0032.jpg` (t=03:11, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0033.jpg` (t=03:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0034.jpg` (t=03:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0035.jpg` (t=03:23, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0036.jpg` (t=03:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0037.jpg` (t=03:31, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/frames/frame_0038.jpg` (t=03:38, reason=scene-change)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:14] the existence the physical universe is basically playful
+[00:16] is basically playful there is no necessity for it whatsoever
+[00:20] there is no necessity for it whatsoever it isn't going anywhere
+[00:22] it isn't going anywhere that is to say it doesn't
+[00:28] have some destination that it ought to arrive at
+[00:30] arrive at but that it is best understood by
+[00:32] but that it is best understood by analogy with music
+[00:35] analogy with music [Applause]
+[00:37] [Applause] because music as an art form
+[00:40] because music as an art form is essentially playful we say you play
+[00:42] is essentially playful we say you play the piano you don't work the piano
+[00:45] the piano you don't work the piano [Music]
+[00:48] [Music] why
+[00:50] why music differs from say travel
+[00:52] music differs from say travel when you travel
+[00:53] when you travel you are trying to get
+[00:56] you are trying to get somewhere one doesn't make the end of a
+[00:59] somewhere one doesn't make the end of a composition
+[01:04] the point of the competition of the composition if that was so the best
+[01:06] composition if that was so the best conductors would be those who played
+[01:08] conductors would be those who played fastest
+[01:09] fastest [Music]
+[01:12] [Music] and there will be composers who wrote
+[01:14] and there will be composers who wrote only finales
+[01:20] people go to concert just hear one crashing chord because that's the end
+[01:26] same way dancing you don't aim at a particular spot in the room that's where
+[01:28] particular spot in the room that's where you should arrive the whole point of the
+[01:30] you should arrive the whole point of the dancing is the dance
+[01:37] now but we don't see that as uh something brought by our education
+[01:40] uh something brought by our education into our everyday conduct
+[01:45] we've got a system of schooling which gives a completely
+[01:47] of schooling which gives a completely different impression
+[01:50] different impression it's all graded
+[01:52] it's all graded and what we do is we put the child into
+[01:54] and what we do is we put the child into the corridor
+[01:56] the corridor of this grade system with a kind of come
+[01:58] of this grade system with a kind of come on kitty kitty kitty and yeah you go to
+[02:01] on kitty kitty kitty and yeah you go to kindergarten you know and that's a great
+[02:02] kindergarten you know and that's a great thing because when you finish that
+[02:04] thing because when you finish that you'll get into first grade
+[02:07] you'll get into first grade and then come on first grade leads to
+[02:08] and then come on first grade leads to second grade and so on and then you get
+[02:10] second grade and so on and then you get out of grade school you got high school
+[02:12] out of grade school you got high school and it's revving up the thing is coming
+[02:14] and it's revving up the thing is coming then you're going to go to college and
+[02:15] then you're going to go to college and buy a job then you get into graduate
+[02:17] buy a job then you get into graduate school and when you're through with
+[02:18] school and when you're through with graduate school you go out to join the
+[02:21] graduate school you go out to join the world
+[02:22] world and then you get into some racket where
+[02:24] and then you get into some racket where you're selling insurance
+[02:26] you're selling insurance and they've got that quota to make and
+[02:28] and they've got that quota to make and you're going to make that and all the
+[02:30] you're going to make that and all the time the thing is coming it's coming
+[02:32] time the thing is coming it's coming it's coming that great thing the success
+[02:34] it's coming that great thing the success you're working for then when you wake up
+[02:36] you're working for then when you wake up one day about 40 years old you say my
+[02:38] one day about 40 years old you say my god i've arrived
+[02:41] god i've arrived i'm there
+[02:42] i'm there and you don't feel very different from
+[02:44] and you don't feel very different from what you've always felt
+[02:46] what you've always felt by expectation look at the people who
+[02:48] by expectation look at the people who live to retire
+[02:50] live to retire and put those savings away
+[02:53] and put those savings away and then when they
+[02:54] and then when they 65 they don't have any energy left
+[02:57] 65 they don't have any energy left they're more or less impotent and
+[02:59] they're more or less impotent and they go and rot in an old people's
+[03:01] they go and rot in an old people's senior citizens community
+[03:09] because we've simply cheated ourselves the whole way down the line
+[03:16] we thought of life by analogy with a journey with a pilgrimage which had a
+[03:18] journey with a pilgrimage which had a serious purpose at the end and the thing
+[03:20] serious purpose at the end and the thing was to get to that end success or
+[03:22] was to get to that end success or whatever it is or maybe heaven after
+[03:24] whatever it is or maybe heaven after you're dead
+[03:29] but we missed the point the whole way along
+[03:30] along it was a musical thing and you were
+[03:32] it was a musical thing and you were supposed to sing or to dance while the
+[03:34] supposed to sing or to dance while the music was being played
+[03:38] music was being played [Music]
+[03:52] [Music] for more interesting videos like this
+[03:54] for more interesting videos like this one please subscribe
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal` — delete when done._

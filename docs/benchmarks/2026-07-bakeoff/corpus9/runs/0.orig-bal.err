@@ -1,0 +1,8 @@
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/0-orig-bal
+[watch] checking metadata/captions via yt-dlp…
+[youtube:truncated_id] Extracting URL: https://www.youtube.com/watch?v=0
+ERROR: [youtube:truncated_id] 0: Incomplete YouTube ID 0. URL https://www.youtube.com/watch?v=0 looks truncated.
+[watch] downloading video via yt-dlp…
+[youtube:truncated_id] Extracting URL: https://www.youtube.com/watch?v=0
+ERROR: [youtube:truncated_id] 0: Incomplete YouTube ID 0. URL https://www.youtube.com/watch?v=0 looks truncated.
+yt-dlp did not produce a video file in /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/0-orig-bal/download (exit 1)

@@ -1,0 +1,413 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=ZDa-Z5JzLYM
+- **Title:** Python OOP Tutorial 1: Classes and Instances
+- **Uploader:** Corey Schafer
+- **Duration:** 15:24 (923.7s)
+- **Resolution:** 1280x720 (av1)
+- **Detail:** balanced
+- **Frames:** 12 selected from 1 candidates (uniform with uniform fallback, 88 near-duplicates dropped, full range, budget 100, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 370 segments (via captions)
+
+> **Warning:** This is a 15-minute video. Frame coverage is sparse at this length under `balanced` detail — its cap spreads thin across the full clip. For better results, re-run with `--start HH:MM:SS --end HH:MM:SS` to zoom into a section, or use `--detail token-burner` to keep every scene-change frame across the whole video.
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0027.jpg` (t=04:00, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0030.jpg` (t=04:28, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0031.jpg` (t=04:37, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0053.jpg` (t=08:00, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0056.jpg` (t=08:28, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0058.jpg` (t=08:46, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0065.jpg` (t=09:51, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0080.jpg` (t=12:10, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0083.jpg` (t=12:37, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0094.jpg` (t=14:19, reason=uniform)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal/frames/frame_0100.jpg` (t=15:14, reason=uniform)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:01] hey everybody how's it going in this series of videos we'll be learning how
+[00:03] series of videos we'll be learning how to create and use classes within Python
+[00:05] to create and use classes within Python and how object-oriented concepts are
+[00:07] and how object-oriented concepts are applied within the language now there's
+[00:09] applied within the language now there's a lot to cover when working with classes
+[00:11] a lot to cover when working with classes so I'm going to break these up into
+[00:12] so I'm going to break these up into several different videos we'll cover the
+[00:14] several different videos we'll cover the basics of creating and instantiating
+[00:16] basics of creating and instantiating classes we'll learn about inheritance
+[00:18] classes we'll learn about inheritance class and instance variables static
+[00:20] class and instance variables static methods and class methods and several
+[00:22] methods and class methods and several other topics so breaking these up in
+[00:24] other topics so breaking these up in several videos will allow us to focus on
+[00:26] several videos will allow us to focus on specific Topics in each video so in this
+[00:28] specific Topics in each video so in this video we'll be learning the basics of
+[00:30] video we'll be learning the basics of creating and instantiating simple
+[00:32] creating and instantiating simple classes but first why should we even use
+[00:35] classes but first why should we even use classes now this isn't just specific to
+[00:37] classes now this isn't just specific to python you can see classes being used
+[00:39] python you can see classes being used throughout most modern programming
+[00:41] throughout most modern programming languages and there's a good reason for
+[00:42] languages and there's a good reason for that they allow us to logically group
+[00:45] that they allow us to logically group our data and functions in a way that's
+[00:47] our data and functions in a way that's easy to reuse and also easy to build
+[00:49] easy to reuse and also easy to build upon if need be now just a quick side
+[00:52] upon if need be now just a quick side note when I say data and functions that
+[00:54] note when I say data and functions that are associated with a specific class we
+[00:57] are associated with a specific class we call those attributes and methods and
+[00:59] call those attributes and methods and you'll hear me use those terms a lot
+[01:00] you'll hear me use those terms a lot throughout these videos so when I say
+[01:02] throughout these videos so when I say methods I mean a function that is
+[01:04] methods I mean a function that is associated with a class um so let's go
+[01:07] associated with a class um so let's go ahead and get started so say we had an
+[01:10] ahead and get started so say we had an application for our company and we
+[01:12] application for our company and we wanted to represent our employees in our
+[01:14] wanted to represent our employees in our python code now this would be a great
+[01:16] python code now this would be a great use case for a class because each
+[01:18] use case for a class because each individual employee is going to have
+[01:20] individual employee is going to have specific attributes and methods so for
+[01:22] specific attributes and methods so for example each employee is going to have a
+[01:24] example each employee is going to have a name an email address a pay and also
+[01:28] name an email address a pay and also actions that they can perform so it
+[01:30] actions that they can perform so it would be nice if we had a class that we
+[01:32] would be nice if we had a class that we could use as a blueprint to create each
+[01:34] could use as a blueprint to create each employee so that we didn't have to do
+[01:36] employee so that we didn't have to do this manually each time from scratch so
+[01:39] this manually each time from scratch so let's go ahead and create a simple
+[01:40] let's go ahead and create a simple employee class and see what that would
+[01:42] employee class and see what that would look like so to create a class it's just
+[01:45] look like so to create a class it's just as easy as saying class employee now I'm
+[01:48] as easy as saying class employee now I'm going to leave this empty for now and if
+[01:51] going to leave this empty for now and if we just left it like this then we get an
+[01:52] we just left it like this then we get an error so if you ever have a class or a
+[01:54] error so if you ever have a class or a function that you want to leave empty
+[01:55] function that you want to leave empty for the time being then you can simply
+[01:57] for the time being then you can simply put in a past statement and P Pyon will
+[02:00] put in a past statement and P Pyon will know that you just want to skip that for
+[02:02] know that you just want to skip that for now so now we have a simple employee
+[02:04] now so now we have a simple employee class with no attributes or methods and
+[02:07] class with no attributes or methods and I wanted to stop here because I wanted
+[02:08] I wanted to stop here because I wanted to explain the difference between a
+[02:10] to explain the difference between a class and an instance of a class so our
+[02:13] class and an instance of a class so our class is basically a blueprint for
+[02:16] class is basically a blueprint for creating instances and each unique
+[02:18] creating instances and each unique employee that we create using our
+[02:21] employee that we create using our employee class will be an instance of
+[02:23] employee class will be an instance of that class so for example if I said
+[02:26] that class so for example if I said employee 1 equals employee and employee
+[02:30] employee 1 equals employee and employee 2 equals employee then each of these are
+[02:34] 2 equals employee then each of these are going to be their own unique instances
+[02:37] going to be their own unique instances of the employee class so for example if
+[02:41] of the employee class so for example if I go ahead and print both of these out
+[02:45] I go ahead and print both of these out and copy and paste that there then you
+[02:49] and copy and paste that there then you can see that both of these are employee
+[02:51] can see that both of these are employee objects and they're both unique they
+[02:53] objects and they're both unique they both have different locations here in
+[02:54] both have different locations here in memory now this is an important
+[02:56] memory now this is an important distinction because you'll hear me talk
+[02:58] distinction because you'll hear me talk a lot about instance variable abl and
+[03:00] a lot about instance variable abl and class variables and it's important to
+[03:01] class variables and it's important to know the difference between those and
+[03:04] know the difference between those and I'll go more in depth into class
+[03:05] I'll go more in depth into class variables in the next video but for this
+[03:07] variables in the next video but for this video we're going to be looking at
+[03:09] video we're going to be looking at instance variables so instance variables
+[03:11] instance variables so instance variables contain data that is unique to each
+[03:14] contain data that is unique to each instance now we could manually create
+[03:16] instance now we could manually create instance variables for each employee by
+[03:19] instance variables for each employee by doing something like this so let's say
+[03:21] doing something like this so let's say we wanted employee one to have a first
+[03:23] we wanted employee one to have a first name and a last name so I could just do
+[03:26] name and a last name so I could just do employee one. first equals Corey
+[03:30] employee one. first equals Corey and then I could do employee
+[03:34] and then I could do employee last is equal to schaer and I could also
+[03:39] last is equal to schaer and I could also give it an email address so I'll do
+[03:41] give it an email address so I'll do employee 1. email equals and I'll just
+[03:45] employee 1. email equals and I'll just do the first name uh with the last name
+[03:48] do the first name uh with the last name at uh company.com and lastly let's go
+[03:51] at uh company.com and lastly let's go ahead and add a pay onto there too so
+[03:54] ahead and add a pay onto there too so I'll do employee 1. pay and we'll just
+[03:56] I'll do employee 1. pay and we'll just do 50,000 there now let's give employee
+[04:00] do 50,000 there now let's give employee 2 uh some of these same attributes so
+[04:04] 2 uh some of these same attributes so for this one I'll just do test user and
+[04:07] for this one I'll just do test user and then I'll do
+[04:09] then I'll do test user and I will make that 60,000
+[04:14] test user and I will make that 60,000 okay so now each of these instances have
+[04:16] okay so now each of these instances have attributes that are unique to them so if
+[04:20] attributes that are unique to them so if I print it out let's say I could print
+[04:22] I print it out let's say I could print out the employee one. email and I'll
+[04:26] out the employee one. email and I'll also print out the employee 2.
+[04:30] also print out the employee 2. email oh and it looks like whenever I
+[04:33] email oh and it looks like whenever I gave these the instance variables I
+[04:35] gave these the instance variables I forgot to make this employee 2 here so
+[04:37] forgot to make this employee 2 here so now let's run that so now you can see
+[04:39] now let's run that so now you can see that that email was created for each
+[04:42] that that email was created for each employee but let's say that we wanted to
+[04:44] employee but let's say that we wanted to set all of this information for each
+[04:46] set all of this information for each employee when they're created rather
+[04:48] employee when they're created rather than doing all of this manually like we
+[04:51] than doing all of this manually like we did here so we wouldn't want to have to
+[04:53] did here so we wouldn't want to have to manually set these variables every time
+[04:55] manually set these variables every time you can see it's a lot of code and it's
+[04:57] you can see it's a lot of code and it's also prone to mistakes just like I did
+[04:59] also prone to mistakes just like I did whenever I forgot to change the to
+[05:01] whenever I forgot to change the to employee 2 um so we don't get much
+[05:04] employee 2 um so we don't get much benefit of using classes if we did it
+[05:06] benefit of using classes if we did it this way so to make these uh set up
+[05:10] this way so to make these uh set up automatically when we create the
+[05:11] automatically when we create the employee we're going to use a special in
+[05:13] employee we're going to use a special in nit method so now inside of our employee
+[05:16] nit method so now inside of our employee class I'm going to create this special
+[05:19] class I'm going to create this special inip method now you can think of this
+[05:22] inip method now you can think of this method as initialize and if you're
+[05:24] method as initialize and if you're coming from another language then you
+[05:26] coming from another language then you can think of this as the Constructor now
+[05:28] can think of this as the Constructor now when we create methods within a class
+[05:31] when we create methods within a class they receive the instance as the first
+[05:33] they receive the instance as the first argument automatically and by convention
+[05:36] argument automatically and by convention uh we should call the instance self now
+[05:39] uh we should call the instance self now you can call it whatever you want but
+[05:40] you can call it whatever you want but it's a good idea to stick to Convention
+[05:42] it's a good idea to stick to Convention here and just use self so after self we
+[05:46] here and just use self so after self we can specify what other arguments that we
+[05:48] can specify what other arguments that we want to accept so let's go ahead and
+[05:50] want to accept so let's go ahead and accept the first name the last name and
+[05:54] accept the first name the last name and the pay and I know that we had email too
+[05:56] the pay and I know that we had email too but we can create the email using the
+[05:58] but we can create the email using the first name and the last name name so now
+[06:01] first name and the last name name so now within our anip method we're going to
+[06:04] within our anip method we're going to set all of these instance variables so
+[06:06] set all of these instance variables so let's do self. first equals first and
+[06:10] let's do self. first equals first and now I'm just going to do this for the
+[06:13] now I'm just going to do this for the rest of them as well so I'm going to do
+[06:15] rest of them as well so I'm going to do self. pay or self. last and self. pay
+[06:19] self. pay or self. last and self. pay and for the email I can do self. email
+[06:22] and for the email I can do self. email equals first plus and then we'll put a
+[06:26] equals first plus and then we'll put a dot between those and then last and then
+[06:29] dot between those and then last and then we'll add on to the end at company.com
+[06:34] we'll add on to the end at company.com okay so whenever I say that self is the
+[06:37] okay so whenever I say that self is the instance what I mean by that is that
+[06:40] instance what I mean by that is that when we set self. first equals to First
+[06:43] when we set self. first equals to First here it's going to be the same thing as
+[06:45] here it's going to be the same thing as us saying down here that employee
+[06:48] us saying down here that employee 1.first equals Corey except now instead
+[06:51] 1.first equals Corey except now instead of uh doing this manually it'll be done
+[06:54] of uh doing this manually it'll be done automatically when we create our
+[06:55] automatically when we create our employee objects U now these don't need
+[06:58] employee objects U now these don't need to be the same as our arguments so for
+[07:00] to be the same as our arguments so for example I could make this uh self. fname
+[07:05] example I could make this uh self. fname equals first but I usually like to keep
+[07:08] equals first but I usually like to keep these similar if possible so I'm going
+[07:09] these similar if possible so I'm going to go ahead and set that back to self.
+[07:12] to go ahead and set that back to self. First equals first okay so now when we
+[07:15] First equals first okay so now when we create our instances of our employee
+[07:17] create our instances of our employee class right here now we can pass in the
+[07:20] class right here now we can pass in the values that we specified in our anip
+[07:22] values that we specified in our anip method now our inip method takes the
+[07:25] method now our inip method takes the instance which we called self and the
+[07:27] instance which we called self and the first name last name and pay as
+[07:29] first name last name and pay as arguments but when we create our
+[07:31] arguments but when we create our employee down here uh the instance is
+[07:34] employee down here uh the instance is passed automatically so we can leave off
+[07:37] passed automatically so we can leave off self we only need to provide the names
+[07:40] self we only need to provide the names and the pay so we could create these by
+[07:43] and the pay so we could create these by passing in first and we have to do this
+[07:46] passing in first and we have to do this in order so I will pass in all of the
+[07:49] in order so I will pass in all of the same information that we did manually
+[07:51] same information that we did manually down there and for the second one I'll
+[07:53] down there and for the second one I'll do test and user and I think I had that
+[07:58] do test and user and I think I had that at 60,000 okay so what would happen on
+[08:02] at 60,000 okay so what would happen on this line when we create this employee
+[08:05] this line when we create this employee the init method will be run
+[08:07] the init method will be run automatically so employee one will be
+[08:10] automatically so employee one will be passed in as self and then it will set
+[08:14] passed in as self and then it will set all of these attributes so it it'll set
+[08:16] all of these attributes so it it'll set employee 1. first is equal to first
+[08:19] employee 1. first is equal to first which we passed in as Corey uh employee
+[08:22] which we passed in as Corey uh employee one. last equals what we passed in as
+[08:24] one. last equals what we passed in as last and so on so now that we have that
+[08:27] last and so on so now that we have that init method in place we can go ahead and
+[08:30] init method in place we can go ahead and delete these manual assignments that we
+[08:32] delete these manual assignments that we made down here and you can see by
+[08:34] made down here and you can see by deleting that that we got rid of a lot
+[08:36] deleting that that we got rid of a lot of code so I'm going to go ahead and
+[08:38] of code so I'm going to go ahead and comment out those lines where we're
+[08:40] comment out those lines where we're printing the employees and I'm just
+[08:42] printing the employees and I'm just going to go ahead and print out the
+[08:43] going to go ahead and print out the email so if I run that then you can see
+[08:46] email so if I run that then you can see that that still works okay so everything
+[08:48] that that still works okay so everything that we have so far like the names and
+[08:50] that we have so far like the names and email and the pay are all attributes of
+[08:53] email and the pay are all attributes of our class now let's say that we wanted
+[08:55] our class now let's say that we wanted the ability to perform some kind of
+[08:57] the ability to perform some kind of action now to do that we can add add
+[08:59] action now to do that we can add add some methods to our class so let's say
+[09:01] some methods to our class so let's say that I wanted the ability to display the
+[09:03] that I wanted the ability to display the full name of an employee now this is an
+[09:06] full name of an employee now this is an action that you'd likely need to do a
+[09:08] action that you'd likely need to do a lot with a class like this so we can do
+[09:11] lot with a class like this so we can do this manually outside the class if I was
+[09:13] this manually outside the class if I was to come down here and do um print and I
+[09:17] to come down here and do um print and I could get the full name just by putting
+[09:19] could get the full name just by putting in two placeholders there and doing a
+[09:23] in two placeholders there and doing a format and saying employee 1. first and
+[09:27] format and saying employee 1. first and employee 1.
+[09:29] employee 1. last and if I go ahead and print this
+[09:33] last and if I go ahead and print this out then you can see that we got the
+[09:35] out then you can see that we got the full name there but that's a lot to type
+[09:38] full name there but that's a lot to type in each time that you want to display
+[09:40] in each time that you want to display the employes full name so instead let's
+[09:42] the employes full name so instead let's create a method within our class that
+[09:44] create a method within our class that allows us to put this functionality in
+[09:47] allows us to put this functionality in one place so within our class here I'm
+[09:50] one place so within our class here I'm going to create a method called full
+[09:53] going to create a method called full name and we can do that with just doing
+[09:55] name and we can do that with just doing a def of full name now like I said
+[09:58] a def of full name now like I said before each method within a class
+[10:01] before each method within a class automatically takes the instance as the
+[10:03] automatically takes the instance as the first argument and we're going to always
+[10:06] first argument and we're going to always call that self and the instance is the
+[10:09] call that self and the instance is the only argument that we'll need in order
+[10:10] only argument that we'll need in order to get the full name So within this
+[10:14] to get the full name So within this method here I'm just going to take the
+[10:17] method here I'm just going to take the same logic that we had down here and cut
+[10:20] same logic that we had down here and cut that out and I'm just going to go ahead
+[10:22] that out and I'm just going to go ahead and return that but we have to be
+[10:24] and return that but we have to be careful here because now instead of uh
+[10:27] careful here because now instead of uh printing employee one first name and
+[10:30] printing employee one first name and last name I'm going to use self so that
+[10:33] last name I'm going to use self so that it will work with all instances so I'm
+[10:35] it will work with all instances so I'm going to do self. first and self. last
+[10:39] going to do self. first and self. last so now that we created that method
+[10:41] so now that we created that method instead of printing like we did before
+[10:43] instead of printing like we did before now I can just come down here and do
+[10:45] now I can just come down here and do employee one. full name and print that
+[10:49] employee one. full name and print that out and if I run that then you can see
+[10:51] out and if I run that then you can see that we got the same thing and notice
+[10:54] that we got the same thing and notice that we need the parentheses here
+[10:55] that we need the parentheses here because this is a method instead of an
+[10:58] because this is a method instead of an attribute so if I left the parentheses
+[11:00] attribute so if I left the parentheses off and printed this then you can see
+[11:03] off and printed this then you can see that it prints the method instead of the
+[11:06] that it prints the method instead of the return value of the method so we're
+[11:08] return value of the method so we're going to have to put those parentheses
+[11:10] going to have to put those parentheses on in order to run that properly so now
+[11:13] on in order to run that properly so now we have full advantage of code reuse
+[11:15] we have full advantage of code reuse here so instead of typing this out for
+[11:17] here so instead of typing this out for each full name that I want to print now
+[11:19] each full name that I want to print now I can just use that method so now if I
+[11:21] I can just use that method so now if I wanted to print employee 2's full name
+[11:24] wanted to print employee 2's full name it's just as easy as replacing employee
+[11:26] it's just as easy as replacing employee one with employ employee 2 and running
+[11:29] one with employ employee 2 and running that and we get the correct answer okay
+[11:31] that and we get the correct answer okay and one more quick thing that I wanted
+[11:33] and one more quick thing that I wanted to point out here um now one common
+[11:36] to point out here um now one common mistake that I see when creating methods
+[11:39] mistake that I see when creating methods is forgetting the self argument for the
+[11:42] is forgetting the self argument for the instance so let's take a quick look at
+[11:44] instance so let's take a quick look at what that would look like if we left
+[11:46] what that would look like if we left that off so now before I run this if I
+[11:49] that off so now before I run this if I just commented out this printing of full
+[11:51] just commented out this printing of full name down here and ran this then you can
+[11:54] name down here and ran this then you can see I'm actually going to remove these
+[11:56] see I'm actually going to remove these print statements here as well now you
+[11:58] print statements here as well now you can see that this runs without any
+[12:00] can see that this runs without any errors but if I was to try to run this
+[12:03] errors but if I was to try to run this method that we accidentally left self
+[12:05] method that we accidentally left self off of then run this then you can see
+[12:08] off of then run this then you can see that we get an error and the error that
+[12:10] that we get an error and the error that we got was a type error full name takes
+[12:13] we got was a type error full name takes zero positional arguments but one was
+[12:16] zero positional arguments but one was given now this can be confusing because
+[12:18] given now this can be confusing because it doesn't look like we're passing any
+[12:20] it doesn't look like we're passing any arguments here into full name but the
+[12:23] arguments here into full name but the instance uh which in this case is
+[12:25] instance uh which in this case is employee 2 is getting passed
+[12:27] employee 2 is getting passed automatically so we we have to expect
+[12:30] automatically so we we have to expect that instance argument in our method and
+[12:32] that instance argument in our method and that's why we added self so I'm going to
+[12:35] that's why we added self so I'm going to come back up here to full name and put
+[12:37] come back up here to full name and put self back in and now running this you
+[12:40] self back in and now running this you can see that it runs correctly now we
+[12:42] can see that it runs correctly now we can also run these methods using the
+[12:46] can also run these methods using the class name itself uh which makes it a
+[12:49] class name itself uh which makes it a bit more obvious of what's going on in
+[12:51] bit more obvious of what's going on in the background because whenever we do
+[12:54] the background because whenever we do that so I'll do employee um do full name
+[12:58] that so I'll do employee um do full name now when we run it from the class we
+[13:00] now when we run it from the class we have to manually pass in the instance as
+[13:03] have to manually pass in the instance as an argument so in this case I'll pass in
+[13:06] an argument so in this case I'll pass in employee one so you can see how these
+[13:08] employee one so you can see how these are similar but not exactly the same so
+[13:11] are similar but not exactly the same so I'm going to put these side by side just
+[13:13] I'm going to put these side by side just so that we can compare them here so
+[13:15] so that we can compare them here so these two lines here do the exact same
+[13:18] these two lines here do the exact same thing but here when I do employee one
+[13:21] thing but here when I do employee one which is an instance and I call the
+[13:23] which is an instance and I call the method I don't need to pass in self it
+[13:26] method I don't need to pass in self it does it automatically and when we call
+[13:28] does it automatically and when we call the method on the class then it doesn't
+[13:31] the method on the class then it doesn't know what instance that we want to run
+[13:33] know what instance that we want to run that method with so we do have to pass
+[13:35] that method with so we do have to pass in the instance and that gets passed in
+[13:37] in the instance and that gets passed in as self and if I go ahead and print this
+[13:40] as self and if I go ahead and print this out and run it then you can see that it
+[13:44] out and run it then you can see that it works just like if we were to print out
+[13:47] works just like if we were to print out the employee one. full name and I wanted
+[13:49] the employee one. full name and I wanted to show you that because that's actually
+[13:51] to show you that because that's actually what's going on in the background when
+[13:53] what's going on in the background when we run employee 1. full name it gets
+[13:56] we run employee 1. full name it gets transformed into this here employee full
+[13:59] transformed into this here employee full name and passes in employee one as self
+[14:03] name and passes in employee one as self and that's why we have self for these
+[14:05] and that's why we have self for these methods so I hope that makes sense to
+[14:07] methods so I hope that makes sense to you uh that's not extremely important to
+[14:09] you uh that's not extremely important to know when we're just getting started
+[14:11] know when we're just getting started with working with classes but we'll need
+[14:13] with working with classes but we'll need to understand that in later videos once
+[14:14] to understand that in later videos once we start inheriting from other classes
+[14:17] we start inheriting from other classes and things like that so I figured it
+[14:18] and things like that so I figured it would be a good thing to go ahead and
+[14:20] would be a good thing to go ahead and show you that now okay so I think that's
+[14:23] show you that now okay so I think that's going to do it for this video uh in this
+[14:25] going to do it for this video uh in this video we learned how to create simple
+[14:27] video we learned how to create simple classes uh the difference between a
+[14:29] classes uh the difference between a class and an instance of that class and
+[14:31] class and an instance of that class and we also learned how to initialize class
+[14:33] we also learned how to initialize class attributes and create methods now we
+[14:36] attributes and create methods now we still have a lot to cover in future
+[14:37] still have a lot to cover in future videos and we'll be going over more
+[14:39] videos and we'll be going over more advanced topics so in the next video
+[14:41] advanced topics so in the next video we'll learn about class variables and
+[14:43] we'll learn about class variables and how they differ from instance variables
+[14:45] how they differ from instance variables that we saw here but if you do have any
+[14:47] that we saw here but if you do have any questions with what we covered in this
+[14:48] questions with what we covered in this video then feel free to ask in the
+[14:50] video then feel free to ask in the comment section below and I'll do my
+[14:52] comment section below and I'll do my best to answer those uh if you enjoy
+[14:54] best to answer those uh if you enjoy these tutorials and would like to
+[14:55] these tutorials and would like to support them then there's several ways
+[14:56] support them then there's several ways you can do that uh the easiest way is to
+[14:58] you can do that uh the easiest way is to Simply like the video and give it a
+[15:00] Simply like the video and give it a thumbs up and also it's a huge help to
+[15:02] thumbs up and also it's a huge help to share these videos with anyone who you
+[15:03] share these videos with anyone who you think would find them useful and if you
+[15:05] think would find them useful and if you have the means you can contribute
+[15:07] have the means you can contribute through patreon and there's a link to
+[15:08] through patreon and there's a link to that page in the description section
+[15:09] that page in the description section below uh be sure to subscribe for future
+[15:12] below uh be sure to subscribe for future videos and thank you all for watching
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZDa-Z5JzLYM-orig-bal` — delete when done._

@@ -1,0 +1,608 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=iG9CE55wbtY
+- **Title:** Do schools kill creativity? | Sir Ken Robinson | TED
+- **Uploader:** TED
+- **Duration:** 20:03 (1203.4s)
+- **Resolution:** 960x720 (av1)
+- **Detail:** balanced
+- **Frames:** 22 selected from 22 candidates (scene, full range, budget 100, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 555 segments (via captions)
+
+> **Warning:** This is a 20-minute video. Frame coverage is sparse at this length under `balanced` detail — its cap spreads thin across the full clip. For better results, re-run with `--start HH:MM:SS --end HH:MM:SS` to zoom into a section, or use `--detail token-burner` to keep every scene-change frame across the whole video.
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=first-frame)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0002.jpg` (t=00:10, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0003.jpg` (t=00:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0004.jpg` (t=00:32, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0005.jpg` (t=00:39, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0006.jpg` (t=14:45, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0007.jpg` (t=14:57, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0008.jpg` (t=15:03, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0009.jpg` (t=16:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0010.jpg` (t=16:41, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0011.jpg` (t=19:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0012.jpg` (t=19:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0013.jpg` (t=19:30, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0014.jpg` (t=19:50, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0015.jpg` (t=19:51, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0016.jpg` (t=19:52, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0017.jpg` (t=19:53, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0018.jpg` (t=19:53, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0019.jpg` (t=19:55, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0020.jpg` (t=19:57, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0021.jpg` (t=19:57, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal/frames/frame_0022.jpg` (t=20:01, reason=scene-change)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:28] good morning how are you it's been great hasn't it
+[00:32] how are you it's been great hasn't it it's been i've been blown away by the
+[00:34] it's been i've been blown away by the whole thing in fact i'm leaving
+[00:44] um there have been three themes haven't they running through the conference
+[00:45] they running through the conference uh which are rather relevant to what i
+[00:47] uh which are rather relevant to what i want to talk about one is the
+[00:49] want to talk about one is the extraordinary evidence of human
+[00:51] extraordinary evidence of human creativity
+[00:53] creativity in all of the presentations that we've
+[00:55] in all of the presentations that we've had and and in all the people here
+[00:57] had and and in all the people here just the variety of it and the range of
+[00:59] just the variety of it and the range of it
+[01:01] it the second is that it's put us in a
+[01:02] the second is that it's put us in a place where we have no idea what's going
+[01:04] place where we have no idea what's going to happen
+[01:05] to happen uh in terms of future no idea how this
+[01:08] uh in terms of future no idea how this may play out
+[01:09] may play out i have an interest in education uh
+[01:11] i have an interest in education uh actually what i find is
+[01:13] actually what i find is everybody has an interest in education
+[01:15] everybody has an interest in education don't you
+[01:17] don't you i find this very interesting if you're
+[01:18] i find this very interesting if you're at a dinner party and you say you work
+[01:21] at a dinner party and you say you work in education
+[01:22] in education actually you're not often at dinner
+[01:23] actually you're not often at dinner parties frankly
+[01:30] if you work in education you're not asked you know and uh
+[01:36] and you'll never ask back curiously that's a thing that's straight to me
+[01:38] that's a thing that's straight to me but if you are and you say to somebody
+[01:41] but if you are and you say to somebody uh they say what do you do
+[01:42] uh they say what do you do and you say you work in education you
+[01:44] and you say you work in education you can see the blood run from their face
+[01:45] can see the blood run from their face they think oh my god you know why me
+[01:47] they think oh my god you know why me it's my one night out all week
+[01:52] it's my one night out all week um but if you ask
+[01:55] um but if you ask about their education they pin you to
+[01:57] about their education they pin you to the wall because it's one of those
+[01:58] the wall because it's one of those things that goes deep with people
+[02:00] things that goes deep with people am i right like religion and money
+[02:03] am i right like religion and money uh and other things so um
+[02:07] uh and other things so um i have a big interest in education and i
+[02:08] i have a big interest in education and i think we all do we have a huge vested
+[02:10] think we all do we have a huge vested interest in it
+[02:11] interest in it partly because it's education that's
+[02:13] partly because it's education that's meant to take us into this future that
+[02:14] meant to take us into this future that we can't grasp
+[02:16] we can't grasp if you think of it children starting
+[02:17] if you think of it children starting school this year
+[02:20] school this year will be retiring in 2065.
+[02:25] will be retiring in 2065. nobody has a clue despite all the
+[02:27] nobody has a clue despite all the expertise that's been on parade for the
+[02:28] expertise that's been on parade for the past four days
+[02:30] past four days what the world will look like in five
+[02:31] what the world will look like in five years time and yet we're meant to be
+[02:33] years time and yet we're meant to be educating them for it
+[02:34] educating them for it so the unpredictability i think is
+[02:36] so the unpredictability i think is extraordinary and the third part of this
+[02:38] extraordinary and the third part of this is that we've all agreed nonetheless
+[02:41] is that we've all agreed nonetheless on the really um extraordinary
+[02:44] on the really um extraordinary capacities that children have
+[02:46] capacities that children have their capacities for innovation i mean
+[02:48] their capacities for innovation i mean serena last night was a marvel
+[02:50] serena last night was a marvel wasn't she just seeing what she could do
+[02:53] wasn't she just seeing what she could do and
+[02:54] and she's exceptional but i think she's not
+[02:56] she's exceptional but i think she's not um
+[02:57] um so to speak exceptional in the whole of
+[03:00] so to speak exceptional in the whole of of childhood
+[03:01] of childhood what you have there is a person of
+[03:02] what you have there is a person of extraordinary dedication who found a
+[03:04] extraordinary dedication who found a talent
+[03:05] talent and my contention is all kids have
+[03:06] and my contention is all kids have tremendous talents and we squander them
+[03:09] tremendous talents and we squander them pretty ruthlessly so i want to talk
+[03:11] pretty ruthlessly so i want to talk about education
+[03:12] about education and i want to talk about creativity my
+[03:14] and i want to talk about creativity my contention is that creativity now
+[03:16] contention is that creativity now is as important in education as literacy
+[03:20] is as important in education as literacy and we should treat it with the same
+[03:22] and we should treat it with the same status
+[03:24] status thank you
+[03:26] thank you [Music]
+[03:31] that was it by the way thank you very much
+[03:31] much [Laughter]
+[03:34] [Laughter] so 15 minutes left
+[03:46] i had a great story recently uh i love telling it of a little girl
+[03:47] telling it of a little girl who was in a drawing lesson she was six
+[03:50] who was in a drawing lesson she was six and she was at the back drawing and the
+[03:51] and she was at the back drawing and the teacher said this little girl had ever
+[03:53] teacher said this little girl had ever paid attention
+[03:53] paid attention and in this drawing lesson she did and
+[03:56] and in this drawing lesson she did and the teacher was fascinated she went over
+[03:57] the teacher was fascinated she went over to and she said
+[03:58] to and she said what are you drawing and the girl said
+[04:01] what are you drawing and the girl said i'm drawing a picture of god
+[04:04] i'm drawing a picture of god and the teacher said but nobody knows
+[04:06] and the teacher said but nobody knows what god looks like
+[04:07] what god looks like and the girl said they will in a minute
+[04:14] and the girl said they will in a minute okay when
+[04:24] when my son was four in england actually he was four everywhere to be honest i
+[04:25] he was four everywhere to be honest i mean
+[04:26] mean apparently for being strict about it
+[04:28] apparently for being strict about it wherever he went he was for that yeah
+[04:30] wherever he went he was for that yeah but
+[04:30] but he was in the nativity play do you
+[04:32] he was in the nativity play do you remember the story
+[04:37] no it's big it's a big story mel gibson to the sequel you may have seen it
+[04:43] nativity too but um james got the part of joseph which we
+[04:45] james got the part of joseph which we were thrilled about we consider this to
+[04:46] were thrilled about we consider this to be one of the lead parts
+[04:49] be one of the lead parts uh we had the place crammed full of
+[04:50] uh we had the place crammed full of agents and t-shirts you know james
+[04:51] agents and t-shirts you know james robinson is joseph
+[04:53] robinson is joseph we had he didn't have to speak but the
+[04:55] we had he didn't have to speak but the other bit where the three kings come in
+[04:57] other bit where the three kings come in now they come in bearing gifts and they
+[04:59] now they come in bearing gifts and they bring gold frankincense and mayo this
+[05:00] bring gold frankincense and mayo this really happened we were sitting there
+[05:01] really happened we were sitting there and they
+[05:02] and they i think just went out of sequence
+[05:04] i think just went out of sequence because we talked a little boy
+[05:05] because we talked a little boy afterwards and said you know
+[05:06] afterwards and said you know are you okay with that they said yeah
+[05:07] are you okay with that they said yeah why was that wrong they just switched i
+[05:09] why was that wrong they just switched i think that was it anyway the three boys
+[05:10] think that was it anyway the three boys came in
+[05:11] came in little four-year-olds with tea towels on
+[05:12] little four-year-olds with tea towels on their heads and they put these boxes
+[05:14] their heads and they put these boxes down the first boy said
+[05:15] down the first boy said i bring you gold and the second boy said
+[05:18] i bring you gold and the second boy said i bring you mare
+[05:20] i bring you mare and the third boy said frank sent this
+[05:28] [Applause] [Laughter]
+[05:36] what these things have in common is that kids will take a chance
+[05:38] kids will take a chance if they don't know they'll have a go
+[05:41] if they don't know they'll have a go am i right they're not frightened of
+[05:43] am i right they're not frightened of being wrong
+[05:45] being wrong now i don't mean to say that being wrong
+[05:47] now i don't mean to say that being wrong is the same thing as being creative
+[05:49] is the same thing as being creative what we do know is if you're not
+[05:51] what we do know is if you're not prepared to be wrong
+[05:52] prepared to be wrong you'll never come up with anything
+[05:53] you'll never come up with anything original if you're not prepared
+[05:56] original if you're not prepared to be wrong and by the time they get to
+[05:58] to be wrong and by the time they get to be adults most kids have lost that
+[06:00] be adults most kids have lost that capacity
+[06:02] capacity they have become frightened of being
+[06:04] they have become frightened of being wrong and we run our companies this by
+[06:05] wrong and we run our companies this by the way we stigmatize mistakes
+[06:07] the way we stigmatize mistakes and we're now running national education
+[06:09] and we're now running national education systems where mistakes
+[06:11] systems where mistakes are the worst thing you can make and the
+[06:14] are the worst thing you can make and the result is that we are
+[06:15] result is that we are educating people out of their creative
+[06:17] educating people out of their creative capacities
+[06:18] capacities picasso once said this he said that all
+[06:20] picasso once said this he said that all children are born
+[06:21] children are born artists the problem is to remain an
+[06:24] artists the problem is to remain an artist as we grow up
+[06:26] artist as we grow up i believe this passionately that we
+[06:27] i believe this passionately that we don't grow into creativity
+[06:29] don't grow into creativity we grow out of it or rather we get
+[06:32] we grow out of it or rather we get educated out of it
+[06:34] educated out of it so why is this um i lived in stratford
+[06:37] so why is this um i lived in stratford haven
+[06:38] haven until about five years ago in fact we
+[06:39] until about five years ago in fact we moved from stratfor to los angeles
+[06:42] moved from stratfor to los angeles so you can imagine what a seamless
+[06:43] so you can imagine what a seamless transition you know this was from
+[06:46] transition you know this was from uh actually we lived in a place called
+[06:47] uh actually we lived in a place called sinister field uh just outside stratford
+[06:49] sinister field uh just outside stratford which is where shakespeare's father was
+[06:51] which is where shakespeare's father was born
+[06:52] born are you struck by a new thought i was
+[06:54] are you struck by a new thought i was you don't think of shakespeare having a
+[06:56] you don't think of shakespeare having a father do you
+[06:57] father do you do you because you don't think of
+[06:59] do you because you don't think of shakespeare being a child
+[07:01] shakespeare being a child dude shakespeare being seven i never
+[07:03] dude shakespeare being seven i never thought of it
+[07:04] thought of it i mean he was a seven at some point he
+[07:05] i mean he was a seven at some point he was in somebody's english class wasn't
+[07:07] was in somebody's english class wasn't he
+[07:18] really how annoying would that be [Laughter]
+[07:24] [Laughter] must try harder
+[07:30] must try harder being sent to bed by us now go to
+[07:31] being sent to bed by us now go to shakespeare go to bed now you know to
+[07:33] shakespeare go to bed now you know to william shakespeare
+[07:34] william shakespeare and put the pencil down and stop
+[07:36] and put the pencil down and stop speaking like that
+[07:37] speaking like that you know it's it's
+[07:41] you know it's it's it's confusing everybody
+[07:51] anyway um we moved from stratfor to los angeles
+[07:53] we moved from stratfor to los angeles and i just want to
+[07:54] and i just want to say what about the transition actually
+[07:56] say what about the transition actually my son didn't want to come i've got two
+[07:58] my son didn't want to come i've got two kids uh he's 21 now and my daughter's
+[07:59] kids uh he's 21 now and my daughter's 16. he didn't want to come
+[08:01] 16. he didn't want to come to los angeles he loved it but he had a
+[08:03] to los angeles he loved it but he had a girlfriend in england
+[08:05] girlfriend in england uh this was the love of his life
+[08:08] uh this was the love of his life sarah he'd known her for a month
+[08:12] sarah he'd known her for a month mind you they've had their fourth
+[08:13] mind you they've had their fourth anniversary
+[08:15] anniversary because it's a long time when you're 16.
+[08:17] because it's a long time when you're 16. anyway he was really upset on the plane
+[08:18] anyway he was really upset on the plane he said i'll never find another girl
+[08:19] he said i'll never find another girl like sarah
+[08:21] like sarah and we were rather pleased about that
+[08:22] and we were rather pleased about that frankly because
+[08:24] frankly because she was
+[08:33] she was she was the main reason we're leaving the country
+[08:40] leaving the country but something strikes you when you move
+[08:41] but something strikes you when you move to america and when you travel around
+[08:43] to america and when you travel around the world
+[08:43] the world every education system on earth has the
+[08:45] every education system on earth has the same hierarchy of subjects
+[08:48] same hierarchy of subjects everyone doesn't matter where you go you
+[08:49] everyone doesn't matter where you go you think it would be otherwise but it isn't
+[08:51] think it would be otherwise but it isn't at the top are mathematics and languages
+[08:53] at the top are mathematics and languages then the humanity is in the bottom of
+[08:54] then the humanity is in the bottom of the arts everywhere on earth
+[08:57] the arts everywhere on earth and in pretty much every system too
+[08:59] and in pretty much every system too there's
+[09:00] there's a hierarchy within the arts art and
+[09:02] a hierarchy within the arts art and music are normally given a higher status
+[09:04] music are normally given a higher status in schools than drama and dance
+[09:06] in schools than drama and dance there isn't an education system on the
+[09:07] there isn't an education system on the planet that teaches dance every day to
+[09:09] planet that teaches dance every day to children the way we teach the
+[09:10] children the way we teach the mathematics
+[09:11] mathematics why why not i think this is rather
+[09:15] why why not i think this is rather important
+[09:15] important i think maths is very important but so
+[09:17] i think maths is very important but so is dance children dance all the time if
+[09:19] is dance children dance all the time if they're allowed to we all do
+[09:20] they're allowed to we all do we all have bodies don't we yeah did i
+[09:23] we all have bodies don't we yeah did i miss a meeting i mean
+[09:23] miss a meeting i mean i think
+[09:28] truthfully what happens is as children grow up we start to educate them
+[09:29] grow up we start to educate them progressively from the waist up
+[09:31] progressively from the waist up and then we focus on their heads and
+[09:33] and then we focus on their heads and slightly to one side
+[09:36] slightly to one side if you were to visit education as an
+[09:38] if you were to visit education as an alien and say what's it for
+[09:40] alien and say what's it for public education i think you'd have to
+[09:42] public education i think you'd have to conclude if you look at the output you
+[09:43] conclude if you look at the output you know who really succeeds by this who
+[09:45] know who really succeeds by this who does everything they should
+[09:47] does everything they should who gets all the brownie points you know
+[09:48] who gets all the brownie points you know who are the winners i think you'd have
+[09:50] who are the winners i think you'd have to conclude the whole purpose of public
+[09:52] to conclude the whole purpose of public education throughout the world
+[09:54] education throughout the world is to produce university professors
+[09:57] is to produce university professors isn't it they're the people who come out
+[09:59] isn't it they're the people who come out the top and i used to be one
+[10:01] the top and i used to be one so there you know
+[10:05] so there you know but and i like university professors but
+[10:07] but and i like university professors but you know
+[10:08] you know we shouldn't hold them up as the uh the
+[10:10] we shouldn't hold them up as the uh the high water mark of all human achievement
+[10:12] high water mark of all human achievement they're just a form of life
+[10:14] they're just a form of life you know another form of life but
+[10:16] you know another form of life but they're rather curious and i say this
+[10:17] they're rather curious and i say this out of affection for them
+[10:18] out of affection for them there's somebody curious about
+[10:19] there's somebody curious about professors in my experience not all of
+[10:21] professors in my experience not all of them but typically
+[10:22] them but typically they live in their heads they live up
+[10:25] they live in their heads they live up there
+[10:25] there and slightly to one side they're
+[10:28] and slightly to one side they're disembodied
+[10:29] disembodied you know in a kind of literal way you
+[10:30] you know in a kind of literal way you know they they look upon their body as a
+[10:32] know they they look upon their body as a form of transport for their heads
+[10:42] don't they it's a way of getting their head to meetings
+[10:51] if you want real evidence of out-of-body experiences by the way
+[10:53] experiences by the way get yourself along to a residential
+[10:55] get yourself along to a residential conference for senior academics
+[10:57] conference for senior academics and pop into the discotheque on the
+[10:58] and pop into the discotheque on the final night
+[11:00] final night and there you will see it grown men and
+[11:03] and there you will see it grown men and women writhing uncontrollably
+[11:07] women writhing uncontrollably off the beat
+[11:12] waiting to end so go and write a paper about it now
+[11:17] our education system is predicated on the idea of academic ability
+[11:19] the idea of academic ability and there's a reason the whole system
+[11:21] and there's a reason the whole system was invented around the world there were
+[11:23] was invented around the world there were no public systems of education really
+[11:24] no public systems of education really before the 19th century
+[11:26] before the 19th century they all came into being to meet the
+[11:28] they all came into being to meet the needs of industrialism
+[11:29] needs of industrialism so the hierarchy is rooted on two ideas
+[11:32] so the hierarchy is rooted on two ideas number one
+[11:33] number one that the the most useful subjects for
+[11:35] that the the most useful subjects for work are at the top
+[11:36] work are at the top so you were probably stayed benignly
+[11:38] so you were probably stayed benignly away from things at school when you're a
+[11:39] away from things at school when you're a kid
+[11:40] kid things you liked on the ground you would
+[11:42] things you liked on the ground you would never get a job doing that
+[11:43] never get a job doing that is that right don't do music you're not
+[11:45] is that right don't do music you're not going to be a musician don't do art you
+[11:47] going to be a musician don't do art you won't be an artist
+[11:48] won't be an artist uh benign advice now profoundly mistaken
+[11:52] uh benign advice now profoundly mistaken the whole world is engulfed in a
+[11:53] the whole world is engulfed in a revolution and the second is
+[11:56] revolution and the second is academic ability which has really come
+[11:57] academic ability which has really come to dominate our view of intelligence
+[11:59] to dominate our view of intelligence because the
+[11:59] because the universities designed the system in
+[12:01] universities designed the system in their image if you think about the whole
+[12:03] their image if you think about the whole system of public education around the
+[12:04] system of public education around the world
+[12:05] world it's a protracted process of university
+[12:07] it's a protracted process of university entrance and the consequences that many
+[12:09] entrance and the consequences that many highly talented
+[12:10] highly talented brilliant creative people think they're
+[12:12] brilliant creative people think they're not
+[12:13] not because the thing they were good at at
+[12:14] because the thing they were good at at school wasn't valued or was actually
+[12:16] school wasn't valued or was actually stigmatized
+[12:18] stigmatized and i think we can't afford to go on
+[12:19] and i think we can't afford to go on that way in the next 30 years
+[12:21] that way in the next 30 years according to unesco more people
+[12:23] according to unesco more people worldwide will be graduating through
+[12:25] worldwide will be graduating through education than since the beginning of
+[12:27] education than since the beginning of history
+[12:28] history more people and it's the combination of
+[12:29] more people and it's the combination of all the things we've talked about
+[12:31] all the things we've talked about technology and its transformation effect
+[12:32] technology and its transformation effect on work
+[12:33] on work and demography and the huge explosion in
+[12:35] and demography and the huge explosion in population
+[12:37] population suddenly degrees aren't worth anything
+[12:39] suddenly degrees aren't worth anything isn't that true
+[12:41] isn't that true when i was a student if you had a degree
+[12:43] when i was a student if you had a degree you had a job if you didn't have a job
+[12:45] you had a job if you didn't have a job it's because you didn't want one
+[12:47] it's because you didn't want one and i didn't want one frankly so um
+[12:51] and i didn't want one frankly so um but now kids without with degrees are
+[12:53] but now kids without with degrees are often heading home uh to carry on
+[12:55] often heading home uh to carry on playing video games
+[12:56] playing video games because you need an ma where the
+[12:58] because you need an ma where the previous job required a ba and now you
+[13:00] previous job required a ba and now you need a phd for the other
+[13:01] need a phd for the other it's a process of academic inflation and
+[13:03] it's a process of academic inflation and it indicates the whole structure of
+[13:04] it indicates the whole structure of education is shifting beneath
+[13:05] education is shifting beneath our feet we need to radically rethink
+[13:07] our feet we need to radically rethink our view of intelligence
+[13:09] our view of intelligence we know three things about intelligence
+[13:10] we know three things about intelligence one it's diverse
+[13:12] one it's diverse we think about the world in all the ways
+[13:13] we think about the world in all the ways that we experience it we think visually
+[13:15] that we experience it we think visually we think in sound we think
+[13:16] we think in sound we think kinesthetically
+[13:18] kinesthetically we think in abstract terms we think in
+[13:19] we think in abstract terms we think in movement
+[13:21] movement secondly intelligence is dynamic
+[13:24] secondly intelligence is dynamic if you look at the interactions of a
+[13:25] if you look at the interactions of a human brain as we heard yesterday from
+[13:27] human brain as we heard yesterday from a number of presentations intelligence
+[13:30] a number of presentations intelligence is wonderfully interactive
+[13:31] is wonderfully interactive the brain isn't divided into
+[13:32] the brain isn't divided into compartments in fact
+[13:35] compartments in fact creativity which i define as the process
+[13:37] creativity which i define as the process of having original ideas that have value
+[13:40] of having original ideas that have value more often than not comes about through
+[13:42] more often than not comes about through the interaction
+[13:43] the interaction of different disciplinary ways of seeing
+[13:45] of different disciplinary ways of seeing things
+[13:47] things the brain is intensely by the way
+[13:48] the brain is intensely by the way there's a shaft of nerves that joins the
+[13:50] there's a shaft of nerves that joins the two halves of the brain called the
+[13:50] two halves of the brain called the corpus callosum it's thicker in women
+[13:54] corpus callosum it's thicker in women following on from helen yesterday i
+[13:55] following on from helen yesterday i think this is probably why women are
+[13:56] think this is probably why women are better at multitasking
+[13:58] better at multitasking because you are aren't you that's a raft
+[14:01] because you are aren't you that's a raft of research
+[14:02] of research but i know for my personal life if my
+[14:04] but i know for my personal life if my wife is cooking a meal at home
+[14:06] wife is cooking a meal at home which is not often thankfully but you
+[14:09] which is not often thankfully but you know if she's saying
+[14:11] know if she's saying she's no she's good at some things but
+[14:13] she's no she's good at some things but if she's cooking
+[14:14] if she's cooking you know she's dealing with people on
+[14:16] you know she's dealing with people on the phone she's talking to the kids
+[14:17] the phone she's talking to the kids she's painting the ceiling you know
+[14:18] she's painting the ceiling you know she's
+[14:20] she's doing open-heart surgery over here if
+[14:22] doing open-heart surgery over here if i'm cooking the door is shut
+[14:24] i'm cooking the door is shut the kids are out the phone's on the hook
+[14:26] the kids are out the phone's on the hook if she comes in i get annoyed
+[14:28] if she comes in i get annoyed i say terry please i'm trying to fry an
+[14:30] i say terry please i'm trying to fry an egg in here you know
+[14:36] [Applause] [Laughter]
+[14:38] [Laughter] give me a break
+[14:43] actually there was a during that old philosophical thing if a tree falls in a
+[14:45] philosophical thing if a tree falls in a in a forest and nobody hears it did it
+[14:47] in a forest and nobody hears it did it happen
+[14:47] happen remember that old chestnut i saw a great
+[14:49] remember that old chestnut i saw a great t-shirt really recently which said
+[14:51] t-shirt really recently which said um if a man speaks his mind in a forest
+[14:54] um if a man speaks his mind in a forest and no woman hears him
+[14:55] and no woman hears him is he still wrong
+[14:59] is he still wrong [Laughter]
+[15:06] and the third thing about intelligence is it's distinct
+[15:08] is it's distinct i i'm doing a new book at the moment
+[15:10] i i'm doing a new book at the moment called epiphany which is uh based on a
+[15:12] called epiphany which is uh based on a series of interviews with people about
+[15:13] series of interviews with people about how they discovered their talent
+[15:15] how they discovered their talent i'm fascinated by how people got to be
+[15:16] i'm fascinated by how people got to be there uh it's really prompted by a
+[15:18] there uh it's really prompted by a conversation i had with a wonderful
+[15:19] conversation i had with a wonderful woman who
+[15:20] woman who most people have never heard of she's
+[15:21] most people have never heard of she's called jillian lynn have you heard of
+[15:23] called jillian lynn have you heard of her
+[15:24] her some have she's a choreographer and
+[15:25] some have she's a choreographer and everybody knows her work she did cats
+[15:28] everybody knows her work she did cats and phantom of the opera she's wonderful
+[15:29] and phantom of the opera she's wonderful i used to be on the board of the royal
+[15:31] i used to be on the board of the royal ballet in england
+[15:32] ballet in england as you can see and uh
+[15:35] as you can see and uh anyway julian i had lunch on that i said
+[15:37] anyway julian i had lunch on that i said how'd you get to be a dancer and she
+[15:38] how'd you get to be a dancer and she said it was interesting when she was at
+[15:40] said it was interesting when she was at school she was really hopeless
+[15:42] school she was really hopeless and the school in the 30s wrote to her
+[15:44] and the school in the 30s wrote to her parents said we think jillian has a
+[15:46] parents said we think jillian has a learning disorder
+[15:47] learning disorder she couldn't concentrate she was
+[15:48] she couldn't concentrate she was fidgeting i think now they'd say she had
+[15:49] fidgeting i think now they'd say she had adhd
+[15:51] adhd wouldn't you but this was the 1930s an
+[15:54] wouldn't you but this was the 1930s an adhd hadn't been invented you know at
+[15:56] adhd hadn't been invented you know at this point so it
+[15:57] this point so it wasn't an available condition you know
+[15:58] wasn't an available condition you know people
+[16:00] people people people weren't aware they could
+[16:03] people people weren't aware they could have that
+[16:10] anyway she sent went to see this um this specialist
+[16:11] specialist so this oak panel room and she was there
+[16:13] so this oak panel room and she was there with with her mother and she
+[16:15] with with her mother and she was led and sat on this uh chair at the
+[16:16] was led and sat on this uh chair at the end and she sat on her hands for 20
+[16:18] end and she sat on her hands for 20 minutes while this man talked to mother
+[16:19] minutes while this man talked to mother about all the problems jillian was
+[16:20] about all the problems jillian was having at school
+[16:22] having at school and at the end of it um because she was
+[16:24] and at the end of it um because she was disturbing people at home work was
+[16:25] disturbing people at home work was always late and so a little kid of a
+[16:27] always late and so a little kid of a in the end uh the uh the doctor went and
+[16:30] in the end uh the uh the doctor went and sat next to him and said julian i've
+[16:31] sat next to him and said julian i've listened to all these things that
+[16:32] listened to all these things that mother's told me i need to speak to her
+[16:33] mother's told me i need to speak to her privately
+[16:35] privately so she said he said wait here we'll be
+[16:37] so she said he said wait here we'll be back we won't be very long and
+[16:38] back we won't be very long and and uh and they went and left it but as
+[16:40] and uh and they went and left it but as they went out the room he turned on the
+[16:42] they went out the room he turned on the radio that was sitting on his desk
+[16:45] radio that was sitting on his desk and when they got out the room he said
+[16:46] and when they got out the room he said to mother just stand and watch her
+[16:48] to mother just stand and watch her and um the minute they left the room
+[16:51] and um the minute they left the room she said she was on their feet moving to
+[16:53] she said she was on their feet moving to the music and they watched a few minutes
+[16:55] the music and they watched a few minutes and he turned to her mother
+[16:56] and he turned to her mother and he said you know mrs lin jillian
+[16:58] and he said you know mrs lin jillian isn't sick
+[16:59] isn't sick she's a dancer
+[17:04] take her to a dance school i said what happened said she did
+[17:06] happened said she did i can't tell you how wonderful it was we
+[17:08] i can't tell you how wonderful it was we walked in this room and it was full of
+[17:10] walked in this room and it was full of people like me
+[17:11] people like me people who couldn't sit still people who
+[17:14] people who couldn't sit still people who had to move
+[17:15] had to move to think who had to move to think they
+[17:18] to think who had to move to think they did ballet
+[17:19] did ballet they did tap they did jazz they did
+[17:21] they did tap they did jazz they did modern contemporary she was eventually
+[17:22] modern contemporary she was eventually auditioned for the royal ballet school
+[17:24] auditioned for the royal ballet school she became a soloist she had a wonderful
+[17:25] she became a soloist she had a wonderful career at the royal ballet she
+[17:27] career at the royal ballet she eventually graduated from the royal
+[17:28] eventually graduated from the royal ballet school
+[17:29] ballet school found her own company the julian dance
+[17:31] found her own company the julian dance company met andrew lloyd webber
+[17:33] company met andrew lloyd webber she's been responsible for some of the
+[17:34] she's been responsible for some of the successful musical theater productions
+[17:36] successful musical theater productions in history
+[17:37] in history she's given pleasure to millions and
+[17:38] she's given pleasure to millions and she's a multi-millionaire
+[17:40] she's a multi-millionaire somebody else might have put on
+[17:41] somebody else might have put on medication and told her to calm down
+[17:45] medication and told her to calm down now i think
+[17:46] now i think [Music]
+[17:47] [Music] [Applause]
+[17:49] [Applause] [Music]
+[17:55] what i think it comes to is this al gore spoke uh the other night about
+[17:56] spoke uh the other night about ecology and the revolution that was
+[17:58] ecology and the revolution that was triggered by
+[18:00] triggered by rachel carson i believe our only hope
+[18:02] rachel carson i believe our only hope for the future
+[18:04] for the future is to adopt a new conception of human
+[18:06] is to adopt a new conception of human ecology
+[18:07] ecology one in which we start to reconstitute
+[18:09] one in which we start to reconstitute our conception of the richness of human
+[18:11] our conception of the richness of human capacity our education system has
+[18:14] capacity our education system has mined our minds in the way that we strip
+[18:17] mined our minds in the way that we strip mine the earth
+[18:18] mine the earth for a particular commodity and for the
+[18:20] for a particular commodity and for the future it won't serve us
+[18:22] future it won't serve us we have to rethink the fundamental
+[18:24] we have to rethink the fundamental principles on which we're educating our
+[18:25] principles on which we're educating our children
+[18:26] children there was a wonderful quote by jonas
+[18:28] there was a wonderful quote by jonas salk who said if you were to
+[18:30] salk who said if you were to uh if all the insects were to disappear
+[18:32] uh if all the insects were to disappear from the earth
+[18:34] from the earth within 50 years all life on earth would
+[18:36] within 50 years all life on earth would end
+[18:38] end if all human beings disappeared from the
+[18:40] if all human beings disappeared from the earth
+[18:41] earth within 50 years all forms of life would
+[18:43] within 50 years all forms of life would flourish
+[18:45] flourish and he's right what ted celebrates
+[18:48] and he's right what ted celebrates is the gift of the human imagination we
+[18:51] is the gift of the human imagination we have to be
+[18:52] have to be careful now that we use this gift wisely
+[18:55] careful now that we use this gift wisely and that we avert some of the scenarios
+[18:57] and that we avert some of the scenarios that we've talked about and the only way
+[18:59] that we've talked about and the only way we'll do it
+[19:00] we'll do it is by seeing our creative capacities for
+[19:02] is by seeing our creative capacities for the richness they are
+[19:04] the richness they are and seeing our children for the hope
+[19:06] and seeing our children for the hope that they are
+[19:07] that they are and our task is to educate their whole
+[19:09] and our task is to educate their whole being so they can face this future by
+[19:11] being so they can face this future by the way
+[19:11] the way we may not see this future but they will
+[19:15] we may not see this future but they will and our job is to help them make
+[19:17] and our job is to help them make something of it thank you very much
+[19:24] something of it thank you very much [Music]
+[19:34] what if great ideas weren't cherished [Music]
+[19:36] [Music] what if they carried no importance
+[19:38] what if they carried no importance [Music]
+[19:41] [Music] or held no value
+[19:43] or held no value [Music]
+[19:48] [Music] there is a place where artistic vision
+[19:50] there is a place where artistic vision is protected where inspired design ideas
+[19:53] is protected where inspired design ideas live on
+[19:54] live on to become ultimate driving machines
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/iG9CE55wbtY-orig-bal` — delete when done._

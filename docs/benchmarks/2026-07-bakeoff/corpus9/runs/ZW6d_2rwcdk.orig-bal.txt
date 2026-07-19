@@ -1,0 +1,696 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=ZW6d_2rwcdk
+- **Title:** Master 95% of Claude Code in 22 Minutes (as a Beginner)
+- **Uploader:** Leon van Zyl
+- **Duration:** 22:32 (1351.9s)
+- **Resolution:** 1280x720 (av1)
+- **Detail:** balanced
+- **Frames:** 60 selected from 61 candidates (scene, 1 near-duplicate dropped, full range, budget 100, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 605 segments (via captions)
+
+> **Warning:** This is a 22-minute video. Frame coverage is sparse at this length under `balanced` detail — its cap spreads thin across the full clip. For better results, re-run with `--start HH:MM:SS --end HH:MM:SS` to zoom into a section, or use `--detail token-burner` to keep every scene-change frame across the whole video.
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=first-frame)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0002.jpg` (t=00:03, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0003.jpg` (t=00:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0004.jpg` (t=00:08, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0005.jpg` (t=00:11, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0006.jpg` (t=00:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0007.jpg` (t=00:22, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0008.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0009.jpg` (t=00:32, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0010.jpg` (t=00:48, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0011.jpg` (t=01:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0012.jpg` (t=01:17, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0013.jpg` (t=01:20, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0014.jpg` (t=01:30, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0015.jpg` (t=02:17, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0016.jpg` (t=02:34, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0017.jpg` (t=03:38, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0018.jpg` (t=03:44, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0019.jpg` (t=04:03, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0020.jpg` (t=04:08, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0021.jpg` (t=04:12, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0022.jpg` (t=04:17, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0023.jpg` (t=04:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0024.jpg` (t=05:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0025.jpg` (t=06:47, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0026.jpg` (t=08:32, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0027.jpg` (t=08:39, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0028.jpg` (t=11:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0029.jpg` (t=11:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0030.jpg` (t=11:35, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0031.jpg` (t=14:15, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0032.jpg` (t=14:31, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0033.jpg` (t=14:48, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0034.jpg` (t=14:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0035.jpg` (t=14:50, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0036.jpg` (t=14:51, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0037.jpg` (t=15:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0039.jpg` (t=17:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0040.jpg` (t=17:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0041.jpg` (t=18:00, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0042.jpg` (t=18:24, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0043.jpg` (t=18:37, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0044.jpg` (t=18:46, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0045.jpg` (t=18:57, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0046.jpg` (t=19:04, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0047.jpg` (t=19:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0048.jpg` (t=19:12, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0049.jpg` (t=19:20, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0050.jpg` (t=19:41, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0051.jpg` (t=20:32, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0052.jpg` (t=20:37, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0053.jpg` (t=20:58, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0054.jpg` (t=21:00, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0055.jpg` (t=21:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0056.jpg` (t=21:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0057.jpg` (t=21:18, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0058.jpg` (t=21:22, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0059.jpg` (t=22:04, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0060.jpg` (t=22:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal/frames/frame_0061.jpg` (t=22:09, reason=scene-change)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:02] This is a complete Claude code tutorial for beginners. I'm assuming you've never
+[00:04] for beginners. I'm assuming you've never used it and by the end you'll be
+[00:06] used it and by the end you'll be building real working apps and I'll
+[00:08] building real working apps and I'll cover all of it from installing cloud
+[00:10] cover all of it from installing cloud code to setting up Git and GitHub so you
+[00:13] code to setting up Git and GitHub so you never lose your work to planning your
+[00:15] never lose your work to planning your builds and all the features that really
+[00:17] builds and all the features that really matter and I'll show you the easiest way
+[00:19] matter and I'll show you the easiest way to run it within the Claude desktop app.
+[00:22] to run it within the Claude desktop app. That way you never have to look at a
+[00:23] That way you never have to look at a terminal unless you want to. If you can
+[00:25] terminal unless you want to. If you can use CLA in the browser, you can do this.
+[00:29] use CLA in the browser, you can do this. Let's dive in. But first, what is Claude
+[00:31] Let's dive in. But first, what is Claude Code? Well, this is Enthropics coding
+[00:34] Code? Well, this is Enthropics coding agent. You simply tell it what you want
+[00:35] agent. You simply tell it what you want in plain English, and the agent will go
+[00:38] in plain English, and the agent will go and build the project, run the code, fix
+[00:41] and build the project, run the code, fix bugs, and do everything for you. You're
+[00:43] bugs, and do everything for you. You're not writing any code yourself. Think of
+[00:45] not writing any code yourself. Think of Claude Code as a developer that you
+[00:47] Claude Code as a developer that you simply talk to. Now, there are basically
+[00:49] simply talk to. Now, there are basically two popular ways to run Claude code. One
+[00:52] two popular ways to run Claude code. One is with a CLI tool. Now, a lot of you
+[00:55] is with a CLI tool. Now, a lot of you don't like looking at terminals. So, a
+[00:57] don't like looking at terminals. So, a better alternative for the majority of
+[00:59] better alternative for the majority of people, especially if you're a
+[01:00] people, especially if you're a nondeveloper
+[01:02] nondeveloper or a vibe coder, is to use the CL
+[01:04] or a vibe coder, is to use the CL desktop app. It's extremely
+[01:06] desktop app. It's extremely userfriendly. You can see all of your
+[01:08] userfriendly. You can see all of your projects from this little sidebar over
+[01:10] projects from this little sidebar over here. And because it's embedded into the
+[01:12] here. And because it's embedded into the desktop app, you can easily jump between
+[01:15] desktop app, you can easily jump between chat and go work. In this video, we will
+[01:17] chat and go work. In this video, we will be using the desktop app. Now, one of
+[01:20] be using the desktop app. Now, one of the major benefits of using the desktop
+[01:22] the major benefits of using the desktop app over the CLI tool is it's way easier
+[01:25] app over the CLI tool is it's way easier to see all of your projects and all of
+[01:27] to see all of your projects and all of your different sessions within a single
+[01:29] your different sessions within a single view. For example, if you're using the
+[01:31] view. For example, if you're using the CLI tool, what you would typically have
+[01:33] CLI tool, what you would typically have to do is start a terminal session and
+[01:36] to do is start a terminal session and then run Claude code in that session.
+[01:38] then run Claude code in that session. Now, if you ever wanted to run multiple
+[01:40] Now, if you ever wanted to run multiple Claude code sessions within the same
+[01:42] Claude code sessions within the same project, you would have to click on this
+[01:44] project, you would have to click on this little terminal view, start cla and then
+[01:48] little terminal view, start cla and then you kind of have to jump and manage all
+[01:50] you kind of have to jump and manage all these different sessions. And it gets
+[01:51] these different sessions. And it gets even more complex if you want to run
+[01:53] even more complex if you want to run multiple cla code sessions spanning
+[01:56] multiple cla code sessions spanning multiple different projects at the same
+[01:58] multiple different projects at the same time. With a desktop app, this is not
+[02:00] time. With a desktop app, this is not the case. Within this very same view, I
+[02:03] the case. Within this very same view, I can see all of my different projects.
+[02:05] can see all of my different projects. And within each of these projects, I can
+[02:07] And within each of these projects, I can view all of my Claude Code sessions. It
+[02:09] view all of my Claude Code sessions. It makes it very easy to get Claude Code to
+[02:11] makes it very easy to get Claude Code to work on multiple projects at the same
+[02:13] work on multiple projects at the same time. Now, enough talk. Let's actually
+[02:15] time. Now, enough talk. Let's actually have a look at setting all of this up.
+[02:17] have a look at setting all of this up. Setting up the Claw Desktop app is
+[02:19] Setting up the Claw Desktop app is really simple. Simply go to this page,
+[02:21] really simple. Simply go to this page, which I'll link to in the description of
+[02:23] which I'll link to in the description of this video. Then, all you have to do is
+[02:25] this video. Then, all you have to do is download and install the Claw desktop
+[02:26] download and install the Claw desktop app for your operating system. Then,
+[02:28] app for your operating system. Then, I'll simply double click on the file
+[02:30] I'll simply double click on the file that I just downloaded and go through
+[02:32] that I just downloaded and go through the setup steps. After installing the
+[02:34] the setup steps. After installing the desktop app, it will look something like
+[02:36] desktop app, it will look something like this. If you've ever used the Claude
+[02:38] this. If you've ever used the Claude website, you should be familiar with
+[02:39] website, you should be familiar with this interface. This is where we can
+[02:41] this interface. This is where we can have a normal conversation with the
+[02:43] have a normal conversation with the Claude models. Now, in order to use
+[02:45] Claude models. Now, in order to use Claude Code, you will need a Claude
+[02:47] Claude Code, you will need a Claude subscription. So, if you go down here,
+[02:50] subscription. So, if you go down here, you do have to sign in with an account
+[02:52] you do have to sign in with an account or create an account, which is free. And
+[02:55] or create an account, which is free. And I think they do give you a little bit of
+[02:56] I think they do give you a little bit of free usage as well. But in order to use
+[02:59] free usage as well. But in order to use Cloud Coat, you really do need to
+[03:00] Cloud Coat, you really do need to upgrade to one of the paid plans. To do
+[03:03] upgrade to one of the paid plans. To do that, simply go to view all plans. And
+[03:05] that, simply go to view all plans. And from here, you can upgrade to the pro
+[03:08] from here, you can upgrade to the pro plan or even one of the max plans. If
+[03:11] plan or even one of the max plans. If you're just starting out, simply go with
+[03:13] you're just starting out, simply go with the pro plan. Now, once you've
+[03:14] the pro plan. Now, once you've subscribed to one of those plans, what
+[03:16] subscribed to one of those plans, what you can do is from the sidebar, go to
+[03:20] you can do is from the sidebar, go to this tab over here called code. And now
+[03:23] this tab over here called code. And now we can start using Claude Code. And I
+[03:25] we can start using Claude Code. And I think you'll agree that this looks way
+[03:26] think you'll agree that this looks way more user friendly than the terminal
+[03:28] more user friendly than the terminal view. Now, don't worry if this all seems
+[03:30] view. Now, don't worry if this all seems very intimidating to you. install. My
+[03:32] very intimidating to you. install. My goal with this video is to show you how
+[03:33] goal with this video is to show you how to use claw code effectively to build
+[03:36] to use claw code effectively to build whatever you want. If you want to learn
+[03:38] whatever you want. If you want to learn how to use coding agents effectively,
+[03:40] how to use coding agents effectively, then you might be interested in my agent
+[03:43] then you might be interested in my agent coding master class. This teaches you
+[03:44] coding master class. This teaches you all the fundamentals you need to know
+[03:46] all the fundamentals you need to know about using coding agents. This also
+[03:48] about using coding agents. This also includes a project that you can follow
+[03:50] includes a project that you can follow along with where we built an entire SAS
+[03:53] along with where we built an entire SAS application which includes user
+[03:54] application which includes user authentication, payment integration, and
+[03:57] authentication, payment integration, and even MCP servers so that other AI agents
+[04:00] even MCP servers so that other AI agents and assistants can use this app as well.
+[04:02] and assistants can use this app as well. And we just released a cloth code course
+[04:04] And we just released a cloth code course as well. And we're constantly adding new
+[04:07] as well. And we're constantly adding new videos to this course. I'll leave a link
+[04:08] videos to this course. I'll leave a link to Agentic Labs in the description of
+[04:11] to Agentic Labs in the description of this video. Now, before we build our
+[04:13] this video. Now, before we build our very first project, I do recommend
+[04:15] very first project, I do recommend setting up our development environment.
+[04:17] setting up our development environment. This is a step that a lot of people skip
+[04:19] This is a step that a lot of people skip and it's extremely valuable. The first
+[04:21] and it's extremely valuable. The first thing we need to do is select our
+[04:23] thing we need to do is select our project folder. So down here, click on
+[04:25] project folder. So down here, click on this folder name. Then I'll just select
+[04:27] this folder name. Then I'll just select a new folder on my machine. And now we
+[04:30] a new folder on my machine. And now we can trust this workspace. This simply
+[04:33] can trust this workspace. This simply means that cloud code will be allowed to
+[04:35] means that cloud code will be allowed to make changes to this folder. Now what we
+[04:37] make changes to this folder. Now what we can also do is change the mode by
+[04:39] can also do is change the mode by clicking on this button. And here we can
+[04:42] clicking on this button. And here we can switch cloth code into planning mode.
+[04:44] switch cloth code into planning mode. And in planning mode, the agent will not
+[04:46] And in planning mode, the agent will not be allowed to make any changes to the
+[04:47] be allowed to make any changes to the project. This is where we can have a
+[04:49] project. This is where we can have a discussion with the agent to flesh out
+[04:51] discussion with the agent to flesh out our project idea. Or if we just want the
+[04:54] our project idea. Or if we just want the agent to make changes, we can select ask
+[04:56] agent to make changes, we can select ask permissions, which means that the agent
+[04:59] permissions, which means that the agent will always ask our permission before
+[05:01] will always ask our permission before making any changes to any files or
+[05:03] making any changes to any files or running any commands. Or if we go with
+[05:05] running any commands. Or if we go with accept edits, the agent will be allowed
+[05:07] accept edits, the agent will be allowed to make changes to files, but it will
+[05:09] to make changes to files, but it will still ask our permission to run certain
+[05:11] still ask our permission to run certain commands. Or what we can also do is
+[05:13] commands. Or what we can also do is switch to auto mode, which is the one I
+[05:16] switch to auto mode, which is the one I will use in this video. In auto mode,
+[05:19] will use in this video. In auto mode, the agent will be allowed to make
+[05:20] the agent will be allowed to make changes and even run commands, but the
+[05:23] changes and even run commands, but the agent will try to assess if a command is
+[05:25] agent will try to assess if a command is potentially harmful and then only ask
+[05:28] potentially harmful and then only ask your permission for those specific
+[05:30] your permission for those specific commands. Then next to that, we've got
+[05:31] commands. Then next to that, we've got this little button which we can use to
+[05:33] this little button which we can use to attach files, add folders, and even add
+[05:37] attach files, add folders, and even add connectors. We will have a look at those
+[05:39] connectors. We will have a look at those towards the end of this video. What we
+[05:41] towards the end of this video. What we can also do is change the model down
+[05:43] can also do is change the model down here. So we can select between Fable 5,
+[05:46] here. So we can select between Fable 5, Opus, Sonnet or Haiku. Selecting the
+[05:49] Opus, Sonnet or Haiku. Selecting the right model for your use case can always
+[05:51] right model for your use case can always feel very overwhelming. So please don't
+[05:53] feel very overwhelming. So please don't stress. I created this slide to help you
+[05:55] stress. I created this slide to help you out. So feel free to snapshot it and you
+[05:58] out. So feel free to snapshot it and you can reference this in the future.
+[05:59] can reference this in the future. Basically, Fable is the highest tier
+[06:01] Basically, Fable is the highest tier model they have, and it's also the most
+[06:03] model they have, and it's also the most expensive at $10 per 1 million tokens in
+[06:08] expensive at $10 per 1 million tokens in and $50 per 1 million tokens out. This
+[06:11] and $50 per 1 million tokens out. This is the most capable model, but it's also
+[06:13] is the most capable model, but it's also the most expensive. Then we've got Opus
+[06:16] the most expensive. Then we've got Opus 4.8, which is about half of that cost of
+[06:18] 4.8, which is about half of that cost of Fable, and this is basically the best
+[06:20] Fable, and this is basically the best model for coding tasks. Then we've got
+[06:22] model for coding tasks. Then we've got Sonnet which is slightly cheaper than
+[06:24] Sonnet which is slightly cheaper than Opus. So it's got near Opus quality and
+[06:27] Opus. So it's got near Opus quality and it's a lot faster and cheaper in most
+[06:29] it's a lot faster and cheaper in most instances. And then we've got Haiku
+[06:31] instances. And then we've got Haiku which is way cheaper. But I honestly
+[06:33] which is way cheaper. But I honestly wouldn't really use Haiku for any
+[06:35] wouldn't really use Haiku for any important tasks. You can kind of see
+[06:37] important tasks. You can kind of see Opus as the default model that you
+[06:39] Opus as the default model that you should be using. And you can use Sonet 5
+[06:40] should be using. And you can use Sonet 5 for any sort of easy work like updating
+[06:43] for any sort of easy work like updating documentation or even reviewing and
+[06:46] documentation or even reviewing and exploring code. Then next to the model
+[06:48] exploring code. Then next to the model selector, we also have this effort
+[06:51] selector, we also have this effort selector. Now I recommend going with
+[06:53] selector. Now I recommend going with high effort even for coding tasks. With
+[06:57] high effort even for coding tasks. With extra effort and max effort, the agent
+[06:59] extra effort and max effort, the agent will spend a lot more time sort of
+[07:00] will spend a lot more time sort of reasoning through what it needs to do.
+[07:03] reasoning through what it needs to do. But in most instances, that's just
+[07:04] But in most instances, that's just driving up costs unnecessarily and you
+[07:07] driving up costs unnecessarily and you don't really see a quality difference.
+[07:09] don't really see a quality difference. In fact, on max effort, I've seen the
+[07:11] In fact, on max effort, I've seen the model produce worse output because it's
+[07:13] model produce worse output because it's kind of overthinking the task and over
+[07:15] kind of overthinking the task and over complicating things. And then we've got
+[07:17] complicating things. And then we've got all code. This is where the agent will
+[07:20] all code. This is where the agent will create workflows and kick off multiple
+[07:23] create workflows and kick off multiple agents to run at the same time to try
+[07:25] agents to run at the same time to try and build your project. I would
+[07:27] and build your project. I would recommend staying away from Ultra Code
+[07:29] recommend staying away from Ultra Code as it's a very expensive mode and
+[07:32] as it's a very expensive mode and basically it's just a way for Anthropic
+[07:33] basically it's just a way for Anthropic to squeeze more money out of you. But I
+[07:36] to squeeze more money out of you. But I really wouldn't recommend using ultra
+[07:38] really wouldn't recommend using ultra code as your default option. So I'll set
+[07:40] code as your default option. So I'll set my effort to high. And now we can ask
+[07:43] my effort to high. And now we can ask Claude to build our very first project.
+[07:45] Claude to build our very first project. And before we build our first project,
+[07:47] And before we build our first project, we also have to set up version control.
+[07:50] we also have to set up version control. This is really important, and this is
+[07:52] This is really important, and this is something that I haven't really seen
+[07:53] something that I haven't really seen other creators cover. What we need to do
+[07:55] other creators cover. What we need to do is install Git and set up GitHub as
+[07:59] is install Git and set up GitHub as well. Now, if you're not technical or
+[08:01] well. Now, if you're not technical or you don't have a developer background,
+[08:02] you don't have a developer background, you might not know what Git or GitHub
+[08:04] you might not know what Git or GitHub is, but basically, it's a way for you to
+[08:06] is, but basically, it's a way for you to take a snapshot of where your project
+[08:09] take a snapshot of where your project currently is. That way, if you ever
+[08:11] currently is. That way, if you ever break your app, you can always roll back
+[08:13] break your app, you can always roll back to that specific checkpoint. And of
+[08:15] to that specific checkpoint. And of course, you can take multiple
+[08:16] course, you can take multiple checkpoints along the way and roll back
+[08:19] checkpoints along the way and roll back to any of those checkpoints. GitHub will
+[08:21] to any of those checkpoints. GitHub will allow us to back up our code to a remote
+[08:23] allow us to back up our code to a remote server. And don't worry, it's completely
+[08:25] server. And don't worry, it's completely free. It's very popular. And it's just
+[08:28] free. It's very popular. And it's just that if something had to happen to our
+[08:30] that if something had to happen to our machine, we won't lose our code. So, all
+[08:32] machine, we won't lose our code. So, all you have to do for this is go to
+[08:34] you have to do for this is go to github.com and create an account. As I
+[08:37] github.com and create an account. As I mentioned, it's completely free. Then
+[08:39] mentioned, it's completely free. Then what we can do is go back to cla code
+[08:41] what we can do is go back to cla code and thankfully we don't have to install
+[08:43] and thankfully we don't have to install anything ourselves. We can simply ask
+[08:46] anything ourselves. We can simply ask cla to set up everything for us. So we
+[08:48] cla to set up everything for us. So we can send a prompt like please install
+[08:50] can send a prompt like please install and set up git on my machine. Now I'm
+[08:54] and set up git on my machine. Now I'm not going to do this since I've already
+[08:55] not going to do this since I've already installed git. But once installed git on
+[08:57] installed git. But once installed git on your machine, all you have to do then is
+[08:59] your machine, all you have to do then is say please set up and connect to github
+[09:02] say please set up and connect to github from my machine. Again I'm not going to
+[09:04] from my machine. Again I'm not going to run this command. But what G will do is
+[09:06] run this command. But what G will do is install certain dependencies on your
+[09:08] install certain dependencies on your machine and it will ask you just to
+[09:10] machine and it will ask you just to click a link to authenticate your local
+[09:13] click a link to authenticate your local machine with your remote GitHub
+[09:15] machine with your remote GitHub repository is going to install certain
+[09:17] repository is going to install certain dependencies on your machine and it's
+[09:19] dependencies on your machine and it's going to walk you through the process of
+[09:21] going to walk you through the process of authenticating your GitHub account on
+[09:23] authenticating your GitHub account on your machine. It's really simple. And
+[09:26] your machine. It's really simple. And then once GitHub has been set up, what
+[09:28] then once GitHub has been set up, what we can do is ask our agent to write our
+[09:30] we can do is ask our agent to write our very first project. So, I'll just say
+[09:32] very first project. So, I'll just say make a tip calculator I can use in the
+[09:34] make a tip calculator I can use in the browser. Let me type in the bill amount,
+[09:36] browser. Let me type in the bill amount, choose a tip percentage, and split it
+[09:38] choose a tip percentage, and split it across a number of people. Then show the
+[09:41] across a number of people. Then show the total and how much each person owes. And
+[09:44] total and how much each person owes. And let's press enter to send this prompt.
+[09:46] let's press enter to send this prompt. What you'll notice in the left sidebar
+[09:48] What you'll notice in the left sidebar is that Claude just created a new folder
+[09:50] is that Claude just created a new folder over here. And this is the exact name of
+[09:52] over here. And this is the exact name of the folder that I used for this project.
+[09:55] the folder that I used for this project. And what's nice about this is if you
+[09:57] And what's nice about this is if you ever wanted to run multiple Claude code
+[09:59] ever wanted to run multiple Claude code sessions in the exact same project, all
+[10:01] sessions in the exact same project, all we have to do is click this little
+[10:02] we have to do is click this little button over here, we can select the same
+[10:05] button over here, we can select the same project, right? So Claude actually just
+[10:07] project, right? So Claude actually just created this file. And if we click on
+[10:09] created this file. And if we click on this, we can see our tip calculator over
+[10:13] this, we can see our tip calculator over here. So let's just enter an amount. And
+[10:17] here. So let's just enter an amount. And we can select the tip percentage and
+[10:19] we can select the tip percentage and everything just works. And let's split
+[10:21] everything just works. And let's split it between four people. Now we can ask
+[10:23] it between four people. Now we can ask Claude to make any changes to the
+[10:25] Claude to make any changes to the project that we want or if we're happy
+[10:27] project that we want or if we're happy with the results we can ask Claude to
+[10:29] with the results we can ask Claude to commit this to the GitHub repository. So
+[10:33] commit this to the GitHub repository. So let's say please create a new GitHub
+[10:35] let's say please create a new GitHub repository and push our project. Claude
+[10:38] repository and push our project. Claude will ask us if this repository should be
+[10:39] will ask us if this repository should be private or public. With public
+[10:41] private or public. With public repositories, you can actually share
+[10:43] repositories, you can actually share your projects with the world. So anyone
+[10:45] your projects with the world. So anyone with a link to that project will be able
+[10:47] with a link to that project will be able to actually view the contents of your
+[10:49] to actually view the contents of your project. Or if this is just a private
+[10:51] project. Or if this is just a private project, so it's for my eyes only. I can
+[10:53] project, so it's for my eyes only. I can just select private. And there we go. So
+[10:56] just select private. And there we go. So C is also giving us this URL to GitHub.
+[10:59] C is also giving us this URL to GitHub. And if we open this, we can see this
+[11:03] And if we open this, we can see this project on GitHub. And if we have a look
+[11:05] project on GitHub. And if we have a look at the contents, we've got that one HTML
+[11:08] at the contents, we've got that one HTML file. How cool is that? This means if we
+[11:12] file. How cool is that? This means if we ever lose our project on our local
+[11:13] ever lose our project on our local machine, [snorts]
+[11:14] machine, [snorts] we can simply ask Claude to retrieve the
+[11:16] we can simply ask Claude to retrieve the project files from GitHub. This is a
+[11:18] project files from GitHub. This is a step that so many people skip in their
+[11:20] step that so many people skip in their tutorials and I don't know why this is
+[11:23] tutorials and I don't know why this is so valuable. Cloud code running in the
+[11:25] so valuable. Cloud code running in the desktop app has a very cool superpower.
+[11:28] desktop app has a very cool superpower. It's got access to an integrated
+[11:30] It's got access to an integrated browser. This means it can open your app
+[11:32] browser. This means it can open your app and test the app by itself. Check this
+[11:35] and test the app by itself. Check this out. Please use your browser to test the
+[11:37] out. Please use your browser to test the app. Also see if you could improve the
+[11:39] app. Also see if you could improve the UI. So normally agents aren't able to
+[11:42] UI. So normally agents aren't able to see the results, right? they write code
+[11:45] see the results, right? they write code and then you can kind of open the app
+[11:47] and then you can kind of open the app and play with it yourself and then you
+[11:49] and play with it yourself and then you have to point out any bugs or any issues
+[11:51] have to point out any bugs or any issues with the app. But because Claude has
+[11:53] with the app. But because Claude has access to this little integrated browser
+[11:55] access to this little integrated browser or this little preview window, it can
+[11:58] or this little preview window, it can now navigate the browser itself, take
+[12:00] now navigate the browser itself, take screenshots and make sure that the app
+[12:02] screenshots and make sure that the app actually works. This is great for end to
+[12:04] actually works. This is great for end to end testing. And by the way, I'm not
+[12:07] end testing. And by the way, I'm not typing anything. I'm doing absolutely
+[12:09] typing anything. I'm doing absolutely nothing. This is the agent driving the
+[12:11] nothing. This is the agent driving the app by itself. All right, I just created
+[12:14] app by itself. All right, I just created a brand new project and for this project
+[12:16] a brand new project and for this project I'm actually going to try out planning
+[12:18] I'm actually going to try out planning mode. So what we can do is go to modes,
+[12:21] mode. So what we can do is go to modes, click on plan mode or what you can also
+[12:23] click on plan mode or what you can also do is hold shift and press tab. And now
+[12:26] do is hold shift and press tab. And now we're in planning mode. Now in planning
+[12:28] we're in planning mode. Now in planning mode, the agent will not make any
+[12:30] mode, the agent will not make any changes to the project. This is where it
+[12:32] changes to the project. This is where it will kind of have a discussion with us
+[12:34] will kind of have a discussion with us to figure out what we want to build. And
+[12:36] to figure out what we want to build. And by the end of this court will give us a
+[12:38] by the end of this court will give us a detailed plan. So, let's send a prompt
+[12:40] detailed plan. So, let's send a prompt like I want to build a daily habit
+[12:42] like I want to build a daily habit tracker that runs in the browser. I want
+[12:44] tracker that runs in the browser. I want to add my own habits, check them off
+[12:46] to add my own habits, check them off each day, and see a strict counter for
+[12:49] each day, and see a strict counter for each one. I need to save my data so
+[12:51] each one. I need to save my data so everything is still there when I refresh
+[12:53] everything is still there when I refresh the page. Keep the design clean and
+[12:55] the page. Keep the design clean and minimal, and give it a light and dark
+[12:57] minimal, and give it a light and dark mode. Let's send this. Right. C is
+[12:59] mode. Let's send this. Right. C is asking us a few clarifying questions
+[13:01] asking us a few clarifying questions like should this be a single HTML file
+[13:04] like should this be a single HTML file which is the recommended option or
+[13:07] which is the recommended option or should it use a framework like React and
+[13:09] should it use a framework like React and V. By the way, if you don't know what to
+[13:11] V. By the way, if you don't know what to say, you can simply go with this other
+[13:13] say, you can simply go with this other option and just tell the agent you
+[13:16] option and just tell the agent you choose and the agent will make a
+[13:18] choose and the agent will make a decision on your behalf. Beyond checking
+[13:20] decision on your behalf. Beyond checking off today, how much history do you want
+[13:22] off today, how much history do you want to see? Let's just go with this one over
+[13:25] to see? Let's just go with this one over here. And check this out. So Claude just
+[13:28] here. And check this out. So Claude just gave us this plan on the right hand
+[13:30] gave us this plan on the right hand side. So if we want, we can just like
+[13:32] side. So if we want, we can just like enlarge this and read through all the
+[13:35] enlarge this and read through all the context and if you're technical, you can
+[13:38] context and if you're technical, you can also read through all the technical
+[13:40] also read through all the technical details as well. And if we want to make
+[13:42] details as well. And if we want to make any changes to the plan, we can simply
+[13:45] any changes to the plan, we can simply continue chatting to Claude. So we can
+[13:46] continue chatting to Claude. So we can click on revise, tell Claude what we
+[13:48] click on revise, tell Claude what we want to change, and Claude will change
+[13:50] want to change, and Claude will change the plan accordingly. Once we're happy
+[13:52] the plan accordingly. Once we're happy with the plan, we can click on accept
+[13:54] with the plan, we can click on accept and auto mode. So now we're out of
+[13:56] and auto mode. So now we're out of planning mode and back into auto mode.
+[13:59] planning mode and back into auto mode. But Claude is busy building this project
+[14:01] But Claude is busy building this project and I want to show you one of the
+[14:02] and I want to show you one of the strengths of using Claude code in the
+[14:04] strengths of using Claude code in the desktop. On the left hand side we can
+[14:06] desktop. On the left hand side we can see all our different projects. Right?
+[14:08] see all our different projects. Right? So we've got demo 2 which is this
+[14:09] So we've got demo 2 which is this project that Claude is currently working
+[14:11] project that Claude is currently working on. Let's say we wanted to go back to
+[14:13] on. Let's say we wanted to go back to our tip calculator app. So this app is
+[14:17] our tip calculator app. So this app is still cooking away. Claude just actually
+[14:19] still cooking away. Claude just actually updated the UI design and we can
+[14:21] updated the UI design and we can continue working and making changes to
+[14:23] continue working and making changes to this project. In fact, if I ever wanted
+[14:25] this project. In fact, if I ever wanted to run multiple sessions in this very
+[14:28] to run multiple sessions in this very same project, what I can do is click on
+[14:30] same project, what I can do is click on this plus button. This will bring up
+[14:32] this plus button. This will bring up this chat window. And this is already
+[14:34] this chat window. And this is already focusing at the same project folder. And
+[14:37] focusing at the same project folder. And let's just say something like, please
+[14:39] let's just say something like, please describe
+[14:41] describe this project. And this will create a
+[14:43] this project. And this will create a second cloud code session in that tip
+[14:46] second cloud code session in that tip calculator project folder. So now we
+[14:48] calculator project folder. So now we actually have multiple cloud code
+[14:50] actually have multiple cloud code sessions running within the same
+[14:52] sessions running within the same project. And of course, while we're
+[14:53] project. And of course, while we're working on the tip calculator, we can
+[14:55] working on the tip calculator, we can jump back to any of our other projects
+[14:57] jump back to any of our other projects and continue working and editing those
+[14:59] and continue working and editing those as well. I love being able to multitask
+[15:02] as well. I love being able to multitask on so many different projects at the
+[15:04] on so many different projects at the same time. Now, as I mentioned before,
+[15:05] same time. Now, as I mentioned before, Claude will actually open up its
+[15:07] Claude will actually open up its integrated browser and test the app on
+[15:09] integrated browser and test the app on your behalf. If you were using the CLI
+[15:11] your behalf. If you were using the CLI tool, you would kind of have to install
+[15:13] tool, you would kind of have to install separate skills or MCP tools to get this
+[15:15] separate skills or MCP tools to get this to work. But while Cord is busy, let me
+[15:17] to work. But while Cord is busy, let me just show you a few more very cool
+[15:19] just show you a few more very cool things. So we can close that window if
+[15:21] things. So we can close that window if we want. And what we can also do is if
+[15:24] we want. And what we can also do is if we click on these three dots, we can
+[15:26] we click on these three dots, we can enable artifacts or we can click on
+[15:30] enable artifacts or we can click on files. And from here we can see all the
+[15:32] files. And from here we can see all the files in this current directory. Or if
+[15:35] files in this current directory. Or if you ever wanted to jump back to that
+[15:36] you ever wanted to jump back to that plan again, we can simply click on plan.
+[15:39] plan again, we can simply click on plan. And there was the plan that we created
+[15:41] And there was the plan that we created earlier. If you do want to see what's
+[15:43] earlier. If you do want to see what's going on in the terminal, you can
+[15:44] going on in the terminal, you can definitely do that as well. So we can
+[15:46] definitely do that as well. So we can click on this little terminal view. And
+[15:47] click on this little terminal view. And then we've got a terminal over here. And
+[15:49] then we've got a terminal over here. And if we wanted to open up the browser
+[15:51] if we wanted to open up the browser window again, we can simply click on
+[15:53] window again, we can simply click on that play button. And there's a little
+[15:55] that play button. And there's a little browser view. And by the way, Claude is
+[15:57] browser view. And by the way, Claude is actually testing the app in a mobile
+[15:59] actually testing the app in a mobile view at the moment. So it's ensuring
+[16:00] view at the moment. So it's ensuring that the app will look correct on mobile
+[16:02] that the app will look correct on mobile devices. And now Claude is saying that
+[16:04] devices. And now Claude is saying that it completed all of this work. And what
+[16:07] it completed all of this work. And what we can do is test the app ourselves as
+[16:09] we can do is test the app ourselves as well. So we can, you know, try to add
+[16:11] well. So we can, you know, try to add things. But let's say that we wanted to
+[16:13] things. But let's say that we wanted to change a very specific element in this
+[16:15] change a very specific element in this app. I don't want to call this habits. I
+[16:17] app. I don't want to call this habits. I want to call this something like habit
+[16:18] want to call this something like habit forge as an example. What we could do is
+[16:21] forge as an example. What we could do is simply ask the agent to change the
+[16:23] simply ask the agent to change the branding or the name from habits to
+[16:25] branding or the name from habits to whatever else or if we want to be more
+[16:27] whatever else or if we want to be more surgical on what we want to change. We
+[16:29] surgical on what we want to change. We can click on this select elements button
+[16:32] can click on this select elements button then highlight over this one and that
+[16:35] then highlight over this one and that will add this specific element to the
+[16:37] will add this specific element to the chat window. Then we can say please
+[16:40] chat window. Then we can say please change the name to Abbott's Forge. And
+[16:45] change the name to Abbott's Forge. And Cord is now making that little edit. And
+[16:47] Cord is now making that little edit. And now the site was rebranded to Habits
+[16:50] now the site was rebranded to Habits Forge. If we're happy with the app, we
+[16:52] Forge. If we're happy with the app, we can take a snapshot and push it to
+[16:54] can take a snapshot and push it to GitHub. Please create a repo for this
+[16:56] GitHub. Please create a repo for this project and push it. And by the way, you
+[16:59] project and push it. And by the way, you might be wondering, well, what if we've
+[17:01] might be wondering, well, what if we've already created a GitHub repo? What
+[17:03] already created a GitHub repo? What should the prompt look like then?
+[17:05] should the prompt look like then? Thankfully, that is very simple. Let's
+[17:07] Thankfully, that is very simple. Let's go back to our browser tip calculator.
+[17:10] go back to our browser tip calculator. So we made a few changes to this. We
+[17:12] So we made a few changes to this. We improved the UI. So what we can do and
+[17:15] improved the UI. So what we can do and actually claicked out that we already
+[17:17] actually claicked out that we already have a repository. That is why it's
+[17:19] have a repository. That is why it's showing this button called create PR. So
+[17:22] showing this button called create PR. So really all we have to do is click on
+[17:23] really all we have to do is click on this create PR button. So this stands
+[17:26] this create PR button. So this stands for create pull request by the way. And
+[17:29] for create pull request by the way. And pull request might sound a little bit
+[17:30] pull request might sound a little bit misleading, but really all it is, it's
+[17:33] misleading, but really all it is, it's taking all the changes that we just
+[17:34] taking all the changes that we just created and it's now creating a pull
+[17:36] created and it's now creating a pull request in GitHub which contains all of
+[17:38] request in GitHub which contains all of these new changes. And what we can do
+[17:41] these new changes. And what we can do then is merge that pull request back
+[17:43] then is merge that pull request back into our main project. So working with
+[17:45] into our main project. So working with Git and GitHub and pull requests can be
+[17:48] Git and GitHub and pull requests can be a little bit technical, but it's really
+[17:50] a little bit technical, but it's really not that bad as Cloud Code Desktop is
+[17:52] not that bad as Cloud Code Desktop is really handling all of that for us. But
+[17:54] really handling all of that for us. But just know that Claude is saying that the
+[17:56] just know that Claude is saying that the pull request is ready for review and
+[17:58] pull request is ready for review and merge whenever you're ready. Now, just
+[18:00] merge whenever you're ready. Now, just to kind of show you what that looks like
+[18:02] to kind of show you what that looks like on GitHub, if we go back to that
+[18:04] on GitHub, if we go back to that repository that we created, we can see
+[18:07] repository that we created, we can see we now have one pull request. So, we can
+[18:09] we now have one pull request. So, we can just go to that tab, click on this link
+[18:12] just go to that tab, click on this link over here, and now we can see the
+[18:13] over here, and now we can see the changes that we just made. Now, this is
+[18:16] changes that we just made. Now, this is very much meant for developers to review
+[18:18] very much meant for developers to review the changes and if they're happy with
+[18:20] the changes and if they're happy with the results, they can merge these
+[18:22] the results, they can merge these changes back into their main code base.
+[18:24] changes back into their main code base. Now, if you're non-technical, that might
+[18:26] Now, if you're non-technical, that might seem very overwhelming. Don't even look
+[18:28] seem very overwhelming. Don't even look at GitHub if you don't feel comfortable
+[18:30] at GitHub if you don't feel comfortable with this. Simply tell Claude, please
+[18:33] with this. Simply tell Claude, please can you merge the changes? And if we
+[18:37] can you merge the changes? And if we refresh the list of pull requests now,
+[18:39] refresh the list of pull requests now, we will notice that pull request is now
+[18:41] we will notice that pull request is now gone. And our main code branch now
+[18:43] gone. And our main code branch now contains all of this new redesign
+[18:45] contains all of this new redesign changes. But honestly, keep it simple.
+[18:48] changes. But honestly, keep it simple. Simply click on the merge PR button.
+[18:50] Simply click on the merge PR button. When Claude says it's ready to be
+[18:52] When Claude says it's ready to be merged, just claw to merge it on your
+[18:54] merged, just claw to merge it on your behalf. And let's just go back to the
+[18:56] behalf. And let's just go back to the habit tracker. And we can see the habit
+[18:58] habit tracker. And we can see the habit tracker was also pushed to GitHub. And
+[19:00] tracker was also pushed to GitHub. And here we can see all the code as well.
+[19:03] here we can see all the code as well. Another cool benefit of using claude
+[19:05] Another cool benefit of using claude code in the desktop app is that you have
+[19:07] code in the desktop app is that you have access to all the same connectors that
+[19:09] access to all the same connectors that you would get with co-work and the
+[19:11] you would get with co-work and the normal chat tab. For example, if I click
+[19:13] normal chat tab. For example, if I click on this plus button and go to
+[19:15] on this plus button and go to connectors, you can go to manage
+[19:17] connectors, you can go to manage connectors or browse connectors. Let's
+[19:20] connectors or browse connectors. Let's actually start with browse. From here,
+[19:22] actually start with browse. From here, we get a curated list of different
+[19:24] we get a curated list of different connectors which will connect code to
+[19:27] connectors which will connect code to third-party apps. And there are plenty
+[19:30] third-party apps. And there are plenty like notion, Gmail, I mean you name it.
+[19:33] like notion, Gmail, I mean you name it. So what we can do is just go to any of
+[19:35] So what we can do is just go to any of these connectors and then connect it. So
+[19:37] these connectors and then connect it. So in this instance I've actually connected
+[19:39] in this instance I've actually connected Gmail to claude code. So this means I
+[19:41] Gmail to claude code. So this means I can set up a new rule something like for
+[19:44] can set up a new rule something like for this I'm actually going to use speech to
+[19:46] this I'm actually going to use speech to text which we can do by holding this
+[19:48] text which we can do by holding this button. Please, can you add this rule?
+[19:51] button. Please, can you add this rule? Whenever you complete a change, I need
+[19:54] Whenever you complete a change, I need you to use the Gmail connector to send
+[19:57] you to use the Gmail connector to send me an email containing a summary of what
+[20:00] me an email containing a summary of what was changed. All right, cool. Let's
+[20:03] was changed. All right, cool. Let's actually send this. Claud is saying it's
+[20:06] actually send this. Claud is saying it's trying to add it to some kind of config
+[20:09] trying to add it to some kind of config file. So, I'm just going to stop it and
+[20:11] file. So, I'm just going to stop it and say no. This should only apply to this
+[20:14] say no. This should only apply to this project. Update the CLA. MD file and
+[20:19] project. Update the CLA. MD file and claude will now actually create a claw.
+[20:22] claude will now actually create a claw. MD file and if you are confused on what
+[20:24] MD file and if you are confused on what these memory files actually do, it's
+[20:26] these memory files actually do, it's simply a way for you to give very
+[20:27] simply a way for you to give very specific rules that claude need to
+[20:29] specific rules that claude need to follow in each of these cla code
+[20:31] follow in each of these cla code sessions. And as a reminder, I've got a
+[20:33] sessions. And as a reminder, I've got a complete lesson just on agent memory
+[20:35] complete lesson just on agent memory within my agent coding master class. All
+[20:37] within my agent coding master class. All right, cool. So what claude did is it
+[20:39] right, cool. So what claude did is it now created this memory file. So if I go
+[20:42] now created this memory file. So if I go to files, we can see we now have this
+[20:45] to files, we can see we now have this clotted MD file in the project and in
+[20:48] clotted MD file in the project and in this file there's a rule that tells
+[20:50] this file there's a rule that tells agent to send emails to this email
+[20:53] agent to send emails to this email address. Now if we want to send emails
+[20:55] address. Now if we want to send emails to a different address, we can just ask
+[20:56] to a different address, we can just ask claw to update this rule. This means if
+[20:59] claw to update this rule. This means if we start a new session, let's try this.
+[21:01] we start a new session, let's try this. Let's say please change the branding of
+[21:05] Let's say please change the branding of the app to claude habits as an example.
+[21:09] the app to claude habits as an example. And if I have a look at my Gmail inbox,
+[21:11] And if I have a look at my Gmail inbox, I did receive an email from Claude. So
+[21:14] I did receive an email from Claude. So that way I can get notified whenever
+[21:16] that way I can get notified whenever these changes complete. Now, there's so
+[21:18] these changes complete. Now, there's so much more we can go over, but there's
+[21:20] much more we can go over, but there's simply not enough time. So I'll just
+[21:22] simply not enough time. So I'll just give you a rapid fire of a bunch of very
+[21:24] give you a rapid fire of a bunch of very cool features that you should be aware
+[21:26] cool features that you should be aware of. Firstly is slashcomands. When you
+[21:29] of. Firstly is slashcomands. When you enter front slash, you can access all of
+[21:32] enter front slash, you can access all of these different slash commands. So, we
+[21:34] these different slash commands. So, we can do things like schedule a CL code
+[21:36] can do things like schedule a CL code session to run on an interval or at a
+[21:38] session to run on an interval or at a set time. We can also install skills by
+[21:41] set time. We can also install skills by clicking on this plus button again.
+[21:43] clicking on this plus button again. Let's go to manage plugins. Here we can
+[21:46] Let's go to manage plugins. Here we can go to skills. And here you've got a list
+[21:48] go to skills. And here you've got a list of curated skills from Anthropic. And
+[21:50] of curated skills from Anthropic. And all you have to do to use a skill is to
+[21:52] all you have to do to use a skill is to install it. Another feature you might
+[21:54] install it. Another feature you might want to set up as well is remote access
+[21:57] want to set up as well is remote access or remote control. To set that up, you
+[21:59] or remote control. To set that up, you can simply go to settings, cla code,
+[22:02] can simply go to settings, cla code, enable remote control by default. This
+[22:04] enable remote control by default. This means you'll be able to step away from
+[22:06] means you'll be able to step away from your PC and continue using your Claw
+[22:08] your PC and continue using your Claw Code sessions on your mobile phone. Now,
+[22:11] Code sessions on your mobile phone. Now, there's just so much more that we can
+[22:12] there's just so much more that we can cover, so please let me know down in the
+[22:14] cover, so please let me know down in the comments if you've got any questions or
+[22:16] comments if you've got any questions or if you would like me to create more
+[22:18] if you would like me to create more videos on Claw Code and Claw Code
+[22:20] videos on Claw Code and Claw Code desktop in the future. If you found this
+[22:22] desktop in the future. If you found this video useful, hit the like button and
+[22:24] video useful, hit the like button and subscribe to my channel for more Aentic
+[22:26] subscribe to my channel for more Aentic coding tutorials. Thank you for
+[22:28] coding tutorials. Thank you for watching. I'll see you in the next one.
+[22:30] watching. I'll see you in the next one. Bye-bye.
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/ZW6d_2rwcdk-orig-bal` — delete when done._

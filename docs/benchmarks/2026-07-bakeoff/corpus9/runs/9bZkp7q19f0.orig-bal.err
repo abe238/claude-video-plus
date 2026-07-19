@@ -1,0 +1,32 @@
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal
+[watch] checking metadata/captions via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[youtube] 9bZkp7q19f0: Downloading webpage
+[youtube] 9bZkp7q19f0: Downloading android vr player API JSON
+[info] 9bZkp7q19f0: Downloading subtitles: en
+[info] 9bZkp7q19f0: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.en.vtt
+WARNING: Unable to download video subtitles for 'en': HTTP Error 429: Too Many Requests
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+WARNING: Skipping embedding en subtitle because the file is missing
+[watch] downloading video via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[youtube] 9bZkp7q19f0: Downloading webpage
+[youtube] 9bZkp7q19f0: Downloading android vr player API JSON
+[info] 9bZkp7q19f0: Downloading subtitles: en
+[info] 9bZkp7q19f0: Downloading 1 format(s): 398+251
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    7.00KiB at  Unknown B/s (00:00:00)[download]   15.00KiB at    7.46MiB/s (00:00:00)[download]   16.28KiB at    6.28MiB/s (00:00:00)[download] 100% of   16.28KiB in 00:00:00 at 254.35KiB/s
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.f398.mp4
+[download]   0.0% of   28.46MiB at  472.65KiB/s ETA 01:01[download]   0.0% of   28.46MiB at    1.24MiB/s ETA 00:22[download]   0.0% of   28.46MiB at    2.76MiB/s ETA 00:10[download]   0.1% of   28.46MiB at    5.66MiB/s ETA 00:05[download]   0.1% of   28.46MiB at    2.93MiB/s ETA 00:09[download]   0.2% of   28.46MiB at    4.58MiB/s ETA 00:06[download]   0.4% of   28.46MiB at    5.64MiB/s ETA 00:05[download]   0.9% of   28.46MiB at    7.71MiB/s ETA 00:03[download]   1.8% of   28.46MiB at   10.64MiB/s ETA 00:02[download]   3.5% of   28.46MiB at   15.35MiB/s ETA 00:01[download]   7.0% of   28.46MiB at   23.97MiB/s ETA 00:01[download]  14.1% of   28.46MiB at   34.80MiB/s ETA 00:00[download]  28.1% of   28.46MiB at   45.65MiB/s ETA 00:00[download]  34.0% of   28.46MiB at   48.09MiB/s ETA 00:00[download]  34.0% of   28.46MiB at  Unknown B/s ETA Unknown[download]  34.0% of   28.46MiB at  Unknown B/s ETA Unknown[download]  34.0% of   28.46MiB at    6.56MiB/s ETA 00:02  [download]  34.1% of   28.46MiB at   10.84MiB/s ETA 00:01[download]  34.1% of   28.46MiB at   18.23MiB/s ETA 00:01[download]  34.2% of   28.46MiB at   31.70MiB/s ETA 00:00[download]  34.4% of   28.46MiB at   55.89MiB/s ETA 00:00[download]  34.9% of   28.46MiB at   76.88MiB/s ETA 00:00[download]  35.8% of   28.46MiB at   80.78MiB/s ETA 00:00[download]  37.5% of   28.46MiB at   75.18MiB/s ETA 00:00[download]  41.0% of   28.46MiB at   72.45MiB/s ETA 00:00[download]  48.1% of   28.46MiB at   74.29MiB/s ETA 00:00[download]  62.1% of   28.46MiB at   70.58MiB/s ETA 00:00[download]  68.3% of   28.46MiB at   71.31MiB/s ETA 00:00[download]  68.3% of   28.46MiB at  Unknown B/s ETA Unknown[download]  68.3% of   28.46MiB at    2.31MiB/s ETA 00:03  [download]  68.3% of   28.46MiB at    4.08MiB/s ETA 00:02[download]  68.3% of   28.46MiB at    7.45MiB/s ETA 00:01[download]  68.4% of   28.46MiB at   13.38MiB/s ETA 00:00[download]  68.5% of   28.46MiB at   24.79MiB/s ETA 00:00[download]  68.7% of   28.46MiB at   45.70MiB/s ETA 00:00[download]  69.1% of   28.46MiB at   81.01MiB/s ETA 00:00[download]  70.0% of   28.46MiB at   85.10MiB/s ETA 00:00[download]  71.8% of   28.46MiB at   81.21MiB/s ETA 00:00[download]  75.3% of   28.46MiB at   69.97MiB/s ETA 00:00[download]  82.3% of   28.46MiB at   68.91MiB/s ETA 00:00[download]  96.4% of   28.46MiB at   71.70MiB/s ETA 00:00[download] 100.0% of   28.46MiB at   71.87MiB/s ETA 00:00[download] 100% of   28.46MiB in 00:00:00 at 48.10MiB/s  
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.f251.webm
+[download]   0.0% of    3.81MiB at  Unknown B/s ETA Unknown[download]   0.1% of    3.81MiB at  Unknown B/s ETA Unknown[download]   0.2% of    3.81MiB at  Unknown B/s ETA Unknown[download]   0.4% of    3.81MiB at   13.35MiB/s ETA 00:00  [download]   0.8% of    3.81MiB at   21.38MiB/s ETA 00:00[download]   1.6% of    3.81MiB at   35.32MiB/s ETA 00:00[download]   3.3% of    3.81MiB at   57.77MiB/s ETA 00:00[download]   6.5% of    3.81MiB at   82.46MiB/s ETA 00:00[download]  13.1% of    3.81MiB at   80.75MiB/s ETA 00:00[download]  26.3% of    3.81MiB at   80.36MiB/s ETA 00:00[download]  52.5% of    3.81MiB at   70.66MiB/s ETA 00:00[download] 100.0% of    3.81MiB at   68.49MiB/s ETA 00:00[download] 100% of    3.81MiB in 00:00:00 at 38.84MiB/s  
+[Merger] Merging formats into "/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.mp4"
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.f251.webm (pass -k to keep)
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/download/video.f398.mp4 (pass -k to keep)
+[watch] extracting scene-aware frames over full 252.2s (target 80, cap 100)…

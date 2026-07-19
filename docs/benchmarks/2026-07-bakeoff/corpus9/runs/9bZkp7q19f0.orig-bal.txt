@@ -1,0 +1,171 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=9bZkp7q19f0
+- **Title:** PSY - GANGNAM STYLE(강남스타일) M/V
+- **Uploader:** officialpsy
+- **Duration:** 04:12 (252.2s)
+- **Resolution:** 1280x720 (av1)
+- **Detail:** balanced
+- **Frames:** 100 selected from 166 candidates (scene, full range, budget 80, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 42 segments (via captions)
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=first-frame)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0003.jpg` (t=00:18, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0004.jpg` (t=00:22, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0006.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0008.jpg` (t=00:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0009.jpg` (t=00:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0011.jpg` (t=00:32, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0013.jpg` (t=00:36, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0014.jpg` (t=00:44, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0016.jpg` (t=00:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0018.jpg` (t=00:54, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0019.jpg` (t=00:55, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0021.jpg` (t=00:58, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0023.jpg` (t=01:00, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0024.jpg` (t=01:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0026.jpg` (t=01:03, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0028.jpg` (t=01:04, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0029.jpg` (t=01:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0031.jpg` (t=01:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0033.jpg` (t=01:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0034.jpg` (t=01:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0036.jpg` (t=01:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0038.jpg` (t=01:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0039.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0041.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0043.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0044.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0046.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0048.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0049.jpg` (t=01:07, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0051.jpg` (t=01:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0053.jpg` (t=01:19, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0054.jpg` (t=01:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0056.jpg` (t=01:24, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0058.jpg` (t=01:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0059.jpg` (t=01:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0061.jpg` (t=01:30, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0063.jpg` (t=01:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0064.jpg` (t=01:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0066.jpg` (t=01:39, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0068.jpg` (t=01:43, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0069.jpg` (t=01:45, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0071.jpg` (t=01:47, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0073.jpg` (t=01:52, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0074.jpg` (t=01:54, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0076.jpg` (t=02:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0078.jpg` (t=02:12, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0079.jpg` (t=02:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0081.jpg` (t=02:17, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0083.jpg` (t=02:20, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0084.jpg` (t=02:23, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0086.jpg` (t=02:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0088.jpg` (t=02:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0089.jpg` (t=02:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0091.jpg` (t=02:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0093.jpg` (t=02:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0094.jpg` (t=02:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0096.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0098.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0099.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0101.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0103.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0104.jpg` (t=02:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0106.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0108.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0109.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0111.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0113.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0114.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0116.jpg` (t=02:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0118.jpg` (t=02:31, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0119.jpg` (t=02:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0121.jpg` (t=02:38, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0123.jpg` (t=02:41, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0124.jpg` (t=02:43, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0126.jpg` (t=02:45, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0128.jpg` (t=02:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0129.jpg` (t=02:51, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0131.jpg` (t=03:00, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0133.jpg` (t=03:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0134.jpg` (t=03:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0136.jpg` (t=03:11, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0138.jpg` (t=03:13, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0139.jpg` (t=03:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0141.jpg` (t=03:15, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0143.jpg` (t=03:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0144.jpg` (t=03:18, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0146.jpg` (t=03:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0148.jpg` (t=03:26, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0149.jpg` (t=03:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0151.jpg` (t=03:31, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0153.jpg` (t=03:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0154.jpg` (t=03:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0156.jpg` (t=03:34, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0158.jpg` (t=03:34, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0159.jpg` (t=03:35, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0161.jpg` (t=03:37, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0163.jpg` (t=04:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0164.jpg` (t=04:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal/frames/frame_0166.jpg` (t=04:07, reason=scene-change)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:22] humane woman who comes separately during the day, a woman of class who knows the leisure of a cup of coffee, a woman whose
+[00:25] woman of class who knows the leisure of a cup of coffee, a woman whose heart heats up as night falls, a woman who has that kind of vibe.
+[00:29] heart heats up as night falls, a woman who has that kind of vibe.
+[00:36] I am a woman who is as separate as you during the day, a woman who chugs it down before you even finish drinking, a woman whose
+[00:39] before you even finish drinking, a woman whose heart
+[00:43] heart bursts as the tiger comes, such a
+[00:47] bursts as the tiger comes, such a beautiful, lovely woman, yes,
+[00:48] beautiful, lovely woman, yes,
+[00:52] you, yes, exactly you. Heh,
+[00:54] exactly you. Heh, beautiful,
+[00:56] beautiful, lovely,
+[00:58] lovely, that's right,
+[00:59] that's right, yes, exactly no. Shall we go all the way from now on
+[01:01] yes, exactly no. Shall we go all the way from now on ?
+[01:17] Gangnam Star Oh Gangnam Star
+[01:24] Gangnam Star Ohppang Gangnam Star Ray
+[01:31] Oh Oh Oh Oh Oh Oppa Gangnam Star Ray
+[01:35] Oppa Gangnam Star Ray [Music] Oh, a
+[01:37] [Music] Oh, a
+[01:43] woman who looks demure but plays when you look at her, a woman who lets her hair down when she thinks she's from Ewha, a woman who is covered but
+[01:47] woman who lets her hair down when she thinks she's from Ewha, a woman who is covered but sexier than most exposure,
+[01:50] sexier than most exposure, such a sensual woman, I only
+[01:54] such a sensual woman, I only see Braille on the other side, but on the other side where she plays when she plays, on the other side where she goes
+[01:58] see Braille on the other side, but on the other side where she plays when she plays, on the other side where she goes completely crazy when she becomes me, on the other side where her
+[02:01] completely crazy when she becomes me, on the other side where her
+[02:09] thoughts are bulging like bees, in her own way, lovely,
+[02:14] you, yes, exactly you, heh,
+[02:16] exactly you, heh, beautiful,
+[02:17] beautiful, lovely, yes,
+[02:20] lovely, yes, you, yes, exactly you, shall we go all the way from now on?
+[02:23] you, yes, exactly you, shall we go all the way from now on?
+[02:51] Sexy Ohppang
+[02:57] Gangnam Star Ray [Music] The one coming, the one flying
+[02:59] [Music] The one coming, the one flying
+[03:07] above him, the one who cuts, the one who knows a thing or two, the one running, the one flying above him, the one who cuts, the one who
+[03:12] knows a thing or two, the one running, the one flying above him, the one who cuts, the one who knows a thing or two, momentum
+[03:17] knows a thing or two, momentum Oh Gangnam Style
+[03:24] Sexy Ohppang
+[03:26] Ohppang Gangnam Star
+[03:29] Gangnam Star Sexy
+[03:32] Sexy Oppa
+[04:09] Oppa Gangnam Star Ah [Music]
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/9bZkp7q19f0-orig-bal` — delete when done._

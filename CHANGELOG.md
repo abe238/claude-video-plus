@@ -2,6 +2,31 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.2.3] — 2026-07-18
+
+Fixes the one loss in the corpus-9 blind bake-off: evidence mode scored 2/4 on
+a TED talk because it consumed YouTube's ASR caption track over the manual one
+and lexical retrieval could not match "Gillian Lynne" against ASR's "jillian
+lynn" — the answer chapter scored 0.000 and was never selected.
+
+### Fixed
+
+- Caption track selection prefers the exact-language manual track over the
+  `-orig` ASR track (sorted() had it backwards: `-` < `.`).
+- Retrieval tokenization suffix-normalizes plurals/possessives on both query
+  and transcript ("schools" now matches "school").
+- Zero-hit fuzzy question-term matching: a term absent from the ENTIRE
+  transcript maps to the closest transcript token at edit distance <= 1
+  (gillian -> jillian), re-arming chapter ranking and the span-rescue net.
+  Gated on total absence, so videos where terms match exactly are unaffected.
+- Evidence reports gain "## Retrieval notes": fuzzy matches are disclosed, and
+  a capitalized question term found nowhere in the selected evidence prints an
+  explicit warning instead of failing silently.
+
+Re-test against the frozen bake-off key: the failed arm re-scores 4/4 blind
+(epiphany chapter selected, -43% tokens vs the original tool held); the other
+four evidence arms re-ran clean. Suite 483 (8 new regression tests).
+
 ## [1.2.2] — 2026-07-18
 
 Cleanup release: dead-code removal and de-duplication from the closing review's

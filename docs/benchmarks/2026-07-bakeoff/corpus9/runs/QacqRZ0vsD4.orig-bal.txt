@@ -1,0 +1,1419 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=QacqRZ0vsD4
+- **Title:** Free transcription app, YouTube scraper, and GitHub’s top repos!
+- **Uploader:** The Next New Thing
+- **Duration:** 43:27 (2607.5s)
+- **Resolution:** 1280x720 (av1)
+- **Detail:** balanced
+- **Frames:** 56 selected from 56 candidates (scene, full range, budget 100, cap 100)
+- **Frame size:** max 512px wide, max 1998px tall
+- **Transcript:** 1332 segments (via captions)
+
+> **Warning:** This is a 43-minute video. Frame coverage is sparse at this length under `balanced` detail — its cap spreads thin across the full clip. For better results, re-run with `--start HH:MM:SS --end HH:MM:SS` to zoom into a section, or use `--detail token-burner` to keep every scene-change frame across the whole video.
+
+## Frames
+
+Frames live at: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames`
+
+**Read each frame path below with the Read tool to view the image.** Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.
+
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0001.jpg` (t=00:00, reason=first-frame)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0002.jpg` (t=00:00, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0003.jpg` (t=00:01, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0004.jpg` (t=00:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0005.jpg` (t=00:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0006.jpg` (t=00:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0007.jpg` (t=00:06, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0008.jpg` (t=00:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0009.jpg` (t=00:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0010.jpg` (t=00:11, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0011.jpg` (t=00:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0012.jpg` (t=00:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0013.jpg` (t=00:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0014.jpg` (t=00:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0015.jpg` (t=00:21, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0016.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0017.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0018.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0019.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0020.jpg` (t=00:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0021.jpg` (t=00:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0022.jpg` (t=00:28, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0023.jpg` (t=05:25, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0024.jpg` (t=06:40, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0025.jpg` (t=07:40, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0026.jpg` (t=09:41, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0027.jpg` (t=11:20, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0028.jpg` (t=19:20, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0029.jpg` (t=19:39, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0030.jpg` (t=20:14, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0031.jpg` (t=20:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0032.jpg` (t=20:53, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0033.jpg` (t=21:09, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0034.jpg` (t=21:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0035.jpg` (t=21:55, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0036.jpg` (t=24:02, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0037.jpg` (t=25:40, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0038.jpg` (t=27:24, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0039.jpg` (t=27:27, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0040.jpg` (t=28:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0041.jpg` (t=32:54, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0042.jpg` (t=32:56, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0043.jpg` (t=33:05, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0044.jpg` (t=36:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0045.jpg` (t=36:50, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0046.jpg` (t=37:33, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0047.jpg` (t=38:48, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0048.jpg` (t=38:49, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0049.jpg` (t=38:52, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0050.jpg` (t=38:53, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0051.jpg` (t=39:11, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0052.jpg` (t=39:16, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0053.jpg` (t=39:23, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0054.jpg` (t=39:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0055.jpg` (t=40:29, reason=scene-change)
+- `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal/frames/frame_0056.jpg` (t=43:15, reason=scene-change)
+
+## Transcript
+
+_Source: captions._
+
+```
+[00:01] You're about to get a free meeting notetaker that transcribes right on your
+[00:03] notetaker that transcribes right on your computer, keeps your data safe that you
+[00:05] computer, keeps your data safe that you can edit, and it's free. Are you tired
+[00:06] can edit, and it's free. Are you tired of hitting your rate limit? I've got a
+[00:08] of hitting your rate limit? I've got a few tools that will help you with that.
+[00:09] few tools that will help you with that. I've got a free tool that will add an AI
+[00:11] I've got a free tool that will add an AI agent to any website, even ones you
+[00:13] agent to any website, even ones you don't own. And I've got a cool system
+[00:15] don't own. And I've got a cool system that will let Claude understand every
+[00:17] that will let Claude understand every YouTube video you want to study and
+[00:19] YouTube video you want to study and organize it in a way that you can use
+[00:21] organize it in a way that you can use it. All that and so much more coming up.
+[00:22] it. All that and so much more coming up. I've got, of course, links below. Let's
+[00:24] I've got, of course, links below. Let's get into it. Presented by Zapier, the AI
+[00:27] get into it. Presented by Zapier, the AI automation company. Adam, people keep
+[00:28] automation company. Adam, people keep asking, is AI going to take everyone's
+[00:30] asking, is AI going to take everyone's jobs? Well, this is AI helping people
+[00:32] jobs? Well, this is AI helping people land jobs. It's called AI job search.
+[00:35] land jobs. It's called AI job search. It's really been taking off this week.
+[00:37] It's really been taking off this week. As you can see that it's got a lot of
+[00:38] As you can see that it's got a lot of attention here. What it'll do is it will
+[00:41] attention here. What it'll do is it will go through the process of understanding
+[00:44] go through the process of understanding what a job here. Actually, I put this
+[00:46] what a job here. Actually, I put this together. It you fill in the profile. It
+[00:48] together. It you fill in the profile. It then starts to do job searches for you.
+[00:51] then starts to do job searches for you. It starts to find matches for you. It
+[00:53] It starts to find matches for you. It starts to pick people for you. It
+[00:54] starts to pick people for you. It evaluates your fit. It does the whole
+[00:56] evaluates your fit. It does the whole thing all in an automated way. And some
+[00:59] thing all in an automated way. And some of it is just some basic stuff like uh
+[01:01] of it is just some basic stuff like uh writing your CV. I had one created for
+[01:03] writing your CV. I had one created for myself. I said to it, um I want to apply
+[01:06] myself. I said to it, um I want to apply to get the uh what is it called?
+[01:08] to get the uh what is it called? Entrepreneur and residence role at
+[01:10] Entrepreneur and residence role at Gateway X. Write a cover letter for me
+[01:13] Gateway X. Write a cover letter for me and put together my CV, my my resume.
+[01:16] and put together my CV, my my resume. And it did it. And it did it really
+[01:17] And it did it. And it did it really well. You know, uh three-time founder,
+[01:20] well. You know, uh three-time founder, spent 25 years building profitable
+[01:22] spent 25 years building profitable internet companies. Then it goes into
+[01:24] internet companies. Then it goes into what's in my history. It wrote a cover
+[01:25] what's in my history. It wrote a cover letter.
+[01:26] letter. &gt;&gt; Did it interview you to get all that
+[01:27] &gt;&gt; Did it interview you to get all that information, Andrew, or did you have did
+[01:29] information, Andrew, or did you have did it just scrape and figure out all that
+[01:31] it just scrape and figure out all that from the internet?
+[01:32] from the internet? &gt;&gt; It scraped and figured all that from the
+[01:33] &gt;&gt; It scraped and figured all that from the internet. I didn't do the full process
+[01:36] internet. I didn't do the full process of going through a job. Um, but this
+[01:39] of going through a job. Um, but this just shows the value of using AI. Look
+[01:41] just shows the value of using AI. Look at how much it could get about me
+[01:43] at how much it could get about me without me giving it the data. And it
+[01:45] without me giving it the data. And it understood from the job that I was going
+[01:48] understood from the job that I was going for what the context was. A lot of this
+[01:50] for what the context was. A lot of this is Claw doing the work. Obviously, it's
+[01:52] is Claw doing the work. Obviously, it's smart enough to opus. Um, I accidentally
+[01:54] smart enough to opus. Um, I accidentally used Fable 5 for it, but Fable 5, Opus,
+[01:57] used Fable 5 for it, but Fable 5, Opus, all these models are smart enough to do
+[01:58] all these models are smart enough to do this. Um, and now this is just being
+[02:00] this. Um, and now this is just being directed properly at this role. Um, I
+[02:04] directed properly at this role. Um, I like how it understood to write the
+[02:06] like how it understood to write the letter to Jesse, who's probably going to
+[02:08] letter to Jesse, who's probably going to be the person deciding who the
+[02:09] be the person deciding who the entrepreneur in residence is. It gave a
+[02:11] entrepreneur in residence is. It gave a little bit of my background. I think
+[02:12] little bit of my background. I think this is really interesting, and I'm
+[02:15] this is really interesting, and I'm hoping that we're going to see more of
+[02:16] hoping that we're going to see more of this. Basically, tools for people who
+[02:19] this. Basically, tools for people who are looking to get work, who are looking
+[02:21] are looking to get work, who are looking for self-improvement. What do you think
+[02:23] for self-improvement. What do you think of this one?
+[02:24] of this one? &gt;&gt; Yeah, what stands out to me here is this
+[02:27] &gt;&gt; Yeah, what stands out to me here is this is kind of an endto-end tool. Often when
+[02:30] is kind of an endto-end tool. Often when we look at these cla code or codec
+[02:32] we look at these cla code or codec skills, it's sort of this niche little
+[02:34] skills, it's sort of this niche little here's one tool in your tool belt, but
+[02:37] here's one tool in your tool belt, but this doesn't solve a problem for you.
+[02:39] this doesn't solve a problem for you. Andrew, this kind of feels like an
+[02:40] Andrew, this kind of feels like an endto-end application. [snorts] Like you
+[02:42] endto-end application. [snorts] Like you would sign up on a website to research,
+[02:45] would sign up on a website to research, to build a great resume, to write cover
+[02:47] to build a great resume, to write cover letters. Like, oh, but you don't have to
+[02:49] letters. Like, oh, but you don't have to do that anymore. I think you're right.
+[02:51] do that anymore. I think you're right. like Claude plus some good instructions
+[02:53] like Claude plus some good instructions and and well thoughtout skills. I think
+[02:56] and and well thoughtout skills. I think we're going to start to see more like
+[02:57] we're going to start to see more like endtoend applications that you're only
+[03:00] endtoend applications that you're only accessing through Claude.
+[03:01] accessing through Claude. &gt;&gt; Preps you for scheduled interviews. This
+[03:03] &gt;&gt; Preps you for scheduled interviews. This is really good. I'm so glad to see this
+[03:05] is really good. I'm so glad to see this one on top um this week. A lot of times
+[03:07] one on top um this week. A lot of times we've seen some whacked out things at
+[03:09] we've seen some whacked out things at the top.
+[03:10] the top. &gt;&gt; Yeah. And this feels useful. This feels
+[03:12] &gt;&gt; Yeah. And this feels useful. This feels helpful for society. This is like a
+[03:14] helpful for society. This is like a happy skill. Um, and it's the kind of
+[03:16] happy skill. Um, and it's the kind of thing also that people are referring to
+[03:18] thing also that people are referring to their friends and so it's spreading
+[03:20] their friends and so it's spreading nicely. All right. Number two, meily.
+[03:23] nicely. All right. Number two, meily. This is your meeting notetaker on your
+[03:25] This is your meeting notetaker on your desktop. So the stuff that you say
+[03:27] desktop. So the stuff that you say doesn't go into somebody else's
+[03:28] doesn't go into somebody else's computer. And by the way, it happens to
+[03:30] computer. And by the way, it happens to be free and it happens to be fast. You
+[03:32] be free and it happens to be fast. You and I know that this type of stuff is so
+[03:34] and I know that this type of stuff is so dangerous. We've seen people who
+[03:36] dangerous. We've seen people who accidentally will leave a meeting
+[03:38] accidentally will leave a meeting notetaker in that's shared with the rest
+[03:39] notetaker in that's shared with the rest of the team where they talk about
+[03:41] of the team where they talk about someone on the team and they get access
+[03:42] someone on the team and they get access to it and that feels bad. I don't know
+[03:44] to it and that feels bad. I don't know about you, Adam, I keep this on for my
+[03:46] about you, Adam, I keep this on for my meetings with my doctor. I keep it on
+[03:48] meetings with my doctor. I keep it on for my meetings with my um financial
+[03:50] for my meetings with my um financial adviser. All this stuff, very private
+[03:52] adviser. All this stuff, very private stuff. And as someone who lived in San
+[03:54] stuff. And as someone who lived in San Francisco and I had friends who worked
+[03:56] Francisco and I had friends who worked at tech companies, I know they use god
+[03:58] at tech companies, I know they use god mode to look at this stuff because some
+[03:59] mode to look at this stuff because some of them told me how they got dates by
+[04:01] of them told me how they got dates by looking at data of women that they liked
+[04:02] looking at data of women that they liked and then using that to connect with
+[04:04] and then using that to connect with them. So I understand why me is doing so
+[04:07] them. So I understand why me is doing so well. I want to show you one image here
+[04:09] well. I want to show you one image here that I think shows also that it's not
+[04:12] that I think shows also that it's not just a smart useful tool. It is nicely
+[04:14] just a smart useful tool. It is nicely designed. This is what it looks like on
+[04:15] designed. This is what it looks like on the inside.
+[04:16] the inside. &gt;&gt; Yeah. Cool.
+[04:18] &gt;&gt; Yeah. Cool. &gt;&gt; Right. Real time.
+[04:19] &gt;&gt; Right. Real time. &gt;&gt; The streaming transcription Andrew I
+[04:21] &gt;&gt; The streaming transcription Andrew I think is really important. You know
+[04:23] think is really important. You know something we we use Fireflies a lot
+[04:24] something we we use Fireflies a lot internally and last week we had this
+[04:26] internally and last week we had this great feedback session. Fireflies was in
+[04:29] great feedback session. Fireflies was in there and it didn't record. I don't know
+[04:31] there and it didn't record. I don't know what happened. Uh we we checked we made
+[04:34] what happened. Uh we we checked we made sure it was there. I don't know if we
+[04:35] sure it was there. I don't know if we didn't give it permission or what, but
+[04:37] didn't give it permission or what, but we don't own that system. We couldn't
+[04:39] we don't own that system. We couldn't see the the text streaming, so we just
+[04:41] see the the text streaming, so we just assumed it was working and it wasn't and
+[04:43] assumed it was working and it wasn't and we lost this like great feedback
+[04:45] we lost this like great feedback session. So, having something that's
+[04:47] session. So, having something that's local that you control that is on your
+[04:50] local that you control that is on your computer, you can see it actively
+[04:52] computer, you can see it actively streaming. Uh, I I really like this
+[04:54] streaming. Uh, I I really like this stuff and and we've looked at this a
+[04:56] stuff and and we've looked at this a couple different ways like voice with
+[04:58] couple different ways like voice with local models. It's faster, it's cheaper,
+[05:01] local models. It's faster, it's cheaper, it's free because you're not paying for
+[05:03] it's free because you're not paying for some outside API and that's what enables
+[05:05] some outside API and that's what enables all this cool streaming stuff. So, I
+[05:07] all this cool streaming stuff. So, I think we're going to see even more voice
+[05:09] think we're going to see even more voice happening local on device. I love it.
+[05:11] happening local on device. I love it. &gt;&gt; All right, more and more I'm adding a
+[05:12] &gt;&gt; All right, more and more I'm adding a lot of data to these reports and I know
+[05:14] lot of data to these reports and I know people are telling me that I'm clicking
+[05:15] people are telling me that I'm clicking through some of them too fast and not
+[05:17] through some of them too fast and not showing it. You'll have a link to the
+[05:18] showing it. You'll have a link to the report below where you're going to see
+[05:20] report below where you're going to see way more data than I could ever pass in
+[05:22] way more data than I could ever pass in here, but I want to be prepared so I
+[05:23] here, but I want to be prepared so I have as much in my fingertips as
+[05:25] have as much in my fingertips as possible. Next, number three is stricks.
+[05:28] possible. Next, number three is stricks. We all know that hackers are just going
+[05:29] We all know that hackers are just going to test your site. They're going to look
+[05:30] to test your site. They're going to look for vulnerabilities. If you're listening
+[05:32] for vulnerabilities. If you're listening to this, probably your friends are the
+[05:34] to this, probably your friends are the kinds of people who are just looking for
+[05:35] kinds of people who are just looking for vulnerabilities just for fun. I know my
+[05:37] vulnerabilities just for fun. I know my son is really now starting to, as a
+[05:39] son is really now starting to, as a 12-year-old learn about coding and
+[05:40] 12-year-old learn about coding and hacking, and he's really curious just
+[05:42] hacking, and he's really curious just the way that I would have gone through
+[05:43] the way that I would have gone through my dad's drawers. He might be curious
+[05:45] my dad's drawers. He might be curious and go through my code and see what's on
+[05:47] and go through my code and see what's on my site and see what's going on. I get
+[05:49] my site and see what's going on. I get it. This is a tool that gives you a team
+[05:51] it. This is a tool that gives you a team of agents that will tell you where your
+[05:53] of agents that will tell you where your vulnerabilities are and allow you to
+[05:56] vulnerabilities are and allow you to find them and deal with them in uh much
+[05:58] find them and deal with them in uh much faster. Um,
+[06:01] faster. Um, by the way, what do you think of all
+[06:02] by the way, what do you think of all these designs? I This is my upgrade for
+[06:04] these designs? I This is my upgrade for the week. I love it. This whole thing is
+[06:07] the week. I love it. This whole thing is is getting so much more seamless and
+[06:10] is getting so much more seamless and clear. I think it's a lot of
+[06:11] clear. I think it's a lot of information, but it's uh it's a great
+[06:13] information, but it's uh it's a great way for me to learn about all these
+[06:15] way for me to learn about all these tools.
+[06:15] tools. &gt;&gt; A lot of people have told me that the
+[06:17] &gt;&gt; A lot of people have told me that the text was too small, and it's true. I
+[06:18] text was too small, and it's true. I knew I needed to find a way to make it
+[06:20] knew I needed to find a way to make it bigger, so I made it bigger. I wonder if
+[06:22] bigger, so I made it bigger. I wonder if now this is bigger. I wonder if now
+[06:23] now this is bigger. I wonder if now people are going to ask for the
+[06:25] people are going to ask for the highlights on their own slide and this
+[06:27] highlights on their own slide and this on its own slide. I don't know. I know
+[06:28] on its own slide. I don't know. I know many of you are listening and watching
+[06:30] many of you are listening and watching on on your phones. And you should know I
+[06:32] on on your phones. And you should know I watch and read and respond to your
+[06:34] watch and read and respond to your comments. So, let me know how else I
+[06:36] comments. So, let me know how else I could improve this. This is a lot based
+[06:37] could improve this. This is a lot based on your all feedback. All right. Um,
+[06:40] on your all feedback. All right. Um, this video I think is really helpful to
+[06:43] this video I think is really helpful to see. I like better stacks for this type
+[06:44] see. I like better stacks for this type of data.
+[06:45] of data. &gt;&gt; Those tools tell you your door might be
+[06:46] &gt;&gt; Those tools tell you your door might be unlocked. Dris found the endpoint, wrote
+[06:49] unlocked. Dris found the endpoint, wrote a working exploit, ran it, pulled data
+[06:51] a working exploit, ran it, pulled data out, and gave me the exact steps here.
+[06:53] out, and gave me the exact steps here. What's the fix? It told me was wrong.
+[06:57] What's the fix? It told me was wrong. &gt;&gt; Nice. Um, I love that he does this, and
+[06:59] &gt;&gt; Nice. Um, I love that he does this, and you can all watch the video if you get
+[07:00] you can all watch the video if you get the report. Here's his analysis,
+[07:01] the report. Here's his analysis, &gt;&gt; and it mostly held up, but it's got real
+[07:03] &gt;&gt; and it mostly held up, but it's got real limits as well. It leans hard on the
+[07:05] limits as well. It leans hard on the model you give it. You're basically
+[07:07] model you give it. You're basically renting a hacker for a minute or two or
+[07:11] renting a hacker for a minute or two or however long this takes. A weak local
+[07:12] however long this takes. A weak local model gives weak findings. A strong one,
+[07:15] model gives weak findings. A strong one, it costs a lot of tokens. Budget three
+[07:18] it costs a lot of tokens. Budget three maybe $5 for a quick scan. It depends on
+[07:20] maybe $5 for a quick scan. It depends on how big your project is. Deep scans are
+[07:22] how big your project is. Deep scans are slow. They're hours. They're not
+[07:24] slow. They're hours. They're not minutes. And Docker adds friction. And
+[07:26] minutes. And Docker adds friction. And on the really messed up stuff, complex
+[07:28] on the really messed up stuff, complex logic, longchain attacks, it's not quite
+[07:30] logic, longchain attacks, it's not quite there yet. It's pretty cool for routine
+[07:33] there yet. It's pretty cool for routine repeatable checks, but maybe not a
+[07:35] repeatable checks, but maybe not a standin for a human on your actual
+[07:37] standin for a human on your actual systems.
+[07:38] systems. &gt;&gt; Cool. Helpful. Yeah, this is this is
+[07:41] &gt;&gt; Cool. Helpful. Yeah, this is this is nice. You know, we we try and do some of
+[07:44] nice. You know, we we try and do some of this in just prompting Andrew like,
+[07:46] this in just prompting Andrew like, "Hey, Claude, I'm about to deploy this.
+[07:48] "Hey, Claude, I'm about to deploy this. Am I going to leak my API keys? You
+[07:51] Am I going to leak my API keys? You know, is there like data that's going to
+[07:52] know, is there like data that's going to come out?" And when we do these fast
+[07:55] come out?" And when we do these fast prompts, I find that Claude will either
+[07:58] prompts, I find that Claude will either over or underindex. It's like if if I
+[08:00] over or underindex. It's like if if I said, "Hey, Claude, I think there's a
+[08:02] said, "Hey, Claude, I think there's a problem. Can you check?" I say, "Oh
+[08:03] problem. Can you check?" I say, "Oh yeah, there's 15 problems." And I'll go
+[08:05] yeah, there's 15 problems." And I'll go through the list. I'll be like, "These
+[08:06] through the list. I'll be like, "These aren't real problems. These are
+[08:08] aren't real problems. These are nitpicks." And if I say, "Claude, I
+[08:10] nitpicks." And if I say, "Claude, I think it's secure. You know, can you
+[08:11] think it's secure. You know, can you check for me?" Say, "Oh yeah,
+[08:13] check for me?" Say, "Oh yeah, absolutely. It's secure. I built it. You
+[08:15] absolutely. It's secure. I built it. You should trust it implicitly." So having
+[08:18] should trust it implicitly." So having this like kind of external source of
+[08:20] this like kind of external source of basically a bunch of prompts that are
+[08:21] basically a bunch of prompts that are going to run and actually test and load
+[08:24] going to run and actually test and load the website and all of that, I I think
+[08:26] the website and all of that, I I think that makes me feel better about more
+[08:28] that makes me feel better about more people in our organizations deploying
+[08:31] people in our organizations deploying applications that aren't going to leak
+[08:33] applications that aren't going to leak customer data, leak employee data, leak
+[08:36] customer data, leak employee data, leak our API keys. Like it really sucks when
+[08:38] our API keys. Like it really sucks when people get their API keys leaked because
+[08:40] people get their API keys leaked because somebody goes and, you know, spends 30
+[08:42] somebody goes and, you know, spends 30 grand on it in a day. It's pretty easy
+[08:44] grand on it in a day. It's pretty easy to to do that with one of these keys. So
+[08:47] to to do that with one of these keys. So yeah, I think this this is pretty cool
+[08:49] yeah, I think this this is pretty cool and I kind of like that it takes a long
+[08:50] and I kind of like that it takes a long time. I think people won't use this
+[08:52] time. I think people won't use this because like, oh, I don't want to wait
+[08:54] because like, oh, I don't want to wait 15 minutes. I don't want to spend $5,
+[08:56] 15 minutes. I don't want to spend $5, but this is like such an important step
+[08:59] but this is like such an important step that as you're deploying a big
+[09:00] that as you're deploying a big application or making a bunch of
+[09:02] application or making a bunch of changes, uh this is this is going to be
+[09:05] changes, uh this is this is going to be worth the $5 to save you the huge hassle
+[09:08] worth the $5 to save you the huge hassle down the line of leaking data.
+[09:10] down the line of leaking data. &gt;&gt; The current controversy is people are
+[09:12] &gt;&gt; The current controversy is people are calling it vibecoded. um uh they go back
+[09:15] calling it vibecoded. um uh they go back and forth on this in hacker news. Having
+[09:17] and forth on this in hacker news. Having said that, I will say that there is
+[09:21] said that, I will say that there is enough positive feedback about this that
+[09:23] enough positive feedback about this that lets me understand that people are
+[09:25] lets me understand that people are getting value from it and you can always
+[09:27] getting value from it and you can always &gt;&gt; Yeah, nerds are always going to want it
+[09:29] &gt;&gt; Yeah, nerds are always going to want it to be better. And I'm one of those
+[09:30] to be better. And I'm one of those nerds, Andrew. Like I always want things
+[09:32] nerds, Andrew. Like I always want things to be better. I want the system to be
+[09:33] to be better. I want the system to be complete. But the reality is most people
+[09:35] complete. But the reality is most people are doing nothing on this right now. And
+[09:38] are doing nothing on this right now. And doing this instead of nothing is a big
+[09:40] doing this instead of nothing is a big upgrade.
+[09:41] upgrade. &gt;&gt; Okay. Last week and the week before that
+[09:43] &gt;&gt; Okay. Last week and the week before that I said that I'm trying to get Matt Van
+[09:45] I said that I'm trying to get Matt Van Horn and we got him. I hit him up on
+[09:48] Horn and we got him. I hit him up on Twitter. I asked you all to help me get
+[09:49] Twitter. I asked you all to help me get him. And the reason is he is a huge
+[09:51] him. And the reason is he is a huge contributor to a lot of open source
+[09:52] contributor to a lot of open source projects and he's a person who just this
+[09:54] projects and he's a person who just this year decided to get into open source
+[09:57] year decided to get into open source projects. Suddenly he's not just
+[09:58] projects. Suddenly he's not just contributing he also created two open
+[10:00] contributing he also created two open source projects that I really enjoyed. I
+[10:02] source projects that I really enjoyed. I wanted to talk to him about how he used
+[10:03] wanted to talk to him about how he used them. I wanted to understand what he how
+[10:05] them. I wanted to understand what he how I could get the most value out of it. I
+[10:07] I could get the most value out of it. I recorded the interview. It will be up on
+[10:08] recorded the interview. It will be up on this site. If you're if you're
+[10:09] this site. If you're if you're subscribed, you'll get it. And I want to
+[10:11] subscribed, you'll get it. And I want to thank all of you who supported us and
+[10:12] thank all of you who supported us and helped us get Matt Van Horn on. Um, and
+[10:15] helped us get Matt Van Horn on. Um, and now I've got a guy who's just like
+[10:17] now I've got a guy who's just like loving the stuff that we do. He's
+[10:18] loving the stuff that we do. He's watched now so many videos. He didn't
+[10:20] watched now so many videos. He didn't even know if I was real except he goes,
+[10:21] even know if I was real except he goes, "Andrew, I had my AI go scan you and it
+[10:23] "Andrew, I had my AI go scan you and it says that you're okay." And so I'm into
+[10:25] says that you're okay." And so I'm into it. And then when we and I got on, he
+[10:27] it. And then when we and I got on, he was like, "Yeah, I saw that and I saw
+[10:28] was like, "Yeah, I saw that and I saw that and I saw that and I said, "Oh,
+[10:29] that and I saw that and I said, "Oh, good. That's awesome."
+[10:30] good. That's awesome." &gt;&gt; All right. So now the next person, we
+[10:32] &gt;&gt; All right. So now the next person, we can't stop here. We need a better
+[10:34] can't stop here. We need a better looking slide. But I will say I'm
+[10:35] looking slide. But I will say I'm looking for maybe you if you're
+[10:36] looking for maybe you if you're listening to us. I want someone else to
+[10:38] listening to us. I want someone else to come and test these repos out with me.
+[10:40] come and test these repos out with me. Give us your take or just let us know
+[10:42] Give us your take or just let us know what the experience is like. If that's
+[10:44] what the experience is like. If that's you and you want to participate in this.
+[10:45] you and you want to participate in this. Let's talk and see how we can do it. Um
+[10:47] Let's talk and see how we can do it. Um the best thing you could do is just show
+[10:49] the best thing you could do is just show me how you used any repo that we've done
+[10:51] me how you used any repo that we've done here before, anyone that's been popular
+[10:53] here before, anyone that's been popular to do anything and send that over to me
+[10:55] to do anything and send that over to me at hi at the next new thing. And
+[10:58] at hi at the next new thing. And &gt;&gt; I mean that should be a video probably,
+[10:59] &gt;&gt; I mean that should be a video probably, right Andrew? they should send a video,
+[11:02] right Andrew? they should send a video, a three minute video, a five minute
+[11:03] a three minute video, a five minute video or something like that.
+[11:04] video or something like that. &gt;&gt; That'd be great. But I will say if
+[11:06] &gt;&gt; That'd be great. But I will say if you're hesitant about doing video, one
+[11:07] you're hesitant about doing video, one of the things that I do is I will bring
+[11:08] of the things that I do is I will bring out the best of in you on video. So send
+[11:10] out the best of in you on video. So send it in any way that you can and then
+[11:12] it in any way that you can and then maybe we take the next step to do video.
+[11:14] maybe we take the next step to do video. But I do want to hear from you if you're
+[11:15] But I do want to hear from you if you're somebody who loves uh implementing all
+[11:18] somebody who loves uh implementing all these and wants to do it. Okay, thanks
+[11:20] these and wants to do it. Okay, thanks to our sponsor in addition to the top 10
+[11:21] to our sponsor in addition to the top 10 and we're going through the top 10 list
+[11:23] and we're going through the top 10 list as they happen this week to show you
+[11:24] as they happen this week to show you what the trending ones are. Our sponsor
+[11:26] what the trending ones are. Our sponsor Zapier said, "Andrew, throw in another
+[11:28] Zapier said, "Andrew, throw in another three." And so I will thank them and by
+[11:30] three." And so I will thank them and by telling you that I use Zappier or MCP
+[11:32] telling you that I use Zappier or MCP all the freaking time. Adam, here's how
+[11:35] all the freaking time. Adam, here's how I use it. Whenever I sign up for a new a
+[11:37] I use it. Whenever I sign up for a new a whenever I sign up for a new agent, a
+[11:39] whenever I sign up for a new agent, a new tool, I do want to give it access to
+[11:40] new tool, I do want to give it access to things. I'm not somebody who's afraid of
+[11:42] things. I'm not somebody who's afraid of giving it access to my, let's say, work
+[11:43] giving it access to my, let's say, work email. I want it to read my work email
+[11:45] email. I want it to read my work email so it has context. I want it to read my
+[11:47] so it has context. I want it to read my notion. I want it to read my Google Docs
+[11:49] notion. I want it to read my Google Docs and all all these other things, but I
+[11:51] and all all these other things, but I don't necessarily want it to send out
+[11:52] don't necessarily want it to send out email. I don't necessarily want it to
+[11:54] email. I don't necessarily want it to delete calendar uh events, etc. What I
+[11:56] delete calendar uh events, etc. What I like about Zapier MCP is I go to
+[11:58] like about Zapier MCP is I go to zapier.com/mcp.
+[12:00] zapier.com/mcp. For some reason, it always doesn't know
+[12:01] For some reason, it always doesn't know that I'm logged in, but I'm logged in.
+[12:03] that I'm logged in, but I'm logged in. And then um I just select using
+[12:06] And then um I just select using checkboxes the things that I want to
+[12:07] checkboxes the things that I want to give access to and it gives me a single
+[12:09] give access to and it gives me a single URL that I get to paste into u and a and
+[12:12] URL that I get to paste into u and a and a token that I get to paste into
+[12:14] a token that I get to paste into whatever tool I have. If I decide that I
+[12:16] whatever tool I have. If I decide that I don't like that that uh tool anymore, I
+[12:18] don't like that that uh tool anymore, I go and delete the token and I move on.
+[12:19] go and delete the token and I move on. It's really good. It's really free. Many
+[12:22] It's really good. It's really free. Many of you are telling Zapier that you heard
+[12:24] of you are telling Zapier that you heard about them from other YouTube videos. If
+[12:26] about them from other YouTube videos. If you're starting to hear about them from
+[12:27] you're starting to hear about them from me, please let them know that you're
+[12:29] me, please let them know that you're hearing about them from me. They bought
+[12:30] hearing about them from me. They bought a year's worth of ads believing that I'm
+[12:32] a year's worth of ads believing that I'm going to take this somewhere when this
+[12:33] going to take this somewhere when this was literally nothing. And I I want to
+[12:35] was literally nothing. And I I want to show them that that it was money well
+[12:37] show them that that it was money well spent and belief well spent. So, thanks
+[12:39] spent and belief well spent. So, thanks to Zapier. Here is the first one that I
+[12:40] to Zapier. Here is the first one that I want to show you this week. It is Codeex
+[12:42] want to show you this week. It is Codeex Bar. It did not make the top 10 list,
+[12:44] Bar. It did not make the top 10 list, but it's cute and it's helpful and it's
+[12:46] but it's cute and it's helpful and it's useful for those of you who are using
+[12:48] useful for those of you who are using multiple different uh models. And you've
+[12:51] multiple different uh models. And you've got limits on each one of them. And what
+[12:53] got limits on each one of them. And what it does is I think actually I'll jump
+[12:54] it does is I think actually I'll jump right to the screenshot. It does this
+[12:56] right to the screenshot. It does this right in your Mac menu bar. Sorry if
+[12:57] right in your Mac menu bar. Sorry if you're Windows. Um it will show you I
+[13:00] you're Windows. Um it will show you I hate saying sorry if you're Windows. I'd
+[13:01] hate saying sorry if you're Windows. I'd love these things to be more
+[13:02] love these things to be more crossplatform. Having said that, it will
+[13:04] crossplatform. Having said that, it will show you in a at a glance how much of
+[13:07] show you in a at a glance how much of your session time you've used, how much
+[13:08] your session time you've used, how much of your weekly time and so on. It has
+[13:10] of your weekly time and so on. It has been really popular with people largely
+[13:13] been really popular with people largely it's because of Peter the guy who
+[13:15] it's because of Peter the guy who created Open Claw but also because it's
+[13:16] created Open Claw but also because it's a tool that when when you're out there
+[13:18] a tool that when when you're out there using all these other um services you
+[13:21] using all these other um services you want to know where do you stand and he's
+[13:23] want to know where do you stand and he's updating it on a regular basis. I don't
+[13:25] updating it on a regular basis. I don't know how the guy has any freaking time.
+[13:27] know how the guy has any freaking time. &gt;&gt; Yeah, me either. [snorts]
+[13:28] &gt;&gt; Yeah, me either. [snorts] &gt;&gt; This is really cool. I mean I have one
+[13:30] &gt;&gt; This is really cool. I mean I have one of these installed. It's not this one.
+[13:32] of these installed. It's not this one. This one looks a lot better than the one
+[13:33] This one looks a lot better than the one that I have installed. So I'm going to
+[13:35] that I have installed. So I'm going to uninstall mine and install this one
+[13:36] uninstall mine and install this one instead. Uh, but it's so useful because
+[13:39] instead. Uh, but it's so useful because I'm I'm usually trying to think, ooh, I
+[13:40] I'm I'm usually trying to think, ooh, I want to go and like run some big deep
+[13:42] want to go and like run some big deep research project and I'm going to spin
+[13:44] research project and I'm going to spin off a bunch of parallel sub aents and oh
+[13:47] off a bunch of parallel sub aents and oh wait, hold on. Do I have enough left in
+[13:49] wait, hold on. Do I have enough left in my credit where I could keep working
+[13:50] my credit where I could keep working while that's running? Oh, I don't. I
+[13:52] while that's running? Oh, I don't. I should wait until that ticks over. I
+[13:55] should wait until that ticks over. I should switch to codeex instead of cloud
+[13:57] should switch to codeex instead of cloud or, you know, cursor. And and having one
+[14:00] or, you know, cursor. And and having one of these makes it so easy to check
+[14:02] of these makes it so easy to check because I don't know why, but in the
+[14:03] because I don't know why, but in the interfaces, it's so hard to check this.
+[14:05] interfaces, it's so hard to check this. you've got to type the slash command.
+[14:07] you've got to type the slash command. You got to remember to do it and then
+[14:09] You got to remember to do it and then oh, you forgot to check and now you're
+[14:11] oh, you forgot to check and now you're just like shut off for the next 3 hours.
+[14:13] just like shut off for the next 3 hours. Oh man. So having this has has really
+[14:15] Oh man. So having this has has really let me kind of stay on top of what I'm
+[14:17] let me kind of stay on top of what I'm using. Uh and now I don't find that I
+[14:20] using. Uh and now I don't find that I surprise, you know, and and hit the
+[14:22] surprise, you know, and and hit the limits anymore.
+[14:24] limits anymore. &gt;&gt; Next one is pixel rags. So many of the
+[14:26] &gt;&gt; Next one is pixel rags. So many of the tools, Adam, that you and I have looked
+[14:27] tools, Adam, that you and I have looked at will turn web pages into text
+[14:29] at will turn web pages into text documents, markdown, etc. to make them
+[14:32] documents, markdown, etc. to make them easier for LLMs. This one says, "Wait a
+[14:34] easier for LLMs. This one says, "Wait a minute, wait a minute, wait a minute.
+[14:35] minute, wait a minute, wait a minute. There's way more to a website than the
+[14:36] There's way more to a website than the text that's on it. There are images,
+[14:38] text that's on it. There are images, there pictures, there's layouts. So,
+[14:39] there pictures, there's layouts. So, what I'm going to do is I'm going to
+[14:40] what I'm going to do is I'm going to create a an image of the site. And
+[14:43] create a an image of the site. And that's the goal of this. Creates an
+[14:45] that's the goal of this. Creates an image of the site that you're looking at
+[14:47] image of the site that you're looking at and allows your your your tools to use
+[14:50] and allows your your your tools to use it. You then asked me when you saw this,
+[14:52] it. You then asked me when you saw this, Andrew, what is this for? Who is this
+[14:54] Andrew, what is this for? Who is this for actually? And I said, I I actually
+[14:56] for actually? And I said, I I actually don't know who's the use case. I I could
+[14:59] don't know who's the use case. I I could come up with some, but what do you
+[15:00] come up with some, but what do you think?
+[15:01] think? &gt;&gt; Yeah. You know, I was wondering like, is
+[15:02] &gt;&gt; Yeah. You know, I was wondering like, is this a tool for my cloud agent? what I'm
+[15:05] this a tool for my cloud agent? what I'm researching is this a tool I'd built
+[15:06] researching is this a tool I'd built into one of my agents that we can deploy
+[15:10] into one of my agents that we can deploy and I I think the way that they've got
+[15:11] and I I think the way that they've got this set up is that it really can do
+[15:13] this set up is that it really can do both. There's [snorts] an API there uh
+[15:16] both. There's [snorts] an API there uh but there's also this package you can
+[15:18] but there's also this package you can tie it into uh Python. Yeah, pip. There
+[15:21] tie it into uh Python. Yeah, pip. There you go. Python. And what it's going to
+[15:24] you go. Python. And what it's going to let you do, you know, Claude will
+[15:26] let you do, you know, Claude will happily scrape a page, but I find all
+[15:28] happily scrape a page, but I find all the time when I get it into markdown or
+[15:31] the time when I get it into markdown or even just keep the HTML. It takes so
+[15:34] even just keep the HTML. It takes so long for Claude to like parse through
+[15:35] long for Claude to like parse through the HTML and it loses how these things
+[15:37] the HTML and it loses how these things were next to each other visually or in
+[15:40] were next to each other visually or in the markdown you lose 100% of that. And
+[15:42] the markdown you lose 100% of that. And so doing it with with screenshots is is
+[15:44] so doing it with with screenshots is is a heck of a lot better. But a lot of
+[15:46] a heck of a lot better. But a lot of those tools are rough to use. They fail.
+[15:48] those tools are rough to use. They fail. they won't get the like super long
+[15:50] they won't get the like super long screenshot if there's a lot of
+[15:52] screenshot if there's a lot of scrolling. So offloading this to a
+[15:54] scrolling. So offloading this to a service like pixel rag that say no no no
+[15:56] service like pixel rag that say no no no we're going to make sure it always
+[15:57] we're going to make sure it always works. We're going to have good quality.
+[15:59] works. We're going to have good quality. We're going to get around all these bot
+[16:01] We're going to get around all these bot blockers, all that stuff. Like I I think
+[16:04] blockers, all that stuff. Like I I think that's a great way if you're building a
+[16:05] that's a great way if you're building a tool that relies on looking at
+[16:07] tool that relies on looking at information on on the web. Like I I
+[16:10] information on on the web. Like I I would be using a tool like this rather
+[16:12] would be using a tool like this rather than just hoping that Claude can scrape
+[16:14] than just hoping that Claude can scrape the HTML or markdown.
+[16:17] the HTML or markdown. got a link to it, of course, and I found
+[16:19] got a link to it, of course, and I found this on Twitter. I've heard people talk
+[16:20] this on Twitter. I've heard people talk about it a lot. So, I've got a tweet
+[16:22] about it a lot. So, I've got a tweet that I came across this weekend there,
+[16:24] that I came across this weekend there, too. Next is improve. A lot of people
+[16:27] too. Next is improve. A lot of people are talking about how now that Fable 5
+[16:30] are talking about how now that Fable 5 is out, it is too expensive to use for
+[16:32] is out, it is too expensive to use for everything. I know I accidentally made a
+[16:33] everything. I know I accidentally made a mistake in how to create the slides for
+[16:35] mistake in how to create the slides for this. It's so frustrating. Any any other
+[16:36] this. It's so frustrating. Any any other model could have created this website
+[16:38] model could have created this website that I'm using. Um, and so this is one
+[16:40] that I'm using. Um, and so this is one of many tools now that's coming around
+[16:42] of many tools now that's coming around and saying, "We're going to help you
+[16:43] and saying, "We're going to help you organize what gets done by which agent,
+[16:47] organize what gets done by which agent, and we're going to help you delegate it
+[16:49] and we're going to help you delegate it to the right agents." Um,
+[16:52] to the right agents." Um, what do you think of this? I know you
+[16:53] what do you think of this? I know you have a couple of Yeah. thoughts here.
+[16:55] have a couple of Yeah. thoughts here. &gt;&gt; This is this is definitely a trending
+[16:57] &gt;&gt; This is this is definitely a trending topic lately. You know, the these
+[17:00] topic lately. You know, the these models, they're they're getting smarter,
+[17:01] models, they're they're getting smarter, but they're getting slower and more
+[17:03] but they're getting slower and more expensive, too. And so we're all trying
+[17:05] expensive, too. And so we're all trying to figure out how do we how do we put
+[17:08] to figure out how do we how do we put into play these cheap models? How do I
+[17:09] into play these cheap models? How do I use GLM, you know, in places where that
+[17:12] use GLM, you know, in places where that makes sense? How do I use codeex when
+[17:15] makes sense? How do I use codeex when I'm about out of out of uh, you know,
+[17:19] I'm about out of out of uh, you know, tokens on on claude? And how do I use
+[17:21] tokens on on claude? And how do I use haiku, you know, if I'm already in
+[17:22] haiku, you know, if I'm already in claude? So I I think a tool like this,
+[17:26] claude? So I I think a tool like this, this one doesn't hit it for me, but a
+[17:28] this one doesn't hit it for me, but a tool like this where you're going to
+[17:29] tool like this where you're going to like put all these agents into play
+[17:31] like put all these agents into play makes sense. This one we we dove deep
+[17:33] makes sense. This one we we dove deep into the skill file and it's not
+[17:35] into the skill file and it's not actually going to orchestrate all these
+[17:37] actually going to orchestrate all these agents. It's going to look at your code.
+[17:39] agents. It's going to look at your code. You can ask it. I want you to audit all
+[17:41] You can ask it. I want you to audit all my code, look at everything and then
+[17:43] my code, look at everything and then write a bunch of plans so that other
+[17:47] write a bunch of plans so that other cheaper agents can come and execute the
+[17:49] cheaper agents can come and execute the plans. Honestly, I don't love that. I
+[17:51] plans. Honestly, I don't love that. I want the smart agent to actually
+[17:53] want the smart agent to actually orchestrate and run the other agents.
+[17:55] orchestrate and run the other agents. So, this is like really close. Uh, but
+[17:57] So, this is like really close. Uh, but if you just added a layer into this
+[17:59] if you just added a layer into this like, hey, use the Haiku CLI or Codeex
+[18:02] like, hey, use the Haiku CLI or Codeex CLI like in addition to writing these
+[18:04] CLI like in addition to writing these plans and then check the result when
+[18:06] plans and then check the result when they're done, that's great because what
+[18:08] they're done, that's great because what you know, Andrew, what what Fable is is
+[18:10] you know, Andrew, what what Fable is is good at, it's not a it's not a better
+[18:11] good at, it's not a it's not a better thinker. It's the same thinking as all
+[18:13] thinker. It's the same thinking as all these other ones, but what it's better
+[18:15] these other ones, but what it's better at is it's better at the prep. It's
+[18:16] at is it's better at the prep. It's better at making a better plan, and then
+[18:18] better at making a better plan, and then it's just as good at doing the work, but
+[18:20] it's just as good at doing the work, but then it's better at reviewing the work,
+[18:21] then it's better at reviewing the work, too. And so I want Fable or one of these
+[18:24] too. And so I want Fable or one of these top-end models to to be on both ends,
+[18:27] top-end models to to be on both ends, not just the planning end.
+[18:28] not just the planning end. &gt;&gt; Okay. All right. Fair point. If anyone
+[18:31] &gt;&gt; Okay. All right. Fair point. If anyone out there has a better one that you
+[18:32] out there has a better one that you love, send it over to me. I'd love to
+[18:34] love, send it over to me. I'd love to include it um in a future one. That's
+[18:36] include it um in a future one. That's the end of the buzzworthy. We're back
+[18:38] the end of the buzzworthy. We're back now. Number four for this week is
+[18:41] now. Number four for this week is Asterisk from Meta. We can say a lot of
+[18:43] Asterisk from Meta. We can say a lot of things about Meta, some good, some bad,
+[18:46] things about Meta, some good, some bad, but one thing I think most people agree
+[18:47] but one thing I think most people agree on is they do know design a little bit
+[18:50] on is they do know design a little bit too well. is if you ask any 12-year-old,
+[18:52] too well. is if you ask any 12-year-old, they will hook you in really well with
+[18:53] they will hook you in really well with their design. And so, what they decide
+[18:55] their design. And so, what they decide to do is just make it available to
+[18:56] to do is just make it available to everybody. This is fairly recent and
+[18:59] everybody. This is fairly recent and people are really excited about it on
+[19:01] people are really excited about it on Twitter. I like this tweet for giving
+[19:03] Twitter. I like this tweet for giving you a little bit of the design and then
+[19:04] you a little bit of the design and then I'll show you a video
+[19:16] browse components and then he's got different buttons, different elements.
+[19:19] different buttons, different elements. Um, I'll have this again in the report
+[19:21] Um, I'll have this again in the report for anyone who wants to watch.
+[19:22] for anyone who wants to watch. &gt;&gt; So cool. I'm like Andrew, I'm like giddy
+[19:24] &gt;&gt; So cool. I'm like Andrew, I'm like giddy watching this.
+[19:25] watching this. &gt;&gt; Why? What do you love about this?
+[19:27] &gt;&gt; Why? What do you love about this? &gt;&gt; I I mean, a lot of people might not
+[19:29] &gt;&gt; I I mean, a lot of people might not remember or realize, but 23 years ago,
+[19:33] remember or realize, but 23 years ago, Facebook open-sourced React, which is
+[19:36] Facebook open-sourced React, which is this like component system to to build
+[19:40] this like component system to to build web pages from components instead of
+[19:42] web pages from components instead of just pure HTML and JavaScript, which is
+[19:45] just pure HTML and JavaScript, which is what most of us were doing before. And
+[19:47] what most of us were doing before. And man, it's taken over. Nearly every
+[19:48] man, it's taken over. Nearly every website that that you're looking at is
+[19:50] website that that you're looking at is built on React. These guys are very good
+[19:52] built on React. These guys are very good at design. They're very good at UI.
+[19:55] at design. They're very good at UI. They've been good at it for a really
+[19:56] They've been good at it for a really long time. And when we look at like
+[19:59] long time. And when we look at like React, you've got Material UI, you've
+[20:02] React, you've got Material UI, you've got Chakra, you've got Shad C. Like
+[20:05] got Chakra, you've got Shad C. Like you've got all these other tools that
+[20:07] you've got all these other tools that people are using on top to build these
+[20:08] people are using on top to build these design libraries. And now the people
+[20:11] design libraries. And now the people that built React are building this like
+[20:13] that built React are building this like design library that also has designs in
+[20:16] design library that also has designs in it for chat interfaces that has designs
+[20:19] it for chat interfaces that has designs like basically for the modern web. Like
+[20:21] like basically for the modern web. Like if you go to most of these older design
+[20:23] if you go to most of these older design libraries, the components, they belong
+[20:25] libraries, the components, they belong on the internet 5 to 10 years ago.
+[20:28] on the internet 5 to 10 years ago. Whereas this is like this is exactly
+[20:29] Whereas this is like this is exactly what everything should look like today.
+[20:31] what everything should look like today. I haven't dove deep into this, but I
+[20:33] I haven't dove deep into this, but I guarantee I'm gonna like blow off a
+[20:34] guarantee I'm gonna like blow off a meeting later today and and go through
+[20:37] meeting later today and and go through all of these. I really want to try
+[20:39] all of these. I really want to try building with it. I'm so excited. These
+[20:41] building with it. I'm so excited. These these guys are very good at what they
+[20:42] these guys are very good at what they do. Um, and I bet we're going to see a
+[20:44] do. Um, and I bet we're going to see a bunch of websites that pop up in the
+[20:46] bunch of websites that pop up in the next month or two. It's like, oh, looks
+[20:48] next month or two. It's like, oh, looks like they're using asterisks [laughter]
+[20:50] like they're using asterisks [laughter] like that. I'm starting to recognize
+[20:52] like that. I'm starting to recognize that date picker. I'm starting to
+[20:53] that date picker. I'm starting to recognize that chat interface. And I bet
+[20:55] recognize that chat interface. And I bet they're going to be really seamless and
+[20:56] they're going to be really seamless and very beautiful. And I'm I'm very
+[20:59] very beautiful. And I'm I'm very excited. I want to build something with
+[21:00] excited. I want to build something with this right now.
+[21:01] this right now. &gt;&gt; All right. AI Labs did a video. Since we
+[21:03] &gt;&gt; All right. AI Labs did a video. Since we just went through this for so long, I'll
+[21:04] just went through this for so long, I'll move on and leave it for everybody else
+[21:06] move on and leave it for everybody else to go get afterwards. But it's Go try
+[21:07] to go get afterwards. But it's Go try it. It broke down the different the
+[21:09] it. It broke down the different the different templates and setups that they
+[21:10] different templates and setups that they have.
+[21:11] have. &gt;&gt; This one keeps coming back. Its system
+[21:13] &gt;&gt; This one keeps coming back. Its system prompts leak. Every AI chatbot ships
+[21:16] prompts leak. Every AI chatbot ships with a hidden instruction manual. Its
+[21:17] with a hidden instruction manual. Its maker its maker never shows you. That is
+[21:19] maker its maker never shows you. That is not true. But this is what people are
+[21:21] not true. But this is what people are saying. This repo publishes them all.
+[21:23] saying. This repo publishes them all. And every week on Twitter, somebody will
+[21:25] And every week on Twitter, somebody will say, "I just found the full system
+[21:26] say, "I just found the full system prompt. I'm shocked shocked that this is
+[21:28] prompt. I'm shocked shocked that this is available online." And then you and I
+[21:30] available online." And then you and I looked at it and we realized just kind
+[21:31] looked at it and we realized just kind of like the Washington Post did a little
+[21:33] of like the Washington Post did a little while ago back in May that this is
+[21:35] while ago back in May that this is something that they want you to see.
+[21:37] something that they want you to see. This is something that you have said in
+[21:38] This is something that you have said in the past people can use to um to
+[21:41] the past people can use to um to understand how the model makers are
+[21:43] understand how the model makers are prompting and how we could prompt
+[21:45] prompting and how we could prompt better. Um let's see. Oh, look at this.
+[21:48] better. Um let's see. Oh, look at this. So good. I I'm so glad that I've got the
+[21:50] So good. I I'm so glad that I've got the No. Is this the archive. Let's see if
+[21:52] No. Is this the archive. Let's see if I'm giving people archive. No, I'm
+[21:54] I'm giving people archive. No, I'm giving them the actual link to the site.
+[21:56] giving them the actual link to the site. My agent failed at this one. It's pay
+[21:59] My agent failed at this one. It's pay paywalled. Uh it's just saying
+[22:00] paywalled. Uh it's just saying archive.ph has a free version of it. I
+[22:03] archive.ph has a free version of it. I hate when I get these errors in it.
+[22:04] hate when I get these errors in it. Having said that, I do have the link.
+[22:07] Having said that, I do have the link. Uh, you know what? It so bothers me. I
+[22:08] Uh, you know what? It so bothers me. I have these skills set up to organize all
+[22:11] have these skills set up to organize all my links and all the videos the way that
+[22:12] my links and all the videos the way that I like them, and then every once in a
+[22:14] I like them, and then every once in a while, something will fail. Like this
+[22:16] while, something will fail. Like this week, this little thing at the top
+[22:18] week, this little thing at the top didn't didn't let me click around to the
+[22:20] didn't didn't let me click around to the different um to the different repos. So
+[22:22] different um to the different repos. So frustrating. All right. There's a little
+[22:24] frustrating. All right. There's a little bit of controversy and that is that
+[22:26] bit of controversy and that is that people are saying they're looking at the
+[22:27] people are saying they're looking at the way the systems are prompt are being
+[22:29] way the systems are prompt are being prompted and then they're saying this is
+[22:31] prompted and then they're saying this is why I'm getting the results I I'm
+[22:33] why I'm getting the results I I'm getting and I'm not happy with it. I'll
+[22:35] getting and I'm not happy with it. I'll let you all take a look at that. We'll
+[22:36] let you all take a look at that. We'll move on. Um codeex plugin openai
+[22:41] move on. Um codeex plugin openai turned its coding assistant into a
+[22:43] turned its coding assistant into a second opinion that lives inside the
+[22:45] second opinion that lives inside the claude code tool. The idea behind this
+[22:47] claude code tool. The idea behind this is you build with cloud code. Codex
+[22:49] is you build with cloud code. Codex understands it, but they say, "Hey, you
+[22:51] understands it, but they say, "Hey, you know what? How about if you let us give
+[22:52] know what? How about if you let us give it a second opinion for free?" Even on
+[22:54] it a second opinion for free?" Even on the free chat GPT models, you can get it
+[22:57] the free chat GPT models, you can get it for free and get a second opinion. And
+[22:59] for free and get a second opinion. And people have been doing this for a long
+[23:01] people have been doing this for a long time. A lot of my friends do this. Do
+[23:02] time. A lot of my friends do this. Do you do this, Adam?
+[23:03] you do this, Adam? &gt;&gt; All the time. I've actually got this
+[23:05] &gt;&gt; All the time. I've actually got this built into my cloud. MD file. Uh I I've
+[23:09] built into my cloud. MD file. Uh I I've instructed for my for every Cloud Code
+[23:12] instructed for my for every Cloud Code session, my my uh Claude Code knows I
+[23:16] session, my my uh Claude Code knows I can use the Codeex CLI. here's how I
+[23:18] can use the Codeex CLI. here's how I could use it. Codeex is better at this
+[23:20] could use it. Codeex is better at this and this. Claude is better at this and
+[23:22] and this. Claude is better at this and this and here's when you should use
+[23:23] this and here's when you should use them. So, I love having, you know, I
+[23:25] them. So, I love having, you know, I don't have a skill like this. I've just
+[23:26] don't have a skill like this. I've just put it in the in the cloud. MD, but I I
+[23:29] put it in the in the cloud. MD, but I I think this makes sense to add in these
+[23:31] think this makes sense to add in these skills because honestly, the models are
+[23:34] skills because honestly, the models are good at different things and they
+[23:36] good at different things and they they're going to have different points
+[23:37] they're going to have different points of view. And if you say, "Claude, give
+[23:40] of view. And if you say, "Claude, give me three different examples of what this
+[23:42] me three different examples of what this website could look like." They're all
+[23:43] website could look like." They're all going to be kind of the same. But if you
+[23:45] going to be kind of the same. But if you say, "Claude, give me one. GLM give me
+[23:47] say, "Claude, give me one. GLM give me one. Codex, give me one. And a skill
+[23:49] one. Codex, give me one. And a skill like this that can help, you know, make
+[23:51] like this that can help, you know, make that really, really easy. You're going
+[23:52] that really, really easy. You're going to get like the best of all of these
+[23:54] to get like the best of all of these agents. Uh, and you're not really going
+[23:56] agents. Uh, and you're not really going to even think, oh, was this built with
+[23:57] to even think, oh, was this built with cloud or was this built with codeex?
+[23:59] cloud or was this built with codeex? &gt;&gt; Yes.
+[24:01] &gt;&gt; Yes. [laughter]
+[24:02] [laughter] &gt;&gt; Um, I got this video from Nate Herk
+[24:05] &gt;&gt; Um, I got this video from Nate Herk showing how
+[24:06] showing how &gt;&gt; I released an official codeex plugin for
+[24:08] &gt;&gt; I released an official codeex plugin for cloud code. AIT. So, I'm going to go
+[24:10] cloud code. AIT. So, I'm going to go ahead and try the adversarial review
+[24:13] ahead and try the adversarial review right here. So what you'll notice is
+[24:14] right here. So what you'll notice is right away it has to get familiarized
+[24:16] right away it has to get familiarized and acclimated with the environment. So
+[24:17] and acclimated with the environment. So it's
+[24:18] it's &gt;&gt; let's jump to the p point where he gets
+[24:20] &gt;&gt; let's jump to the p point where he gets a result. It's at 73 found and it also
+[24:23] a result. It's at 73 found and it also looks like it has priority scores. So we
+[24:25] looks like it has priority scores. So we have some high priority things. We have
+[24:26] have some high priority things. We have a recommendation. Same thing right here.
+[24:28] a recommendation. Same thing right here. And then we also have a medium priority
+[24:30] And then we also have a medium priority thing as well as some next steps. So
+[24:32] thing as well as some next steps. So from here it would be up to you to
+[24:33] from here it would be up to you to either continue on using codeex to build
+[24:36] either continue on using codeex to build out these changes or switch back to
+[24:38] out these changes or switch back to cloud code.
+[24:40] cloud code. &gt;&gt; All right. By the way, I keep licking my
+[24:42] &gt;&gt; All right. By the way, I keep licking my lips today because I'm using tape to
+[24:44] lips today because I'm using tape to close my mouth when I sleep because I'm
+[24:46] close my mouth when I sleep because I'm snoring and my wife said, "I'm getting
+[24:49] snoring and my wife said, "I'm getting out of the bedroom if you don't do
+[24:51] out of the bedroom if you don't do something about it." And I don't know
+[24:52] something about it." And I don't know what to do about it, but I've heard that
+[24:54] what to do about it, but I've heard that &gt;&gt; I've got a mouth guard, Andrew, that I
+[24:55] &gt;&gt; I've got a mouth guard, Andrew, that I really like. I can send you a
+[24:58] really like. I can send you a &gt;&gt; Will it keep me from snoring?
+[24:59] &gt;&gt; Will it keep me from snoring? &gt;&gt; It'll keep you [clears throat] from
+[25:00] &gt;&gt; It'll keep you [clears throat] from snoring. It goes inside your lips above
+[25:02] snoring. It goes inside your lips above and below and and so it blocks you
+[25:04] and below and and so it blocks you cannot while it's in your mouth. You
+[25:05] cannot while it's in your mouth. You cannot breathe through your mouth. You
+[25:07] cannot breathe through your mouth. You only breathe through your nose, but it's
+[25:08] only breathe through your nose, but it's inside your mouth then. And it also if
+[25:10] inside your mouth then. And it also if you grind your teeth it stops you from
+[25:11] you grind your teeth it stops you from grinding your teeth.
+[25:12] grinding your teeth. &gt;&gt; I will take it. The same thing as the
+[25:14] &gt;&gt; I will take it. The same thing as the tape makes you breathe through your nose
+[25:16] tape makes you breathe through your nose but it kind of puts your mouth in a
+[25:17] but it kind of puts your mouth in a better shape too.
+[25:18] better shape too. &gt;&gt; You know the tape does have one nice
+[25:19] &gt;&gt; You know the tape does have one nice side effect. My wife loves talking about
+[25:22] side effect. My wife loves talking about like important things before going to
+[25:23] like important things before going to sleep. It lets her put her mind at ease.
+[25:25] sleep. It lets her put her mind at ease. What about this? What about that? Now I
+[25:27] What about this? What about that? Now I have tape on my mouth. I'm like she's
+[25:28] have tape on my mouth. I'm like she's like all right let's just [laughter]
+[25:29] like all right let's just [laughter] move on. Thank you. It's like you don't
+[25:31] move on. Thank you. It's like you don't have to put it on tonight. I go I want
+[25:33] have to put it on tonight. I go I want to I want us to sleep next to each other
+[25:36] to I want us to sleep next to each other but I I really can't talk past a certain
+[25:38] but I I really can't talk past a certain time.
+[25:38] time. &gt;&gt; Yeah. I'm with you.
+[25:40] &gt;&gt; Yeah. I'm with you. &gt;&gt; Next herder. I don't know what this is.
+[25:43] &gt;&gt; Next herder. I don't know what this is. I've done so much research on it. I've
+[25:45] I've done so much research on it. I've got some videos to show on it. I don't
+[25:47] got some videos to show on it. I don't I'm just going to read what it says
+[25:48] I'm just going to read what it says here. Run. And this is uh I let just
+[25:51] here. Run. And this is uh I let just Claude do this. Running several AI
+[25:53] Claude do this. Running several AI agents at once means juggling a mess of
+[25:55] agents at once means juggling a mess of terminal windows. This puts your whole
+[25:57] terminal windows. This puts your whole AI team on the screen at once. I like
+[26:00] AI team on the screen at once. I like the offer. I get it. I don't know what
+[26:02] the offer. I get it. I don't know what this is.
+[26:04] this is. &gt;&gt; Yeah. You know, Andrew, you don't use
+[26:06] &gt;&gt; Yeah. You know, Andrew, you don't use the terminal for cloud code, right? for
+[26:08] the terminal for cloud code, right? for nothing.
+[26:09] nothing. &gt;&gt; Yeah. You're in you're in what? VS Code.
+[26:11] &gt;&gt; Yeah. You're in you're in what? VS Code. &gt;&gt; Yes.
+[26:12] &gt;&gt; Yes. &gt;&gt; Yeah. So, when you're in VS Code, you're
+[26:14] &gt;&gt; Yeah. So, when you're in VS Code, you're often opening multiple tabs with Claude,
+[26:17] often opening multiple tabs with Claude, right?
+[26:17] right? &gt;&gt; Mhm.
+[26:18] &gt;&gt; Mhm. &gt;&gt; They've gotten this one's running and
+[26:19] &gt;&gt; They've gotten this one's running and you can open a new tab and start some
+[26:21] you can open a new tab and start some other task. And
+[26:22] other task. And &gt;&gt; that's why I use VS Code and not the
+[26:23] &gt;&gt; that's why I use VS Code and not the terminal.
+[26:24] terminal. &gt;&gt; That's why you use VS Code and not the
+[26:25] &gt;&gt; That's why you use VS Code and not the terminal. There are people out there
+[26:27] terminal. There are people out there that really like the terminal and that's
+[26:29] that really like the terminal and that's like what they're familiar with. And you
+[26:30] like what they're familiar with. And you know what? The interface kind of sucks.
+[26:32] know what? The interface kind of sucks. uh it's really hard to do that tab thing
+[26:34] uh it's really hard to do that tab thing and you need multiple terminal tabs and
+[26:36] and you need multiple terminal tabs and it's just like it's very cumbersome.
+[26:38] it's just like it's very cumbersome. They don't get that experience you get
+[26:39] They don't get that experience you get in VS Code. This kind of brings that
+[26:41] in VS Code. This kind of brings that experience there. You get multiple tabs.
+[26:44] experience there. You get multiple tabs. You can have them next to each other in
+[26:46] You can have them next to each other in panes. You can have a vertical pane on
+[26:48] panes. You can have a vertical pane on the left and then you know quarter panes
+[26:50] the left and then you know quarter panes on the right and move them around. This
+[26:52] on the right and move them around. This even lets you use multiple agents just
+[26:55] even lets you use multiple agents just like you can in VS Code. You said I want
+[26:57] like you can in VS Code. You said I want cla code next to codecs. Well, you can't
+[27:00] cla code next to codecs. Well, you can't do that in just the cloud code, you
+[27:01] do that in just the cloud code, you know, CLI. So, this is basically
+[27:03] know, CLI. So, this is basically bringing that that interface that you
+[27:05] bringing that that interface that you like, multiple screens, multiple panes,
+[27:07] like, multiple screens, multiple panes, drag things around, see the status, and
+[27:09] drag things around, see the status, and it's bringing it all into the terminal.
+[27:11] it's bringing it all into the terminal. &gt;&gt; So, that's what I'm looking at right
+[27:12] &gt;&gt; So, that's what I'm looking at right here. And I'm guessing the agents are on
+[27:14] here. And I'm guessing the agents are on the left in that in in the section here,
+[27:17] the left in that in in the section here, so I can watch them as they're working.
+[27:19] so I can watch them as they're working. &gt;&gt; That's right.
+[27:19] &gt;&gt; That's right. &gt;&gt; Ah, got it. Okay. And so, this is not
+[27:22] &gt;&gt; Ah, got it. Okay. And so, this is not the terminal that comes with my Mac.
+[27:23] the terminal that comes with my Mac. This is their app. That is the terminal
+[27:26] This is their app. That is the terminal app.
+[27:27] app. &gt;&gt; Okay. I got it. Now, now it's actually
+[27:29] &gt;&gt; Okay. I got it. Now, now it's actually helping me understand.
+[27:30] helping me understand. &gt;&gt; You would, Andrew. I' I'd point out, you
+[27:32] &gt;&gt; You would, Andrew. I' I'd point out, you know, the the claude code terminal app
+[27:34] know, the the claude code terminal app has like some features that don't make
+[27:37] has like some features that don't make it into the VS Code app, too. People
+[27:40] it into the VS Code app, too. People like the terminal one because and
+[27:42] like the terminal one because and anything new that comes out, it comes
+[27:43] anything new that comes out, it comes out in the terminal first. So, you're
+[27:45] out in the terminal first. So, you're you're getting kind of a watered down
+[27:47] you're getting kind of a watered down experience. Now you're getting a nice
+[27:49] experience. Now you're getting a nice user interface for it, but but people
+[27:52] user interface for it, but but people that want to be on the edge, that want
+[27:53] that want to be on the edge, that want to be trying everything, that want to
+[27:54] to be trying everything, that want to have the best control, they're in the
+[27:56] have the best control, they're in the terminal, but they're struggling. So I I
+[27:58] terminal, but they're struggling. So I I think this is this is aiming to help
+[28:00] think this is this is aiming to help them not struggle so much.
+[28:02] them not struggle so much. &gt;&gt; You know what? That's what Matt Van Horn
+[28:03] &gt;&gt; You know what? That's what Matt Van Horn said to me yesterday. He goes, "Andrew,
+[28:05] said to me yesterday. He goes, "Andrew, you you're not getting all the power of
+[28:07] you you're not getting all the power of what I'm building because you're" And he
+[28:09] what I'm building because you're" And he was like so disappointed. He's like he
+[28:11] was like so disappointed. He's like he didn't know who I was and he was like,
+[28:12] didn't know who I was and he was like, "Oh, this guy's great." And then he
+[28:13] "Oh, this guy's great." And then he goes, "Oh, okay. All right. Let's move
+[28:16] goes, "Oh, okay. All right. Let's move on to the next one." just like just just
+[28:18] on to the next one." just like just just just just like Windows and PES and
+[28:21] just just like Windows and PES and buttons instead of terminal stuff.
+[28:22] buttons instead of terminal stuff. There's nothing wrong with that.
+[28:25] There's nothing wrong with that. &gt;&gt; I think this one demos really really
+[28:28] &gt;&gt; I think this one demos really really well. Here's how it works. You paste one
+[28:30] well. Here's how it works. You paste one line of code on your website and then
+[28:32] line of code on your website and then you have a built-in assistant that your
+[28:34] you have a built-in assistant that your users can click around. So that means if
+[28:36] users can click around. So that means if they're wondering how to find something
+[28:38] they're wondering how to find something on your site or they want to just ask
+[28:40] on your site or they want to just ask the site to do something, they don't
+[28:42] the site to do something, they don't have to email you or send you all a
+[28:44] have to email you or send you all a message. They just chat with your site
+[28:46] message. They just chat with your site and it doesn't get they don't just get
+[28:48] and it doesn't get they don't just get the answer. They get taken in by an
+[28:50] the answer. They get taken in by an agent that will do the work of getting
+[28:51] agent that will do the work of getting them to what they want to do. Here, let
+[28:52] them to what they want to do. Here, let me uh wait, where is it? Uh oh, here.
+[28:55] me uh wait, where is it? Uh oh, here. There we go. Uh that will do the work
+[28:57] There we go. Uh that will do the work and get them there. I want to show you
+[28:58] and get them there. I want to show you all what this looks like. Um let's
+[29:00] all what this looks like. Um let's actually go over to I have this link
+[29:02] actually go over to I have this link right here. Where is it? Here's a live
+[29:04] right here. Where is it? Here's a live demo. Now, this is from Alibaba. Um and
+[29:07] demo. Now, this is from Alibaba. Um and we'll talk about what that means. This
+[29:08] we'll talk about what that means. This is a demo site that they have. Imagine
+[29:10] is a demo site that they have. Imagine somebody is on this. Imagine this is
+[29:12] somebody is on this. Imagine this is your site and someone's on it. They want
+[29:14] your site and someone's on it. They want to know where the MCP this or that is.
+[29:15] to know where the MCP this or that is. So they just type in where is the MCP
+[29:19] So they just type in where is the MCP and they just run. [snorts] And this is
+[29:22] and they just run. [snorts] And this is the agent now coming up. You can tell
+[29:24] the agent now coming up. You can tell because it's kind of cool how it puts
+[29:26] because it's kind of cool how it puts this box around the site. And look, it's
+[29:29] this box around the site. And look, it's going and it took me to the MCP server
+[29:31] going and it took me to the MCP server right there. And it clicked around and
+[29:32] right there. And it clicked around and then it told me. I could even ask it to
+[29:34] then it told me. I could even ask it to create, let's try it. create a markdown
+[29:38] create, let's try it. create a markdown file of the key features.
+[29:46] Now, you can add this to your site if you want to experiment with it. Rather
+[29:48] you want to experiment with it. Rather not, look at this. It's actually going
+[29:49] not, look at this. It's actually going through and it's doing this on the site.
+[29:52] through and it's doing this on the site. &gt;&gt; There is a really interesting bookmark
+[29:54] &gt;&gt; There is a really interesting bookmark lit that you can put on right now on
+[29:56] lit that you can put on right now on your bookmark bar and then try it on any
+[29:59] your bookmark bar and then try it on any website. I literally tried it on the
+[30:01] website. I literally tried it on the site that I created for this GitHub show
+[30:03] site that I created for this GitHub show and and it found everything for me. So,
+[30:05] and and it found everything for me. So, this is Andrew. Is this kind of like the
+[30:07] this is Andrew. Is this kind of like the like Ask Gemini button in in Chrome, but
+[30:11] like Ask Gemini button in in Chrome, but but I could build it into my own site
+[30:13] but I could build it into my own site instead.
+[30:14] instead. &gt;&gt; Yeah. With one addition. I don't think
+[30:16] &gt;&gt; Yeah. With one addition. I don't think the Ask Gemini button still has agent
+[30:18] the Ask Gemini button still has agent mode. It will not click stuff. It will
+[30:20] mode. It will not click stuff. It will answer questions about
+[30:21] answer questions about &gt;&gt; navigate. Yeah. Okay.
+[30:24] &gt;&gt; navigate. Yeah. Okay. &gt;&gt; Yeah. Okay. It's working. You all get
+[30:26] &gt;&gt; Yeah. Okay. It's working. You all get the sense of what it does. It's now
+[30:28] the sense of what it does. It's now studying the site. It's then going to
+[30:29] studying the site. It's then going to create a markdown file for me here. So,
+[30:32] create a markdown file for me here. So, that's what it does. You can add it to
+[30:33] that's what it does. You can add it to any website. You can you can experiment
+[30:36] any website. You can you can experiment with it for free. Here's the controversy
+[30:37] with it for free. Here's the controversy though. The controversy is now this
+[30:40] though. The controversy is now this thing knows all the security. It's not
+[30:43] thing knows all the security. It's not just the access to the security tokens.
+[30:44] just the access to the security tokens. It just basically has access to the site
+[30:46] It just basically has access to the site and what people are doing on it. And the
+[30:48] and what people are doing on it. And the fact that it's China hosted in the demo
+[30:50] fact that it's China hosted in the demo and the fact that it's made by China is
+[30:52] and the fact that it's made by China is is worrying people. What do you think?
+[30:54] is worrying people. What do you think? Would you put this on your site?
+[30:57] Would you put this on your site? &gt;&gt; Uh, no.
+[30:59] &gt;&gt; Uh, no. [laughter]
+[31:00] [laughter] I would I would point Claude at this and
+[31:03] I would I would point Claude at this and say, "Hey, Claude, could you help me
+[31:04] say, "Hey, Claude, could you help me build this functionality into my site,
+[31:07] build this functionality into my site, but I don't I don't think I would just
+[31:08] but I don't I don't think I would just take this like thing that Yeah, I don't
+[31:11] take this like thing that Yeah, I don't like anything that has tentacles
+[31:12] like anything that has tentacles everywhere." Uh, unless unless I have
+[31:15] everywhere." Uh, unless unless I have some some control over it. And I, you
+[31:17] some some control over it. And I, you know, I don't know if it's good or not,
+[31:18] know, I don't know if it's good or not, but I don't I don't trust a lot of of
+[31:21] but I don't I don't trust a lot of of international
+[31:22] international um services like this, too.
+[31:24] um services like this, too. &gt;&gt; Should I add this to this report?
+[31:27] &gt;&gt; Should I add this to this report? because people have been getting the
+[31:28] because people have been getting the whole website that I build out for each
+[31:30] whole website that I build out for each one of our sessions. Should I add it
+[31:31] one of our sessions. Should I add it onto this report and let people ask
+[31:33] onto this report and let people ask questions? I don't think I've got
+[31:34] questions? I don't think I've got anything personal on this, right?
+[31:35] anything personal on this, right? &gt;&gt; Yeah, there's nothing personal here.
+[31:36] &gt;&gt; Yeah, there's nothing personal here. Give it a shot. See what happens.
+[31:39] Give it a shot. See what happens. &gt;&gt; I'm a little worried now. Will it go
+[31:40] &gt;&gt; I'm a little worried now. Will it go beyond the site? [laughter]
+[31:42] beyond the site? [laughter] I'll test it and see uh you all will
+[31:44] I'll test it and see uh you all will know whether it's on the site um
+[31:46] know whether it's on the site um [laughter]
+[31:47] [laughter] on the bottom and feel free to ask me
+[31:48] on the bottom and feel free to ask me what what happened if it's not there.
+[31:51] what what happened if it's not there. Okay. Uh number nine for the week is
+[31:53] Okay. Uh number nine for the week is Omniroot. Omniroot is recognizing that
+[31:57] Omniroot. Omniroot is recognizing that so many people now as they're
+[31:59] so many people now as they're interacting with their agents are
+[32:00] interacting with their agents are running out of uh what is it not is it
+[32:03] running out of uh what is it not is it running out of tokens basically you get
+[32:05] running out of tokens basically you get the session limits I I hit that now for
+[32:07] the session limits I I hit that now for the next two hours my cloud code is
+[32:09] the next two hours my cloud code is basically shot and I have to switch over
+[32:11] basically shot and I have to switch over to codeex this says let me tar it out
+[32:14] to codeex this says let me tar it out for you and when you run out I'm going
+[32:16] for you and when you run out I'm going to switch you over in fact it's not just
+[32:18] to switch you over in fact it's not just when you run out will I will I switch
+[32:20] when you run out will I will I switch you over it's got 237 different
+[32:23] you over it's got 237 different providers that it worked with it will
+[32:24] providers that it worked with it will auto fall back, but it will also add
+[32:27] auto fall back, but it will also add token compression. We've talked about
+[32:28] token compression. We've talked about caveman, which will simplify the way
+[32:30] caveman, which will simplify the way that you're talking with um your your
+[32:34] that you're talking with um your your agent, but it will do it in these 70
+[32:37] agent, but it will do it in these 70 different ways. Um, and I've grouped
+[32:39] different ways. Um, and I've grouped them here. Actually, I got this from a
+[32:40] them here. Actually, I got this from a video that grouped them this way. I'll
+[32:42] video that grouped them this way. I'll just explain it. It it'll start by maybe
+[32:44] just explain it. It it'll start by maybe draining one subscription, then going to
+[32:45] draining one subscription, then going to the next. Or maybe it'll start with the
+[32:46] the next. Or maybe it'll start with the cheapest model first. That's there are a
+[32:48] cheapest model first. That's there are a few that do that. There are a few that
+[32:49] few that do that. There are a few that will spread the load around across
+[32:51] will spread the load around across multiple models and then it has one
+[32:52] multiple models and then it has one that's adaptive. Um, what do you what do
+[32:55] that's adaptive. Um, what do you what do you say about this? What do you think?
+[32:57] you say about this? What do you think? &gt;&gt; I think these are cool. I mean, this is
+[32:59] &gt;&gt; I think these are cool. I mean, this is stuff that we're building into a lot of
+[33:01] stuff that we're building into a lot of our apps now, but it's hard to do this
+[33:04] our apps now, but it's hard to do this uh, you know, when I run out of of my
+[33:06] uh, you know, when I run out of of my cloud subscription, I have to like log
+[33:08] cloud subscription, I have to like log out and log into another account if if
+[33:10] out and log into another account if if that's what I want to do. So, I I like
+[33:13] that's what I want to do. So, I I like having this here uh, in a way that can
+[33:15] having this here uh, in a way that can use the subscriptions. Basically, these
+[33:17] use the subscriptions. Basically, these are things we're already doing with like
+[33:18] are things we're already doing with like Light LLM and Open Router Online, but
+[33:22] Light LLM and Open Router Online, but those don't work with your
+[33:23] those don't work with your subscriptions. So, this does. So, it's
+[33:25] subscriptions. So, this does. So, it's kind of the personal version of those
+[33:26] kind of the personal version of those business tools, which makes a lot of
+[33:28] business tools, which makes a lot of sense to me.
+[33:29] sense to me. &gt;&gt; I know our viewers, I last week, I think
+[33:31] &gt;&gt; I know our viewers, I last week, I think it was, I shared a private messaging app
+[33:34] it was, I shared a private messaging app and I said, "Hey, everyone, if you want
+[33:35] and I said, "Hey, everyone, if you want to test it and see if this works, just
+[33:36] to test it and see if this works, just send me a message." One guy sent me a
+[33:39] send me a message." One guy sent me a message showing his Hermes agent and how
+[33:41] message showing his Hermes agent and how he has multiple um what is it? OpenAI
+[33:45] he has multiple um what is it? OpenAI models in it. And I said, "Wow, how are
+[33:46] models in it. And I said, "Wow, how are you even doing this?" And he said,
+[33:48] you even doing this?" And he said, "Well, my friends give me their access
+[33:50] "Well, my friends give me their access and then I get to rotate through all of
+[33:51] and then I get to rotate through all of them." And the fact that he did that is
+[33:53] them." And the fact that he did that is just so our people. So our people, you
+[33:55] just so our people. So our people, you [laughter] know.
+[33:57] [laughter] know. Okay, next. Oh, I added this. I said
+[34:01] Okay, next. Oh, I added this. I said randomly put it in. I'm going to tell
+[34:02] randomly put it in. I'm going to tell you why this is here. Years ago, I
+[34:03] you why this is here. Years ago, I talked to Simon Synynic. He is the
+[34:05] talked to Simon Synynic. He is the author of Start with Why? And he said,
+[34:07] author of Start with Why? And he said, "Andrew, what's your why?" And at the
+[34:09] "Andrew, what's your why?" And at the time I was just doing these set of
+[34:10] time I was just doing these set of interviews on Mixer G and I said my why
+[34:12] interviews on Mixer G and I said my why is that I believe that more people need
+[34:13] is that I believe that more people need to be entrepreneurs because my teachers
+[34:16] to be entrepreneurs because my teachers in school wouldn't let me be an
+[34:17] in school wouldn't let me be an entrepreneur but I think it's a lot
+[34:18] entrepreneur but I think it's a lot easier and a lot more liberating and a
+[34:20] easier and a lot more liberating and a lot more fun than most people think and
+[34:21] lot more fun than most people think and it's creative create companies and as a
+[34:23] it's creative create companies and as a result of doing over 2,000 interviews
+[34:25] result of doing over 2,000 interviews and saying that and if not explicitly
+[34:28] and saying that and if not explicitly over and over implicitly with the
+[34:29] over and over implicitly with the interviews that I did people were out
+[34:31] interviews that I did people were out there building companies. One of the
+[34:32] there building companies. One of the reasons why WDE Foster, the founder of
+[34:34] reasons why WDE Foster, the founder of Zapier, sponsored this is he was
+[34:36] Zapier, sponsored this is he was listening in in uh Missouri where he was
+[34:39] listening in in uh Missouri where he was going, "Oh, you know what? There's
+[34:40] going, "Oh, you know what? There's another path for me. I could be an
+[34:41] another path for me. I could be an entrepreneur." He listened. He reached
+[34:42] entrepreneur." He listened. He reached out to me. I became his first customer
+[34:44] out to me. I became his first customer of Zapier and we've known each other
+[34:46] of Zapier and we've known each other here and there over the years. And so
+[34:48] here and there over the years. And so that's why that's why I did Mixer Gy.
+[34:51] that's why that's why I did Mixer Gy. Now, the I want to say why I'm doing
+[34:53] Now, the I want to say why I'm doing this so that you're not just seeing a
+[34:54] this so that you're not just seeing a collection of free stuff. I have to
+[34:56] collection of free stuff. I have to admit that the algorithm is pushing me
+[34:58] admit that the algorithm is pushing me to use the word free in the uh in the
+[35:00] to use the word free in the uh in the descriptions of a lot of these. is it
+[35:02] descriptions of a lot of these. is it brings people in and and I like that.
+[35:04] brings people in and and I like that. But it's not just about free software. I
+[35:06] But it's not just about free software. I think Adam, we are in a world where we
+[35:08] think Adam, we are in a world where we can freaking create. How proud am I when
+[35:10] can freaking create. How proud am I when I show you that I created this website
+[35:12] I show you that I created this website that I that last night the star history
+[35:14] that I that last night the star history plugin didn't work and I created my own
+[35:15] plugin didn't work and I created my own star history thing overnight while I
+[35:17] star history thing overnight while I slept by using the loop and that I added
+[35:19] slept by using the loop and that I added a video in bed that does it the way that
+[35:21] a video in bed that does it the way that I want. This is the kind of freedom of
+[35:23] I want. This is the kind of freedom of creativity of expression of building and
+[35:25] creativity of expression of building and yes entrepreneurship but also of just
+[35:27] yes entrepreneurship but also of just creativity in general that we have never
+[35:30] creativity in general that we have never never had before. And the more that I
+[35:32] never had before. And the more that I talked to people about this in my real
+[35:33] talked to people about this in my real life, I went to my son's kung fu class,
+[35:36] life, I went to my son's kung fu class, the dad seemed interested in coding
+[35:39] the dad seemed interested in coding using Claude. The son who was what, 15
+[35:41] using Claude. The son who was what, 15 years old, seemed interested. I said,
+[35:42] years old, seemed interested. I said, "Let me come over to your house. My son
+[35:44] "Let me come over to your house. My son will come play with your son who's also
+[35:46] will come play with your son who's also 12, and I'll teach a 15-year-old how to
+[35:47] 12, and I'll teach a 15-year-old how to do this."
+[35:48] do this." &gt;&gt; They both sat and watched. Their eyes
+[35:51] &gt;&gt; They both sat and watched. Their eyes lit up the way mine did, Adam, when you
+[35:52] lit up the way mine did, Adam, when you introduced me to it. The kid started
+[35:54] introduced me to it. The kid started building a website to sell candy to his
+[35:56] building a website to sell candy to his friends at school. And then he had an
+[35:57] friends at school. And then he had an idea for another and another and another
+[35:59] idea for another and another and another and he built it there within the hour
+[36:00] and he built it there within the hour that I spent with him. That's the kind
+[36:02] that I spent with him. That's the kind of thing that we're unleashing now. He
+[36:03] of thing that we're unleashing now. He was creating a candy store. That's the
+[36:05] was creating a candy store. That's the way a lot of kids start. We are creating
+[36:06] way a lot of kids start. We are creating bigger and bigger projects. This is
+[36:08] bigger and bigger projects. This is where this thing goes. I want to infect
+[36:10] where this thing goes. I want to infect more people with this passion. I want
+[36:11] more people with this passion. I want more people to build. And that's why I'm
+[36:13] more people to build. And that's why I'm doing this. And the idea that you can
+[36:14] doing this. And the idea that you can now go into open source projects and
+[36:16] now go into open source projects and pull their ideas in and use them to
+[36:18] pull their ideas in and use them to build your stuff or actually build on
+[36:20] build your stuff or actually build on them or in many cases like Matt Van Horn
+[36:22] them or in many cases like Matt Van Horn went from not knowing GitHub really to
+[36:23] went from not knowing GitHub really to then contributing to it. You got that
+[36:25] then contributing to it. You got that ability. It's a creative force that has
+[36:27] ability. It's a creative force that has never happened in the history of the
+[36:29] never happened in the history of the world. No exaggeration. I want to be a
+[36:31] world. No exaggeration. I want to be a part of it and I want more people who
+[36:33] part of it and I want more people who are part of it. And that's why we're
+[36:34] are part of it. And that's why we're doing this and that's the that's the
+[36:36] doing this and that's the that's the reason Simon would be so proud that I
+[36:37] reason Simon would be so proud that I did this.
+[36:39] did this. &gt;&gt; Warms my heart. Andrew,
+[36:40] &gt;&gt; Warms my heart. Andrew, &gt;&gt; thank you. If you're there, let me know.
+[36:43] &gt;&gt; thank you. If you're there, let me know. If you're part of this mission, if
+[36:44] If you're part of this mission, if you're part of this, if you're driven
+[36:45] you're part of this, if you're driven like I am like this, if you're this
+[36:47] like I am like this, if you're this electrified, I want to meet you. I want
+[36:48] electrified, I want to meet you. I want to know you. Let me know.
+[36:49] to know you. Let me know. &gt;&gt; Yeah. There there's Andrew there. I I
+[36:51] &gt;&gt; Yeah. There there's Andrew there. I I kind of wish more people that that do go
+[36:53] kind of wish more people that that do go out and build. I wish more people would
+[36:55] out and build. I wish more people would write, that they would comment, that
+[36:56] write, that they would comment, that they'd email you to say like, "Oh, I'm
+[36:59] they'd email you to say like, "Oh, I'm building this. You inspired me to build
+[37:00] building this. You inspired me to build this." Like that that, you know, we
+[37:02] this." Like that that, you know, we could say that it's great. It helps us
+[37:04] could say that it's great. It helps us build the channel, whatever. But like
+[37:05] build the channel, whatever. But like really, it it warms our hearts like to
+[37:08] really, it it warms our hearts like to hear, "Oh, somebody created this.
+[37:09] hear, "Oh, somebody created this. Somebody got inspired. Somebody built a
+[37:11] Somebody got inspired. Somebody built a cool app." Uh, we want to know those
+[37:14] cool app." Uh, we want to know those stories. That's that's, you know, that's
+[37:16] stories. That's that's, you know, that's what we eat for dinner is uh awesome
+[37:18] what we eat for dinner is uh awesome stories like that. I just pulled out my
+[37:21] stories like that. I just pulled out my pen and wrote a note here to make sure
+[37:22] pen and wrote a note here to make sure that I include my email address in the
+[37:24] that I include my email address in the description of this uh video so people
+[37:26] description of this uh video so people can send me an email and let me know if
+[37:28] can send me an email and let me know if I get a lot of spam from that. I might
+[37:29] I get a lot of spam from that. I might remove it, but I want to hear from you.
+[37:32] remove it, but I want to hear from you. All right, final repo of the week. It's
+[37:35] All right, final repo of the week. It's called Claude Video. So well named that
+[37:37] called Claude Video. So well named that Claude is going to spank this guy and
+[37:39] Claude is going to spank this guy and remove this [laughter] whole thing.
+[37:41] remove this [laughter] whole thing. &gt;&gt; How long has this been around? Okay, it
+[37:43] &gt;&gt; How long has this been around? Okay, it hasn't been around that long. It has
+[37:45] hasn't been around that long. It has taken off. I I predict that this will be
+[37:47] taken off. I I predict that this will be changed into like maltbot video or
+[37:49] changed into like maltbot video or something like that.
+[37:51] something like that. &gt;&gt; Um but this is really cool. Um for those
+[37:54] &gt;&gt; Um but this is really cool. Um for those of us like me who are using YouTube
+[37:56] of us like me who are using YouTube videos to study things that are visual
+[37:58] videos to study things that are visual like you know me I want to understand
+[38:00] like you know me I want to understand how tools work and visual is important
+[38:02] how tools work and visual is important to me but what I want to do is search
+[38:04] to me but what I want to do is search through multiple videos at once. I use
+[38:07] through multiple videos at once. I use uh clawed code to do that to go and hunt
+[38:09] uh clawed code to do that to go and hunt through videos for me. What this tool
+[38:11] through videos for me. What this tool will do is it will bring in the
+[38:14] will do is it will bring in the transcript. Often the transcript is
+[38:16] transcript. Often the transcript is available in uh uh the subtitles of the
+[38:20] available in uh uh the subtitles of the of the YouTube video and if not it will
+[38:22] of the YouTube video and if not it will use whisper
+[38:24] use whisper to go and grab this or to create the
+[38:26] to go and grab this or to create the subtitles. Um and then what it'll do is
+[38:30] subtitles. Um and then what it'll do is it will match it up to the video frames
+[38:34] it will match it up to the video frames to understand what's in the video and
+[38:36] to understand what's in the video and make it available to you. It's useful
+[38:38] make it available to you. It's useful for people like me who are doing this,
+[38:40] for people like me who are doing this, but it's also useful to people like this
+[38:42] but it's also useful to people like this guy Tufik. I kept looking for how people
+[38:44] guy Tufik. I kept looking for how people were using this because not everyone's
+[38:45] were using this because not everyone's creating videos like me and studying
+[38:47] creating videos like me and studying using this Tufik. I'm not even going to
+[38:49] using this Tufik. I'm not even going to play this video. I will just describe to
+[38:50] play this video. I will just describe to you what he's doing. Where is it? Check
+[38:52] you what he's doing. Where is it? Check this out. He basically wants everything
+[38:54] this out. He basically wants everything that he learns using YouTube to be
+[38:57] that he learns using YouTube to be organized for him in his own little
+[38:59] organized for him in his own little personal wiki. There it is. So that he
+[39:01] personal wiki. There it is. So that he can access the things that he learned.
+[39:03] can access the things that he learned. Um there uh there it is. And and so
+[39:07] Um there uh there it is. And and so that's a really interesting use case.
+[39:09] that's a really interesting use case. I'll have this here for you all to
+[39:10] I'll have this here for you all to watch. I also have this video here from
+[39:12] watch. I also have this video here from Brad who talks about how this works and
+[39:15] Brad who talks about how this works and I think a way that's a little more
+[39:16] I think a way that's a little more organized than I just did.
+[39:17] organized than I just did. &gt;&gt; Code the ability to instantly watch.
+[39:19] &gt;&gt; Code the ability to instantly watch. &gt;&gt; Let's jump into that video tool you've
+[39:21] &gt;&gt; Let's jump into that video tool you've ever touched is probably using under the
+[39:22] ever touched is probably using under the hood. YTDLP is the downloader. You can
+[39:25] hood. YTDLP is the downloader. You can think of it as a right-click save video,
+[39:27] think of it as a right-click save video, but it works on basically the whole
+[39:28] but it works on basically the whole internet. FFmpeg is the video engine. It
+[39:31] internet. FFmpeg is the video engine. It takes the video and turns it into two
+[39:33] takes the video and turns it into two things that Claude actually wants. first
+[39:34] things that Claude actually wants. first screenshots which are taken every few
+[39:36] screenshots which are taken every few seconds all the way through the video
+[39:37] seconds all the way through the video and then second the audio file which is
+[39:39] and then second the audio file which is pulled out as a clean little file ready
+[39:41] pulled out as a clean little file ready to be transcribed into text using
+[39:43] to be transcribed into text using whisper. Now Claude has the full picture
+[39:44] whisper. Now Claude has the full picture when we put these two together. It's
+[39:46] when we put these two together. It's flipping through the screenshots like a
+[39:47] flipping through the screenshots like a flip book reading the transcript like a
+[39:49] flip book reading the transcript like a script and the timestamps line up
+[39:51] script and the timestamps line up exactly so it knows on screen when
+[39:53] exactly so it knows on screen when something is being said. So that's the
+[39:54] something is being said. So that's the whole pipeline.
+[39:56] whole pipeline. &gt;&gt; So cool. Such a
+[39:57] &gt;&gt; So cool. Such a &gt;&gt; I didn't really understand this at first
+[39:59] &gt;&gt; I didn't really understand this at first Andrew like I'm already getting the
+[40:00] Andrew like I'm already getting the transcripts that's all Claude needs.
+[40:02] transcripts that's all Claude needs. That's really useful, you know, getting
+[40:04] That's really useful, you know, getting the images. I guess that's fine, too.
+[40:06] the images. I guess that's fine, too. But I I didn't realize that it ties the
+[40:09] But I I didn't realize that it ties the the screenshot to the moment in the
+[40:11] the screenshot to the moment in the transcript when that happens. And so,
+[40:14] transcript when that happens. And so, you know, often in a video, somebody's
+[40:15] you know, often in a video, somebody's talking about what's on screen.
+[40:17] talking about what's on screen. &gt;&gt; Oh, but now Claude doesn't know. Oh, but
+[40:20] &gt;&gt; Oh, but now Claude doesn't know. Oh, but now Claude does know. Now I get it.
+[40:23] now Claude does know. Now I get it. That's exactly that it.
+[40:25] That's exactly that it. &gt;&gt; It's It's in this video where he
+[40:26] &gt;&gt; It's It's in this video where he demonstrates how that happens together
+[40:28] demonstrates how that happens together and it pieces it together. And then
+[40:29] and it pieces it together. And then there are people who are saying look you
+[40:31] there are people who are saying look you don't want it to grab it every you don't
+[40:33] don't want it to grab it every you don't want it to grab every frame at an
+[40:34] want it to grab every frame at an interval because then you end up with a
+[40:35] interval because then you end up with a lot of waste. You want it to ask it you
+[40:37] lot of waste. You want it to ask it you want um to grab it on uh scene changes
+[40:40] want um to grab it on uh scene changes and then match that up. So yeah that's
+[40:42] and then match that up. So yeah that's exactly what this is about. And having
+[40:44] exactly what this is about. And having said that as somebody who uses tools
+[40:46] said that as somebody who uses tools like this all the time to get
+[40:48] like this all the time to get transcripts not every transcript is
+[40:50] transcripts not every transcript is available on YouTube. This is a way of
+[40:52] available on YouTube. This is a way of doing it. And I should also say this
+[40:54] doing it. And I should also say this goes beyond YouTube. It goes into the
+[40:56] goes beyond YouTube. It goes into the Loom videos you get, the Zoom videos you
+[40:57] Loom videos you get, the Zoom videos you get and other platforms so that you can
+[40:59] get and other platforms so that you can say, "I've gotten all this information.
+[41:01] say, "I've gotten all this information. I don't have it accessible now. I do."
+[41:04] I don't have it accessible now. I do." And sometimes the
+[41:05] And sometimes the &gt;&gt; That's really interesting, too, cuz
+[41:06] &gt;&gt; That's really interesting, too, cuz that's that's a big problem in our, you
+[41:08] that's that's a big problem in our, you know, when we take either Loom or like
+[41:10] know, when we take either Loom or like Fireflies, we're just looking at the
+[41:12] Fireflies, we're just looking at the transcripts there, too. It's like, "No,
+[41:14] transcripts there, too. It's like, "No, I'm like trying to process a sales call.
+[41:15] I'm like trying to process a sales call. I need to know what was on the screen.
+[41:17] I need to know what was on the screen. What were what was the salesperson
+[41:19] What were what was the salesperson showing?" So, this is uh I'm Is this a
+[41:22] showing?" So, this is uh I'm Is this a skill or is this a tool? Let's take a
+[41:24] skill or is this a tool? Let's take a look. I think it's a skill that brings
+[41:26] look. I think it's a skill that brings them together.
+[41:28] them together. &gt;&gt; It's a skill. Yeah. Okay, cool. Yeah,
+[41:30] &gt;&gt; It's a skill. Yeah. Okay, cool. Yeah, I'm definitely I'm going to go and read
+[41:32] I'm definitely I'm going to go and read this skill, too. Man, you've given me
+[41:33] this skill, too. Man, you've given me way too much to do today. [laughter]
+[41:35] way too much to do today. [laughter] There's some There's some gems here.
+[41:38] There's some There's some gems here. &gt;&gt; I You know what? This week is good. Some
+[41:40] &gt;&gt; I You know what? This week is good. Some weeks piss you off because it's just a
+[41:41] weeks piss you off because it's just a bunch of skills. You're like, Andrew, I
+[41:44] bunch of skills. You're like, Andrew, I don't even want to do this anymore. Can
+[41:46] don't even want to do this anymore. Can we just switch to something else? And
+[41:47] we just switch to something else? And then some weeks you like, I I got to try
+[41:49] then some weeks you like, I I got to try this. I got to do that. Yeah,
+[41:50] this. I got to do that. Yeah, &gt;&gt; I I spend hours on these and um it's I
+[41:55] &gt;&gt; I I spend hours on these and um it's I wonder if really going with the top 10
+[41:56] wonder if really going with the top 10 is the right way. There might be a
+[41:58] is the right way. There might be a better way and you and I have talked
+[41:59] better way and you and I have talked about it. So maybe we're not just going
+[42:00] about it. So maybe we're not just going with what happens to get the most stars
+[42:02] with what happens to get the most stars this week, but what happens to get the
+[42:04] this week, but what happens to get the most stars this week that clears our our
+[42:05] most stars this week that clears our our bar.
+[42:06] bar. &gt;&gt; Um I don't know. I've been playing with
+[42:07] &gt;&gt; Um I don't know. I've been playing with it. This week's play was this. I told
+[42:10] it. This week's play was this. I told you I used star history and the whole
+[42:12] you I used star history and the whole freaking thing crashed out last night on
+[42:13] freaking thing crashed out last night on me and I had to reproduce it. I'm not
+[42:15] me and I had to reproduce it. I'm not copying them. I'm trying to reproduce
+[42:17] copying them. I'm trying to reproduce what was in my my site before. um to
+[42:20] what was in my my site before. um to show all of these graphs and it worked
+[42:22] show all of these graphs and it worked out fairly nicely and I'm really proud
+[42:24] out fairly nicely and I'm really proud of it. If you like this video, please
+[42:27] of it. If you like this video, please subscribe, like it, comment. All of that
+[42:29] subscribe, like it, comment. All of that stuff makes me feel good about life and
+[42:31] stuff makes me feel good about life and God knows, you know what, I shouldn't
+[42:32] God knows, you know what, I shouldn't have external validation making me feel
+[42:34] have external validation making me feel good about life, but I do I do um
+[42:37] good about life, but I do I do um &gt;&gt; either way, Andrew, honesty is is an
+[42:39] &gt;&gt; either way, Andrew, honesty is is an important element. So,
+[42:40] important element. So, &gt;&gt; I like on the weekend with my with my
+[42:43] &gt;&gt; I like on the weekend with my with my sons. I wouldn't do this around my wife
+[42:45] sons. I wouldn't do this around my wife cuz I still want her to like look at me
+[42:47] cuz I still want her to like look at me in a sexy way and not look at me as a
+[42:48] in a sexy way and not look at me as a dork, but uh when my sons are in the car
+[42:50] dork, but uh when my sons are in the car and it's not her, I will go in and I
+[42:52] and it's not her, I will go in and I will refresh the YouTube studio app. Do
+[42:56] will refresh the YouTube studio app. Do they like me? Oh man, they like me, but
+[42:58] they like me? Oh man, they like me, but they didn't thumbs it up. Who am I? Why
+[43:00] they didn't thumbs it up. Who am I? Why do they Why am I even doing this? Oh,
+[43:01] do they Why am I even doing this? Oh, wait. Somebody did like it and thumbs it
+[43:03] wait. Somebody did like it and thumbs it up. And I like that comment. He's a
+[43:04] up. And I like that comment. He's a smart person. I don't care about the
+[43:06] smart person. I don't care about the other people who didn't watch it. I care
+[43:07] other people who didn't watch it. I care about this one smart person. up and down
+[43:09] about this one smart person. up and down and up and down. It's all in other
+[43:11] and up and down. It's all in other people's control. I do need some help
+[43:12] people's control. I do need some help here, folks. Thanks for watching this
+[43:14] here, folks. Thanks for watching this one. We have a whole other killer set of
+[43:16] one. We have a whole other killer set of 10 repos that you need to watch. I'm
+[43:18] 10 repos that you need to watch. I'm going to link them right here on the
+[43:19] going to link them right here on the screen. Every week I point down like
+[43:21] screen. Every week I point down like this, but I think it's mostly like this
+[43:22] this, but I think it's mostly like this is where Michael does it. But somewhere
+[43:24] is where Michael does it. But somewhere on the screen, you'll see it. And I'll
+[43:25] on the screen, you'll see it. And I'll see you in the next one. Bye.
+```
+
+---
+_Work dir: `/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/QacqRZ0vsD4-orig-bal` — delete when done._

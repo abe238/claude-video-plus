@@ -1,0 +1,91 @@
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal
+[watch] checking metadata/captions via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[youtube] dQw4w9WgXcQ: Downloading webpage
+[youtube] dQw4w9WgXcQ: Downloading android vr player API JSON
+[youtube] dQw4w9WgXcQ: Downloading player 882a803a-main
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] dQw4w9WgXcQ: Downloading m3u8 information
+[info] dQw4w9WgXcQ: Downloading subtitles: en, en-en, en-orig, en-de-DE, en-ja, en-pt-BR, en-es-419
+[info] dQw4w9WgXcQ: Downloading 1 format(s): 401+251
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.16KiB at  Unknown B/s (00:00:00)[download] 100% of    4.16KiB in 00:00:00 at 88.40KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.16KiB at  Unknown B/s (00:00:00)[download] 100% of    4.16KiB in 00:00:00 at 88.31KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-orig.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-orig.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  397.88KiB/s (00:00:00)[download]    7.00KiB at  846.65KiB/s (00:00:00)[download]   14.46KiB at    1.11MiB/s (00:00:00)[download] 100% of   14.46KiB in 00:00:00 at 240.58KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-de-DE.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-de-DE.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    3.53KiB at  Unknown B/s (00:00:00)[download] 100% of    3.53KiB in 00:00:00 at 54.86KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-ja.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-ja.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    3.51KiB at    2.04MiB/s (00:00:00)[download] 100% of    3.51KiB in 00:00:00 at 53.34KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-pt-BR.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-pt-BR.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    3.67KiB at    1.75MiB/s (00:00:00)[download] 100% of    3.67KiB in 00:00:00 at 67.33KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-es-419.vtt
+WARNING: Unable to download video subtitles for 'en-es-419': HTTP Error 429: Too Many Requests
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-es-419 subtitle because the file is missing
+[watch] downloading video via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[youtube] dQw4w9WgXcQ: Downloading webpage
+[youtube] dQw4w9WgXcQ: Downloading android vr player API JSON
+[youtube] dQw4w9WgXcQ: Downloading player 882a803a-main
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] dQw4w9WgXcQ: Downloading m3u8 information
+[info] dQw4w9WgXcQ: Downloading subtitles: en, en-en, en-orig, en-de-DE, en-ja, en-pt-BR, en-es-419
+[info] dQw4w9WgXcQ: Downloading 1 format(s): 398+251
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.71MiB/s (00:00:00)[download]    4.16KiB at    1.80MiB/s (00:00:00)[download] 100% of    4.16KiB in 00:00:00 at 67.51KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-en.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.16KiB at  Unknown B/s (00:00:00)[download] 100% of    4.16KiB in 00:00:00 at 97.69KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-orig.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-orig.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-orig.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    7.00KiB at  Unknown B/s (00:00:00)[download]   14.46KiB at    8.98MiB/s (00:00:00)[download] 100% of   14.46KiB in 00:00:00 at 335.13KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-de-DE.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-de-DE.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-de-DE.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.61MiB/s (00:00:00)[download]    3.53KiB at    1.18MiB/s (00:00:00)[download] 100% of    3.53KiB in 00:00:00 at 63.96KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-ja.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-ja.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-ja.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    2.22MiB/s (00:00:00)[download]    3.51KiB at    1.21MiB/s (00:00:00)[download] 100% of    3.51KiB in 00:00:00 at 45.70KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-pt-BR.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-pt-BR.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-pt-BR.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    3.67KiB at    1.57MiB/s (00:00:00)[download] 100% of    3.67KiB in 00:00:00 at 44.98KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.en-es-419.vtt
+WARNING: Unable to download video subtitles for 'en-es-419': HTTP Error 429: Too Many Requests
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-es-419 subtitle because the file is missing
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.f398.mp4
+[download]   0.0% of   16.78MiB at  449.89KiB/s ETA 00:38[download]   0.0% of   16.78MiB at    1.19MiB/s ETA 00:14[download]   0.0% of   16.78MiB at    2.69MiB/s ETA 00:06[download]   0.1% of   16.78MiB at    5.53MiB/s ETA 00:03[download]   0.2% of   16.78MiB at    4.37MiB/s ETA 00:03[download]   0.4% of   16.78MiB at    3.84MiB/s ETA 00:04[download]   0.7% of   16.78MiB at    6.06MiB/s ETA 00:02[download]   1.5% of   16.78MiB at    8.73MiB/s ETA 00:01[download]   3.0% of   16.78MiB at   12.60MiB/s ETA 00:01[download]   6.0% of   16.78MiB at   17.38MiB/s ETA 00:00[download]  11.9% of   16.78MiB at   27.37MiB/s ETA 00:00[download]  23.8% of   16.78MiB at   36.30MiB/s ETA 00:00[download]  47.7% of   16.78MiB at   46.13MiB/s ETA 00:00[download]  59.5% of   16.78MiB at   48.85MiB/s ETA 00:00[download]  59.5% of   16.78MiB at  Unknown B/s ETA Unknown[download]  59.5% of   16.78MiB at  Unknown B/s ETA Unknown[download]  59.5% of   16.78MiB at  Unknown B/s ETA Unknown[download]  59.6% of   16.78MiB at   11.89MiB/s ETA 00:00  [download]  59.7% of   16.78MiB at   19.49MiB/s ETA 00:00[download]  59.8% of   16.78MiB at   32.44MiB/s ETA 00:00[download]  60.2% of   16.78MiB at   44.32MiB/s ETA 00:00[download]  61.0% of   16.78MiB at   57.72MiB/s ETA 00:00[download]  62.4% of   16.78MiB at   60.74MiB/s ETA 00:00[download]  65.4% of   16.78MiB at   67.63MiB/s ETA 00:00[download]  71.4% of   16.78MiB at   66.70MiB/s ETA 00:00[download]  83.3% of   16.78MiB at   69.88MiB/s ETA 00:00[download] 100.0% of   16.78MiB at   69.68MiB/s ETA 00:00[download] 100% of   16.78MiB in 00:00:00 at 47.56MiB/s  
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.f251.webm
+[download]   0.0% of    3.27MiB at  Unknown B/s ETA Unknown[download]   0.1% of    3.27MiB at  Unknown B/s ETA Unknown[download]   0.2% of    3.27MiB at    5.43MiB/s ETA 00:00  [download]   0.4% of    3.27MiB at    9.45MiB/s ETA 00:00[download]   0.9% of    3.27MiB at   16.52MiB/s ETA 00:00[download]   1.9% of    3.27MiB at   28.08MiB/s ETA 00:00[download]   3.8% of    3.27MiB at   36.17MiB/s ETA 00:00[download]   7.6% of    3.27MiB at   55.28MiB/s ETA 00:00[download]  15.2% of    3.27MiB at   70.28MiB/s ETA 00:00[download]  30.5% of    3.27MiB at   67.43MiB/s ETA 00:00[download]  61.0% of    3.27MiB at   70.41MiB/s ETA 00:00[download] 100.0% of    3.27MiB at   70.89MiB/s ETA 00:00[download] 100% of    3.27MiB in 00:00:00 at 57.46MiB/s  
+[Merger] Merging formats into "/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.mp4"
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.f398.mp4 (pass -k to keep)
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/dQw4w9WgXcQ-orig-bal/download/video.f251.webm (pass -k to keep)
+[watch] extracting scene-aware frames over full 213.1s (target 80, cap 100)…

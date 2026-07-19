@@ -1,0 +1,230 @@
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal
+[watch] checking metadata/captions via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=rBpaUICxEhk
+[youtube] rBpaUICxEhk: Downloading webpage
+[youtube] rBpaUICxEhk: Downloading android vr player API JSON
+[info] rBpaUICxEhk: Downloading subtitles: en, en-ar, en-bg, en-ca, en-zh-CN, en-cs, en-nl, en-en, en-orig, en-fi, en-fr, en-de, en-el, en-hu, en-id, en-it, en-ja, en-ko, en-pl, en-pt, en-pt-BR, en-ro, en-ru, en-es, en-es-419, en-tr
+[info] rBpaUICxEhk: Downloading 1 format(s): 399+251
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.47MiB/s (00:00:00)[download]    4.57KiB at    1.77MiB/s (00:00:00)[download] 100% of    4.57KiB in 00:00:00 at 77.47KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ar.vtt
+WARNING: Unable to download video subtitles for 'en-ar': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-bg.vtt
+WARNING: Unable to download video subtitles for 'en-bg': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ca.vtt
+WARNING: Unable to download video subtitles for 'en-ca': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-zh-CN.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-zh-CN.vtt
+[download]    1.00KiB at  369.15KiB/s (00:00:01)[download]    3.00KiB at  940.50KiB/s (00:00:01)[download]    4.52KiB at  911.80KiB/s (00:00:01)[download] 100% of    4.52KiB in 00:00:01 at 2.79KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-cs.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-cs.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    2.85MiB/s (00:00:00)[download]    4.50KiB at    2.04MiB/s (00:00:00)[download] 100% of    4.50KiB in 00:00:00 at 4.52KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-nl.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-nl.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:02)[download]    3.00KiB at    1.83MiB/s (00:00:02)[download]    4.17KiB at    1.24MiB/s (00:00:02)[download] 100% of    4.17KiB in 00:00:02 at 1.84KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    2.44MiB/s (00:00:00)[download]    4.57KiB at    1.87MiB/s (00:00:00)[download] 100% of    4.57KiB in 00:00:00 at 83.49KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-orig.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-orig.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    2.89MiB/s (00:00:00)[download]    7.00KiB at    3.96MiB/s (00:00:00)[download]   15.00KiB at    5.99MiB/s (00:00:00)[download]   26.67KiB at    4.97MiB/s (00:00:00)[download] 100% of   26.67KiB in 00:00:00 at 422.15KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fi.vtt
+WARNING: Unable to download video subtitles for 'en-fi': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fr.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fr.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:02)[download]    3.00KiB at    2.93MiB/s (00:00:02)[download]    4.71KiB at    2.34MiB/s (00:00:02)[download] 100% of    4.71KiB in 00:00:02 at 2.15KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-de.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-de.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.48MiB/s (00:00:01)[download]    4.92KiB at    1.35MiB/s (00:00:01)[download] 100% of    4.92KiB in 00:00:01 at 4.63KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-el.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-el.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    2.59KiB at    1.12MiB/s (00:00:00)[download] 100% of    2.59KiB in 00:00:00 at 3.00KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-hu.vtt
+WARNING: Unable to download video subtitles for 'en-hu': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-id.vtt
+WARNING: Unable to download video subtitles for 'en-id': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-it.vtt
+WARNING: Unable to download video subtitles for 'en-it': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ja.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ja.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    1.99KiB at    1.55MiB/s (00:00:00)[download] 100% of    1.99KiB in 00:00:00 at 36.81KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ko.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ko.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.53MiB/s (00:00:01)[download]    4.55KiB at    1.51MiB/s (00:00:01)[download] 100% of    4.55KiB in 00:00:01 at 2.90KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pl.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pl.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.91MiB/s (00:00:01)[download]    3.64KiB at    1.19MiB/s (00:00:01)[download] 100% of    3.64KiB in 00:00:01 at 2.88KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt.vtt
+WARNING: Unable to download video subtitles for 'en-pt': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt-BR.vtt
+WARNING: Unable to download video subtitles for 'en-pt-BR': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ro.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ro.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:03)[download]    3.00KiB at    1.95MiB/s (00:00:03)[download]    4.87KiB at    1.53MiB/s (00:00:03)[download] 100% of    4.87KiB in 00:00:03 at 1.46KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ru.vtt
+WARNING: Unable to download video subtitles for 'en-ru': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.95MiB/s (00:00:01)[download]    4.47KiB at    1.56MiB/s (00:00:01)[download] 100% of    4.47KiB in 00:00:01 at 3.12KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es-419.vtt
+WARNING: Unable to download video subtitles for 'en-es-419': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-tr.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-tr.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    2.19MiB/s (00:00:01)[download]    4.54KiB at    1.49MiB/s (00:00:01)[download] 100% of    4.54KiB in 00:00:01 at 3.69KiB/s
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-ar subtitle because the file is missing
+WARNING: Skipping embedding en-bg subtitle because the file is missing
+WARNING: Skipping embedding en-ca subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-fi subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-hu subtitle because the file is missing
+WARNING: Skipping embedding en-id subtitle because the file is missing
+WARNING: Skipping embedding en-it subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-pt subtitle because the file is missing
+WARNING: Skipping embedding en-pt-BR subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-ru subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-es-419 subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[watch] downloading video via yt-dlp…
+[youtube] Extracting URL: https://www.youtube.com/watch?v=rBpaUICxEhk
+[youtube] rBpaUICxEhk: Downloading webpage
+[youtube] rBpaUICxEhk: Downloading android vr player API JSON
+[youtube] rBpaUICxEhk: Downloading player 882a803a-main
+[youtube] [jsc:deno] Solving JS challenges using deno
+[youtube] rBpaUICxEhk: Downloading m3u8 information
+[info] rBpaUICxEhk: Downloading subtitles: en, en-ar, en-bg, en-ca, en-zh-CN, en-cs, en-nl, en-en, en-orig, en-fi, en-fr, en-de, en-el, en-hu, en-id, en-it, en-ja, en-ko, en-pl, en-pt, en-pt-BR, en-ro, en-ru, en-es, en-es-419, en-tr
+[info] rBpaUICxEhk: Downloading 1 format(s): 398+251
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.04MiB/s (00:00:00)[download]    4.57KiB at    1.31MiB/s (00:00:00)[download] 100% of    4.57KiB in 00:00:00 at 77.55KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ar.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ar.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:02)[download]    3.00KiB at    1.41MiB/s (00:00:02)[download]    4.52KiB at    1.31MiB/s (00:00:02)[download] 100% of    4.52KiB in 00:00:02 at 1.80KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-bg.vtt
+WARNING: Unable to download video subtitles for 'en-bg': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ca.vtt
+WARNING: Unable to download video subtitles for 'en-ca': HTTP Error 429: Too Many Requests
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-zh-CN.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-zh-CN.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-zh-CN.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.98MiB/s (00:00:00)[download]    4.52KiB at    1.47MiB/s (00:00:00)[download] 100% of    4.52KiB in 00:00:00 at 65.32KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-cs.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-cs.vtt
+WARNING: Unable to download video subtitles for 'en-cs': HTTP Error 429: Too Many Requests
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-nl.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-nl.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-nl.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.48MiB/s (00:00:00)[download]    4.17KiB at    1.48MiB/s (00:00:00)[download] 100% of    4.17KiB in 00:00:00 at 63.14KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-en.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-en.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-en.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.75MiB/s (00:00:00)[download]    4.57KiB at    1.32MiB/s (00:00:00)[download] 100% of    4.57KiB in 00:00:00 at 84.41KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-orig.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-orig.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-orig.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    7.00KiB at    2.82MiB/s (00:00:00)[download]   15.00KiB at    5.16MiB/s (00:00:00)[download]   26.67KiB at    6.91MiB/s (00:00:00)[download] 100% of   26.67KiB in 00:00:00 at 529.36KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fi.vtt
+WARNING: Unable to download video subtitles for 'en-fi': HTTP Error 429: Too Many Requests
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fr.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fr.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-fr.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.71KiB at    2.29MiB/s (00:00:00)[download] 100% of    4.71KiB in 00:00:00 at 65.03KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-de.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-de.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-de.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.73MiB/s (00:00:00)[download]    4.92KiB at    1.60MiB/s (00:00:00)[download] 100% of    4.92KiB in 00:00:00 at 72.34KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-el.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-el.vtt
+WARNING: Unable to download video subtitles for 'en-el': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-hu.vtt
+WARNING: Unable to download video subtitles for 'en-hu': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-id.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-id.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    2.00MiB/s (00:00:01)[download]    4.82KiB at    1.59MiB/s (00:00:01)[download] 100% of    4.82KiB in 00:00:01 at 3.43KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-it.vtt
+WARNING: Unable to download video subtitles for 'en-it': HTTP Error 429: Too Many Requests
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ja.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ja.vtt
+WARNING: Unable to download video subtitles for 'en-ja': HTTP Error 429: Too Many Requests
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ko.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ko.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ko.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at    1.69MiB/s (00:00:00)[download]    4.55KiB at    1.54MiB/s (00:00:00)[download] 100% of    4.55KiB in 00:00:00 at 18.84KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pl.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pl.vtt
+WARNING: Unable to download video subtitles for 'en-pl': HTTP Error 429: Too Many Requests
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at  Unknown B/s (00:00:01)[download]    4.59KiB at    1.92MiB/s (00:00:01)[download] 100% of    4.59KiB in 00:00:01 at 3.20KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt-BR.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-pt-BR.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.74MiB/s (00:00:01)[download]    3.97KiB at    1.12MiB/s (00:00:01)[download] 100% of    3.97KiB in 00:00:01 at 2.94KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ro.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ro.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ro.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.87KiB at    2.14MiB/s (00:00:00)[download] 100% of    4.87KiB in 00:00:00 at 76.32KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ru.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-ru.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at  Unknown B/s (00:00:00)[download]    4.67KiB at    2.40MiB/s (00:00:00)[download] 100% of    4.67KiB in 00:00:00 at 5.18KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:00)[download]    3.00KiB at 1009.70KiB/s (00:00:00)[download]    4.47KiB at  980.80KiB/s (00:00:00)[download] 100% of    4.47KiB in 00:00:00 at 17.49KiB/s
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es-419.vtt
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-es-419.vtt
+[download]    1.00KiB at  Unknown B/s (00:00:01)[download]    3.00KiB at    1.58MiB/s (00:00:01)[download]    4.68KiB at    1.26MiB/s (00:00:01)[download] 100% of    4.68KiB in 00:00:01 at 3.40KiB/s
+Deleting existing file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-tr.vtt
+[info] Writing video subtitles to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.en-tr.vtt
+WARNING: Unable to download video subtitles for 'en-tr': HTTP Error 429: Too Many Requests
+[info] Writing video metadata as JSON to: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.info.json
+[SubtitlesConvertor] Converting subtitles
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-bg subtitle because the file is missing
+WARNING: Skipping embedding en-ca subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-cs subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-fi subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-el subtitle because the file is missing
+WARNING: Skipping embedding en-hu subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-it subtitle because the file is missing
+WARNING: Skipping embedding en-ja subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-pl subtitle because the file is missing
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+[SubtitlesConvertor] Subtitle file for vtt is already in the requested format
+WARNING: Skipping embedding en-tr subtitle because the file is missing
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.f398.mp4
+[download]   0.0% of   23.74MiB at  258.52KiB/s ETA 01:34[download]   0.0% of   23.74MiB at  644.45KiB/s ETA 00:37[download]   0.0% of   23.74MiB at    1.36MiB/s ETA 00:17[download]   0.1% of   23.74MiB at    2.78MiB/s ETA 00:08[download]   0.1% of   23.74MiB at    3.81MiB/s ETA 00:06[download]   0.3% of   23.74MiB at    3.87MiB/s ETA 00:06[download]   0.5% of   23.74MiB at    5.57MiB/s ETA 00:04[download]   1.0% of   23.74MiB at    7.60MiB/s ETA 00:03[download]   2.1% of   23.74MiB at   11.13MiB/s ETA 00:02[download]   4.2% of   23.74MiB at   14.23MiB/s ETA 00:01[download]   8.4% of   23.74MiB at   22.18MiB/s ETA 00:00[download]  16.8% of   23.74MiB at   30.65MiB/s ETA 00:00[download]  33.7% of   23.74MiB at   33.18MiB/s ETA 00:00[download]  40.9% of   23.74MiB at   29.70MiB/s ETA 00:00[download]  40.9% of   23.74MiB at  Unknown B/s ETA Unknown[download]  40.9% of   23.74MiB at  Unknown B/s ETA Unknown[download]  40.9% of   23.74MiB at  Unknown B/s ETA Unknown[download]  40.9% of   23.74MiB at   13.13MiB/s ETA 00:01  [download]  41.0% of   23.74MiB at   23.22MiB/s ETA 00:00[download]  41.1% of   23.74MiB at   40.80MiB/s ETA 00:00[download]  41.4% of   23.74MiB at   70.27MiB/s ETA 00:00[download]  41.9% of   23.74MiB at  114.24MiB/s ETA 00:00[download]  43.0% of   23.74MiB at    4.75MiB/s ETA 00:02[download]  45.1% of   23.74MiB at    8.97MiB/s ETA 00:01[download]  49.3% of   23.74MiB at   15.61MiB/s ETA 00:00[download]  57.7% of   23.74MiB at   18.60MiB/s ETA 00:00[download]  74.6% of   23.74MiB at   16.17MiB/s ETA 00:00[download]  81.7% of   23.74MiB at   18.01MiB/s ETA 00:00[download]  81.7% of   23.74MiB at  Unknown B/s ETA Unknown[download]  81.7% of   23.74MiB at  Unknown B/s ETA Unknown[download]  81.7% of   23.74MiB at  Unknown B/s ETA Unknown[download]  81.7% of   23.74MiB at   12.39MiB/s ETA 00:00  [download]  81.8% of   23.74MiB at   19.71MiB/s ETA 00:00[download]  81.9% of   23.74MiB at   32.69MiB/s ETA 00:00[download]  82.2% of   23.74MiB at   58.22MiB/s ETA 00:00[download]  82.7% of   23.74MiB at   98.94MiB/s ETA 00:00[download]  83.8% of   23.74MiB at   80.85MiB/s ETA 00:00[download]  85.9% of   23.74MiB at    7.43MiB/s ETA 00:00[download]  90.1% of   23.74MiB at   13.14MiB/s ETA 00:00[download]  98.5% of   23.74MiB at   10.90MiB/s ETA 00:00[download] 100.0% of   23.74MiB at   11.60MiB/s ETA 00:00[download] 100% of   23.74MiB in 00:00:01 at 15.59MiB/s  
+[download] Destination: /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.f251.webm
+[download]   0.0% of    3.72MiB at  Unknown B/s ETA Unknown[download]   0.1% of    3.72MiB at    2.01MiB/s ETA 00:01  [download]   0.2% of    3.72MiB at    3.25MiB/s ETA 00:01[download]   0.4% of    3.72MiB at    5.94MiB/s ETA 00:00[download]   0.8% of    3.72MiB at   10.56MiB/s ETA 00:00[download]   1.7% of    3.72MiB at   19.36MiB/s ETA 00:00[download]   3.3% of    3.72MiB at   36.09MiB/s ETA 00:00[download]   6.7% of    3.72MiB at   60.31MiB/s ETA 00:00[download]  13.4% of    3.72MiB at   91.92MiB/s ETA 00:00[download]  26.9% of    3.72MiB at   70.60MiB/s ETA 00:00[download]  53.7% of    3.72MiB at   68.39MiB/s ETA 00:00[download] 100.0% of    3.72MiB at   63.68MiB/s ETA 00:00[download] 100% of    3.72MiB in 00:00:00 at 10.58MiB/s  
+[Merger] Merging formats into "/private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.mp4"
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.f251.webm (pass -k to keep)
+Deleting original file /private/tmp/claude-501/-Users-abediaz/a1330ba5-c70f-47fc-87c3-d4ae7156a5ae/scratchpad/c9/rBpaUICxEhk-orig-bal/download/video.f398.mp4 (pass -k to keep)
+[watch] extracting scene-aware frames over full 240.6s (target 80, cap 100)…
