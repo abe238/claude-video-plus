@@ -258,7 +258,7 @@ The normalized transcript pipeline stops at the first usable source:
 7. frames-only fail-open result.
 
 Every local option is exhausted before anything leaves the machine. Set `WATCH_STT_ORDER`, `WATCH_STT_URL`, `WATCH_STT_MODEL`, `WATCH_WHISPER_CLI_PATH`, `WATCH_WHISPER_CLI_MODEL`, and `WATCH_LANGUAGE` in
-`~/.config/watch/.env`. `WATCH_LANGUAGE` is normalized per adapter (yap needs `en_US`, the whisper CLI needs `en`), so set it once in whichever form you like. YAP, local servers, and the whisper CLI are detected, never installed. Cloud audio is never
+`~/.config/watch/.env`. `WATCH_LANGUAGE` controls caption-track selection too: an ordered list like `es,en` fetches and prefers those subtitle tracks (manual tracks beat auto-generated within each language). It is normalized per adapter (yap needs `en_US`, the whisper CLI needs `en`), so set it once in whichever form you like. YAP, local servers, and the whisper CLI are detected, never installed. Cloud audio is never
 sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE=true`). Focused
 requests extract only the requested range before inference, restore absolute timestamps, split
 near silence, and reuse successful owner-only chunk receipts after interruption.
