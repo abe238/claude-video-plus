@@ -20,7 +20,7 @@ def _skill_version():
 def test_release_versions_and_identity_are_canonical():
     claude = _json(".claude-plugin/plugin.json")
     codex = _json(".codex-plugin/plugin.json")
-    assert {_skill_version(), claude["version"], codex["version"]} == {"1.2.1"}
+    assert {_skill_version(), claude["version"], codex["version"]} == {"1.2.2"}
     assert claude["repository"] == codex["repository"] == "https://github.com/abe238/claude-video-plus"
     assert claude["homepage"] == codex["homepage"] == "https://abe238.github.io/claude-video-plus/"
     assert claude["license"] == codex["license"] == "MIT"

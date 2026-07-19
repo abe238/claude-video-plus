@@ -8,6 +8,7 @@ zooming in for detail).
 """
 from __future__ import annotations
 
+import bisect
 import json
 import os
 import re
@@ -600,6 +601,26 @@ def _changed_cell_pct(a: bytes, b: bytes) -> float:
     return changed * 100.0 / (len(a) // 3)
 
 
+def _cell_delta_duplicate(a: bytes, b: bytes) -> bool:
+    """Binary form of ``_changed_cell_pct(a, b) <= V2_CHANGED_PCT_THRESHOLD``
+    with an early exit: the decision only needs the changed count to cross the
+    duplicate allowance, so counting stops there instead of scanning every cell.
+    Must stay in lockstep with :func:`_changed_cell_pct` (same tolerance, same
+    fail-open: mismatched or non-rgb24 lengths are never duplicates)."""
+    if not a or len(a) != len(b) or len(a) % 3:
+        return False
+    # duplicate iff changed * 100 / total <= threshold  ⇔  changed <= allowance
+    allowance = V2_CHANGED_PCT_THRESHOLD * (len(a) // 3) / 100.0
+    changed = 0
+    for i in range(0, len(a), 3):
+        delta = max(abs(a[i] - b[i]), abs(a[i + 1] - b[i + 1]), abs(a[i + 2] - b[i + 2]))
+        if delta > V2_CELL_TOLERANCE:
+            changed += 1
+            if changed > allowance:
+                return False
+    return True
+
+
 def _window_partition(
     candidates: list[dict], thumbs: list[bytes]
 ) -> tuple[list[dict], list[dict]]:
@@ -618,7 +639,7 @@ def _window_partition(
         ts = float(cand["timestamp_seconds"])
         duplicate = any(
             (ts - seen_ts) <= V2_WINDOW_HORIZON_SECONDS
-            and _changed_cell_pct(thumb, seen) <= V2_CHANGED_PCT_THRESHOLD
+            and _cell_delta_duplicate(thumb, seen)
             for seen, seen_ts in window
         )
         if duplicate:
@@ -658,26 +679,28 @@ def _gap_fill(
     widest-first equivalent greedily (nearest-to-gap-middle pick)."""
     if not survivors or floor_interval <= 0 or max_fill <= 0:
         return survivors
-    out = list(survivors)
+    # Single left-to-right pass. A fill splits the current gap; the left half is
+    # re-examined at the same index (identical to the old re-sort-and-rescan,
+    # because earlier gaps only ever shrink and the pool only ever drains).
+    out = sorted(survivors, key=lambda c: float(c["timestamp_seconds"]))
+    out_ts = [float(c["timestamp_seconds"]) for c in out]
     pool = sorted(dropped, key=lambda c: float(c["timestamp_seconds"]))
+    pool_ts = [float(c["timestamp_seconds"]) for c in pool]
     fills = 0
-    while fills < max_fill:
-        out.sort(key=lambda c: float(c["timestamp_seconds"]))
-        pick = None
-        for a, b in zip(out, out[1:]):
-            a_ts, b_ts = float(a["timestamp_seconds"]), float(b["timestamp_seconds"])
-            if b_ts - a_ts > floor_interval:
-                inside = [c for c in pool if a_ts < float(c["timestamp_seconds"]) < b_ts]
-                if inside:
-                    mid = (a_ts + b_ts) / 2
-                    pick = min(inside, key=lambda c: abs(float(c["timestamp_seconds"]) - mid))
-                    break
-        if pick is None:
-            break
-        pool.remove(pick)
-        out.append(pick)
-        fills += 1
-    out.sort(key=lambda c: float(c["timestamp_seconds"]))
+    i = 0
+    while fills < max_fill and i < len(out) - 1:
+        a_ts, b_ts = out_ts[i], out_ts[i + 1]
+        if b_ts - a_ts > floor_interval:
+            lo = bisect.bisect_right(pool_ts, a_ts)  # strictly inside the gap
+            hi = bisect.bisect_left(pool_ts, b_ts)
+            if lo < hi:
+                mid = (a_ts + b_ts) / 2
+                j = min(range(lo, hi), key=lambda k: abs(pool_ts[k] - mid))
+                out.insert(i + 1, pool.pop(j))
+                out_ts.insert(i + 1, pool_ts.pop(j))
+                fills += 1
+                continue
+        i += 1
     return out
 
 

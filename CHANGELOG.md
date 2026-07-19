@@ -2,6 +2,30 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.2.2] — 2026-07-18
+
+Cleanup release: dead-code removal and de-duplication from the closing review's
+non-correctness findings. Pure refactors, behavior-frozen (a 2000-trial
+randomized equivalence harness pins the gap-fill rewrite; a 500-trial one pins
+the comparator early-exit).
+
+### Changed
+
+- Deleted `detect_silence_boundaries()` and `SILENCE_CLASSIFIER_VERSION` (dead
+  since the two-pass chunking switch — the second silencedetect parser that had
+  already begun to drift from `silence_intervals`).
+- One validation rule set for word timestamps (`whisper._clean_words`), shared
+  by the cloud and CLI paths; `transcription._parse_words` delegates to it.
+- whisper-cli JSON parsing delegates to `whisper.segments_from_response`, which
+  gained the same malformed-cue drop — cloud and CLI now reject `end<start` /
+  `start<0` cues identically (a deliberate unification; the cloud path
+  previously did not).
+- Comparator early-exit: `_cell_delta_duplicate` stops counting once the changed
+  cells exceed the duplicate allowance — the hot-path decision is binary, so a
+  distinct frame no longer pays all 256 cells.
+- `_gap_fill` rewritten from re-sort-every-iteration + full-pool-rescan to a
+  single bisect pass. Identical fills; O(n log n) instead of O(n²).
+
 ## [1.2.1] — 2026-07-18
 
 Correctness release: every item found by the chain's own closing review (eight

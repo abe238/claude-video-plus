@@ -13,6 +13,7 @@ from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from typing import Mapping, Protocol, Sequence, runtime_checkable
 
+import whisper
 from config import get_transcription_config
 from transcribe import filter_range
 from transcription_chunks import ChunkReceiptStore, PreparedAudio, prepare_audio
@@ -34,25 +35,17 @@ class TranscriptWord:
 def _parse_words(value: object, *, offset: float) -> tuple[TranscriptWord, ...]:
     """Coerce an optional backend 'words' list, shifting by the segment offset.
 
-    Fail-open: malformed entries are dropped, never raised — words are an
-    enrichment, and a bad word list must not cost the segment."""
-    if not isinstance(value, (list, tuple)):
-        return ()
+    Entry validation delegates to whisper._clean_words — ONE rule set shared by
+    the cloud and CLI word paths (drop empty text, non-numeric, start < 0,
+    end < start). Fail-open: malformed entries are dropped, never raised —
+    words are an enrichment, and a bad word list must not cost the segment."""
     words: list[TranscriptWord] = []
-    for entry in value:
-        if not isinstance(entry, Mapping):
+    for entry in whisper._clean_words(value):
+        start = round(entry["start"] + offset, 3)
+        end = round(entry["end"] + offset, 3)
+        if start < 0 or end < start:  # invariant guard after the offset shift
             continue
-        text = str(entry.get("word") or "").strip()
-        if not text:
-            continue
-        try:
-            start = round(float(entry.get("start")) + offset, 3)
-            end = round(float(entry.get("end")) + offset, 3)
-        except (TypeError, ValueError):
-            continue
-        if start < 0 or end < start:
-            continue
-        words.append(TranscriptWord(word=str(entry.get("word")), start=start, end=end))
+        words.append(TranscriptWord(word=entry["word"], start=start, end=end))
     return tuple(words)
 
 

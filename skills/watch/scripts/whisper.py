@@ -22,6 +22,7 @@ import sys
 import time
 import urllib.error
 import uuid
+from collections.abc import Mapping
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -400,21 +401,25 @@ def shift_segments(segments: list[dict], offset_seconds: float) -> list[dict]:
 
 
 def _clean_words(raw: object) -> list[dict]:
-    """Normalize a backend word list to {word, start, end}; drop malformed entries."""
+    """Normalize a backend word list to {word, start, end}; drop malformed entries.
+
+    THE word-validation rule set: transcription._parse_words delegates here so
+    the cloud and CLI word paths reject identical entries (empty text,
+    non-numeric, start < 0, end < start)."""
     words: list[dict] = []
-    if not isinstance(raw, list):
+    if not isinstance(raw, (list, tuple)):
         return words
     for entry in raw:
-        if not isinstance(entry, dict) or not str(entry.get("word") or "").strip():
+        if not isinstance(entry, Mapping) or not str(entry.get("word") or "").strip():
             continue
         try:
-            words.append({
-                "word": str(entry["word"]),
-                "start": round(float(entry["start"]), 3),
-                "end": round(float(entry["end"]), 3),
-            })
+            start = round(float(entry["start"]), 3)
+            end = round(float(entry["end"]), 3)
         except (KeyError, TypeError, ValueError):
             continue
+        if start < 0 or end < start:
+            continue
+        words.append({"word": str(entry["word"]), "start": start, "end": end})
     return words
 
 
@@ -429,12 +434,19 @@ def segments_from_response(data: dict) -> list[dict]:
     top_words = _clean_words(data.get("words"))
     out: list[dict] = []
     for seg in data.get("segments") or []:
-        text = (seg.get("text") or "").strip()
+        text = str(seg.get("text") or "").strip()
         if not text:
             continue
+        start = round(float(seg.get("start") or 0.0), 2)
+        end = round(float(seg.get("end") or 0.0), 2)
+        if end < start or start < 0:
+            # v1.2.1 validity drop (shared with the whisper-cli path): a
+            # malformed cue is dropped HERE — not later in _local_segments
+            # where a ValueError would kill the whole adapter.
+            continue
         value = {
-            "start": round(float(seg.get("start") or 0.0), 2),
-            "end": round(float(seg.get("end") or 0.0), 2),
+            "start": start,
+            "end": end,
             "text": text,
         }
         words = _clean_words(seg.get("words"))

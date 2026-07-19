@@ -170,6 +170,40 @@ def test_segments_from_response_without_words_stays_segment_only():
     assert "words" not in out[0]
 
 
+def test_segments_from_response_drops_malformed_cues_not_crashes():
+    """v1.2.1 validity drop, now shared by BOTH the cloud and whisper-cli
+    paths: an end<start or start<0 cue is dropped — never raised later in
+    _local_segments where a ValueError would kill the whole adapter."""
+    out = whisper.segments_from_response(
+        {
+            "segments": [
+                {"start": 2.0, "end": 1.0, "text": "inverted"},
+                {"start": -0.5, "end": 1.0, "text": "negative"},
+                {"start": 1.0, "end": 2.0, "text": "valid"},
+            ]
+        }
+    )
+    assert [s["text"] for s in out] == ["valid"]
+
+
+def test_word_validation_is_identical_on_cloud_and_cli_paths():
+    """One normalizer (whisper._clean_words) backs both word paths: negative,
+    inverted, and non-numeric word entries are rejected everywhere."""
+    raw = [
+        {"word": "keep", "start": 0.1, "end": 0.5},
+        {"word": "negative", "start": -1.0, "end": 0.5},
+        {"word": "inverted", "start": 2.0, "end": 1.0},
+        {"word": "nonnumeric", "start": "x", "end": 1.0},
+    ]
+    # cloud/cli backend normalizer
+    assert [w["word"] for w in whisper._clean_words(raw)] == ["keep"]
+    # TranscriptSegment path (receipts, adapters) applies the same rule set
+    segment = TranscriptSegment.from_mapping(
+        {"start": 0.0, "end": 2.0, "text": "t", "words": raw}
+    )
+    assert [w.word for w in segment.words] == ["keep"]
+
+
 def test_shift_segments_shifts_nested_words_too():
     shifted = whisper.shift_segments(
         [{"start": 0.0, "end": 1.0, "text": "w",
@@ -246,6 +280,42 @@ def test_whisper_cli_without_words_in_json_is_fail_open(tmp_path, monkeypatch):
     values = ta.WhisperCliAdapter()._transcribe_one(request, chunk)
     assert values[0]["text"] == "plain"
     assert not values[0].get("words")
+
+
+def test_whisper_cli_drops_malformed_segment_instead_of_crashing(tmp_path, monkeypatch):
+    """Pin the v1.2.1 fix through the adapter: a malformed cue in the CLI's
+    JSON is dropped inside the per-chunk retry boundary, valid cues survive,
+    and the CLI's top-level "text" never fabricates a 0.0-0.0 segment."""
+    chunk = _Chunk()
+    chunk.path = tmp_path / "chunk_000.wav"
+    chunk.path.write_bytes(b"")
+    request = _Request()
+    request.work_dir = tmp_path
+
+    payload = {
+        "text": "full transcript text",
+        "segments": [
+            {"start": 3.0, "end": 1.0, "text": "inverted"},
+            {"start": -2.0, "end": 1.0, "text": "negative"},
+            {"start": 0.0, "end": 1.0, "text": "valid"},
+        ],
+    }
+
+    def fake_run(command, **kwargs):
+        out_dir = tmp_path / "whisper-cli"
+        out_dir.mkdir(exist_ok=True)
+        (out_dir / "chunk_000.json").write_text(json.dumps(payload), encoding="utf-8")
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(ta.subprocess, "run", fake_run)
+    values = ta.WhisperCliAdapter()._transcribe_one(request, chunk)
+    assert [v["text"] for v in values] == ["valid"]
+
+    # All cues malformed → empty result (failed chunk), NOT a fabricated
+    # segment from the top-level "text" fallback.
+    payload["segments"] = [{"start": 3.0, "end": 1.0, "text": "inverted"}]
+    values = ta.WhisperCliAdapter()._transcribe_one(request, chunk)
+    assert values == []
 
 
 # --- receipts: schema bump + words round-trip -----------------------------------

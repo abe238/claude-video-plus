@@ -534,29 +534,14 @@ class WhisperCliAdapter:
 
     def _parse_json_output(self, output: Path) -> list[dict]:
         data = json.loads(output.read_text(encoding="utf-8"))
-        values: list[dict] = []
-        for seg in data.get("segments") or []:
-            text = str(seg.get("text") or "").strip()
-            if not text:
-                continue
-            start = round(float(seg.get("start") or 0.0), 2)
-            end = round(float(seg.get("end") or 0.0), 2)
-            if end < start or start < 0:
-                # Same strictness parse_subtitle(strict=True) gave the old srt
-                # path: a malformed cue is dropped HERE, inside the per-chunk
-                # retry boundary — not later in _local_segments where a
-                # ValueError would kill the whole adapter and poison receipts.
-                continue
-            value = {
-                "start": start,
-                "end": end,
-                "text": text,
-            }
-            words = whisper._clean_words(seg.get("words"))
-            if words:
-                value["words"] = words
-            values.append(value)
-        return values
+        # Delegate to the shared normalizer so cloud and CLI reject malformed
+        # cues identically (v1.2.1 validity drop: end < start / start < 0 cues
+        # are dropped inside the per-chunk retry boundary — not later in
+        # _local_segments where a ValueError would kill the whole adapter and
+        # poison receipts). Segments only: the CLI JSON's top-level "text"
+        # must NOT trigger the cloud fallback that fabricates a 0.0-0.0
+        # segment — a chunk with no valid cues stays a failed chunk here.
+        return whisper.segments_from_response({"segments": data.get("segments")})
 
     def _transcribe_one(self, request: TranscriptionRequest, chunk: AudioChunk) -> list[dict]:
         out_dir = request.work_dir / "whisper-cli"

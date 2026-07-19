@@ -74,6 +74,20 @@ def test_v2_delta_identical_is_zero_and_mismatch_is_max():
     assert frames._changed_cell_pct(a, a[:-3]) == float("inf")  # fail-open: never collapse on decode hiccup
 
 
+def test_v2_duplicate_decision_matches_exact_comparator():
+    """The early-exit boolean used on the hot path must agree with the exact
+    metric: decisively different pairs read as different, near-identical pairs
+    as duplicates, mismatched lengths fail open (never a duplicate)."""
+    base = rgb_thumb(30, 30, 30)
+    different = rgb_thumb(0, 200, 0)
+    caption = thumb_with_patch(base, patch_pixels=16, r=250, g=250, b=250)
+    grain = rgb_thumb(33, 28, 32)
+    for a, b in [(base, different), (base, caption), (base, grain), (base, base)]:
+        expected = frames._changed_cell_pct(a, b) <= frames.V2_CHANGED_PCT_THRESHOLD
+        assert frames._cell_delta_duplicate(a, b) is expected
+    assert frames._cell_delta_duplicate(base, base[:-3]) is False  # fail-open
+
+
 # --- R1b: window + horizon contract -------------------------------------------
 
 def _cand(ts: float) -> dict:

@@ -161,41 +161,9 @@ def extract_audio_range(
     return output_path, start, start + duration
 
 
-def detect_silence_boundaries(audio_path: Path) -> tuple[float, ...]:
-    """Return silence midpoints; failure safely degrades to even chunking."""
-    if shutil.which("ffmpeg") is None:
-        return ()
-    try:
-        result = subprocess.run(
-            [
-                "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
-                "-af", "silencedetect=noise=-35dB:d=0.40", "-f", "null", "-",
-            ],
-            capture_output=True,
-            text=True,
-            timeout=FFMPEG_TIMEOUT_SECONDS,
-        )
-    except subprocess.TimeoutExpired:
-        return ()  # silence detection is an optimization; degrade to even chunking
-    if result.returncode != 0:
-        return ()
-    starts: list[float] = []
-    boundaries: list[float] = []
-    for kind, raw in SILENCE_RE.findall(result.stderr or ""):
-        value = max(0.0, float(raw))
-        if kind == "start":
-            starts.append(value)
-        elif starts:
-            boundaries.append((starts.pop(0) + value) / 2.0)
-        else:
-            boundaries.append(value)
-    return tuple(sorted(set(round(value, 3) for value in boundaries if value > 0)))
-
-
-# R2a-1 classifier thresholds. Not stored in receipts because no_speech is
+# R2a-1 classifier threshold. Not stored in receipts because no_speech is
 # never cached (see AudioChunk.silent) — a change here takes effect on the very
 # next run with no invalidation machinery needed.
-SILENCE_CLASSIFIER_VERSION = 1
 # Flat threshold ONLY. 1.2.0 also used max(0.5s, 2% of chunk duration), which
 # on a ~180s chunk discarded up to 3.6s of genuine speech — a chunk holding one
 # short sentence was classified silent (L6 review finding). Any utterance
