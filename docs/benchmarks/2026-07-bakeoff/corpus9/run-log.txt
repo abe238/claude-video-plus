@@ -1,0 +1,25 @@
+== CORPUS-9 ARM RUN (post-freeze 9debf2b) ==
+iG9CE55wbtY orig-bal rc=0 wall=153s tokens=10759
+iG9CE55wbtY ours-bal rc=0 wall=99s tokens=8255
+iG9CE55wbtY ours-ev rc=0 wall=74s tokens=4203
+ZDa-Z5JzLYM orig-bal rc=0 wall=47s tokens=8643
+ZDa-Z5JzLYM ours-bal rc=0 wall=50s tokens=5448
+ZDa-Z5JzLYM ours-ev rc=0 wall=19s tokens=5265
+zjkBMFhNj_g orig-bal rc=0 wall=52s tokens=36733
+zjkBMFhNj_g ours-bal rc=0 wall=52s tokens=21476
+zjkBMFhNj_g ours-ev rc=0 wall=25s tokens=8793
+QacqRZ0vsD4 orig-bal rc=0 wall=50s tokens=30493
+QacqRZ0vsD4 ours-bal rc=0 wall=51s tokens=18804
+QacqRZ0vsD4 ours-ev rc=0 wall=30s tokens=9208
+ZW6d_2rwcdk orig-bal rc=0 wall=32s tokens=15670
+ZW6d_2rwcdk ours-bal rc=0 wall=32s tokens=10677
+ZW6d_2rwcdk ours-ev rc=0 wall=18s tokens=1865
+rBpaUICxEhk orig-bal rc=0 wall=59s tokens=3209
+rBpaUICxEhk ours-bal rc=0 wall=40s tokens=2992
+zQnBQ4tB3ZA orig-bal rc=0 wall=18s tokens=2587
+zQnBQ4tB3ZA ours-bal rc=0 wall=18s tokens=2161
+9bZkp7q19f0 orig-bal rc=0 wall=20s tokens=5146
+9bZkp7q19f0 ours-bal rc=0 wall=29s tokens=5159
+dQw4w9WgXcQ orig-bal rc=0 wall=21s tokens=5163
+dQw4w9WgXcQ ours-bal rc=0 wall=27s tokens=5525
+== COMPLETE ==
