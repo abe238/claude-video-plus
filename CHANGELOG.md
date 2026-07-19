@@ -2,6 +2,39 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.2.0] — 2026-07-18
+
+Transcript-correctness release (competitive plan Release 2, all five items).
+
+### Added
+
+- **`no_speech` terminal state, classified at the chunk layer.** Silence is
+  detected BEFORE any transcription adapter runs — previously a silent clip
+  reached the first adapter (Whisper hallucinates on silence) and its empty
+  result fell through toward cloud. Whole-input `no_speech` only when every
+  chunk is silent; silent chunks in mixed files are skipped, never failed; a
+  broken classifier gates nothing; the report says "no speech detected in the
+  audio", distinct from "none available".
+- **Word-level timestamps** (`words[]` on every segment, absent-tolerant,
+  offset-correct through chunking and receipts; cloud Whisper via verbose_json
+  word granularity, whisper-cli via json output). Receipt schema bumped so
+  stale segment-only caches invalidate.
+- **Media-rich portable bundles**: `--export-bundle` + `--bundle-media` packs
+  frames and the sanitized transcript into the existing checksummed bundle
+  format — export → verify → replay works standalone. No new schema.
+- **Silero VAD tier for whisper-cli** (detect-only: used when the model file
+  already exists at `WATCH_VAD_MODEL_PATH`, `WATCH_VAD=off` to disable;
+  failures fall back to non-VAD runs).
+- **Two-pass silence chunking**: tight scan shared between the no_speech
+  classifier and chunk planning, loose fallback only when needed, `hard_cut`
+  warnings surfaced when neither pass can place a cut.
+
+### Credits
+
+Idea prior art: jordanrendric/claude-video-vision (chunk silence gating, VAD),
+taoufik123-collab/claude-watch (word timestamps), upstream PR #79 (durable
+evidence export).
+
 ## [1.1.0] — 2026-07-18
 
 Frame-engine release. A four-agent competitive field survey (upstream + five
