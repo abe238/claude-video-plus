@@ -19,3 +19,22 @@ Balanced = equal frame budget both sides. Evidence engages only on videos >9min.
 - **Short videos: modest (-7% to -16%)** — less caption overlap to collapse, and evidence mode correctly doesn't engage under 9 minutes.
 - **PUBLISHED LOSS: on music videos ours can be slightly LARGER** (Rick Astley +7%). No substantive transcript to dedup, and ours adds the author-description block that a music video's promo copy doesn't earn. Fixable (skip the description when it's below a signal threshold) — logged, not hidden. Gangnam is +0% (parity).
 - All 22 runs rc=0. Music canaries confirm the tool handles non-substantive video without crashing.
+
+## Judged answer quality (blind, opaque rotated labels, 5 substantive videos)
+| Video | max | original | ours-balanced | ours-evidence |
+|---|---|---|---|---|
+| Ken Robinson | 4 | 4 | 4 | **2 (LOSS)** |
+| Python OOP | 4 | 4 | 4 | 4 |
+| Karpathy LLMs | 4 | 4 | 4 | 4 |
+| repo roundup | 4 | **3** | 4 | 4 |
+| Claude Code | 2 | 2 | 2 | 2 |
+| **TOTAL** | **18** | **17** | **18** | **16** |
+
+- **ours-balanced: 18/18** — perfect score at 23-42% fewer tokens than the original.
+- **original dropped a point** on the roundup: captions-only, it garbled the repo name
+  ("Claude Video"/"maltbot", never the exact slug); ours recovered `bradautomates/claude-video`
+  from the description on both arms. The description-as-evidence feature is worth real points.
+- **ours-evidence dropped 2 points on Ken Robinson**: chapter retrieval stopped at 15:08,
+  just before the Gillian Lynne story (15:20) that the question explicitly asked about.
+  A real retrieval miss, under analysis. Elsewhere evidence mode was 4/4/4/2 at -39% to -88%.
+- Prior judged video (_cmpIveXnvE): 8/8 all three arms.
