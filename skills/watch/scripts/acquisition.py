@@ -173,7 +173,11 @@ def acquisition_config(file_values: dict[str, str]) -> dict[str, object]:
     cookie_spec = validate_cookie_browser(configured("WATCH_COOKIES_BROWSER"))
     max_filesize = validate_max_filesize(configured("WATCH_MAX_FILESIZE"))
     languages = validate_languages(configured("WATCH_LANGUAGE"))
-    clients_value = configured("WATCH_YOUTUBE_CLIENTS") or "tv,mweb"
+    # android_vr is token-free; tv/mweb now gate their https formats behind a
+    # GVS PO Token (tv: DRM-flagged, mweb: 403) that yt-dlp cannot supply without
+    # cookies. Verified live 2026-07-25 against a real video: tv -> DRM error,
+    # mweb -> "No video formats found", android_vr -> succeeds.
+    clients_value = configured("WATCH_YOUTUBE_CLIENTS") or "android_vr,tv,mweb"
     clients = tuple(part.strip() for part in clients_value.split(",") if part.strip())
     safe = lambda value: bool(value) and len(value) <= 32 and all(
         char.isalnum() or char in "_-" for char in value
@@ -347,7 +351,7 @@ def acquire_url(
     languages: tuple[str, ...] = ("en",),
     cookie_spec: str | None = None,
     max_filesize: str | None = None,
-    player_clients: tuple[str, ...] = ("tv", "mweb"),
+    player_clients: tuple[str, ...] = ("android_vr", "tv", "mweb"),
     runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
     pick_media: Callable[[Path], Path | None],
     pick_subtitles: Callable[[Path, tuple[str, ...]], list[Path]],

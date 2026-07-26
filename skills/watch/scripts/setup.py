@@ -79,7 +79,7 @@ OPENAI_API_KEY=
 
 # Acquisition recovery remains default-first. Cookies are explicit and optional.
 # WATCH_COOKIES_BROWSER=chrome
-# WATCH_YOUTUBE_CLIENTS=tv,mweb
+# WATCH_YOUTUBE_CLIENTS=android_vr,tv,mweb
 """
 
 

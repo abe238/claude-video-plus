@@ -74,6 +74,7 @@ def test_eligible_retry_ladder_is_bounded_and_itag18_is_last(tmp_path: Path):
     failures = [
         "YouTube SABR streaming data is missing",
         "HTTP Error 403: Forbidden",
+        "HTTP Error 403: Forbidden",
         "requested format is not available",
     ]
 
@@ -88,12 +89,14 @@ def test_eligible_retry_ladder_is_bounded_and_itag18_is_last(tmp_path: Path):
 
     assert [attempt.strategy for attempt in result.attempts] == [
         "default",
+        "youtube-client:android_vr",
         "youtube-client:tv",
         "youtube-client:mweb",
         "youtube-format-final:18",
     ]
-    assert "youtube:player_client=tv" in calls[1]
-    assert "youtube:player_client=mweb" in calls[2]
+    assert "youtube:player_client=android_vr" in calls[1]
+    assert "youtube:player_client=tv" in calls[2]
+    assert "youtube:player_client=mweb" in calls[3]
     assert calls[-1][calls[-1].index("-f") + 1].endswith("/18")
     assert all(
         not call[call.index("-f") + 1].endswith("/18") for call in calls[:-1]
@@ -192,7 +195,7 @@ def test_http429_caption_exhaustion_uses_json3_without_media_redownload(tmp_path
     result = acquire(tmp_path, runner, captions_only=True)
 
     assert [attempt.strategy for attempt in result.attempts] == [
-        "default", "youtube-client:tv", "youtube-client:mweb",
+        "default", "youtube-client:android_vr", "youtube-client:tv", "youtube-client:mweb",
         "captions-json3-after-429",
     ]
     assert calls[-1][calls[-1].index("--sub-format") + 1] == "json3"
