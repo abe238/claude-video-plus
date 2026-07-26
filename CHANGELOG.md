@@ -2,6 +2,18 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.1] — 2026-07-26
+
+### Fixed
+
+- YouTube download/caption fallback now leads with the `android_vr` player
+  client instead of `tv`/`mweb`. YouTube began gating `tv` (DRM-flagged) and
+  `mweb` (requires a GVS PO token, yields "No video formats found") https
+  formats; `android_vr` remains token-free. Verified live against a real
+  video: the previous default failed outright, the new default succeeds.
+  `WATCH_YOUTUBE_CLIENTS` remains overridable. Credit: surfaced by
+  helkrypt/claude-video via the daily fork-watch scan.
+
 ## [1.3.0] — 2026-07-19
 
 Two opt-in download guards absorbed from the fork ecosystem (found by the
