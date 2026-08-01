@@ -2,6 +2,16 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.2] — 2026-08-01
+
+### Changed
+
+- Broadened SKILL.md's `description` so the agent recognizes a pasted video
+  link or file and an implied question ("watch this", "what's in this
+  video") and invokes `/watch` without the user having to type the slash
+  command. Docs-only change. Credit: surfaced by jordandepares-web/claude-video
+  via the daily fork-watch scan.
+
 ## [1.3.1] — 2026-07-26
 
 ### Fixed
