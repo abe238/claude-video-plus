@@ -61,7 +61,7 @@ publication.
 
 ## Rules
 
-- Keep the version in sync across `skills/watch/SKILL.md` (frontmatter), `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` when cutting a release. Those three files are the ONLY place a version is written by hand.
+- Keep the version in sync across `skills/watch/SKILL.md` (frontmatter), `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` when cutting a release. Those three files are the ONLY place the *canonical* version is written by hand. Two release-integrity tests independently hardcode that same version as their expected value and must be bumped alongside it, or the release workflow's "Verify release tag and repository" step fails before it ever builds anything: `tests/test_release_integrity.py::test_release_versions_and_identity_are_canonical` and `tests/test_release_tools_v1.py::test_release_versions_are_coherent`. Run the full test suite locally *after* the version bump, not before, to catch this.
 - **Never hardcode a release version or a test count in `README.md` or `docs/*.html`.** They are read live: shields.io badges in the README, the GitHub API (`releases/latest`, `actions/workflows/tests.yml/runs`) in `docs/index.html`, which ships fallback text for a rate-limited API or a no-JS reader. `tests/test_no_hardcoded_version.py` fails the build if a version or count reappears there. Per-release prose goes in `CHANGELOG.md` (exempt), not on the landing page — cutting a release should cost zero docs commits.
 - Releasing: tag `vX.Y.Z` and push the tag; `.github/workflows/release.yml` builds `dist/watch.skill` and attaches it to the GitHub release.
 - Never commit real API keys or `.env` contents; keys live in `~/.config/watch/.env` (mode `0600`) at runtime.
