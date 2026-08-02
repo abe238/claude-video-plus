@@ -2,6 +2,24 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.3] — 2026-08-02
+
+### Fixed
+
+- `subprocess.run(..., text=True)` calls around ffmpeg/ffprobe (frame
+  extraction, audio extraction, audio probing, chunk splitting) now pass
+  `encoding="utf-8", errors="replace"` explicitly. Without it, Python falls
+  back to the platform's default locale encoding to decode stderr/stdout;
+  non-UTF8 bytes there (a non-UTF8 locale, or Windows' default codepage)
+  could raise `UnicodeDecodeError` and crash the skill outright instead of
+  surfacing ffmpeg's actual error message. Credit: surfaced by
+  kuailefengnan2024/claude-video via the daily fork-watch scan.
+- `setup.py`'s secrets-file permission check (`_check_file_permissions`,
+  the `.env` "readable by other users" warning) now skips on Windows
+  instead of running a Unix-only `st_mode` bit check there — `chmod 600`
+  isn't meaningful on Windows and the prior behavior could mis-warn. Credit:
+  surfaced by kuailefengnan2024/claude-video via the daily fork-watch scan.
+
 ## [1.3.2] — 2026-08-01
 
 ### Changed

@@ -96,7 +96,13 @@ _PERM_WARNED: set[str] = set()
 
 def _check_file_permissions(path: Path) -> None:
     """Warn to stderr (once per path per process) if a secrets file is
-    world/group readable."""
+    world/group readable.
+
+    Unix-only check: Windows' `st_mode` doesn't carry the same group/other
+    readable bits, and `chmod 600` isn't a meaningful remediation there.
+    """
+    if platform.system() == "Windows":
+        return
     key = str(path)
     if key in _PERM_WARNED:
         return
