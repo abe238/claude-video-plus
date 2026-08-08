@@ -2,6 +2,16 @@
 
 All notable changes to `/watch` are documented here.
 
+## [Unreleased]
+
+### Changed
+
+- SKILL.md frame-mining guidance now tells the model to triage frames by type
+  (slide, code, diagram, chart, UI vs b-roll / talking-head) and spend its
+  attention on the informational ones. Concept credit: the frame-type taxonomy
+  in [`noblecloud/claude-video`](https://github.com/noblecloud/claude-video);
+  no code adopted.
+
 ## [1.3.3] — 2026-08-02
 
 ### Fixed
