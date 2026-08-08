@@ -2,7 +2,7 @@
 
 All notable changes to `/watch` are documented here.
 
-## [Unreleased]
+## [1.3.4] — 2026-08-08
 
 ### Changed
 
