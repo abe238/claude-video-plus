@@ -2,6 +2,25 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.5] — 2026-08-09
+
+### Fixed
+
+- Frame extraction no longer breaks on ffmpeg 9, which removed the `-vsync`
+  option (deprecated in 8.0) — both frame paths aborted with "Unrecognized
+  option 'vsync'" and returned zero frames. Both call sites now use the
+  replacement `-fps_mode vfr`, chosen by a once-per-process capability probe
+  that falls back to `-vsync` on ffmpeg older than 5.1 (where `-fps_mode`
+  does not exist yet — e.g. Ubuntu 22.04's 4.4). Credit:
+  [`shP-code/claude-video`](https://github.com/shP-code/claude-video).
+- `watch.py` and `setup.py` no longer crash with `UnicodeEncodeError` on
+  legacy Windows consoles using a locale codepage (cp1252, cp949, cp936, ...)
+  that cannot encode the em dashes and arrows in the report — a failure that
+  landed after frame extraction, throwing away finished work. stdout/stderr
+  are reconfigured to UTF-8 with `errors="replace"` at both entry points,
+  guarded so non-TextIO streams (pytest capture, pipes) are untouched.
+  Credit: [`shP-code/claude-video`](https://github.com/shP-code/claude-video).
+
 ## [1.3.4] — 2026-08-08
 
 ### Changed

@@ -68,3 +68,25 @@ def test_scene_fallback_on_static_clip(static_clip: Path, tmp_path: Path):
     )
     assert meta["engine"] == "uniform"
     assert meta["fallback"] is True
+
+
+def test_vfr_args_prefers_fps_mode_and_falls_back(monkeypatch):
+    """ffmpeg >=5.1 gets -fps_mode; older binaries keep -vsync (probe-driven)."""
+    import subprocess as sp
+    import types
+
+    def fake_run(with_fps_mode):
+        def run(cmd, **kwargs):
+            assert cmd[:2] == ["ffmpeg", "-hide_banner"]
+            out = "... -fps_mode mode ..." if with_fps_mode else "... -vsync only ..."
+            return types.SimpleNamespace(returncode=0, stdout=out, stderr="")
+        return run
+
+    frames._vfr_args.cache_clear()
+    monkeypatch.setattr(sp, "run", fake_run(True))
+    assert frames._vfr_args() == ("-fps_mode", "vfr")
+
+    frames._vfr_args.cache_clear()
+    monkeypatch.setattr(sp, "run", fake_run(False))
+    assert frames._vfr_args() == ("-vsync", "vfr")
+    frames._vfr_args.cache_clear()

@@ -9,6 +9,7 @@ zooming in for detail).
 from __future__ import annotations
 
 import bisect
+import functools
 import json
 import os
 import re
@@ -50,6 +51,24 @@ V2_WINDOW_SIZE = 4              # kept-frame memory: catches A-B-A cutaways
 V2_WINDOW_HORIZON_SECONDS = 90.0  # a return to a shot beyond this is kept (new segment)
 V2_FLOOR_INTERVAL_SECONDS = 30.0  # target max uncovered stretch on slow content
 V2_FLOOR_CAP_SHARE = 0.30       # gap-fill may consume at most this share of the cap
+
+
+@functools.lru_cache(maxsize=1)
+def _vfr_args() -> tuple[str, str]:
+    """VFR passthrough flag for the installed ffmpeg.
+
+    ffmpeg 5.1 renamed ``-vsync`` to ``-fps_mode``; 8.0 deprecated the old name
+    and 9.0 removed it outright ("Unrecognized option 'vsync'" → zero frames).
+    Probe the binary's help once per process: prefer ``-fps_mode``, fall back to
+    ``-vsync`` for ffmpeg <5.1 (Ubuntu 22.04 still ships 4.4).
+    """
+    result = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-h", "full"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    if "fps_mode" in (result.stdout or ""):
+        return ("-fps_mode", "vfr")
+    return ("-vsync", "vfr")
 
 
 def resolve_engine() -> str:
@@ -329,7 +348,7 @@ def extract_scene_candidates(
     cmd += [
         "-i", str(Path(video_path).resolve()),
         "-vf", vf,
-        "-vsync", "vfr",
+        *_vfr_args(),
     ]
     if max_frames is not None:
         cmd += ["-frames:v", str(max_frames)]
@@ -885,7 +904,7 @@ def extract_keyframes(
         "-skip_frame", "nokey",
         "-i", str(Path(video_path).resolve()),
         "-vf", f"{_scale_filter(resolution)},showinfo",
-        "-vsync", "vfr",
+        *_vfr_args(),
         "-q:v", "4",
         output_pattern,
     ]

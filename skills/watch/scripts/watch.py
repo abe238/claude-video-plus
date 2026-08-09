@@ -13,6 +13,16 @@ import tempfile
 from pathlib import Path
 
 
+# Legacy Windows consoles use a locale codepage (cp1252, cp949, cp936, ...) that
+# cannot encode the em dashes and arrows this script prints, so a plain print()
+# raises UnicodeEncodeError and kills the run after the work is done. Force
+# UTF-8 on the way out; non-TextIO streams (pytest capture, pipes) are left alone.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):  # pragma: no cover - non-TextIO stream
+        pass
+
 SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
