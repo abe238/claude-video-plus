@@ -2,6 +2,37 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.6] — 2026-08-10
+
+### Fixed
+
+Windows resilience batch for machines running an App Control policy
+(WDAC / Smart App Control) that blocks unsigned executables (ffprobe.exe,
+yt-dlp.exe) while allowing ffmpeg.exe. Credit:
+[`vgrosetti-maker/claude-video`](https://github.com/vgrosetti-maker/claude-video)
+(reimplemented against our diverged pipeline).
+
+- `get_metadata` (frames.py) and `audio_duration` (whisper.py) no longer
+  abort when ffprobe is missing, blocked at execution time, or errors —
+  they fall back to parsing the `ffmpeg -i` stream banner, which carries
+  the same Duration/Stream information. Verified live end-to-end: a full
+  `watch.py` run with a hard-failing ffprobe shim extracted frames and
+  printed the report normally.
+- yt-dlp invocations now go through a once-per-process `ytdlp_cmd()` probe
+  in acquisition.py: the executable is preferred, but when it is present
+  yet not runnable (blocked shim) the pipeline falls back to
+  `python -m yt_dlp`. Probes fail open to `yt-dlp` so error paths are
+  unchanged when nothing is usable. Bonus: a module-only install
+  (`pip install yt-dlp` without the shim on PATH) now works.
+- The Windows secrets-file permission check is no longer a blanket skip
+  (v1.3.3): setup.py now reads the real NTFS ACL via PowerShell `Get-Acl`,
+  compares against well-known SIDs (locale-proof), and suggests an
+  `icacls` remediation when principals beyond the user/SYSTEM/
+  Administrators can read `~/.config/watch/.env`.
+- The SessionStart hook no longer emits a false permissions warning under
+  Git Bash / MSYS / Cygwin, where the emulated POSIX mode reports 644
+  regardless and `chmod` is a no-op.
+
 ## [1.3.5] — 2026-08-09
 
 ### Fixed

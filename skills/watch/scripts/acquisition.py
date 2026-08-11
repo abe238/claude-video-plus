@@ -7,10 +7,13 @@ URLs, cookies, headers, signed query strings, or local browser-profile paths.
 """
 from __future__ import annotations
 
+import functools
 import hashlib
 import os
 import re
+import shutil
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -304,6 +307,44 @@ def _caption_patterns(languages: tuple[str, ...]) -> str:
     return ",".join(ordered)
 
 
+@functools.lru_cache(maxsize=1)
+def ytdlp_cmd() -> tuple[str, ...]:
+    """Working yt-dlp invocation, probed once per process.
+
+    Windows Smart App Control / WDAC blocks the unsigned yt-dlp.exe shim at
+    *execution* time (OSError) while ``shutil.which`` still finds it, so
+    presence on PATH is not proof of usability. Prefer the executable; fall
+    back to ``python -m yt_dlp`` when the exe is blocked or absent but the
+    module is importable. Fails open to ``("yt-dlp",)`` so callers keep
+    today's error paths when nothing is usable.
+    """
+    exe = shutil.which("yt-dlp")
+    if exe is not None:
+        try:
+            subprocess.run(
+                [exe, "--version"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
+            )
+            return ("yt-dlp",)
+        except subprocess.CalledProcessError:
+            # Runs but errored — executable, so use it and surface real errors.
+            return ("yt-dlp",)
+        except OSError as exc:
+            print(
+                f"[watch] yt-dlp executable is present but not runnable ({exc}); "
+                "trying `python -m yt_dlp`.",
+                file=sys.stderr,
+            )
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "yt_dlp", "--version"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
+        )
+        return (sys.executable, "-m", "yt_dlp")
+    except (OSError, subprocess.CalledProcessError):
+        return ("yt-dlp",)
+
+
 def build_yt_dlp_command(
     url: str,
     output_template: str,
@@ -320,7 +361,7 @@ def build_yt_dlp_command(
     normal = "ba/bestaudio" if audio_only else "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
     if final_format_fallback and not audio_only:
         normal = f"{normal}/18"
-    cmd = ["yt-dlp"]
+    cmd = [*ytdlp_cmd()]
     if captions_only:
         cmd.append("--skip-download")
     else:

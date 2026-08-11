@@ -15,6 +15,7 @@ import json
 import math
 import mimetypes
 import os
+import re
 import shutil
 import ssl
 import subprocess
@@ -162,26 +163,51 @@ def extract_audio(
     return out_path
 
 
+def _duration_via_ffmpeg(audio_path: Path) -> float:
+    """Fallback duration probe parsing the `ffmpeg -i` banner.
+
+    Some Windows machines run an App Control (WDAC / Smart App Control) policy
+    that blocks ffprobe.exe while still allowing ffmpeg.exe; ffmpeg prints the
+    same Duration line to stderr, so parse that instead of failing the run.
+    """
+    if shutil.which("ffmpeg") is None:
+        raise SystemExit("Neither ffprobe nor ffmpeg is usable. Install ffmpeg.")
+
+    result = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-i", str(audio_path.resolve())],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    banner = (result.stderr or "") + (result.stdout or "")
+    m = re.search(r"Duration:\s*(\d+):(\d{2}):(\d{2}(?:\.\d+)?)", banner)
+    if not m:
+        raise SystemExit(f"ffmpeg probe failed: {banner.strip()[-400:]}")
+    return int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
+
+
 def audio_duration(audio_path: Path) -> float:
     """Return the duration of an audio file in seconds via ffprobe."""
     if shutil.which("ffprobe") is None:
-        raise SystemExit("ffprobe is not installed. Install with: brew install ffmpeg")
+        return _duration_via_ffmpeg(audio_path)
 
-    result = subprocess.run(
-        [
-            "ffprobe",
-            "-v", "quiet",
-            "-print_format", "json",
-            "-show_format",
-            str(audio_path.resolve()),
-        ],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-    )
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v", "quiet",
+                "-print_format", "json",
+                "-show_format",
+                str(audio_path.resolve()),
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except OSError:
+        # On PATH but not executable (e.g. blocked by an App Control policy).
+        return _duration_via_ffmpeg(audio_path)
     if result.returncode != 0:
-        raise SystemExit(f"ffprobe failed: {result.stderr.strip()}")
+        return _duration_via_ffmpeg(audio_path)
     fmt = json.loads(result.stdout or "{}").get("format", {})
     return float(fmt.get("duration") or 0.0)
 

@@ -166,26 +166,76 @@ def format_time(seconds: float) -> str:
     return f"{minutes:02d}:{sec:02d}"
 
 
+def _metadata_via_ffmpeg(video_path: str) -> dict:
+    """Fallback probe parsing the `ffmpeg -i` stream banner.
+
+    Some Windows machines run an App Control (WDAC / Smart App Control) policy
+    that blocks ffprobe.exe while still allowing ffmpeg.exe. ffmpeg prints the
+    same Duration/Stream banner to stderr (and exits nonzero for lack of an
+    output file — that is expected), so parse that instead of failing the run.
+    """
+    if shutil.which("ffmpeg") is None:
+        raise SystemExit("Neither ffprobe nor ffmpeg is usable. Install ffmpeg.")
+
+    path = Path(video_path).resolve()
+    result = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-i", str(path)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    banner = (result.stderr or "") + (result.stdout or "")
+
+    duration = 0.0
+    m = re.search(r"Duration:\s*(\d+):(\d{2}):(\d{2}(?:\.\d+)?)", banner)
+    if m:
+        duration = int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
+
+    width = height = codec = None
+    vm = re.search(r"Stream #\d+:\d+.*?: Video: ([A-Za-z0-9_\-]+).*?, (\d{2,5})x(\d{2,5})", banner)
+    if vm:
+        codec, width, height = vm.group(1), int(vm.group(2)), int(vm.group(3))
+
+    if duration <= 0 and width is None:
+        raise SystemExit(f"ffmpeg probe failed: {banner.strip()[-500:]}")
+
+    try:
+        size_bytes = path.stat().st_size
+    except OSError:
+        size_bytes = 0
+
+    return {
+        "duration_seconds": duration,
+        "width": width,
+        "height": height,
+        "codec": codec,
+        "size_bytes": size_bytes,
+        "has_audio": re.search(r"Stream #\d+:\d+.*?: Audio: ", banner) is not None,
+    }
+
+
 def get_metadata(video_path: str) -> dict:
     if shutil.which("ffprobe") is None:
-        raise SystemExit("ffprobe is not installed. Install with: brew install ffmpeg")
+        return _metadata_via_ffmpeg(video_path)
 
-    result = subprocess.run(
-        [
-            "ffprobe",
-            "-v", "quiet",
-            "-print_format", "json",
-            "-show_format",
-            "-show_streams",
-            str(Path(video_path).resolve()),
-        ],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-    )
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v", "quiet",
+                "-print_format", "json",
+                "-show_format",
+                "-show_streams",
+                str(Path(video_path).resolve()),
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except OSError:
+        # On PATH but not executable (e.g. blocked by an App Control policy).
+        return _metadata_via_ffmpeg(video_path)
     if result.returncode != 0:
-        raise SystemExit(f"ffprobe failed: {result.stderr.strip()}")
+        return _metadata_via_ffmpeg(video_path)
 
     data = json.loads(result.stdout or "{}")
     streams = data.get("streams", [])

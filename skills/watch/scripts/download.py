@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 
 from acquisition import (
     AcquisitionAttempt,
+    ytdlp_cmd,
     AcquisitionError,
     AcquisitionResult,
     FailureClass,
@@ -110,8 +111,11 @@ def _pick_video(out_dir: Path) -> Path | None:
 
 def fetch_captions(url: str, out_dir: Path) -> dict:
     """Fetch metadata and best available VTT captions without downloading video."""
-    if shutil.which("yt-dlp") is None:
-        raise SystemExit("yt-dlp is not installed. Install with: brew install yt-dlp")
+    if shutil.which("yt-dlp") is None and ytdlp_cmd() == ("yt-dlp",):
+        raise SystemExit(
+            "yt-dlp is not usable. Install with: brew install yt-dlp "
+            "(or pip install yt-dlp so `python -m yt_dlp` works)"
+        )
 
     cfg = acquisition_config(read_env_file())
     result = acquire_url(
@@ -156,8 +160,11 @@ def download_url(
     out_dir: Path,
     audio_only: bool = False,
 ) -> dict:
-    if shutil.which("yt-dlp") is None:
-        raise SystemExit("yt-dlp is not installed. Install with: brew install yt-dlp")
+    if shutil.which("yt-dlp") is None and ytdlp_cmd() == ("yt-dlp",):
+        raise SystemExit(
+            "yt-dlp is not usable. Install with: brew install yt-dlp "
+            "(or pip install yt-dlp so `python -m yt_dlp` works)"
+        )
 
     cfg = acquisition_config(read_env_file())
     result = acquire_url(

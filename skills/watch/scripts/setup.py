@@ -104,17 +104,81 @@ def _check_binaries() -> list[str]:
 _PERM_WARNED: set[str] = set()
 
 
+# Principals expected to reach a per-user secrets file on Windows.
+# Well-known SIDs, so this stays correct on non-English installs.
+_WIN_OK_SIDS = {
+    "S-1-5-18",      # NT AUTHORITY\SYSTEM
+    "S-1-5-32-544",  # BUILTIN\Administrators
+}
+
+
+def _windows_extra_readers(path: Path) -> list[str] | None:
+    """SIDs beyond the current user/SYSTEM/Administrators allowed on `path`.
+
+    POSIX mode bits are meaningless on Windows: os.stat() reports 0o666 for
+    any writable file and os.chmod() only toggles the read-only flag, so the
+    Unix `mode & 0o044` test is a guaranteed false positive there. Read the
+    real NTFS ACL via PowerShell instead. Returns None when the ACL cannot be
+    determined (no PowerShell, timeout, error) — callers must treat that as
+    "unknown", not "safe".
+    """
+    ps = shutil.which("powershell") or shutil.which("pwsh")
+    if ps is None:
+        return None
+    literal = str(path).replace("'", "''")
+    script = (
+        "$ErrorActionPreference='Stop';"
+        "$me=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value;"
+        f"foreach ($a in (Get-Acl -LiteralPath '{literal}').Access) {{"
+        "  if ($a.AccessControlType -ne 'Allow') { continue }"
+        "  try { $sid=$a.IdentityReference.Translate("
+        "[Security.Principal.SecurityIdentifier]).Value }"
+        "  catch { $sid=$a.IdentityReference.Value }"
+        "  if ($sid -ne $me) { Write-Output $sid }"
+        "}"
+    )
+    try:
+        result = subprocess.run(
+            [ps, "-NoProfile", "-NonInteractive", "-Command", script],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=20,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    seen: list[str] = []
+    for line in result.stdout.splitlines():
+        sid = line.strip()
+        if sid and sid not in _WIN_OK_SIDS and sid not in seen:
+            seen.append(sid)
+    return seen
+
+
 def _check_file_permissions(path: Path) -> None:
     """Warn to stderr (once per path per process) if a secrets file is
-    world/group readable.
+    readable by others.
 
-    Unix-only check: Windows' `st_mode` doesn't carry the same group/other
-    readable bits, and `chmod 600` isn't a meaningful remediation there.
+    Unix: group/other mode bits. Windows: the real NTFS ACL (mode bits are
+    meaningless there — see _windows_extra_readers), warning with an icacls
+    remediation instead of chmod.
     """
-    if platform.system() == "Windows":
-        return
     key = str(path)
     if key in _PERM_WARNED:
+        return
+    if platform.system() == "Windows":
+        extra = _windows_extra_readers(path)
+        if extra:
+            _PERM_WARNED.add(key)
+            sys.stderr.write(
+                f"[watch] WARNING: {path} is accessible to {', '.join(extra)}. "
+                f'Fix: icacls "{path}" /inheritance:r '
+                f'/grant:r "%USERNAME%:F" "SYSTEM:F" "Administrators:F"\n'
+            )
+            sys.stderr.flush()
         return
     try:
         mode = path.stat().st_mode
