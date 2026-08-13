@@ -2,6 +2,20 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.7] — 2026-08-13
+
+### Fixed
+
+- A run now prunes leftover `watch-*` work directories older than 24 hours
+  from the system temp dir. Normal cleanup is the agent's job (SKILL.md
+  Step 5), so an interrupted or crashed run used to leak a directory holding
+  a downloaded video until the OS reaped it — on Linux frequently not before
+  reboot. The 24-hour window is deliberately longer than the fork's 1 hour so
+  a work dir deliberately kept for follow-up questions is never deleted out
+  from under the user. Housekeeping is best-effort and never fails a run;
+  symlinks are skipped rather than followed. Credit:
+  [`dluxcru/claude-video`](https://github.com/dluxcru/claude-video).
+
 ## [1.3.6] — 2026-08-10
 
 ### Fixed

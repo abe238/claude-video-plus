@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 
@@ -154,7 +156,43 @@ def download_consent_blocked(*, url_source: bool, has_captions: bool,
     return value.strip().lower() == "required"
 
 
+# Safety net only. A normal run's work dir is cleaned up by the agent
+# (SKILL.md Step 5); this catches dirs orphaned by an interrupted or crashed
+# run, which hold a downloaded video until the OS reaps them — on Linux often
+# not before reboot. The window is deliberately long: SKILL.md tells the agent
+# to KEEP a work dir for follow-up questions and re-run against the file
+# already downloaded there, so a short cutoff would delete a dir still in use.
+WORK_DIR_MAX_AGE_SECONDS = 24 * 3600
+
+
+def _prune_stale_work_dirs(max_age_seconds: float = WORK_DIR_MAX_AGE_SECONDS) -> int:
+    """Delete `watch-*` dirs in the system temp dir older than max_age_seconds.
+
+    Best-effort: any unreadable/vanishing entry is skipped rather than raising,
+    since housekeeping must never fail a run. Returns the number removed.
+    """
+    removed = 0
+    try:
+        entries = list(Path(tempfile.gettempdir()).glob("watch-*"))
+    except OSError:
+        return 0
+    now = time.time()
+    for entry in entries:
+        try:
+            if not entry.is_dir() or entry.is_symlink():
+                continue
+            if (now - entry.stat().st_mtime) <= max_age_seconds:
+                continue
+        except OSError:
+            continue
+        shutil.rmtree(entry, ignore_errors=True)
+        if not entry.exists():
+            removed += 1
+    return removed
+
+
 def main() -> int:
+    _prune_stale_work_dirs()
     ap = argparse.ArgumentParser(
         prog="watch",
         description="Download a video, extract auto-scaled frames, and surface the transcript.",
