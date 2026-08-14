@@ -33,6 +33,14 @@ def runtime_files(skill_dir: Path) -> list[Path]:
     )
     if unexpected:
         raise ValueError(f"unexpected runtime Python file(s): {', '.join(unexpected)}")
+    # SKILL.md defers cold sections to references/*.md and instructs the model to
+    # Read them on demand. They are runtime files: omit one and a claude.ai
+    # install points at a path that does not exist. Globbed, not allowlisted, so
+    # adding a reference cannot silently fail to ship.
+    references = sorted((skill_dir / "references").glob("*.md"))
+    if not references:
+        raise ValueError("no references/*.md found; SKILL.md expects them at runtime")
+    files.extend(references)
     return files
 
 

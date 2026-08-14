@@ -2,6 +2,40 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.4.0] — 2026-08-14
+
+### Changed
+
+- **SKILL.md now uses progressive disclosure: ~2,495 fewer tokens on every
+  `/watch` invocation (8,445 → 5,950, a 30% cut).** The whole file loads on
+  every run, so its size was a recurring per-run cost paid even by a plain
+  "summarize this video". Cold sections moved to `references/*.md` that the
+  model Reads on demand, each behind an explicit trigger condition:
+
+  | reference | read when |
+  |---|---|
+  | `setup.md` | `setup.py --check` exits non-zero, first run, or a setup/key question |
+  | `flags.md` | using any flag beyond the common ones inline |
+  | `focus-ranges.md` | the user asks about a specific moment or range |
+  | `transcription.md` | choosing/configuring a backend or language |
+  | `troubleshooting.md` | a run fails, warns, or returns less than expected |
+
+  **Security-critical instructions deliberately stay inline** — the
+  untrusted-media boundary, the never-handle-a-key rule, the
+  no-following-description-URLs rule, and the UNTRUSTED evidence markers. A
+  safety rule behind a file the model might not read is not a safety rule, and
+  a test now enforces that.
+
+  `references/*.md` are runtime files: the claude.ai bundle builder previously
+  used an explicit allowlist and would have shipped none of them, leaving every
+  install pointing at paths that do not exist. It now globs them, so adding a
+  reference cannot silently fail to ship.
+
+  14 new tests cover the failure modes: size ceiling and realized saving,
+  dangling pointers, orphan files, pointers lacking a `Read` instruction,
+  security phrases leaving the hot path, bundle inclusion, and no content lost
+  in the split.
+
 ## [1.3.9] — 2026-08-14
 
 ### Fixed

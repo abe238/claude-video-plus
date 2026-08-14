@@ -5,6 +5,7 @@ Agent Skills package that gives an agent a video input. Installable across Claud
 ## Structure
 
 - `skills/watch/SKILL.md` — canonical skill contract the model reads when `/watch` fires. Source of truth for behavior across every host.
+- `skills/watch/references/*.md` — cold sections SKILL.md defers to and Reads on demand (setup, flags, focus ranges, transcription, troubleshooting). **These are runtime files, not docs**: the bundle builder globs them, and a dangling pointer breaks installs. SKILL.md loads on *every* invocation, so keep it lean and put anything conditional here — but **never move a security instruction out of SKILL.md**; `tests/test_skill_progressive_disclosure.py` enforces both halves.
 - `skills/watch/scripts/watch.py` — entry point; orchestrates download → frames → transcript.
 - `skills/watch/scripts/{download,frames,transcribe,whisper,setup,config}.py` — yt-dlp wrapper, ffmpeg frame extraction + auto-fps, caption/Whisper transcription, preflight/installer, shared config.
 - `skills/watch/scripts/build-skill.sh` — builds `dist/watch.skill` for claude.ai upload (dev-only).
