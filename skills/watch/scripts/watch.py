@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -165,21 +166,40 @@ def download_consent_blocked(*, url_source: bool, has_captions: bool,
 WORK_DIR_MAX_AGE_SECONDS = 24 * 3600
 
 
-def _prune_stale_work_dirs(max_age_seconds: float = WORK_DIR_MAX_AGE_SECONDS) -> int:
-    """Delete `watch-*` dirs in the system temp dir older than max_age_seconds.
+# mkdtemp(prefix="watch-") always appends exactly 8 chars from [a-z0-9_]. Only
+# names matching that shape are ours to delete. A human-named directory such as
+# `--out-dir /tmp/watch-client-recording` does NOT match, which is the point:
+# the first version globbed `watch-*` and deleted a user's own output directory,
+# contents and all, before argparse had even run.
+_WORK_DIR_RE = re.compile(r"^watch-[a-z0-9_]{8}$")
+
+
+def _prune_stale_work_dirs(max_age_seconds: float = WORK_DIR_MAX_AGE_SECONDS,
+                           protect: Path | None = None) -> int:
+    """Delete our own abandoned mkdtemp work dirs older than max_age_seconds.
 
     Best-effort: any unreadable/vanishing entry is skipped rather than raising,
-    since housekeeping must never fail a run. Returns the number removed.
+    since housekeeping must never fail a run. `protect` is never touched even if
+    it matches, so an explicit --out-dir survives regardless of its name.
+    Returns the number removed.
     """
     removed = 0
     try:
         entries = list(Path(tempfile.gettempdir()).glob("watch-*"))
     except OSError:
         return 0
+    try:
+        protected = protect.resolve() if protect else None
+    except OSError:
+        protected = None
     now = time.time()
     for entry in entries:
         try:
+            if not _WORK_DIR_RE.match(entry.name):
+                continue
             if not entry.is_dir() or entry.is_symlink():
+                continue
+            if protected is not None and entry.resolve() == protected:
                 continue
             if (now - entry.stat().st_mtime) <= max_age_seconds:
                 continue
@@ -192,7 +212,6 @@ def _prune_stale_work_dirs(max_age_seconds: float = WORK_DIR_MAX_AGE_SECONDS) ->
 
 
 def main() -> int:
-    _prune_stale_work_dirs()
     ap = argparse.ArgumentParser(
         prog="watch",
         description="Download a video, extract auto-scaled frames, and surface the transcript.",
@@ -279,6 +298,13 @@ def main() -> int:
              "links that ASR cannot produce, for a few hundred tokens.",
     )
     args = ap.parse_args()
+
+    # After parsing, so an explicit --out-dir is known and protected. Running
+    # this before argparse deleted user-named directories that merely began
+    # with "watch-".
+    _prune_stale_work_dirs(
+        protect=Path(args.out_dir).expanduser() if args.out_dir else None
+    )
 
     if args.verify_bundle or args.replay_bundle:
         from portable import replay_bundle, verify_bundle

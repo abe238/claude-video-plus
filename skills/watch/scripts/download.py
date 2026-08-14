@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -229,13 +230,46 @@ _INVISIBLE_CODEPOINTS = frozenset({
 _TAG_BLOCK = range(0xE0000, 0xE0080)
 
 
+# Variation selectors. VS1-16 (Mn, so a category filter for format chars misses
+# them) and VS17-256 each carry a byte, giving the same arbitrary-payload channel
+# as the tag block. Verified: a 10-byte payload round-tripped through VS17+.
+_VARIATION_SELECTORS = frozenset(range(0xFE00, 0xFE10)) | frozenset(range(0xE0100, 0xE01F0))
+
+# ZWJ and ZWNJ are the only two invisibles with legitimate *semantic* use in
+# prose: ZWJ joins emoji (👨‍💻) and ZWNJ is a required half-space in Persian
+# (می‌رود) and affects Indic conjuncts. Stripping them unconditionally corrupts
+# real titles and descriptions, so they are kept only where they can be doing
+# that job — between two non-ASCII characters. Between ASCII they can only be
+# evasion padding ("SYS<ZWJ>TEM"), so they go.
+_CONTEXTUAL = {0x200C, 0x200D}
+
+
 def strip_invisible(text: str) -> tuple[str, int]:
-    """Drop code points that render as nothing. Returns (text, removed_count)."""
-    kept = []
+    """Drop code points that render as nothing. Returns (text, removed_count).
+
+    Category ``Cf`` (format) is stripped wholesale rather than by enumeration:
+    it covers zero-width spacers, bidi controls, the tag block, the deprecated
+    U+206A-206F formatting characters, and — critically — anything Unicode adds
+    later. An enumerated denylist silently reopens this hole on every new
+    Unicode revision, which is how U+206A slipped past the first version of
+    this function and left the UNTRUSTED-marker defense bypassable.
+    """
+    kept: list[str] = []
     removed = 0
-    for ch in text:
+    for i, ch in enumerate(text):
         code = ord(ch)
-        if code in _INVISIBLE_CODEPOINTS or code in _TAG_BLOCK:
+        if code in _CONTEXTUAL:
+            prev_ch = text[i - 1] if i else ""
+            next_ch = text[i + 1] if i + 1 < len(text) else ""
+            if prev_ch and next_ch and ord(prev_ch) > 0x7F and ord(next_ch) > 0x7F:
+                kept.append(ch)      # joining emoji or Arabic/Indic letters
+                continue
+            removed += 1
+            continue
+        if (unicodedata.category(ch) == "Cf"
+                or code in _INVISIBLE_CODEPOINTS
+                or code in _TAG_BLOCK
+                or code in _VARIATION_SELECTORS):
             removed += 1
             continue
         kept.append(ch)

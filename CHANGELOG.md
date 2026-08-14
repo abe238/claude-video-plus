@@ -2,6 +2,56 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.4.1] — 2026-08-14
+
+Fixes from an adversarial review of v1.3.5–v1.4.0 by Codex (gpt-5.6-sol). Every
+finding below was independently reproduced before it was fixed.
+
+### Security
+
+- **Invisible-Unicode sanitization was incomplete in a way that reopened the
+  marker-escape hole.** U+206A–U+206F (deprecated format characters) were in no
+  hand-written zero-width list. Inserted mid-marker — `END UN<U+206A>TRUSTED
+  VIDEO EVIDENCE` — they made `_MARKER_RE` miss, so a forged END marker shipped
+  **unpadded** and closed the untrusted-evidence block early: exactly the attack
+  the v1.0.5 sanitizer exists to stop. Variation selectors (U+FE00–FE0F,
+  U+E0100–E01EF) were also unlisted and smuggle an arbitrary payload like the
+  tag block; a 10-byte payload was recovered intact.
+
+  The set is now **category-driven, not enumerated**: everything in Unicode
+  category `Cf` is stripped, plus variation selectors, the tag block, and
+  blank-width letters. A new format character in a future Unicode revision is
+  covered automatically — an enumerated denylist is how U+206A was missed.
+
+### Fixed
+
+- **Work-dir pruning deleted user data.** v1.3.7 globbed `watch-*` and ran
+  *before* argparse, so `--out-dir /tmp/watch-client-recording` was deleted with
+  its contents and recreated empty. Pruning now matches only mkdtemp's exact
+  shape (`watch-` + 8 chars), runs after parsing, and never touches an explicit
+  `--out-dir`. Reproduced as real data loss before the fix.
+- **ZWJ/ZWNJ stripping corrupted legitimate text**: Persian `می‌رود` became
+  `میرود` (a different word form) and family/profession emoji split apart. Both
+  are now kept between non-ASCII characters, where they are doing their
+  joining job, and still stripped between ASCII, where they can only be evasion
+  padding (`SYS<ZWJ>TEM`).
+- **A broken yt-dlp shim suppressed the working fallback.** A shim that starts
+  but fails its own `--version` was treated as usable, pinning every acquisition
+  to it. Both `OSError` and `CalledProcessError` now fall through to
+  `python -m yt_dlp`.
+- **Step 0 blocked the very machines v1.3.6 added fallbacks for.** The preflight
+  required `ffprobe` and a `yt-dlp` executable on PATH, so a WDAC machine was
+  rejected before the ffmpeg-banner or `python -m yt_dlp` fallback could run.
+  A binary now counts as present when its runtime substitute works.
+- **The first-run wizard could never fire.** `--check` exited 0 whenever the
+  environment was usable, even with `SETUP_COMPLETE` unset — and since v1.4.0's
+  slimmed Step 0 calls only `--check`, the one-time detail preference was never
+  asked on any install that already had a backend configured. New **exit 5**
+  means "runnable, wizard still owed"; SKILL.md routes it to `references/setup.md`.
+- **An 8×8 video was misread as audio-only.** The ffmpeg-banner dimension regex
+  required 2–5 digits, so a single-digit dimension yielded `width=None` and the
+  v1.3.9 audio guard suppressed its frames.
+
 ## [1.4.0] — 2026-08-14
 
 ### Changed

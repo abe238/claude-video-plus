@@ -326,12 +326,14 @@ def ytdlp_cmd() -> tuple[str, ...]:
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
             )
             return ("yt-dlp",)
-        except subprocess.CalledProcessError:
-            # Runs but errored — executable, so use it and surface real errors.
-            return ("yt-dlp",)
-        except OSError as exc:
+        except (OSError, subprocess.CalledProcessError) as exc:
+            # Either it cannot start (policy block) or it starts and fails its
+            # own --version (broken/intercepted shim). Both mean "do not trust
+            # this executable" — fall through and try the module, which may
+            # work. Returning early here pinned every acquisition to a shim
+            # already known to be broken.
             print(
-                f"[watch] yt-dlp executable is present but not runnable ({exc}); "
+                f"[watch] yt-dlp executable is present but not usable ({exc}); "
                 "trying `python -m yt_dlp`.",
                 file=sys.stderr,
             )

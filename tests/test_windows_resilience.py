@@ -109,3 +109,57 @@ def test_build_yt_dlp_command_uses_probed_invocation(monkeypatch):
     )
     assert cmd[:3] == ["python", "-m", "yt_dlp"]
     assert "--skip-download" in cmd
+
+
+# --- v1.4.1: found by an adversarial review ---------------------------------
+
+def test_broken_shim_that_exits_nonzero_falls_back_to_module(monkeypatch):
+    """A shim that STARTS but fails its own --version (policy-intercepted or
+    broken) is not usable. v1.3.6 treated CalledProcessError as proof it was
+    executable and pinned every acquisition to it, never trying the module."""
+    monkeypatch.setattr(acquisition.shutil, "which", lambda name: "/fake/yt-dlp")
+
+    def run(cmd, **kwargs):
+        if cmd[0] == "/fake/yt-dlp":
+            raise subprocess.CalledProcessError(1, cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(acquisition.subprocess, "run", run)
+    assert acquisition.ytdlp_cmd() == (acquisition.sys.executable, "-m", "yt_dlp")
+
+
+def test_preflight_accepts_ffmpeg_without_ffprobe(monkeypatch):
+    """Step 0 must not reject a machine the runtime can actually serve: the
+    ffmpeg-banner fallback covers a blocked ffprobe."""
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which", lambda n: None if n == "ffprobe" else f"/usr/bin/{n}")
+    assert "ffprobe" not in setup_mod._check_binaries()
+
+
+def test_preflight_accepts_yt_dlp_module_without_the_shim(monkeypatch):
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which", lambda n: None if n == "yt-dlp" else f"/usr/bin/{n}")
+    monkeypatch.setattr(setup_mod, "_yt_dlp_module_available", lambda: True)
+    assert setup_mod._check_binaries() == []
+
+
+def test_preflight_still_reports_a_genuinely_missing_binary(monkeypatch):
+    """Positive control: the relaxation must not blind the check."""
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which", lambda n: None)
+    monkeypatch.setattr(setup_mod, "_yt_dlp_module_available", lambda: False)
+    assert set(setup_mod._check_binaries()) == {"ffmpeg", "ffprobe", "yt-dlp"}
+
+
+def test_tiny_video_is_not_misread_as_audio_only(tmp_path, monkeypatch):
+    """An 8x8 clip is valid video; the banner regex required 2-5 digits, so it
+    yielded width=None and the v1.3.9 audio guard suppressed its frames."""
+    clip = tmp_path / "tiny.mp4"
+    subprocess.run(
+        ["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi",
+         "-i", "testsrc=duration=2:size=8x8:rate=5", str(clip)],
+        check=True,
+    )
+    _no_ffprobe(monkeypatch, frames)
+    meta = frames.get_metadata(str(clip))
+    assert meta["width"] == 8 and meta["height"] == 8

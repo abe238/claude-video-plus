@@ -86,12 +86,22 @@ def test_keyless_first_run_is_encouraged(tmp_path):
 def test_key_present_is_ready(tmp_path):
     _write_env(tmp_path, "GROQ_API_KEY=sk-test-abc\n")
     chk = _run(["--check"], home=tmp_path)
-    assert chk.returncode == 0, chk.stderr
+    # A key with no SETUP_COMPLETE is exactly the state v1.4.1 fixed: runnable,
+    # but the one-time first-run wizard never ran. It used to exit 0, which made
+    # the slimmed Step 0 skip the preference question forever. Exit 5 says
+    # "usable, still owes the wizard".
+    assert chk.returncode == 5, chk.stderr
 
     js = json.loads(_run(["--json"], home=tmp_path).stdout)
     assert js["status"] == "ready"
     assert js["can_proceed"] is True
     assert js["whisper_backend"] == "groq"
+
+    # ...and once the wizard has run, --check goes silent for good.
+    _write_env(tmp_path, "GROQ_API_KEY=sk-test-abc\nSETUP_COMPLETE=true\n")
+    done = _run(["--check"], home=tmp_path)
+    assert done.returncode == 0, done.stderr
+    assert done.stdout == "" and done.stderr == ""
 
 
 # --- local-first readiness ----------------------------------------------------
@@ -127,7 +137,10 @@ def test_local_http_backend_satisfies_setup(tmp_path):
         _write_env(tmp_path, "GROQ_API_KEY=\nOPENAI_API_KEY=\n")  # first run, no key
         env = {"WATCH_STT_URL": f"http://127.0.0.1:{port}"}
         chk = _run(["--check"], home=tmp_path, extra_env=env)
-        assert chk.returncode == 0, f"local server should satisfy setup: {chk.stderr}"
+        # 0 or 5 both mean "can run": v1.4.1 split out exit 5 for "runnable but
+        # the one-time first-run wizard never completed". The subject here is
+        # backend detection, not wizard state.
+        assert chk.returncode in (0, 5), f"local server should satisfy setup: {chk.stderr}"
 
         js = json.loads(_run(["--json"], home=tmp_path, extra_env=env).stdout)
         assert js["status"] == "ready"
@@ -149,7 +162,7 @@ def test_yap_on_path_satisfies_setup(tmp_path):
     _write_env(tmp_path, "GROQ_API_KEY=\nOPENAI_API_KEY=\n")  # first run, no key
     env = {"WATCH_YAP_PATH": str(yap)}
     chk = _run(["--check"], home=tmp_path, extra_env=env)
-    assert chk.returncode == 0, f"yap should satisfy setup: {chk.stderr}"
+    assert chk.returncode in (0, 5), f"yap should satisfy setup: {chk.stderr}"
 
     js = json.loads(_run(["--json"], home=tmp_path, extra_env=env).stdout)
     assert js["status"] == "ready"
@@ -175,3 +188,24 @@ def test_first_run_message_leads_with_local_not_cloud(tmp_path):
         "if the installer mentions a cloud key it must say the key alone is "
         "inert without explicit remote authorization"
     )
+
+
+def test_check_signals_incomplete_first_run_with_exit_5(monkeypatch):
+    """can_proceed can be true while SETUP_COMPLETE is false (binaries present,
+    a backend configured by hand). That returned 0, and since the slimmed Step 0
+    only calls --check, the first-run preference was never asked."""
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_status", lambda: {
+        "can_proceed": True, "setup_complete": False, "missing_binaries": [],
+        "has_api_key": True, "local_stt": [],
+    })
+    assert setup_mod.cmd_check() == 5
+
+
+def test_check_stays_silent_when_setup_is_complete(monkeypatch):
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_status", lambda: {
+        "can_proceed": True, "setup_complete": True, "missing_binaries": [],
+        "has_api_key": True, "local_stt": [],
+    })
+    assert setup_mod.cmd_check() == 0

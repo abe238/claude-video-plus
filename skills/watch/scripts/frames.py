@@ -190,7 +190,7 @@ def _metadata_via_ffmpeg(video_path: str) -> dict:
         duration = int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
 
     width = height = codec = None
-    vm = re.search(r"Stream #\d+:\d+.*?: Video: ([A-Za-z0-9_\-]+).*?, (\d{2,5})x(\d{2,5})", banner)
+    vm = re.search(r"Stream #\d+:\d+.*?: Video: ([A-Za-z0-9_\-]+).*?, (\d{1,5})x(\d{1,5})", banner)
     if vm:
         codec, width, height = vm.group(1), int(vm.group(2)), int(vm.group(3))
 

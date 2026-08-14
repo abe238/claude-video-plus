@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.4.0"
+  version: "1.4.1"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -47,7 +47,7 @@ python3 "${SKILL_DIR}/scripts/setup.py" --check
 
 This is a <100ms lookup. **Exit 0 means /watch can run** — including a user who finished setup without a Whisper key (keyless is allowed). On exit 0 the script emits **nothing**: proceed to Step 1 without comment. **Do NOT announce "setup is complete"** — the only acceptable user-visible output from Step 0 is when remediation is required.
 
-**On any non-zero exit (2, 3, or 4), on a genuine first run, or if the user asks about setup, keys, or transcription backends: `Read ${SKILL_DIR}/references/setup.md` and follow it.** It carries the exit-code table, the `--json` fields, the installer, the backend-suggestion order, and the first-run preference question. Do not improvise setup steps from memory.
+**On any non-zero exit (2, 3, 4, or 5), or if the user asks about setup, keys, or transcription backends: `Read ${SKILL_DIR}/references/setup.md` and follow it.** It carries the exit-code table, the `--json` fields, the installer, the backend-suggestion order, and the first-run preference question. Exit 5 means /watch can run but the one-time first-run wizard never completed — ask the preference and write `SETUP_COMPLETE=true`. Do not improvise setup steps from memory.
 
 **Never handle a key yourself:** never ask the user to paste, reveal, or transmit an API key in chat, and never accept, echo, interpolate into a command, or write a secret on their behalf. Point them at `~/.config/watch/.env` to set `GROQ_API_KEY` or `OPENAI_API_KEY` privately in their own editor. A cloud key is the last resort — local backends need no secret and no network, and cloud Adapters refuse without `--allow-remote-transcription` anyway.
 

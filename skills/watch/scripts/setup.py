@@ -98,7 +98,34 @@ def _which(name: str) -> str | None:
 
 
 def _check_binaries() -> list[str]:
-    return [b for b in REQUIRED_BINARIES if not _which(b)]
+    """Binaries with no working runtime substitute.
+
+    v1.3.6 added two fallbacks for machines where an App Control policy blocks
+    an unsigned executable: ffprobe -> parse the `ffmpeg -i` banner, and the
+    yt-dlp shim -> `python -m yt_dlp`. Reporting those as missing here would
+    fail Step 0 and stop the user before the fallback could ever run, so a
+    binary counts as present when its substitute is usable.
+    """
+    missing = []
+    for binary in REQUIRED_BINARIES:
+        if _which(binary):
+            continue
+        if binary == "ffprobe" and _which("ffmpeg"):
+            continue  # frames.get_metadata / whisper.audio_duration parse the banner
+        if binary == "yt-dlp" and _yt_dlp_module_available():
+            continue  # acquisition.ytdlp_cmd() selects `python -m yt_dlp`
+        missing.append(binary)
+    return missing
+
+
+def _yt_dlp_module_available() -> bool:
+    try:
+        return subprocess.run(
+            [sys.executable, "-m", "yt_dlp", "--version"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30,
+        ).returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        return False
 
 
 _PERM_WARNED: set[str] = set()
@@ -419,10 +446,25 @@ def cmd_check() -> int:
       2 → binaries missing
       3 → genuine first run with no API key (encourage one)
       4 → both missing
+      5 → runnable, but the first-run wizard never completed
+
+    Exit 5 exists because `can_proceed` can be true while SETUP_COMPLETE is
+    false (binaries present and a backend already configured by hand). Before
+    v1.4.1 that returned 0, and since SKILL.md's slimmed Step 0 only calls
+    --check, the first-run detail preference was never asked and
+    SETUP_COMPLETE was never written — silently, on every such install.
     """
     s = _status()
-    if s["can_proceed"]:
+    if s["can_proceed"] and s["setup_complete"]:
         return 0
+    if s["can_proceed"]:
+        sys.stderr.write(
+            "[watch] ready to run, but first-run setup never completed "
+            "(SETUP_COMPLETE is unset). Ask the one-time detail preference, "
+            "then write SETUP_COMPLETE=true.\n"
+        )
+        sys.stderr.flush()
+        return 5
 
     parts = []
     if s["missing_binaries"]:
