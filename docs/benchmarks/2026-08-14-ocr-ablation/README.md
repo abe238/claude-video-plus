@@ -88,12 +88,12 @@ wrong question. As a *replacement* for frames OCR loses accuracy on the content
 type it should win. As a *supplement* it is +105 tokens/frame (+54%) for text the
 model already reads correctly for free.
 
-**One sliver survives, unproven and not pursued**: OCR as a cheap *pre-scan* to
-choose which frames earn image tokens (rather than as evidence itself), where
-Tesseract's errors might be tolerable because the output is only a ranking
-signal. Our evidence mode already selects frames query-aware from
-transcript + chapters + numeric guards, so this would have to beat a working
-mechanism, not fill a gap.
+One variant was raised and **declined by the owner on 2026-08-14**: OCR as a
+cheap *pre-scan* to choose which frames earn image tokens (rather than as
+evidence itself), where Tesseract's errors might be tolerable because the output
+is only a ranking signal. It would have to beat evidence mode's existing
+query-aware selection (transcript + chapters + numeric guards) rather than fill
+a gap. **The OCR question is closed in every form — do not reopen it.**
 
 ## Reproduce
 
