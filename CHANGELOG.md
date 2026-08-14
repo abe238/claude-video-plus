@@ -2,6 +2,23 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.9] — 2026-08-14
+
+### Fixed
+
+- **Audio-only sources no longer crash at frame-extracting details.** A podcast,
+  recorded meeting, lecture recording, or any container with no video stream
+  reached the frame stage at `balanced` (the default), `efficient`, and
+  `token-burner`, where ffmpeg failed with a raw `Error opening output files:
+  Invalid argument` dump — despite the transcript being perfectly producible.
+  `get_metadata` already reports `width=None` for such a source, so the frame
+  stage is now skipped with a plain message and the run returns the transcript.
+  A fail-open contract violation: the pipeline had the signal and crashed anyway.
+
+  This also makes spoken-audio input a genuinely supported case rather than an
+  accident — the evidence machinery (chapters, retrieval, numeric guards) is
+  transcript-driven and never needed frames.
+
 ## [1.3.8] — 2026-08-14
 
 ### Security

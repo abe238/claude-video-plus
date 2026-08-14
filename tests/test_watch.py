@@ -121,3 +121,39 @@ def test_evidence_mode_short_video_falls_back(tmp_path: Path, monkeypatch):
                               out_dir=str(tmp_path))
     with pytest.raises(ValueError, match="under the 540s evidence-mode cutoff"):
         watch_mod.run_evidence(args)
+
+
+def test_audio_only_source_degrades_to_transcript(tmp_path: Path):
+    """A podcast/meeting .mp3 at a frame-extracting detail must report the
+    transcript, not dump a raw ffmpeg 'Error opening output files' failure.
+
+    get_metadata() reports width=None for a source with no video stream, so the
+    frame stage is skipped rather than attempted. Regression for v1.3.9.
+    """
+    audio = tmp_path / "talk.mp3"
+    subprocess.run(
+        ["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi",
+         "-i", "sine=frequency=300:duration=4", str(audio)],
+        check=True,
+    )
+    script = Path(__file__).resolve().parents[1] / "skills/watch/scripts/watch.py"
+    result = subprocess.run(
+        [sys.executable, str(script), str(audio), "--detail", "balanced", "--no-whisper"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300,
+    )
+    assert result.returncode == 0, result.stderr[-800:]
+    assert "no video stream" in result.stderr
+    assert "Error opening output file" not in result.stderr
+    assert "ffmpeg scene extraction failed" not in result.stderr
+
+
+def test_video_with_a_stream_still_extracts_frames(cut_clip: Path):
+    """Positive control for the guard above: real video is unaffected."""
+    script = Path(__file__).resolve().parents[1] / "skills/watch/scripts/watch.py"
+    result = subprocess.run(
+        [sys.executable, str(script), str(cut_clip), "--detail", "efficient", "--no-whisper"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300,
+    )
+    assert result.returncode == 0, result.stderr[-800:]
+    assert "no video stream" not in result.stderr
+    assert "**Frames:** 0 selected" not in result.stdout

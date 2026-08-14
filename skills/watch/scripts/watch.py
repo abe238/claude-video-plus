@@ -457,6 +457,18 @@ def main() -> int:
             )
 
     detail_budget = max_frames if max_frames is None else max(0, max_frames - len(cue_frames))
+    # A source with no video stream (podcast/meeting/lecture .mp3, an audio-only
+    # download, a stripped container) reaches here at any frame-extracting
+    # detail. ffmpeg then fails with a raw "Error opening output files" dump
+    # instead of the transcript we can perfectly well produce. get_metadata
+    # already tells us there is no video stream — degrade instead of crashing.
+    if detail != "transcript" and video_path and not meta.get("width"):
+        print(
+            "[watch] no video stream in this source (audio-only) — "
+            "skipping frames, reporting the transcript.",
+            file=sys.stderr,
+        )
+        detail_budget = 0
     if detail != "transcript" and video_path and detail_budget != 0:
         cap_label = "unlimited" if detail_budget is None else str(detail_budget)
         engine_label = "keyframes" if detail == "efficient" else "scene-aware frames"
