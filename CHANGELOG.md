@@ -2,6 +2,36 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.3.8] — 2026-08-14
+
+### Security
+
+- **Invisible-Unicode prompt injection in uploader-controlled text is now
+  stripped.** `sanitize_for_report` previously defended only *structural*
+  escapes (forged UNTRUSTED markers, code fences). It did not touch code points
+  that render as nothing, so a description or a manual caption track could carry
+  instructions the user cannot see in the report but the agent reads verbatim.
+  Verified before the fix: a 53-character payload encoded in the Unicode tag
+  block survived sanitization intact and was recoverable from the report.
+
+  Now stripped, before the existing zero-width padding is applied (order
+  matters — our own defenses insert ZWSP): zero-width spacers and joiners,
+  invisible math operators, bidirectional embeddings/overrides/isolates (the
+  Trojan Source class, CVE-2021-42574), blank-width Hangul filler *letters*
+  that survive whitespace normalization, and the Unicode tag block
+  (U+E0000–U+E007F) used to smuggle whole ASCII payloads.
+
+  Because `sanitize_for_report` is the shared chokepoint, this covers the
+  description, title, uploader, transcript, chapter titles, evidence-mode body
+  text, and portable bundles in one place. Legitimate right-to-left prose is
+  unaffected: the Unicode Bidi Algorithm derives direction from the characters
+  themselves, so only explicit controls are removed. 33 new tests, including a
+  positive control (31 fail against the pre-fix sanitizer).
+
+  Found by security-assessing
+  [`virgiliojr94/book-to-skill`](https://github.com/virgiliojr94/book-to-skill),
+  whose `sanitize.py` defends the same class for document-borne injection.
+
 ## [1.3.7] — 2026-08-13
 
 ### Fixed

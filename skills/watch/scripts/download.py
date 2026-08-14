@@ -204,6 +204,43 @@ _MARKER_RE = re.compile(r"UNTRUSTED\s+VIDEO\s+EVIDENCE", re.IGNORECASE)
 # does not, so a fence hidden behind one would evade a naive line scanner.
 _LINE_BREAKS = ("\r\n", "\r", " ", " ", "\f", "\x85")
 
+# Code points that render as NOTHING but read as text to a model. They are the
+# gap between what the user sees in the report and what the agent consumes, so
+# an uploader can hide instructions in a description or a caption track that are
+# invisible to the human approving the answer. Stripped, never zero-width-padded
+# (there is no spelling to preserve inside a character that has no glyph).
+_INVISIBLE_CODEPOINTS = frozenset({
+    # Zero-width spacers and joiners.
+    0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF, 0x00AD, 0x034F, 0x180E,
+    0x2061, 0x2062, 0x2063, 0x2064,
+    # Bidi embeddings/overrides/isolates — the Trojan Source class
+    # (CVE-2021-42574): these do not change the characters a model reads, they
+    # change the order a human SEES, so reviewer and agent disagree about the
+    # same line. Legitimate Arabic/Hebrew is unaffected: the Unicode Bidi
+    # Algorithm derives direction from the characters themselves.
+    0x200E, 0x200F, 0x061C, 0x202A, 0x202B, 0x202C, 0x202D, 0x202E,
+    0x2066, 0x2067, 0x2068, 0x2069,
+    # Blank-width *letters* — not format controls, so a category filter misses
+    # them, and they survive whitespace normalization.
+    0x115F, 0x1160, 0x3164, 0xFFA0,
+})
+# The Unicode tag block: originally language tags, now used to smuggle a whole
+# ASCII payload as invisible characters (chr(0xE0000 + ord(c)) per letter).
+_TAG_BLOCK = range(0xE0000, 0xE0080)
+
+
+def strip_invisible(text: str) -> tuple[str, int]:
+    """Drop code points that render as nothing. Returns (text, removed_count)."""
+    kept = []
+    removed = 0
+    for ch in text:
+        code = ord(ch)
+        if code in _INVISIBLE_CODEPOINTS or code in _TAG_BLOCK:
+            removed += 1
+            continue
+        kept.append(ch)
+    return "".join(kept), removed
+
 
 def sanitize_for_report(text: str) -> str:
     """Neutralize sequences in uploader-controlled text that could escape the
@@ -214,17 +251,24 @@ def sanitize_for_report(text: str) -> str:
     author). Without this, a description containing the END marker closes the
     untrusted block early and everything after it reads as trusted context.
 
-    Three vectors:
+    Four vectors:
+      0. invisible code points (zero-width, bidi overrides, blank-width letters,
+         the Unicode tag block) -- text the human reviewer cannot see but the
+         agent reads verbatim. Stripped FIRST, before the defenses below add
+         their own zero-width padding;
       1. the BEGIN/END UNTRUSTED VIDEO EVIDENCE markers, matched loosely;
       2. lines opening a GFM fence (3+ backticks or tildes) -- the description
          is rendered inside a fence, so one would close it and let the rest
          render as report structure;
       3. fences hidden behind non-LF line terminators.
 
-    ponytail: zero-width spaces, not deletion. The text stays readable and the
-    exact spellings survive (the whole reason the description is in the report),
-    but the token no longer reads as a marker or a fence.
+    ponytail: zero-width spaces, not deletion, for vectors 1-3. The text stays
+    readable and the exact spellings survive (the whole reason the description
+    is in the report), but the token no longer reads as a marker or a fence.
+    Vector 0 is the exception: an invisible character has no spelling to keep.
     """
+    text, _ = strip_invisible(text)
+
     for terminator in _LINE_BREAKS:
         text = text.replace(terminator, "\n")
 
