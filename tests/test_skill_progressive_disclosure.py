@@ -28,7 +28,7 @@ CHARS_PER_TOKEN = 3.6
 # set above the post-refactor size with headroom for edits, but far below the
 # baseline, so re-inlining a cold section fails here instead of silently
 # restoring the per-run cost.
-MAX_SKILL_MD_CHARS = 22_000
+MAX_SKILL_MD_CHARS = 20_000
 
 
 def _skill_text() -> str:
@@ -45,11 +45,13 @@ def test_skill_md_stays_under_the_token_ceiling():
 
 
 def test_refactor_actually_saved_tokens():
-    """The gain is the point: assert it against the measured baseline."""
-    baseline_chars = 30_403
+    """The gain is the point: assert it against the measured baseline.
+    v1.4.0 baseline was 30,403 (pre-split); v1.5.0 rebaselined against the
+    v1.4.2 file (21,949) so THIS refactor is measured, not the old one."""
+    baseline_chars = 21_949
     size = len(_skill_text())
     saved = (baseline_chars - size) / CHARS_PER_TOKEN
-    assert saved > 700, f"only ~{saved:.0f} tokens saved; not worth the indirection"
+    assert saved > 500, f"only ~{saved:.0f} tokens saved vs v1.4.2; not worth the churn"
 
 
 @pytest.mark.parametrize("name", ["setup.md", "flags.md", "focus-ranges.md"])
@@ -136,6 +138,16 @@ def test_no_content_was_lost_in_the_split():
         "--semantic off|local|remote",               # moved to flags.md
         "60-180s",                                   # moved to focus-ranges.md
         "roughly quadruples",                        # moved to flags.md
+        # v1.5.0: cue-frame mechanics moved to flags.md — all load-bearing
+        "reason=transcript-cue",                     # additive merge labeling
+        "reserved against the frame cap",            # pinned-first accounting
+        "outside the window",                        # focus-window filtering
+        "skips scene/keyframe sampling",             # cue-only mode
+        "downloaded local file",                     # no re-download on re-run
+        # v1.5.0: detail-mode mechanics moved to flags.md
+        "fewer than 4 keyframes",                    # keyframe fallback
+        "1998px",                                    # Read-compat clamp
+        "250 frames",                                # token-burner warning
     ]:
         assert fragment in combined, f"content lost in the split: {fragment!r}"
 

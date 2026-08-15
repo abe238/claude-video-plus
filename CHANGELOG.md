@@ -2,6 +2,27 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.0] — 2026-08-15
+
+### Changed
+
+- **SKILL.md refactor: 21,949 → 19,461 chars (~690 tokens saved per invocation).**
+  Hot routing kernel vs cold mechanics: all security, Steps 0–5, and every mode
+  trigger stay inline; mechanics defer to references.
+  - "Recommended limits" + "Detail and frames" merged into one mode table —
+    the frame caps were stated three times (limits list, detail prose, and the
+    `--detail` flag line); now once.
+  - Transcript-cue workflow and behavior moved to `references/flags.md`; the
+    hot path keeps the trigger ("when the transcript directs attention on
+    screen…") and the judgment-call rule.
+  - Token-efficiency section compressed; the do-not-re-run-on-follow-up rule
+    survives verbatim in substance.
+  - Guard tests strengthened first: savings test rebaselined against v1.4.2
+    (the old 30,403 baseline would have passed a regression), content-loss
+    test now pins all five cue-frame behaviors and the three moved selection
+    mechanics, ceiling lowered 22,000 → 20,000.
+  No behavior change: no script code touched.
+
 ## [1.4.2] — 2026-08-15
 
 ### Added

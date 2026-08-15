@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.4.2"
+  version: "1.5.0"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -59,23 +59,22 @@ Within a single session you can skip Step 0 on follow-up `/watch` calls — once
 - User points at a local video file (`.mp4`, `.mov`, `.mkv`, `.webm`, etc.) and asks about it.
 - User types `/watch <url-or-path> [question]`.
 
-## Recommended limits
+## Detail modes and limits
 
-- **Best accuracy: videos under 10 minutes.** Frame coverage scales inversely with duration.
-- **Universal rate cap: 2 fps.** The script never samples faster than 2 fps, even when a budget or `--fps` would imply more.
-- **The frame ceiling is set by the detail mode** (`WATCH_DETAIL` in `~/.config/watch/.env`, or `--detail`), not a single global cap:
-  - `transcript` → no frames
-  - `efficient` → up to **50** (keyframes)
-  - `balanced` (default) → up to **100** (scene-aware)
-  - `token-burner` → **uncapped** (scene-aware; a soft warning prints past 250 frames)
-  - `--max-frames N` overrides whichever cap the mode would otherwise use.
-- **Full-video frame budget by duration.** Token cost grows with frame count, so the script targets a budget by duration. This budget sets the fps and the uniform-sampling fallback; scene-aware selection can fill up to the detail cap above, whichever is lower:
-  - ≤30s → ~12-30 frames
-  - 30s-1min → ~40 frames
-  - 1-3min → ~60 frames
-  - 3-10min → ~80 frames
-  - \>10min → up to the detail cap, sparsely spaced (warning printed)
-- If the user hands you a long video, consider asking whether they want a specific section before burning tokens on a sparse scan.
+Default mode: `WATCH_DETAIL` in `~/.config/watch/.env` (default `balanced`); `--detail` overrides per run.
+
+| mode | selection | frame cap | use for |
+|---|---|---|---|
+| `transcript` | none — captions alone when they exist (skips video download) | 0 | spoken-content questions |
+| `efficient` | keyframes, near-instant | **50** | speed over fidelity |
+| `balanced` (default) | scene-aware | **100** | most questions |
+| `token-burner` | scene-aware | uncapped | maximum fidelity |
+| `evidence` | question-aware retrieval (requires `--question`) | — | targeted questions |
+
+- **Universal rate cap: 2 fps**, whatever a budget or `--fps` would imply. `--max-frames N` overrides any mode cap.
+- **Duration budgets** set the fps and the uniform-sampling fallback (scene selection fills up to the mode cap, whichever is lower): ≤30s → ~12-30 frames · 30s-1min → ~40 · 1-3min → ~60 · 3-10min → ~80 · >10min → sparse up to the cap (warning printed).
+- **Best accuracy under 10 minutes.** For a long video, consider asking which section the user wants before burning tokens on a sparse scan.
+- Selection mechanics (keyframe/static fallbacks, image clamp, warnings): if a run behaves unexpectedly, `Read ${SKILL_DIR}/references/flags.md`.
 
 ## How to invoke
 
@@ -99,7 +98,7 @@ python3 "${SKILL_DIR}/scripts/watch.py" "<source>"
 ```
 
 Optional flags:
-- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial. `transcript` = no frames (transcript only, skips video download when captions exist); `efficient` = fast keyframes (cap 50); `balanced` = scene-aware frames (cap 100); `token-burner` = scene-aware, uncapped; `evidence` = question-aware retrieval (see below).
+- `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial; see the mode table above. `evidence` requires `--question`.
 - `--question "…"` — the user's question, verbatim. Required by `--detail evidence`: the script selects whole topical chapters relevant to the question (plus numeric and visual guards) instead of sampling the full timeline. Benchmarked: quality parity at a 56% mean token reduction in the sealed confirmatory run; targeted questions save 65–88%. Summaries keep the full transcript; videos under 9 minutes (540s) automatically use the original pipeline (short videos are already cheap to read in full, and evidence mode measured worse there); any other failure falls back to `balanced`.
 - `--start T` / `--end T` — focus on a section. Accepts `SS`, `MM:SS`, or `HH:MM:SS`. When either is set, fps auto-scales denser (see "Focusing on a section" below).
 - `--timestamps T1,T2,…` — grab a frame at each of these absolute timestamps (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
@@ -135,31 +134,9 @@ This holds for `transcript` detail too: even with no frames, produce a **summary
 
 **Step 5 — clean up.** The script prints a working directory at the end. If the user isn't going to ask follow-ups about this video, delete it with `rm -rf <dir>`. If they might, leave it in place — a later run prunes leftover work dirs older than 24 hours, so a kept dir survives the follow-up window but an abandoned one does not linger.
 
-## Detail and frames
-
-Default behavior comes from `~/.config/watch/.env`:
-
-- `WATCH_DETAIL=transcript|efficient|balanced|token-burner` (default: `balanced`)
-
-At `transcript` detail, captions are enough to return a report without downloading video. If captions are missing, the script downloads audio only and tries Whisper. If no transcript can be produced, it reports the limitation clearly; re-run with `--detail balanced` for frames.
-
-At `efficient` detail, the script downloads the video and extracts **keyframes only** (`ffmpeg -skip_frame nokey`) — a near-instant pass that lands frames on scene cuts. If a clip has fewer than 4 keyframes it falls back to uniform sampling.
-
-At `balanced` / `token-burner` detail, the script extracts **scene-aware** frames: ffmpeg scene-change selection first, falling back to uniform sampling only when the video is effectively static. `balanced` caps at 100 frames; `token-burner` is uncapped. Frame report lines include both timestamp and selection reason. Extracted images are clamped to a maximum 1998px height for Claude Read compatibility.
-
 ## Transcript-cue frames
 
-Visual frame selection (scene/keyframe) can miss the moments a presenter explicitly flags — "look here", "as you can see", "notice this", "watch what happens" — because pointing at a slide is often a *low* visual change. `--timestamps` lets you force a frame at those exact moments. **You** decide which moments matter, by reading the transcript:
-
-1. Run once at `--detail transcript` (or any detail) to get the timestamped transcript.
-2. Scan it for deictic cues — phrases where the speaker directs attention to something on screen. This is a judgment call (ignore rhetorical "look, the point is…"); that's why it's done by you, not a regex.
-3. Re-run with `--timestamps 4:32,7:10,9:55` (absolute source times). For a URL, point the second run at the **downloaded local file** in the work dir so it doesn't re-download.
-
-Behavior:
-- **Additive by default.** Cue frames (`reason=transcript-cue`) are merged into whatever `--detail` already selected, in chronological order.
-- **Pinned and counted first.** Cue frames are reserved against the frame cap before the detail engine runs, so they're never evicted by even-sampling.
-- **Honors focus mode.** With `--start/--end`, any cue timestamp outside the window is dropped (reported in the summary). Coordinates are always absolute source time.
-- **Cue-only frames.** `--detail transcript --timestamps …` skips scene/keyframe sampling and returns *only* the cue frames (it will download the video to do so, since frames need pixels).
+Scene/keyframe selection can miss the moments a presenter explicitly flags — "look here", "as you can see", "notice this" — because pointing at a slide is often a *low* visual change. **When the transcript directs attention to something on screen: `Read ${SKILL_DIR}/references/flags.md` (Transcript-cue frames section) and re-run with `--timestamps` at those moments.** Deciding which cues matter is your judgment call (ignore rhetorical "look, the point is…"), not a regex.
 
 ## Transcription
 
@@ -173,12 +150,7 @@ The transcript pipeline stops at the first usable source: native captions → `.
 
 ## Token efficiency
 
-This skill burns tokens primarily on frames. Order of magnitude:
-- 80 frames at 512px wide is roughly 50-80k image tokens depending on aspect ratio.
-- The transcript is cheap (a few thousand tokens at most for a 10-minute video).
-- Bumping `--resolution` to 1024 roughly quadruples the image tokens per frame. Only do it when necessary.
-
-If you already watched a video this session and the user asks a follow-up, do **not** re-run the script — you already have the frames and transcript in context. Just answer from what you have.
+Frames dominate cost: ~80 frames at 512px is roughly 50-80k image tokens; the transcript is a few thousand at most. If you already watched a video this session and the user asks a follow-up, do **not** re-run the script — you already have the frames and transcript in context; answer from what you have.
 
 ## Security & Permissions
 
