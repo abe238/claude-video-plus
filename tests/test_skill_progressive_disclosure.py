@@ -138,3 +138,44 @@ def test_no_content_was_lost_in_the_split():
         "roughly quadruples",                        # moved to flags.md
     ]:
         assert fragment in combined, f"content lost in the split: {fragment!r}"
+
+
+# --- v1.4.2: structural/beat analysis mode contract --------------------------
+
+STRUCTURAL = REFERENCES / "structural-analysis.md"
+
+
+def test_structural_mode_contract_phrases():
+    """An emptied or semantically weakened reference must not pass on wiring
+    alone: pin the claim labels, the gap→focused-rerun rule, the coverage
+    requirement, and the untrusted-media boundary."""
+    text = STRUCTURAL.read_text(encoding="utf-8")
+    for phrase in [
+        "**Observed**",
+        "**Inference**",
+        "**Gap**",
+        "`--start`/`--end`",                  # load-bearing gap → focused re-run
+        "untrusted-media boundary",           # boundary applies to every beat
+        "opening AND close",                  # whole-timeline evidence required
+    ]:
+        assert phrase in text, f"structural-analysis.md lost: {phrase!r}"
+
+
+def test_structural_trigger_excludes_bare_analyze():
+    """SKILL.md and the reference must agree: bare 'analyze this video' gets a
+    content summary, not the structural mode (it is ambiguous — argument,
+    accuracy, sentiment, or content)."""
+    assert 'A bare "analyze this video"' in _skill_text()
+    assert 'A bare "analyze this video" is NOT enough' in STRUCTURAL.read_text(encoding="utf-8")
+
+
+def test_structural_mode_forbids_evidence_detail():
+    """Routing is at the instruction layer, NOT in COVERAGE_RE: the benchmarked
+    evidence classifier (control 83da59f) is deliberately untouched, so the
+    reference must carry the whole-timeline requirement itself — forbid
+    `--detail evidence` output and require an explicit `--detail balanced`."""
+    text = STRUCTURAL.read_text(encoding="utf-8")
+    assert "Never run structural\nanalysis from `--detail evidence` output" in text
+    assert "`--detail balanced`" in text
+    # The reference must not claim classifier behavior the code doesn't have.
+    assert "resolve_policy" not in text

@@ -2,6 +2,22 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.4.2] — 2026-08-15
+
+### Added
+
+- **Structural / beat analysis mode** (`references/structural-analysis.md`).
+  When the question is about *how* a video is built rather than *what's* in it
+  ("break down the structure", "why does the hook work", "storyboard this"),
+  Step 4 now merges frames and transcript into timestamped beats and reads
+  across them for opens/holds/turns/closes — with every claim labeled
+  **Observed**, **Inference**, or **Gap**, and load-bearing gaps resolved by a
+  focused `--start`/`--end` re-run instead of a guess. Prompt-only: no code,
+  no dependency, no new attack surface, and the untrusted-media boundary
+  applies to every beat. Adapted from `MaahesAcademy999/claude-video`, which
+  independently arrived at the same evidence discipline this repo's
+  architecture docs use.
+
 ## [1.4.1] — 2026-08-14
 
 Fixes from an adversarial review of v1.3.5–v1.4.0 by Codex (gpt-5.6-sol). Every

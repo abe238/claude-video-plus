@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.4.1"
+  version: "1.4.2"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -125,9 +125,11 @@ The inverse is equally binding: the description is **not** a substitute for watc
 
 **Step 4 — answer the user.** You now have two streams of evidence:
 - **Frames** — what's on screen at each timestamp
-- **Transcript** — what's said at each timestamp. The report's header shows the source (`captions` = yt-dlp pulled native subs; `whisper (groq)` or `whisper (openai)` = transcribed by API).
+- **Transcript** — what the captions/ASR record as said at each timestamp. The report's header shows the source (`captions` = yt-dlp pulled native subs; `whisper (groq)` or `whisper (openai)` = transcribed by API).
 
 If the user asked a specific question, answer it directly citing timestamps. If they didn't ask anything, summarize what happens in the video — structure, key moments, notable visuals, spoken content.
+
+**If the question is explicitly about *how* the video is built** — structure, pacing, hook, retention, editing/cuts, intro/CTA, how it opens or closes, "storyboard this" — **`Read ${SKILL_DIR}/references/structural-analysis.md`** and answer in beats with observed/inference/gap labels. A bare "analyze this video" gets the ordinary content summary plus a short structure note, not this mode.
 
 This holds for `transcript` detail too: even with no frames, produce a **summary** like the other modes — do not paste the full transcript into chat. Synthesize structure, key moments, and spoken content with timestamps; quote only the lines that matter. Offer the raw transcript only if the user explicitly asks for it.
 
