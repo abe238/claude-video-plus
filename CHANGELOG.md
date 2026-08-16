@@ -2,6 +2,26 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.1] — 2026-08-16
+
+### Fixed
+
+- **Four Windows product bugs**, surfaced by adding `windows-latest` to CI
+  (closing the "no Windows hardware" caveat carried since v1.3.3):
+  bundle export died fsyncing a read-only handle; the receipt store and
+  evidence cache read every entry as unsafe (`st_mode & 0o077` is always
+  truthy on NTFS) and reloaded empty; the execution-registry validator built
+  `git show` refs with backslashes; and the private-path refusal was
+  platform-blind both directions (`/Users/x` passed on Windows, `C:\Users\x`
+  passed on POSIX — now both refused everywhere, with positive controls).
+- **Hardening from the adversarial review**: payload refusal closes
+  root-relative-backslash / any-case `file:` / drive-relative bypasses;
+  receipt store refuses symlinks and non-regular files on every platform;
+  on Windows the evidence store requires a root under the user profile
+  (its ACLs are the owner-only boundary), failing open to a disabled cache.
+- CI now runs the full matrix on `windows-latest`; `.gitattributes` pins
+  byte-exact checkouts (`* -text`) alongside the packaging excludes.
+
 ## [1.5.0] — 2026-08-15
 
 ### Changed
