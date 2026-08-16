@@ -1,6 +1,7 @@
 """Focused P17/P18 range, chunk-planning, and receipt tests."""
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
