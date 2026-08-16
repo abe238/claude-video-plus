@@ -114,6 +114,14 @@ def _canonical_json(value: Any) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
 
+# Windows stats regular files as 0o666 regardless of ACLs, so POSIX
+# group/other bits are meaningless there and the 0o077 test would report
+# EVERY entry as unsafe (cache permanently dead). The NTFS ACL check in
+# setup.py (v1.3.6) is the Windows equivalent of this boundary; the
+# symlink/regular-file checks below still apply on every platform.
+_POSIX_MODE_BITS = os.name != "nt"
+
+
 def _owner_only(path: Path, *, directory: bool) -> bool:
     try:
         info = path.lstat()
@@ -125,7 +133,7 @@ def _owner_only(path: Path, *, directory: bool) -> bool:
         return False
     if not directory and not stat.S_ISREG(info.st_mode):
         return False
-    if info.st_mode & 0o077:
+    if _POSIX_MODE_BITS and info.st_mode & 0o077:
         return False
     getuid = getattr(os, "getuid", None)
     return getuid is None or info.st_uid == getuid()
@@ -292,7 +300,8 @@ class EvidenceState:
                 fd, temporary_name = tempfile.mkstemp(prefix=f".{key.digest}.", suffix=".tmp", dir=self.root)
                 temporary = Path(temporary_name)
                 try:
-                    os.fchmod(fd, 0o600)
+                    if hasattr(os, "fchmod"):  # absent on Windows
+                        os.fchmod(fd, 0o600)
                     with os.fdopen(fd, "wb") as handle:
                         handle.write(encoded)
                         handle.flush()

@@ -9,6 +9,8 @@ import os
 import time
 from pathlib import Path
 
+import pytest
+
 import watch
 
 
@@ -49,6 +51,7 @@ def test_leaves_unrelated_entries_alone(tmp_path: Path, monkeypatch):
     assert stray_file.exists()
 
 
+@pytest.mark.skipif(os.name == "nt", reason="symlink creation needs admin on Windows")
 def test_symlink_is_never_followed(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(watch.tempfile, "gettempdir", lambda: str(tmp_path))
     victim = tmp_path / "precious"

@@ -47,7 +47,8 @@ def test_export_is_deterministic_owner_only_verified_and_replayable(tmp_path):
 
     assert first.read_bytes() == second.read_bytes()
     assert one["sha256"] == two["sha256"] == hashlib.sha256(first.read_bytes()).hexdigest()
-    assert stat.S_IMODE(first.stat().st_mode) == 0o600
+    if os.name != "nt":
+        assert stat.S_IMODE(first.stat().st_mode) == 0o600
     verified = verify_bundle(first)
     assert verified["valid"] is True
     assert verified["files"] == sorted(artifacts)
@@ -58,7 +59,8 @@ def test_export_is_deterministic_owner_only_verified_and_replayable(tmp_path):
     for name, content in artifacts.items():
         path = tmp_path / "replayed" / name
         assert path.read_bytes() == content
-        assert stat.S_IMODE(path.stat().st_mode) == 0o600
+        if os.name != "nt":
+            assert stat.S_IMODE(path.stat().st_mode) == 0o600
     assert json.loads((tmp_path / "replayed" / "bundle.json").read_text()) == verified["manifest"]
     with pytest.raises(BundleRefused, match="must not already exist"):
         replay_bundle(first, tmp_path / "replayed")
@@ -70,6 +72,7 @@ def test_export_refuses_traversal_and_absolute_paths(tmp_path, name):
         export({name: b"safe"}, tmp_path / "bundle.evidence")
 
 
+@pytest.mark.skipif(os.name == "nt", reason="symlink creation needs admin on Windows")
 def test_export_refuses_symlink_sources(tmp_path):
     source = tmp_path / "source.txt"
     source.write_text("safe", encoding="utf-8")

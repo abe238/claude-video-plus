@@ -9,6 +9,11 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.skipif(
+    os.name == "nt",
+    reason="benchmark-harness fixtures are /bin/sh scripts; the harness runs on the dev machine and unix CI",
+)
+
 from tools import control_harness
 
 

@@ -33,10 +33,12 @@ def test_atomic_owner_only_store_hit_and_miss(tmp_path):
     assert store.get(cache_key).status == "miss"
     written = store.put(cache_key, {"stage": "caption", "complete": True}, now=100)
     assert written.stored is True
-    assert mode(root) == 0o700
+    if os.name != "nt":  # POSIX mode bits are meaningless on NTFS
+        assert mode(root) == 0o700
     entries = list(root.glob("*.json"))
     assert len(entries) == 1
-    assert mode(entries[0]) == 0o600
+    if os.name != "nt":
+        assert mode(entries[0]) == 0o600
     assert not list(root.glob("*.tmp"))
     assert not (root / ".write-lock").exists()
 
@@ -63,8 +65,9 @@ def test_corruption_checksum_and_unsafe_permissions_are_misses(tmp_path):
     os.chmod(entry, 0o600)
     assert store.get(cache_key).reason == "checksum_mismatch"
 
-    os.chmod(entry, 0o644)
-    assert store.get(cache_key).reason == "unsafe_permissions"
+    if os.name != "nt":  # chmod(0o644) cannot express group/other bits on NTFS
+        os.chmod(entry, 0o644)
+        assert store.get(cache_key).reason == "unsafe_permissions"
 
 
 def test_ttl_and_size_purge_are_bounded(tmp_path):
@@ -132,3 +135,33 @@ def test_sensitive_media_secret_and_private_path_persistence_are_refused(tmp_pat
     assert opted_in.put(cache_key, {"text": "private words"}, payload_kind="transcript").stored
     assert not store.put(cache_key, {"segments": []}, payload_kind="scout").stored
     assert opted_in.put(cache_key, {"segments": []}, payload_kind="scout").stored
+
+
+# --- Windows behavior (v1.5.1): the cache must WORK there, not die silently --
+
+def test_owner_only_skips_mode_bits_when_posix_bits_meaningless(tmp_path, monkeypatch):
+    """Windows stats files 0o666, so with the bit test active every entry read
+    as unsafe and the opt-in cache was permanently dead. With bits disabled the
+    entry is accepted — but the symlink refusal must survive on every platform."""
+    from state import _owner_only
+    import state as state_mod
+    f = tmp_path / "entry.json"
+    f.write_text("{}", encoding="utf-8")
+    if os.name != "nt":
+        os.chmod(f, 0o644)  # would fail the POSIX bit test
+    monkeypatch.setattr(state_mod, "_POSIX_MODE_BITS", False)
+    assert _owner_only(f, directory=False) is True
+    if os.name != "nt":  # positive control: bits enforced when applicable
+        monkeypatch.setattr(state_mod, "_POSIX_MODE_BITS", True)
+        assert _owner_only(f, directory=False) is False
+
+
+def test_put_survives_missing_fchmod(tmp_path, monkeypatch):
+    """os.fchmod does not exist on Windows; put() must not raise AttributeError
+    (which was outside its caught-exception tuple)."""
+    monkeypatch.delattr("os.fchmod", raising=True)
+    store = EvidenceState(tmp_path / "state", ttl_seconds=60, max_bytes=64_000)
+    cache_key = key()
+    written = store.put(cache_key, {"stage": "caption", "complete": True}, now=100)
+    assert written.stored is True, written.reason
+    assert store.get(cache_key, now=101).status == "hit"
