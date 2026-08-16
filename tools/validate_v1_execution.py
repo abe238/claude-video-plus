@@ -341,7 +341,7 @@ def validate(data: dict[str, Any], *, root: Path = ROOT, ready: bool = False) ->
                                 errors.append(f"complete packet {packet.get('id')} has invalid artifact checksum {relative}")
                     if commits:
                         try:
-                            relative_verify = str(verify_path.relative_to(root))
+                            relative_verify = verify_path.relative_to(root).as_posix()
                             base_verify = json.loads(git_output(root, "show", f"{commits[0]}:{relative_verify}"))
                             if strip_verify_finalizer_fields(base_verify) != strip_verify_finalizer_fields(verify):
                                 errors.append(f"complete packet {packet.get('id')} rewrote reviewed verify commands")
@@ -356,7 +356,7 @@ def validate(data: dict[str, Any], *, root: Path = ROOT, ready: bool = False) ->
                 base_review = None
                 if commits:
                     try:
-                        relative_review = str(review_path.relative_to(root))
+                        relative_review = review_path.relative_to(root).as_posix()
                         base_review = git_bytes(root, "show", f"{commits[0]}:{relative_review}").decode("utf-8")
                     except (ValueError, subprocess.CalledProcessError):
                         pass
@@ -375,7 +375,7 @@ def validate(data: dict[str, Any], *, root: Path = ROOT, ready: bool = False) ->
                     errors.append(f"complete packet {packet.get('id')} EXIT.md does not prove acceptance")
                 elif commits:
                     try:
-                        relative_exit = str(exit_path.relative_to(root))
+                        relative_exit = exit_path.relative_to(root).as_posix()
                         if not committed_file_matches(root, commits[0], relative_exit, exit_path):
                             errors.append(f"complete packet {packet.get('id')} EXIT.md differs from reviewed tree")
                     except (ValueError, subprocess.CalledProcessError):

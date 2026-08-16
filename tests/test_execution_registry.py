@@ -208,6 +208,10 @@ def test_exact_review_append_rejects_line_ending_rewrite():
 
 def _commit_crlf_fixture(tmp_path, relative, content):
     subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    # The fixture commits CRLF bytes ON PURPOSE; the Windows runner sets
+    # system-level autocrlf=true, which would normalize them at `git add`
+    # and break the byte-exactness the test exists to verify.
+    subprocess.run(["git", "config", "core.autocrlf", "false"], cwd=tmp_path, check=True)
     subprocess.run(["git", "config", "user.name", "Test"], cwd=tmp_path, check=True)
     subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
     path = tmp_path / relative

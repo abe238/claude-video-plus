@@ -87,9 +87,8 @@ def test_completed_chunk_receipt_is_reused_without_reprocessing(tmp_path):
     assert first.segments[0].start == second.segments[0].start == 12.0
     assert second.diagnostics["processed_chunks"] == 0
     assert second.diagnostics["reused_chunks"] == 1
-    assert receipt_path.stat().st_mode & 0o077 == 0
-
-
+    if os.name != "nt":  # POSIX mode bits are meaningless on NTFS
+        assert receipt_path.stat().st_mode & 0o077 == 0
 def test_legacy_whisper_range_api_restores_absolute_timestamps(monkeypatch, tmp_path):
     media = tmp_path / "clip.mp4"
     media.write_bytes(b"media")
