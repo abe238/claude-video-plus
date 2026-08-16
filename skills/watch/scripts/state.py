@@ -17,7 +17,7 @@ import tempfile
 import time
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass
-from pathlib import Path, PureWindowsPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Iterator
 
 
@@ -155,8 +155,16 @@ def _safe_payload(value: Any, *, path: str = "payload") -> None:
     elif isinstance(value, str):
         if "\x00" in value or _SECRET_TEXT.search(value):
             raise ValueError(f"{path} contains secret-like text")
-        candidate = Path(value).expanduser()
-        if candidate.is_absolute() or value.startswith(("file://", "~/")):
+        # Check every path flavor on every platform: on Windows,
+        # Path("/Users/x").is_absolute() is False (drive-relative), which
+        # silently waved POSIX home paths through this refusal; conversely
+        # POSIX hosts never refused "C:\\Users\\x". Drive detection uses a
+        # separator-anchored regex, not PureWindowsPath.drive, so timestamp
+        # strings like "0:04" are not misread as drives.
+        if (PurePosixPath(value).is_absolute()
+                or Path(value).expanduser().is_absolute()
+                or re.match(r"^[A-Za-z]:[\\/]", value)
+                or value.startswith(("\\\\", "file://", "~/"))):
             raise ValueError(f"{path} contains an absolute private path")
         if "://" in value and ("?" in value or "#" in value):
             raise ValueError(f"{path} contains a non-canonical URL")

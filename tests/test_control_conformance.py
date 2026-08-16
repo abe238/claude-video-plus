@@ -7,7 +7,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+import os
 import pytest
+
+pytestmark = pytest.mark.skipif(
+    os.name == "nt",
+    reason="conformance fixtures are /bin/sh scripts using POSIX process groups and SIGKILL",
+)
 
 from tools import control_conformance as conformance
 

@@ -290,7 +290,8 @@ def export_bundle(
                 archive.writestr(_zip_info(name), normalized[name])
         if temporary.stat().st_size > max_bundle_bytes:
             raise BundleRefused("portable bundle exceeds the size bound")
-        with temporary.open("rb") as handle:
+        # "rb+" not "rb": Windows _commit() refuses read-only handles (EBADF).
+        with temporary.open("rb+") as handle:
             os.fsync(handle.fileno())
         os.replace(temporary, output_path)
         os.chmod(output_path, 0o600)

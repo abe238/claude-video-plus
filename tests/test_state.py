@@ -129,6 +129,11 @@ def test_sensitive_media_secret_and_private_path_persistence_are_refused(tmp_pat
     )
     assert not store.put(cache_key, {"authorization": "Bearer secret"}).stored
     assert not store.put(cache_key, {"manifest": "/Users/private/video.mp4"}).stored
+    # Windows path shapes must be refused on EVERY platform (and POSIX shapes
+    # on Windows): bare is_absolute() is platform-relative and waved these by.
+    assert not store.put(cache_key, {"manifest": "C:\\Users\\x\\video.mp4"}).stored
+    assert not store.put(cache_key, {"manifest": "C:/Users/x/video.mp4"}).stored
+    assert not store.put(cache_key, {"manifest": "\\\\server\\share\\v.mp4"}).stored
     assert not store.put(cache_key, {"frame": "frames/one.jpg"}).stored
 
     opted_in = EvidenceState(tmp_path / "sensitive", allow_sensitive=True)
@@ -159,7 +164,7 @@ def test_owner_only_skips_mode_bits_when_posix_bits_meaningless(tmp_path, monkey
 def test_put_survives_missing_fchmod(tmp_path, monkeypatch):
     """os.fchmod does not exist on Windows; put() must not raise AttributeError
     (which was outside its caught-exception tuple)."""
-    monkeypatch.delattr("os.fchmod", raising=True)
+    monkeypatch.delattr("os.fchmod", raising=False)  # already absent on Windows
     store = EvidenceState(tmp_path / "state", ttl_seconds=60, max_bytes=64_000)
     cache_key = key()
     written = store.put(cache_key, {"stage": "caption", "complete": True}, now=100)
