@@ -12,6 +12,7 @@ import hashlib
 import json
 import math
 import os
+import stat
 import re
 import shutil
 import subprocess
@@ -432,10 +433,15 @@ class ChunkReceiptStore:
         if not self.enabled or not self.path.exists():
             return empty
         try:
+            # Type checks apply on EVERY platform: a symlinked or non-regular
+            # receipt store is never trusted (parity with state._owner_only).
+            info = self.path.lstat()
+            if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+                return empty
             # Sibling of state._POSIX_MODE_BITS: Windows stats files 0o666
             # regardless of ACLs, so this test read EVERY receipt store as
             # unsafe there and the cache reloaded empty.
-            if os.name != "nt" and self.path.stat().st_mode & 0o077:
+            if os.name != "nt" and info.st_mode & 0o077:
                 return empty
             data = json.loads(self.path.read_text(encoding="utf-8"))
             if data.get("schema_version") != RECEIPT_SCHEMA or not isinstance(data.get("entries"), dict):

@@ -134,6 +134,15 @@ def test_sensitive_media_secret_and_private_path_persistence_are_refused(tmp_pat
     assert not store.put(cache_key, {"manifest": "C:\\Users\\x\\video.mp4"}).stored
     assert not store.put(cache_key, {"manifest": "C:/Users/x/video.mp4"}).stored
     assert not store.put(cache_key, {"manifest": "\\\\server\\share\\v.mp4"}).stored
+    # Bypass shapes from the adversarial review: root-relative backslash,
+    # any-case/single-slash file scheme, drive-relative without separator.
+    assert not store.put(cache_key, {"manifest": "\\Users\\x\\video.mp4"}).stored
+    assert not store.put(cache_key, {"manifest": "FILE:///C:/Users/x/v.mp4"}).stored
+    assert not store.put(cache_key, {"manifest": "file:/etc/passwd"}).stored
+    assert not store.put(cache_key, {"manifest": "C:Users\\x\\v.mp4"}).stored
+    # Positive controls: timestamps and prose with colons still store.
+    assert store.put(cache_key, {"note": "cut at 0:04, hold 12:30"}).stored
+    assert store.put(cache_key, {"note": "see https://example.com/page"}).stored
     assert not store.put(cache_key, {"frame": "frames/one.jpg"}).stored
 
     opted_in = EvidenceState(tmp_path / "sensitive", allow_sensitive=True)
@@ -170,3 +179,19 @@ def test_put_survives_missing_fchmod(tmp_path, monkeypatch):
     written = store.put(cache_key, {"stage": "caption", "complete": True}, now=100)
     assert written.stored is True, written.reason
     assert store.get(cache_key, now=101).status == "hit"
+
+
+def test_windows_store_root_must_live_under_the_profile(tmp_path, monkeypatch):
+    """With no POSIX bits, the user profile's ACLs are the Windows boundary; a
+    root outside it reads as a disabled cache (fail-open), never as private."""
+    import state as state_mod
+    # Flip the module constant, NOT os.name — faking os.name poisons
+    # pathlib into trying WindowsPath on a POSIX host.
+    monkeypatch.setattr(state_mod, "_IS_WINDOWS", True)
+    monkeypatch.setattr(state_mod.Path, "home", classmethod(lambda cls: tmp_path / "home"))
+    outside = EvidenceState(tmp_path / "elsewhere" / "store")
+    assert outside.get(key()).status == "disabled"
+    inside = EvidenceState(tmp_path / "home" / "store")
+    # inside the profile the guard passes; on this POSIX host the subsequent
+    # mkdir/mode path continues normally
+    assert inside.get(key()).status in ("miss", "disabled")

@@ -51,8 +51,21 @@ def test_leaves_unrelated_entries_alone(tmp_path: Path, monkeypatch):
     assert stray_file.exists()
 
 
-@pytest.mark.skipif(os.name == "nt", reason="symlink creation needs admin on Windows")
+
+def _symlinks_available(tmp_path: Path) -> bool:
+    """Capability probe, not a platform guess: Windows allows symlinks with
+    Developer Mode or admin rights, so skip only when creation actually fails."""
+    probe = tmp_path / ".symlink-probe"
+    try:
+        probe.symlink_to(tmp_path)
+    except OSError:
+        return False
+    probe.unlink()
+    return True
+
 def test_symlink_is_never_followed(tmp_path: Path, monkeypatch):
+    if not _symlinks_available(tmp_path):
+        pytest.skip("symlink creation not permitted on this host")
     monkeypatch.setattr(watch.tempfile, "gettempdir", lambda: str(tmp_path))
     victim = tmp_path / "precious"
     victim.mkdir()

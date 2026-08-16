@@ -72,8 +72,21 @@ def test_export_refuses_traversal_and_absolute_paths(tmp_path, name):
         export({name: b"safe"}, tmp_path / "bundle.evidence")
 
 
-@pytest.mark.skipif(os.name == "nt", reason="symlink creation needs admin on Windows")
+
+def _symlinks_available(tmp_path: Path) -> bool:
+    """Capability probe, not a platform guess: Windows allows symlinks with
+    Developer Mode or admin rights, so skip only when creation actually fails."""
+    probe = tmp_path / ".symlink-probe"
+    try:
+        probe.symlink_to(tmp_path)
+    except OSError:
+        return False
+    probe.unlink()
+    return True
+
 def test_export_refuses_symlink_sources(tmp_path):
+    if not _symlinks_available(tmp_path):
+        pytest.skip("symlink creation not permitted on this host")
     source = tmp_path / "source.txt"
     source.write_text("safe", encoding="utf-8")
     link = tmp_path / "link.txt"

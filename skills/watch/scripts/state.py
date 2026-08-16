@@ -119,7 +119,8 @@ def _canonical_json(value: Any) -> bytes:
 # EVERY entry as unsafe (cache permanently dead). The NTFS ACL check in
 # setup.py (v1.3.6) is the Windows equivalent of this boundary; the
 # symlink/regular-file checks below still apply on every platform.
-_POSIX_MODE_BITS = os.name != "nt"
+_IS_WINDOWS = os.name == "nt"
+_POSIX_MODE_BITS = not _IS_WINDOWS
 
 
 def _owner_only(path: Path, *, directory: bool) -> bool:
@@ -163,8 +164,13 @@ def _safe_payload(value: Any, *, path: str = "payload") -> None:
         # strings like "0:04" are not misread as drives.
         if (PurePosixPath(value).is_absolute()
                 or Path(value).expanduser().is_absolute()
-                or re.match(r"^[A-Za-z]:[\\/]", value)
-                or value.startswith(("\\\\", "file://", "~/"))):
+                # Letter-colon followed by ANY non-space refuses drive-absolute
+                # (C:\x), drive-relative (C:Users), and one-letter schemes —
+                # deliberately fail-closed; digit-colon timestamps (0:04) pass.
+                or re.match(r"^[A-Za-z]:(?=\S)", value)
+                # Leading backslash: Windows root-relative or UNC.
+                or value.startswith(("\\", "~/"))
+                or value.lower().startswith("file:")):
             raise ValueError(f"{path} contains an absolute private path")
         if "://" in value and ("?" in value or "#" in value):
             raise ValueError(f"{path} contains a non-canonical URL")
@@ -191,6 +197,17 @@ class EvidenceState:
         self.allow_sensitive = bool(allow_sensitive)
 
     def _prepare(self) -> None:
+        # Windows has no POSIX mode bits to enforce owner-only storage; the
+        # boundary there is the user profile's default ACLs (owner + SYSTEM +
+        # Administrators). A store root OUTSIDE the profile has no such
+        # guarantee — refuse it (callers fail open to a disabled cache).
+        if _IS_WINDOWS:
+            try:
+                self.root.resolve().relative_to(Path.home().resolve())
+            except ValueError:
+                raise StateUnavailable(
+                    "on Windows the evidence store must live under the user profile"
+                )
         if self.root.exists() or self.root.is_symlink():
             if not _owner_only(self.root, directory=True):
                 raise StateUnavailable("unsafe state directory permissions or type")
