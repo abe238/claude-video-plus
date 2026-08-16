@@ -66,6 +66,10 @@ def _symlinks_available(tmp_path: Path) -> bool:
 def test_symlink_is_never_followed(tmp_path: Path, monkeypatch):
     if not _symlinks_available(tmp_path):
         pytest.skip("symlink creation not permitted on this host")
+    if os.utime not in os.supports_follow_symlinks:
+        # The GH Windows runner CAN create symlinks but cannot age one
+        # without following it — the fixture, not the behavior, is blocked.
+        pytest.skip("utime(follow_symlinks=False) unsupported on this host")
     monkeypatch.setattr(watch.tempfile, "gettempdir", lambda: str(tmp_path))
     victim = tmp_path / "precious"
     victim.mkdir()
