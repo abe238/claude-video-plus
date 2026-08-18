@@ -21,11 +21,16 @@ def load_registry():
 
 
 def test_current_execution_registry_is_structurally_valid():
-    if shutil.which("gh") is None:
-        # The validator verifies packet GitHub issues via `gh`; without it
-        # every issue reads as missing (11 false errors on a bare host).
-        # Capability skip — the validator itself stays strict where gh exists.
-        pytest.skip("gh CLI not available on this host")
+    # The validator verifies packet GitHub issues via `gh`. Probe a real
+    # authenticated query, not mere presence: an unauthenticated or offline gh
+    # collapses transport failure into "issue missing" (11 false errors).
+    # The validator itself stays strict wherever the probe passes.
+    probe = subprocess.run(
+        ["gh", "api", "repos/abe238/claude-video-plus", "--jq", ".id"],
+        capture_output=True, timeout=30,
+    ) if shutil.which("gh") else None
+    if probe is None or probe.returncode != 0:
+        pytest.skip("gh CLI absent, unauthenticated, or offline on this host")
     assert validate(load_registry()) == []
 
 

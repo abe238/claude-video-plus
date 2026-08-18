@@ -45,7 +45,7 @@ On the first `/watch` invocation in a session, run the silent check:
 python3 "${SKILL_DIR}/scripts/setup.py" --check
 ```
 
-This is a <100ms lookup. **Exit 0 means /watch can run** — including a user who finished setup without a Whisper key (keyless is allowed). On exit 0 the script emits **nothing**: proceed to Step 1 without comment. **Do NOT announce "setup is complete"** — the only acceptable user-visible output from Step 0 is when remediation is required.
+This is a <100ms lookup. **Exit 0 means /watch can run** — including a user who finished setup without a Whisper key (keyless is allowed). On exit 0 the script emits nothing, with one exception: a stderr warning that yt-dlp is stale (dated releases; stale = YouTube breakage). Relay that warning to the user in one sentence and proceed — never block on it. **Do NOT announce "setup is complete"** — the only acceptable user-visible output from Step 0 is when remediation is required.
 
 **On any non-zero exit (2, 3, 4, or 5), or if the user asks about setup, keys, or transcription backends: `Read ${SKILL_DIR}/references/setup.md` and follow it.** It carries the exit-code table, the `--json` fields, the installer, the backend-suggestion order, and the first-run preference question. Exit 5 means /watch can run but the one-time first-run wizard never completed — ask the preference and write `SETUP_COMPLETE=true`. Do not improvise setup steps from memory.
 

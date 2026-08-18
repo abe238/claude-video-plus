@@ -289,3 +289,43 @@ def test_missing_runtime_never_blocks_check(tmp_path, monkeypatch):
     chk = _run(["--check"], home=tmp_path)
     assert chk.returncode == 0
     assert "runtime" not in (chk.stderr or "")
+
+
+# --- v1.5.2 round-2: Codex-review fixes -------------------------------------
+
+def test_malformed_stale_threshold_defaults_instead_of_crashing(tmp_path):
+    """HIGH: WATCH_YTDLP_STALE_DAYS=banana crashed --json at import time."""
+    js = _run(["--json"], home=tmp_path,
+              extra_env={"WATCH_YTDLP_STALE_DAYS": "banana"})
+    assert js.returncode == 0, js.stderr
+    json.loads(js.stdout)  # parseable output, not a traceback
+    neg = _run(["--json"], home=tmp_path,
+               extra_env={"WATCH_YTDLP_STALE_DAYS": "-5"})
+    assert neg.returncode == 0, neg.stderr
+
+
+def test_node_only_host_is_not_reported_as_covered(monkeypatch):
+    """HIGH: yt-dlp enables only deno by default; node must surface as
+    installed-but-not-enabled, never as the active runtime."""
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which",
+                        lambda n: "/x/node" if n == "node" else None)
+    assert setup_mod._youtube_js_runtime() is None
+    assert setup_mod._js_runtime_installed_not_enabled() == "node"
+    # positive control: deno present -> active, and 'other' goes quiet
+    monkeypatch.setattr(setup_mod, "_which",
+                        lambda n: "/x/" + n if n in ("deno", "node") else None)
+    assert setup_mod._youtube_js_runtime() == "deno"
+    assert setup_mod._js_runtime_installed_not_enabled() is None
+
+
+def test_nightly_version_suffix_still_parses(monkeypatch):
+    """MED: '2026.06.09.232712' and prefixed variants must not defeat the
+    date parse; unparseable stays None (fail-open, no warning)."""
+    import setup as setup_mod
+    class Out:
+        returncode = 0
+        stdout = "2026.06.09.232712\n"
+    monkeypatch.setattr(setup_mod.subprocess, "run", lambda *a, **k: Out())
+    expected = (setup_mod.datetime.date.today() - setup_mod.datetime.date(2026, 6, 9)).days
+    assert setup_mod._ytdlp_age_days() == expected

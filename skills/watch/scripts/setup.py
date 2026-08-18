@@ -22,6 +22,7 @@ import datetime
 import json
 import os
 import platform
+import re
 import shutil
 import socket
 import subprocess
@@ -135,7 +136,18 @@ def _yt_dlp_module_available() -> bool:
 # videos that play fine in a browser). Warn-only: never blocks a run.
 # Prior art: fire17/claude-video (feat/ytdlp-staleness-guard), adapted to our
 # module-fallback resolution. Env knob doubles as the deterministic test seam.
-YTDLP_STALE_DAYS = int(os.environ.get("WATCH_YTDLP_STALE_DAYS", "120") or 120)
+def _stale_threshold_days() -> int:
+    """WATCH_YTDLP_STALE_DAYS, parsed defensively: a malformed or negative
+    value must degrade to the default, never crash preflight."""
+    raw = os.environ.get("WATCH_YTDLP_STALE_DAYS", "")
+    try:
+        value = int(raw)
+        return value if value >= 0 else 120
+    except ValueError:
+        return 120
+
+
+YTDLP_STALE_DAYS = _stale_threshold_days()
 
 
 def _youtube_js_runtime() -> str | None:
@@ -150,7 +162,16 @@ def _youtube_js_runtime() -> str | None:
     jryyangjy/claude-video (feat/youtube-deps-preflight-67), severity
     corrected against measurement.
     """
-    for runtime in ("deno", "node"):
+    return "deno" if _which("deno") else None
+
+
+def _js_runtime_installed_not_enabled() -> str | None:
+    """A runtime yt-dlp could use but does not enable by default (needs
+    --js-runtimes). Reported separately so a node-only host is never counted
+    as covered — yt-dlp will not touch node without explicit wiring."""
+    if _which("deno"):
+        return None
+    for runtime in ("node", "bun", "quickjs"):
         if _which(runtime):
             return runtime
     return None
@@ -164,9 +185,10 @@ def _ytdlp_age_days() -> int | None:
             out = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             if out.returncode != 0:
                 continue
-            parts = out.stdout.strip().split(".")
-            released = datetime.date(int(parts[0]), int(parts[1]),
-                                     int(parts[2].split()[0]))
+            m = re.search(r"(\d{4})\.(\d{2})\.(\d{2})", out.stdout)
+            if not m:
+                continue
+            released = datetime.date(int(m[1]), int(m[2]), int(m[3]))
             return (datetime.date.today() - released).days
         except (OSError, subprocess.SubprocessError, ValueError, IndexError):
             continue
@@ -478,6 +500,7 @@ def _status() -> dict:
         "ytdlp_age_days": ytdlp_age,
         "ytdlp_stale": bool(ytdlp_age is not None and ytdlp_age > YTDLP_STALE_DAYS),
         "youtube_js_runtime": _youtube_js_runtime(),
+        "youtube_js_runtime_other": _js_runtime_installed_not_enabled(),
         "config_file": str(CONFIG_FILE),
         "watch_detail": cfg["detail"],
         "platform": platform.system(),
@@ -581,10 +604,13 @@ def cmd_install() -> int:
         print(f"[setup] config exists: {CONFIG_FILE}")
 
     if _youtube_js_runtime() is None:
+        other = _js_runtime_installed_not_enabled()
+        extra = (f" You have {other}, but yt-dlp only enables deno by default "
+                 f"(others need --js-runtimes {other})." if other else "")
         print("[setup] optional: yt-dlp has deprecated YouTube extraction "
               "without a JavaScript runtime (some formats may go missing as "
               "YouTube rolls out EJS challenges). Install deno to stay ahead: "
-              "brew install deno / https://deno.land")
+              "brew install deno / https://deno.land" + extra)
 
     has_key, backend = _have_api_key()
     if has_key:
