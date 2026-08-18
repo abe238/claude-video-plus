@@ -95,7 +95,9 @@ this fork originates good safety ideas.
   lookup (a true digest is unknowable pre-download; `source_identity()` is
   NOT reusable unchanged — query-form YouTube URLs currently collapse to one
   `/watch` identity); URL-only scope (local files never duplicated);
-  cookie-authenticated/signed/private sources excluded or double-consented;
+  cookie-authenticated, signed, private, and credential-bearing sources
+  EXCLUDED from caching outright (no consent path — a cached copy outlives
+  the authorization that fetched it);
   per-hit checksum verification; owner/ACL rules incl. the Windows
   profile-root guard; no symlinks; atomic writes + locking; corrupt-entry
   eviction; per-entry max + total LRU bound + TTL + disk-headroom guard +
@@ -115,4 +117,5 @@ this fork originates good safety ideas.
 
 Explicitly NOT planned: hermes-video's auto-analysis pipeline (mission
 conflict), their models.py LLM layer (intelligence stays in SKILL.md),
-yotamleo items (subset), EmilyYoung items (parallel).
+yotamleo items (subset), and EmilyYoung's runtime items EXCEPT the WAV
+evaluation, which lives in P4.
