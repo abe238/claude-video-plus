@@ -2,6 +2,22 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.2] — 2026-08-18
+
+### Added
+
+- **yt-dlp staleness warning** (offline: version strings ARE release dates).
+  `--check` warns on stderr past 120 days (`WATCH_YTDLP_STALE_DAYS` to tune) —
+  stale yt-dlp is the #1 real-world breakage. Warn-only, exit unchanged.
+  Adapted from `fire17/claude-video`.
+- **YouTube JS-runtime surfacing.** yt-dlp has deprecated runtime-less YouTube
+  extraction (EJS challenges; deno is the only default-enabled runtime).
+  Verified BOTH ways 2026-08-18: the deprecation warning is real, the claimed
+  hard 403 is not (same format list either way today) — so this reports in
+  `--json` (`youtube_js_runtime`) and hints at install time, and deliberately
+  never warns on `--check`. Idea from `jryyangjy/claude-video`, severity
+  corrected against measurement.
+
 ## [1.5.1] — 2026-08-16
 
 ### Fixed

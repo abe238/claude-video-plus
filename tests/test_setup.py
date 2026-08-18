@@ -29,6 +29,9 @@ def _run(args, *, home=None, extra_env=None):
     env.pop("SETUP_COMPLETE", None)
     # Nor a real yap install / real :8082 server. Tests that want a local
     # backend opt in explicitly via extra_env.
+    # A stale host yt-dlp must not break the silence contract in unrelated
+    # tests; staleness tests opt in via extra_env.
+    env.setdefault("WATCH_YTDLP_STALE_DAYS", "100000")
     env.setdefault("WATCH_YAP_PATH", "/nonexistent/yap")
     env.setdefault("WATCH_STT_URL", DEAD_STT_URL)
     if home is not None:
@@ -209,3 +212,80 @@ def test_check_stays_silent_when_setup_is_complete(monkeypatch):
         "has_api_key": True, "local_stt": [],
     })
     assert setup_mod.cmd_check() == 0
+
+
+# --- v1.5.2: yt-dlp staleness warning (prior art: fire17) --------------------
+
+def test_ytdlp_age_parses_the_dated_version(monkeypatch):
+    import setup as setup_mod
+    class Out:
+        returncode = 0
+        stdout = "2026.05.01\n"
+    monkeypatch.setattr(setup_mod.subprocess, "run", lambda *a, **k: Out())
+    age = setup_mod._ytdlp_age_days()
+    expected = (setup_mod.datetime.date.today() - setup_mod.datetime.date(2026, 5, 1)).days
+    assert age == expected
+
+
+def test_ytdlp_age_is_none_when_unparseable(monkeypatch):
+    import setup as setup_mod
+    class Out:
+        returncode = 0
+        stdout = "not-a-date\n"
+    monkeypatch.setattr(setup_mod.subprocess, "run", lambda *a, **k: Out())
+    assert setup_mod._ytdlp_age_days() is None
+
+
+def test_stale_ytdlp_warns_on_check_but_still_exits_zero(tmp_path):
+    """Positive control: with the threshold forced to 0 days, any real yt-dlp
+    is 'stale' — the warning must appear AND the exit stay 0 (warn-only)."""
+    _write_env(tmp_path, "GROQ_API_KEY=sk-test-abc\nSETUP_COMPLETE=true\n")
+    chk = _run(["--check"], home=tmp_path, extra_env={"WATCH_YTDLP_STALE_DAYS": "0"})
+    assert chk.returncode == 0, chk.stderr
+    assert "days old" in chk.stderr and "yt-dlp" in chk.stderr
+
+
+def test_fresh_ytdlp_keeps_check_silent(tmp_path):
+    """Negative control: with a huge threshold, --check is byte-silent."""
+    _write_env(tmp_path, "GROQ_API_KEY=sk-test-abc\nSETUP_COMPLETE=true\n")
+    chk = _run(["--check"], home=tmp_path, extra_env={"WATCH_YTDLP_STALE_DAYS": "100000"})
+    assert chk.returncode == 0, chk.stderr
+    assert chk.stdout == "" and chk.stderr == ""
+
+
+def test_json_reports_staleness_fields(tmp_path):
+    js = json.loads(_run(["--json"], home=tmp_path,
+                         extra_env={"WATCH_YTDLP_STALE_DAYS": "0"}).stdout)
+    assert "ytdlp_age_days" in js and "ytdlp_stale" in js
+    if js["ytdlp_age_days"] is not None:
+        assert js["ytdlp_stale"] is True  # threshold 0 → any age is stale
+
+
+# --- v1.5.2: YouTube JS-runtime surfacing (prior art: jryyangjy; severity
+# corrected against a both-ways probe — deprecation warning, NOT a 403) -------
+
+def test_js_runtime_detected_when_present(monkeypatch):
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which", lambda n: "/x/" + n if n == "deno" else None)
+    assert setup_mod._youtube_js_runtime() == "deno"
+
+
+def test_js_runtime_none_when_absent(monkeypatch):
+    import setup as setup_mod
+    monkeypatch.setattr(setup_mod, "_which", lambda n: None)
+    assert setup_mod._youtube_js_runtime() is None
+
+
+def test_json_reports_js_runtime_field(tmp_path):
+    js = json.loads(_run(["--json"], home=tmp_path).stdout)
+    assert "youtube_js_runtime" in js
+
+
+def test_missing_runtime_never_blocks_check(tmp_path, monkeypatch):
+    """The deprecation is futureproofing, not breakage: --check must stay
+    exit 0 and silent even with no JS runtime anywhere."""
+    import setup as setup_mod
+    _write_env(tmp_path, "GROQ_API_KEY=sk-test-abc\nSETUP_COMPLETE=true\n")
+    chk = _run(["--check"], home=tmp_path)
+    assert chk.returncode == 0
+    assert "runtime" not in (chk.stderr or "")

@@ -18,6 +18,7 @@ Design:
 """
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import platform
@@ -126,6 +127,50 @@ def _yt_dlp_module_available() -> bool:
         ).returncode == 0
     except (OSError, subprocess.SubprocessError):
         return False
+
+
+# yt-dlp version strings ARE release dates (YYYY.MM.DD), so staleness is a
+# pure offline computation — no network, no update check. A stale yt-dlp is
+# the #1 real-world breakage (YouTube extractor churn → HTTP 400/403 on
+# videos that play fine in a browser). Warn-only: never blocks a run.
+# Prior art: fire17/claude-video (feat/ytdlp-staleness-guard), adapted to our
+# module-fallback resolution. Env knob doubles as the deterministic test seam.
+YTDLP_STALE_DAYS = int(os.environ.get("WATCH_YTDLP_STALE_DAYS", "120") or 120)
+
+
+def _youtube_js_runtime() -> str | None:
+    """Which supported JS runtime yt-dlp can use for YouTube's EJS challenges.
+
+    VERIFIED 2026-08-18 both ways: yt-dlp 2026.06.09 enables only deno by
+    default (node/quickjs/bun need --js-runtimes) and warns that runtime-less
+    YouTube extraction "has been deprecated, and some formats may be missing"
+    — but it does NOT fail today (same format list either way in our probe).
+    So this is surfaced in --json and as an install hint, never a --check
+    warning: it is futureproofing, not current breakage. Prior art:
+    jryyangjy/claude-video (feat/youtube-deps-preflight-67), severity
+    corrected against measurement.
+    """
+    for runtime in ("deno", "node"):
+        if _which(runtime):
+            return runtime
+    return None
+
+
+def _ytdlp_age_days() -> int | None:
+    """Days since the installed yt-dlp's release date, or None if unknowable."""
+    for cmd in (["yt-dlp", "--version"],
+                [sys.executable, "-m", "yt_dlp", "--version"]):
+        try:
+            out = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            if out.returncode != 0:
+                continue
+            parts = out.stdout.strip().split(".")
+            released = datetime.date(int(parts[0]), int(parts[1]),
+                                     int(parts[2].split()[0]))
+            return (datetime.date.today() - released).days
+        except (OSError, subprocess.SubprocessError, ValueError, IndexError):
+            continue
+    return None
 
 
 _PERM_WARNED: set[str] = set()
@@ -420,6 +465,7 @@ def _status() -> dict:
     can_proceed = (not missing) and (has_transcription or setup_complete)
 
     cfg = get_config()
+    ytdlp_age = _ytdlp_age_days() if "yt-dlp" not in missing else None
     return {
         "status": status,
         "can_proceed": can_proceed,
@@ -429,6 +475,9 @@ def _status() -> dict:
         "whisper_backend": backend,
         "has_api_key": has_key,
         "local_stt": local_stt,
+        "ytdlp_age_days": ytdlp_age,
+        "ytdlp_stale": bool(ytdlp_age is not None and ytdlp_age > YTDLP_STALE_DAYS),
+        "youtube_js_runtime": _youtube_js_runtime(),
         "config_file": str(CONFIG_FILE),
         "watch_detail": cfg["detail"],
         "platform": platform.system(),
@@ -456,6 +505,12 @@ def cmd_check() -> int:
     """
     s = _status()
     if s["can_proceed"] and s["setup_complete"]:
+        if s.get("ytdlp_stale"):
+            sys.stderr.write(
+                f"[watch] yt-dlp is {s['ytdlp_age_days']} days old — YouTube "
+                "breaks fast on stale extractors (HTTP 400/403). Update it "
+                "(brew upgrade yt-dlp / pipx upgrade yt-dlp / pip install -U yt-dlp).\n"
+            )
         return 0
     if s["can_proceed"]:
         sys.stderr.write(
@@ -524,6 +579,12 @@ def cmd_install() -> int:
         print(f"[setup] created config: {CONFIG_FILE}")
     else:
         print(f"[setup] config exists: {CONFIG_FILE}")
+
+    if _youtube_js_runtime() is None:
+        print("[setup] optional: yt-dlp has deprecated YouTube extraction "
+              "without a JavaScript runtime (some formats may go missing as "
+              "YouTube rolls out EJS challenges). Install deno to stay ahead: "
+              "brew install deno / https://deno.land")
 
     has_key, backend = _have_api_key()
     if has_key:
