@@ -1,8 +1,11 @@
 import copy
 import hashlib
 import json
+import shutil
 import subprocess
 from pathlib import Path
+
+import pytest
 
 from tools.validate_v1_execution import (
     ROOT, codex_session_approves, committed_file_matches, committed_review_accepts_append,
@@ -18,6 +21,11 @@ def load_registry():
 
 
 def test_current_execution_registry_is_structurally_valid():
+    if shutil.which("gh") is None:
+        # The validator verifies packet GitHub issues via `gh`; without it
+        # every issue reads as missing (11 false errors on a bare host).
+        # Capability skip — the validator itself stays strict where gh exists.
+        pytest.skip("gh CLI not available on this host")
     assert validate(load_registry()) == []
 
 
