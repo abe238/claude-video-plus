@@ -6,9 +6,12 @@ scrolls). We dedupe consecutive identical cues and merge their time ranges.
 """
 from __future__ import annotations
 
+import html
 import re
 import sys
 from pathlib import Path
+
+from download import strip_invisible
 
 
 TS_VALUE = r"(?:(\d{1,2}):)?(\d{2}):(\d{2})[.,](\d{3})"
@@ -20,6 +23,24 @@ MIN_OVERLAP = 8
 
 def _to_seconds(h: str | None, m: str, s: str, ms: str) -> float:
     return int(h or 0) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
+
+
+def _decode_entities(text: str) -> str:
+    """Decode HTML entities in caption cue text, then re-apply the invisible-
+    character policy to whatever the decode produced.
+
+    YouTube VTT/json3 tracks carry `&amp;`, `&nbsp;` and friends verbatim
+    (upstream PR #124, Ydiouri, via the bugsmithd fork audit). Unescape runs
+    exactly ONCE — `&amp;amp;` must yield the literal `&amp;`, never a second
+    decode. NBSP folds to a plain space. Because a numeric entity can smuggle
+    any code point past upstream byte-level filters (`&#8206;` → bidi mark),
+    the decoded text goes through download.strip_invisible — the single
+    context-aware policy (category-based Cf strip, contextual ZWJ/ZWNJ
+    preservation for Persian/Indic/emoji) — rather than any local list.
+    """
+    decoded = html.unescape(text).replace("\u00a0", " ")
+    cleaned, _removed = strip_invisible(decoded)
+    return cleaned
 
 
 def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
@@ -58,7 +79,7 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
                 cue_lines.append(cleaned)
             i += 1
 
-        cue_text = " ".join(cue_lines).strip()
+        cue_text = _decode_entities(" ".join(cue_lines)).strip()
         if cue_text:
             segments.append({"start": round(start, 2), "end": round(end, 2), "text": cue_text})
         i += 1
@@ -144,7 +165,13 @@ def format_transcript(segments: list[dict]) -> str:
     lines = []
     for seg in segments:
         start = int(seg["start"])
-        stamp = f"[{start // 60:02d}:{start % 60:02d}]"
+        # Past an hour the minutes field rolls over ([1:01:01], never [61:01]):
+        # long talks are a core use case and an unparseable stamp isn't evidence
+        # (upstream PR #88, dvirarad, via the bugsmithd fork audit).
+        if start >= 3600:
+            stamp = f"[{start // 3600}:{start % 3600 // 60:02d}:{start % 60:02d}]"
+        else:
+            stamp = f"[{start // 60:02d}:{start % 60:02d}]"
         lines.append(f"{stamp} {seg['text']}")
     return "\n".join(lines)
 

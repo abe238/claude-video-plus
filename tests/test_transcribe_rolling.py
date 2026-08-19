@@ -8,6 +8,8 @@ efficient, balanced, token-burner) carried the duplicated words into context.
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 import transcribe
 
 
@@ -93,3 +95,41 @@ def test_dedupe_rolling_is_idempotent():
     once = transcribe.dedupe_rolling(segments)
     twice = transcribe.dedupe_rolling(once)
     assert once == twice
+
+
+# --- v1.5.3 A3: hour rollover in transcript stamps (PR #88 dvirarad) -------
+
+
+def test_stamps_roll_over_at_one_hour():
+    segments = [
+        {"start": 3599.999, "end": 3600.5, "text": "last second"},
+        {"start": 3600.0, "end": 3601.0, "text": "first hour"},
+        {"start": 36000.0, "end": 36001.0, "text": "ten hours"},
+        {"start": 75.0, "end": 76.0, "text": "sub-hour unchanged"},
+    ]
+    lines = transcribe.format_transcript(segments).splitlines()
+    assert lines[0].startswith("[59:59]")     # int() truncates 3599.999
+    assert lines[1].startswith("[1:00:00]")   # never [60:00]
+    assert lines[2].startswith("[10:00:00]")
+    assert lines[3].startswith("[01:15]")
+
+
+def test_no_code_parses_display_stamps_back():
+    """Recorded per the release gate (Codex xhigh, 2026-08-19): nothing
+    round-trips `[MM:SS]`/`[H:MM:SS]` display stamps into seconds, so the
+    hour rollover is a display-only change. Proven by enumerating the actual
+    consumers: format_transcript's output is only ever printed or embedded in
+    report text — no module feeds it back into a parser. frames.parse_time
+    accepts CLI `HH:MM:SS` input, which never carries the brackets."""
+    scripts = Path(__file__).resolve().parents[1] / "skills" / "watch" / "scripts"
+    consumers = {
+        path.name
+        for path in scripts.glob("*.py")
+        if "format_transcript(" in path.read_text(encoding="utf-8")
+    }
+    # The definition plus display-only call sites. A new consumer appearing
+    # here must be audited for stamp round-tripping before this set grows.
+    assert consumers == {"transcribe.py", "watch.py"}
+    import frames
+
+    assert frames.parse_time("1:01:01") == 3661.0  # CLI parser, bracket-free

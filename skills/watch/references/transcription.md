@@ -22,6 +22,17 @@ sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE
 requests extract only the requested range before inference, restore absolute timestamps, split
 near silence, and reuse successful owner-only chunk receipts after interruption.
 
+## Remote cost bound
+
+Authorized cloud transcription is budgeted per run: `WATCH_REMOTE_MAX_UPLOAD_MB`
+(default 256) caps cumulative uploaded bytes and `WATCH_REMOTE_MAX_ATTEMPTS`
+(default 171) caps HTTP send attempts — retries and the Groq→OpenAI fallback
+draw from the same pool. Set either to `0` to disable that bound. When a bound
+trips, completed chunks are kept, no further remote upload happens, local
+adapters may still run, and the run degrades to a partial or frames-only
+SUCCESS whose report suggests re-running with `--start/--end` for a focused
+section.
+
 Evidence mode adds dependency-free lexical retrieval, exact-number/negation/before-after guards,
 bounded sufficiency expansion, conflict reporting, and verified Scout reuse. Semantic reranking is
 optional and fail-open. Vision remains FFmpeg plus standard-library Python: the measured OpenCV

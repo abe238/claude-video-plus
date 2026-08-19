@@ -95,88 +95,113 @@ def _run_chunked(
     started = time.monotonic()
 
     silent_chunks = 0
-    for chunk in request.prepared_audio.chunks:
-        if getattr(chunk, "silent", False):
-            # Classified at the chunk layer: skipped, not failed, never cached.
-            # A silent chunk must never suppress speech elsewhere in the file.
-            silent_chunks += 1
-            continue
-        cached = receipts.get(adapter, model, request.language, chunk)
-        if cached is not None:
+    cost_exceeded = False
+    ledger_attempts_before = request.remote_ledger.attempts
+    # Flush in finally: the cost-limit escape (and any future early exit) must
+    # not lose the pending receipt tail — completed chunks are paid for.
+    try:
+        for chunk in request.prepared_audio.chunks:
+            if getattr(chunk, "silent", False):
+                # Classified at the chunk layer: skipped, not failed, never cached.
+                # A silent chunk must never suppress speech elsewhere in the file.
+                silent_chunks += 1
+                continue
+            cached = receipts.get(adapter, model, request.language, chunk)
+            if cached is not None:
+                try:
+                    restored = _local_segments(
+                        cached,
+                        chunk=chunk,
+                        adapter=adapter,
+                        model=model,
+                        language=request.language,
+                    )
+                    segments.extend(restored)
+                    reused += 1
+                    continue
+                except (TypeError, ValueError):
+                    cached = None
+
+            chunk_values: list[dict] | None = None
+            last_error: BaseException | None = None
+            for _attempt in range(request.max_attempts):
+                try:
+                    chunk_values = transcribe_one(chunk)
+                    if chunk_values:
+                        break
+                except whisper.RemoteCostExceeded:
+                    # Terminal for the run, never retryable: the generic
+                    # handler below would swallow it and keep uploading.
+                    cost_exceeded = True
+                    chunk_values = None
+                    break
+                except (Exception, SystemExit) as exc:
+                    # Keep the cause: "unavailable after bounded retries" alone gives
+                    # no way to tell a timeout from a missing binary from bad audio.
+                    last_error = exc
+                    chunk_values = None
+            if cost_exceeded:
+                failed += 1
+                warnings.append(
+                    f"chunk {chunk.index + 1} halted: {whisper.REMOTE_COST_GUIDANCE}"
+                )
+                break
+            if not chunk_values:
+                failed += 1
+                detail = type(last_error).__name__ if last_error else "no output"
+                warnings.append(
+                    f"chunk {chunk.index + 1} unavailable after bounded retries ({detail})"
+                )
+                continue
+            # Validate BEFORE caching: a malformed value crashing here used to
+            # happen after receipts.put, so the poisoned cache made every rerun
+            # crash identically (L6 review finding).
             try:
-                restored = _local_segments(
-                    cached,
+                built = _local_segments(
+                    chunk_values,
                     chunk=chunk,
                     adapter=adapter,
                     model=model,
                     language=request.language,
                 )
-                segments.extend(restored)
-                reused += 1
+            except (TypeError, ValueError) as exc:
+                failed += 1
+                warnings.append(
+                    f"chunk {chunk.index + 1} produced invalid segments ({type(exc).__name__})"
+                )
                 continue
-            except (TypeError, ValueError):
-                cached = None
-
-        chunk_values: list[dict] | None = None
-        last_error: BaseException | None = None
-        for _attempt in range(request.max_attempts):
+            processed += 1
             try:
-                chunk_values = transcribe_one(chunk)
-                if chunk_values:
-                    break
-            except (Exception, SystemExit) as exc:
-                # Keep the cause: "unavailable after bounded retries" alone gives
-                # no way to tell a timeout from a missing binary from bad audio.
-                last_error = exc
-                chunk_values = None
-        if not chunk_values:
-            failed += 1
-            detail = type(last_error).__name__ if last_error else "no output"
-            warnings.append(
-                f"chunk {chunk.index + 1} unavailable after bounded retries ({detail})"
-            )
-            continue
-        # Validate BEFORE caching: a malformed value crashing here used to
-        # happen after receipts.put, so the poisoned cache made every rerun
-        # crash identically (L6 review finding).
+                receipts.put(adapter, model, request.language, chunk, chunk_values)
+            except OSError as exc:
+                # A receipt is a resume optimization, not the product. A full disk
+                # used to abort the adapter here and discard every chunk already
+                # transcribed; losing the receipt is strictly cheaper than losing
+                # the work.
+                warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
+            segments.extend(built)
+    finally:
+        # Receipts are flushed in batches, so the tail must be persisted explicitly
+        # or the last <5 chunks would be re-transcribed on resume.
         try:
-            built = _local_segments(
-                chunk_values,
-                chunk=chunk,
-                adapter=adapter,
-                model=model,
-                language=request.language,
-            )
-        except (TypeError, ValueError) as exc:
-            failed += 1
-            warnings.append(
-                f"chunk {chunk.index + 1} produced invalid segments ({type(exc).__name__})"
-            )
-            continue
-        processed += 1
-        try:
-            receipts.put(adapter, model, request.language, chunk, chunk_values)
+            receipts.flush()
         except OSError as exc:
-            # A receipt is a resume optimization, not the product. A full disk
-            # used to abort the adapter here and discard every chunk already
-            # transcribed; losing the receipt is strictly cheaper than losing
-            # the work.
             warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
-        segments.extend(built)
 
-    # Receipts are flushed in batches, so the tail must be persisted explicitly
-    # or the last <5 chunks would be re-transcribed on resume.
-    try:
-        receipts.flush()
-    except OSError as exc:
-        warnings.append(f"receipt not stored ({type(exc).__name__}); transcription continues")
-
+    if remote and failed and request.remote_ledger.exhausted:
+        # Exact-cap edge: the last PERMITTED send consumed the whole budget
+        # and then failed or returned nothing, so RemoteCostExceeded was never
+        # raised — but the run is still cost-limited and must say so, or the
+        # report degrades to a false "transcript unavailable" with no remedy.
+        cost_exceeded = True
+        if not any(whisper.REMOTE_COST_GUIDANCE in w for w in warnings):
+            warnings.append(whisper.REMOTE_COST_GUIDANCE)
     if not segments:
         state = "unavailable"
-        failure_code = "adapter_exhausted"
+        failure_code = "remote_cost_limit_exceeded" if cost_exceeded else "adapter_exhausted"
     elif failed:
         state = "partial"
-        failure_code = "incomplete_chunks"
+        failure_code = "remote_cost_limit_exceeded" if cost_exceeded else "incomplete_chunks"
     else:
         state = "success"
         failure_code = None
@@ -199,7 +224,12 @@ def _run_chunked(
         attempts=(attempt,),
         failure_code=failure_code,
         diagnostics={
-            "remote_transmission": remote and processed > 0,
+            # Truthful at the wire level: a failed upload still transmitted.
+            # Ledger attempts are charged immediately before each HTTP send,
+            # so the delta catches sends whose HTTP call then failed; processed
+            # keeps covering stubbed/wrapped success paths that bypass HTTP.
+            "remote_transmission": remote
+            and (processed > 0 or request.remote_ledger.attempts > ledger_attempts_before),
             "silent_chunks": silent_chunks,
             "processed_chunks": processed,
             "reused_chunks": reused,
@@ -609,6 +639,10 @@ class CloudWhisperAdapter:
     def probe(self, request: TranscriptionRequest) -> AdapterAvailability:
         if not request.allow_remote:
             return AdapterAvailability(False, "remote_not_authorized")
+        if request.remote_ledger.exhausted:
+            # A prior remote adapter spent the run's budget; this one must not
+            # start a fresh spend on the same run.
+            return AdapterAvailability(False, "remote_cost_limit_exceeded")
         backend, key = whisper.load_api_key(self.name)
         if backend != self.name or not key:
             return AdapterAvailability(False, "cloud_key_unavailable")
@@ -624,6 +658,7 @@ class CloudWhisperAdapter:
             chunk.path,
             max_attempts=1,
             language=request.language,
+            ledger=request.remote_ledger,
         )
 
     def transcribe(self, request: TranscriptionRequest, receipts: ChunkReceiptStore) -> TranscriptResult:

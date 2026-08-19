@@ -10,6 +10,7 @@ Pure stdlib — no `pip install groq` or `pip install openai` needed.
 """
 from __future__ import annotations
 
+import dataclasses
 import io
 import json
 import math
@@ -37,6 +38,88 @@ OPENAI_MODEL = "whisper-1"
 # Both Groq's free tier and OpenAI whisper-1 cap uploads at 25 MB. We target a
 # margin under that so multipart framing overhead never pushes a chunk over.
 MAX_UPLOAD_BYTES = 24 * 1024 * 1024
+
+
+def _env_nonnegative_int(name: str, default: int) -> int:
+    """Read a non-negative int from the environment; malformed → default.
+
+    Same defensive-parse contract as setup's WATCH_YTDLP_STALE_DAYS: a typo'd
+    value must never crash import or silently disable a safety bound."""
+    raw = os.environ.get(name, "")
+    try:
+        value = int(raw)
+        return value if value >= 0 else default
+    except ValueError:
+        return default
+
+
+# Cumulative remote-spend bounds for ONE transcription run (all providers,
+# retries included). 0 disables a bound. At the current ~1.5 MiB chunk size
+# (transcription_chunks.DEFAULT_MAX_CHUNK_BYTES, ~3.3 min of audio each) the
+# byte bound dominates: 256 MiB ≈ 9 hours of audio; 171 attempts is sized so
+# a clean run hits the byte bound first and the attempt bound only trips on
+# pathological retry storms.
+DEFAULT_REMOTE_MAX_UPLOAD_BYTES = 256 * 1024 * 1024
+DEFAULT_REMOTE_MAX_ATTEMPTS = 171
+
+REMOTE_COST_GUIDANCE = (
+    "remote transcription stopped at the configured cost bound; re-run with "
+    "--start/--end to transcribe a focused section, or raise "
+    "WATCH_REMOTE_MAX_UPLOAD_MB / WATCH_REMOTE_MAX_ATTEMPTS"
+)
+
+
+class RemoteCostExceeded(Exception):
+    """Terminal for the run's remote transcription: the cost budget is spent.
+
+    Deliberately NOT a SystemExit: the generic per-chunk retry machinery
+    swallows SystemExit and would keep uploading; this type is caught
+    specially and stops all further remote sends."""
+
+
+@dataclasses.dataclass
+class RemoteCostLedger:
+    """Cumulative uploaded-bytes + attempt budget shared by every remote send
+    in one transcription run (Groq and OpenAI draw from the same pool).
+
+    Charged immediately before each HTTP send with the actual wire payload
+    (the multipart body), so retries and failed uploads count. Exact-bound
+    semantics: a send landing exactly on the cap is allowed — and LATCHES the
+    ledger, so a later ledger-unaware remote adapter is still refused at the
+    pipeline gate rather than starting a spend past a fully-consumed budget.
+    """
+
+    max_bytes: int | None = None
+    max_attempts: int | None = None
+    spent_bytes: int = 0
+    attempts: int = 0
+    exhausted: bool = False
+
+    def __post_init__(self) -> None:
+        if self.max_bytes is None:
+            self.max_bytes = _env_nonnegative_int(
+                "WATCH_REMOTE_MAX_UPLOAD_MB",
+                DEFAULT_REMOTE_MAX_UPLOAD_BYTES // (1024 * 1024),
+            ) * 1024 * 1024
+        if self.max_attempts is None:
+            self.max_attempts = _env_nonnegative_int(
+                "WATCH_REMOTE_MAX_ATTEMPTS", DEFAULT_REMOTE_MAX_ATTEMPTS
+            )
+
+    def charge(self, upload_bytes: int) -> None:
+        if self.exhausted:
+            raise RemoteCostExceeded(REMOTE_COST_GUIDANCE)
+        over_bytes = self.max_bytes and self.spent_bytes + upload_bytes > self.max_bytes
+        over_attempts = self.max_attempts and self.attempts + 1 > self.max_attempts
+        if over_bytes or over_attempts:
+            self.exhausted = True
+            raise RemoteCostExceeded(REMOTE_COST_GUIDANCE)
+        self.spent_bytes += upload_bytes
+        self.attempts += 1
+        if (self.max_bytes and self.spent_bytes >= self.max_bytes) or (
+            self.max_attempts and self.attempts >= self.max_attempts
+        ):
+            self.exhausted = True
 
 
 def plan_chunks(
@@ -301,6 +384,7 @@ def _post_whisper(
     *,
     max_attempts: int = MAX_ATTEMPTS,
     language: str = "auto",
+    ledger: RemoteCostLedger | None = None,
 ) -> dict:
     if not 1 <= max_attempts <= MAX_ATTEMPTS:
         raise ValueError(f"max_attempts must be between 1 and {MAX_ATTEMPTS}")
@@ -331,6 +415,12 @@ def _post_whisper(
     last_detail = ""
 
     for attempt in range(max_attempts):
+        # Charge the wire payload BEFORE the send: retries and uploads that
+        # fail mid-flight still cost bandwidth and provider ingress, so every
+        # attempt draws from the run's remote budget. RemoteCostExceeded
+        # propagates — it is terminal for the run, not a retryable error.
+        if ledger is not None:
+            ledger.charge(len(body))
         request = Request(endpoint, data=body, headers=headers, method="POST")
         try:
             with urlopen(request, timeout=300, context=context) as response:
@@ -513,6 +603,16 @@ def transcribe_chunks(
     for index, (path, offset) in enumerate(chunks):
         try:
             chunk_segments = transcribe_one(path)
+        except RemoteCostExceeded as exc:
+            # Terminal, not per-chunk: no further chunk may upload. Keep what
+            # is already transcribed; with nothing banked the run has failed.
+            print(
+                f"[watch] chunk {index + 1}/{len(chunks)} halted — {exc}",
+                file=sys.stderr,
+            )
+            if segments:
+                return segments
+            raise SystemExit(str(exc))
         except SystemExit as exc:
             failures += 1
             print(
@@ -538,17 +638,18 @@ def transcribe_file(
     *,
     max_attempts: int = MAX_ATTEMPTS,
     language: str = "auto",
+    ledger: RemoteCostLedger | None = None,
 ) -> list[dict]:
     """Upload one audio file and return its 0-based segments."""
     if backend == "groq":
         response = _post_whisper(
             GROQ_ENDPOINT, api_key, GROQ_MODEL, audio_path,
-            max_attempts=max_attempts, language=language,
+            max_attempts=max_attempts, language=language, ledger=ledger,
         )
     elif backend == "openai":
         response = _post_whisper(
             OPENAI_ENDPOINT, api_key, OPENAI_MODEL, audio_path,
-            max_attempts=max_attempts, language=language,
+            max_attempts=max_attempts, language=language, ledger=ledger,
         )
     else:
         raise SystemExit(f"Unknown whisper backend: {backend}")
@@ -592,16 +693,20 @@ def transcribe_video(
         end_seconds=end_seconds,
     )
     audio_bytes = audio_path.stat().st_size
+    ledger = RemoteCostLedger()
 
     def transcribe_one(path: Path) -> list[dict]:
-        return transcribe_file(backend, api_key, path, language=language)
+        return transcribe_file(backend, api_key, path, language=language, ledger=ledger)
 
     if audio_bytes <= MAX_UPLOAD_BYTES:
         print(
             f"[watch] audio: {audio_bytes / 1024:.0f} kB — uploading to {backend} Whisper…",
             file=sys.stderr,
         )
-        segments = transcribe_one(audio_path)
+        try:
+            segments = transcribe_one(audio_path)
+        except RemoteCostExceeded as exc:
+            raise SystemExit(str(exc))
     else:
         duration = audio_duration(audio_path)
         plan = plan_chunks(duration, audio_bytes, MAX_UPLOAD_BYTES)

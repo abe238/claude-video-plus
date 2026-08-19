@@ -2,6 +2,43 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.3] — 2026-08-19
+
+### Added
+
+- **Remote transcription cost bound.** A per-run `RemoteCostLedger` caps
+  cumulative uploaded bytes (`WATCH_REMOTE_MAX_UPLOAD_MB`, default 256) and
+  send attempts (`WATCH_REMOTE_MAX_ATTEMPTS`, default 171), charged before
+  every HTTP send — retries, failed uploads, and the Groq→OpenAI fallback all
+  draw from one shared pool (both the adapter pipeline and the legacy
+  `whisper.py` entry point). On the bound: structured
+  `remote_cost_limit_exceeded`, completed chunks kept (receipts flush in
+  `finally`), remaining remote adapters skipped, later local adapters still
+  run, the run degrades to partial/frames-only success (exit 0), and the
+  report carries `--start/--end` guidance. `remote_transmission` diagnostics
+  now count sends attempted, not chunks processed, so a failed upload is
+  reported truthfully. `0` disables a bound. Idea from `vcolombo/claude-video`;
+  mechanism rebuilt for this pipeline.
+- **CI supply-chain pinning.** Every external workflow action (including the
+  privileged `softprops/action-gh-release`) is pinned to a full 40-hex commit
+  SHA with a version comment; `tests/test_workflow_pinning.py` enforces it and
+  `.github/dependabot.yml` proposes pin updates weekly. Idea from
+  `vcolombo/claude-video`.
+
+### Fixed
+
+- **Transcript stamps roll over at one hour** — `[1:01:01]`, never `[61:01]`
+  (upstream PR #88 by dvirarad, adopted via the `bugsmithd/claude-video-forked`
+  audit). Known issue: evidence-mode's internal `mm:ss` label keeps the old
+  shape (that formatter is frozen under the 83da59f benchmark gate).
+- **HTML entities in captions decode exactly once** at the shared VTT/SRT
+  parse chokepoint — `&amp;`/`&nbsp;` no longer reach transcripts verbatim,
+  and code points smuggled through numeric entities (`&#8206;` bidi marks,
+  zero-widths, tag-block, variation selectors) re-enter the existing
+  context-aware invisible-character policy (`download.strip_invisible`), which
+  keeps its Persian/Indic/emoji joiner preservation (upstream PR #124 by
+  Ydiouri, adopted via the `bugsmithd/claude-video-forked` audit).
+
 ## [1.5.2] — 2026-08-18
 
 ### Added

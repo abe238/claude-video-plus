@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.5.2"
+  version: "1.5.3"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238

@@ -1,0 +1,8 @@
+# Keeps the SHA-pinned workflow actions current: Dependabot proposes PRs that
+# bump the pinned commit (and its version comment) when an action releases.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

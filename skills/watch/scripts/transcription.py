@@ -187,6 +187,10 @@ class TranscriptionRequest:
     timeout: float = 300.0
     config: Mapping[str, object] = field(default_factory=dict)
     prepared_audio: PreparedAudio | None = None
+    # One remote-cost budget for the WHOLE run: Groq and OpenAI (and every
+    # retry) draw from the same pool, so provider fallback cannot double-spend.
+    # dataclasses.replace() keeps the same ledger object across request copies.
+    remote_ledger: whisper.RemoteCostLedger = field(default_factory=whisper.RemoteCostLedger)
 
     def __post_init__(self) -> None:
         if self.start_seconds is not None and self.start_seconds < 0:
@@ -277,6 +281,47 @@ def build_default_adapters(config: Mapping[str, object]) -> dict[str, Transcript
     }
 
 
+def transcript_cost_limited(result: "TranscriptResult | None") -> bool:
+    """THE predicate for rendering remote-cost guidance: the budget tripped
+    AND the transcript is incomplete. A complete transcript rescued by a later
+    adapter renders no guidance — there is nothing left to re-run for."""
+    if result is None or result.state not in ("partial", "unavailable"):
+        return False
+    return result.failure_code == "remote_cost_limit_exceeded" or any(
+        attempt.failure_code == "remote_cost_limit_exceeded" for attempt in result.attempts
+    )
+
+
+def _aggregate_run_truth(result: TranscriptResult, request: TranscriptionRequest) -> TranscriptResult:
+    """Fold run-level facts into the result an adapter produced.
+
+    A later local adapter knows nothing about the remote sends that came
+    before it: without this fold, a local fallback reports
+    ``remote_transmission: False`` after bytes already left the machine, and a
+    local partial rewrites ``remote_cost_limit_exceeded`` into
+    ``incomplete_chunks`` — hiding that the transcript is incomplete because
+    the run's remote budget tripped and a --start/--end re-run would fix it.
+    """
+    diagnostics = dict(result.diagnostics)
+    if request.remote_ledger.attempts > 0:
+        diagnostics["remote_transmission"] = True
+    cost_limited = any(
+        attempt.failure_code == "remote_cost_limit_exceeded" for attempt in result.attempts
+    )
+    warnings = result.warnings
+    failure_code = result.failure_code
+    if cost_limited and result.state == "partial":
+        # A COMPLETE transcript from a later adapter needs no guidance; an
+        # incomplete one exists BECAUSE the budget tripped — say so at run
+        # level (per-adapter attempt rows keep their own honest codes).
+        failure_code = "remote_cost_limit_exceeded"
+        if whisper.REMOTE_COST_GUIDANCE not in warnings:
+            warnings = warnings + (whisper.REMOTE_COST_GUIDANCE,)
+    return replace(
+        result, diagnostics=diagnostics, warnings=warnings, failure_code=failure_code
+    )
+
+
 class TranscriptionPipeline:
     """Ordered Adapter orchestration with privacy-preserving short circuits."""
 
@@ -322,6 +367,19 @@ class TranscriptionPipeline:
                         state="unavailable",
                         failure_code="remote_not_authorized",
                         detail="remote transcription requires explicit authorization",
+                    )
+                )
+                continue
+            if adapter.is_remote and request.remote_ledger.exhausted:
+                # Pipeline-level, not probe-level: a custom remote adapter that
+                # never checks the ledger must STILL be refused — no probe, no
+                # send, nothing after the run's budget is spent.
+                attempts.append(
+                    TranscriptAttempt(
+                        adapter=name,
+                        state="unavailable",
+                        failure_code="remote_cost_limit_exceeded",
+                        detail="remote cost budget spent earlier in this run",
                     )
                 )
                 continue
@@ -414,23 +472,41 @@ class TranscriptionPipeline:
                 fallback = result.fallback_reason
                 if prior_failures and not fallback:
                     fallback = "earlier Adapters unavailable: " + ", ".join(prior_failures)
-                return replace(result, state=state, attempts=tuple(attempts), fallback_reason=fallback)
+                return _aggregate_run_truth(
+                    replace(result, state=state, attempts=tuple(attempts), fallback_reason=fallback),
+                    request,
+                )
             if result.state == "partial" and result.segments:
                 partial = replace(result, attempts=tuple(attempts))
                 if not request.require_complete:
-                    return partial
+                    return _aggregate_run_truth(partial, request)
             if result.state == "fatal":
                 return replace(result, attempts=tuple(attempts))
 
         if partial is not None:
-            return partial
+            # Re-attach the FULL attempt list: locals run before cloud, so a
+            # stored local partial predates the remote attempts (and any cost
+            # trip) that happened after it.
+            return _aggregate_run_truth(
+                replace(partial, attempts=tuple(attempts)), request
+            )
+        cost_limited = any(
+            attempt.failure_code == "remote_cost_limit_exceeded" for attempt in attempts
+        )
         return TranscriptResult(
             state="unavailable",
             language=request.language,
             attempts=tuple(attempts),
-            failure_code="transcript_unavailable",
-            warnings=("no transcript Adapter produced usable timestamped output",),
-            diagnostics={"remote_transmission": False},
+            # Never rewrite the cost limit to a generic code: the report's
+            # --start/--end guidance keys off it, and "transcript_unavailable"
+            # would hide that the user can fix this with a bound or a range.
+            failure_code="remote_cost_limit_exceeded" if cost_limited else "transcript_unavailable",
+            warnings=(
+                (whisper.REMOTE_COST_GUIDANCE,)
+                if cost_limited
+                else ("no transcript Adapter produced usable timestamped output",)
+            ),
+            diagnostics={"remote_transmission": request.remote_ledger.attempts > 0},
         )
 
 
