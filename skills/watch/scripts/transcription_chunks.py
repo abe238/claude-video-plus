@@ -41,6 +41,117 @@ RECEIPT_FLUSH_EVERY = 5
 DEFAULT_MAX_CHUNK_BYTES = 1536 * 1024
 SILENCE_RE = re.compile(r"silence_(start|end):\s*(-?\d+(?:\.\d+)?)")
 
+# --- whisper repetition-loop detection (v1.5.4, idea from the bugsmithd fork
+# audit; mechanism rebuilt for this chunked pipeline) ------------------------
+#
+# Greedy whisper decoding can collapse into repeating one sentence for the
+# rest of a chunk (their measured failure: one line 6,434x = 83% of a
+# transcript destroyed). Our chunks are ~3.3 min, which BOUNDS the damage but
+# cannot detect it: a looped chunk still poisons its span and, uncaught, the
+# receipt cache. Detection runs on every attempt's output AND on every cached
+# receipt read (so pre-detector receipts and WATCH_LOOP_DETECT=0-era receipts
+# can never resurface a loop), and a detected loop is never stored.
+#
+# Thresholds are calibrated against the real failure (thousands of repeats)
+# and deliberately sit far above legitimate repetition: an 8x chorus, a
+# call-and-response, or a short chant never reaches 20 consecutive identical
+# lines, while a genuine decode loop blows past every one of these within
+# seconds of audio. ponytail: a 3-minute single-mantra chant chunk CAN trip
+# the consecutive rule — the run degrades to partial with a warning naming
+# this constant, and WATCH_LOOP_DETECT=0 is the documented escape hatch.
+LOOP_MIN_CONSECUTIVE = 20
+LOOP_DOMINANCE_MIN_SEGMENTS = 40
+LOOP_DOMINANCE_RATIO = 0.6
+LOOP_INTRA_MIN_REPEATS = 20
+
+# Bracketed/parenthesized annotations ([Music], (applause)) and music-note
+# runs are non-speech markers: excluded so a lyric video full of [Music] cues
+# can never read as a loop.
+_NON_SPEECH_RE = re.compile(r"^\s*(?:[\[\(][^\]\)]*[\]\)]|[♪♫\s])+\s*$")
+_LOOP_WORD_RE = re.compile(r"[^\w\s]", re.UNICODE)
+# Unicode-aware sentence boundaries: ASCII enders plus CJK full stops and
+# question/exclamation forms and ellipses. A loop packs its repeats behind
+# these — ありがとう。 x6,434 inside ONE segment is the same failure as 6,434
+# segments, and must read as the same sentence stream.
+_SENTENCE_SPLIT_RE = re.compile(r"[.!?。！？…‼⁇;；]+\s*")
+
+
+def _loop_words(text: str) -> tuple[str, ...]:
+    return tuple(_LOOP_WORD_RE.sub("", text.casefold()).split())
+
+
+def _loop_sentences(text: str) -> list[tuple[str, ...]]:
+    out: list[tuple[str, ...]] = []
+    for part in _SENTENCE_SPLIT_RE.split(text):
+        words = _loop_words(part)
+        if words:
+            out.append(words)
+    return out
+
+
+def detect_repetition_loop(values: Iterable[Mapping[str, object]]) -> str | None:
+    """Return a human-readable reason if this chunk's segments look like a
+    decode loop, else None. Pure function over segment mappings.
+
+    Segments are flattened into one normalized SENTENCE stream, so the same
+    thresholds catch a repeat spread over thousands of segments, packed in
+    varying groups per segment, or crammed into a single giant segment."""
+    stream: list[tuple[str, ...]] = []
+    unsplit_segments: list[tuple[str, ...]] = []
+    for value in values:
+        raw = str(value.get("text") or "").strip()
+        if not raw or _NON_SPEECH_RE.match(raw):
+            continue
+        sentences = _loop_sentences(raw)
+        if sentences:
+            stream.extend(sentences)
+            if len(sentences) == 1:
+                unsplit_segments.append(sentences[0])
+
+    run = best_run = 1
+    for prev, cur in zip(stream, stream[1:]):
+        run = run + 1 if prev == cur else 1
+        best_run = max(best_run, run)
+    if best_run >= LOOP_MIN_CONSECUTIVE:
+        return f"one sentence repeated {best_run}x consecutively (>= {LOOP_MIN_CONSECUTIVE})"
+
+    if len(stream) >= LOOP_DOMINANCE_MIN_SEGMENTS:
+        counts: dict[tuple[str, ...], int] = {}
+        for words in stream:
+            counts[words] = counts.get(words, 0) + 1
+        top = max(counts.values())
+        if top / len(stream) > LOOP_DOMINANCE_RATIO:
+            return (
+                f"one sentence is {top}/{len(stream)} of the chunk "
+                f"(> {LOOP_DOMINANCE_RATIO:.0%})"
+            )
+
+    # Punctuation-less repeats ("im sorry im sorry …") never split into
+    # sentences, so a word-period scan covers a phrase repeated back-to-back
+    # for most of a single segment.
+    for words in unsplit_segments:
+        n = len(words)
+        if n < 2 * LOOP_INTRA_MIN_REPEATS:
+            continue
+        max_period = min(30, n // LOOP_INTRA_MIN_REPEATS)
+        for period in range(1, max_period + 1):
+            repeats = best = 1
+            i = period
+            while i + period <= n:
+                if words[i:i + period] == words[i - period:i]:
+                    repeats += 1
+                else:
+                    best = max(best, repeats)
+                    repeats = 1
+                i += period
+            best = max(best, repeats)
+            if best >= LOOP_INTRA_MIN_REPEATS and best * period > 0.8 * n:
+                return (
+                    f"one {period}-word phrase repeated {best}x inside a "
+                    f"single segment"
+                )
+    return None
+
 
 @dataclass(frozen=True)
 class AudioChunk:
@@ -451,12 +562,22 @@ class ChunkReceiptStore:
             return empty
 
     @staticmethod
-    def _key(adapter: str, model: str | None, language: str, chunk: AudioChunk) -> str:
+    def _key(
+        adapter: str,
+        model: str | None,
+        language: str,
+        chunk: AudioChunk,
+        policy: str = "loop1",
+    ) -> str:
         payload = {
             "schema": RECEIPT_SCHEMA,
             "adapter": adapter,
             "model": model,
             "language": language,
+            # Detector policy: receipts written while loop detection was OFF
+            # ("loop0") live in a separate namespace, so a detector-off run can
+            # never seed the enabled cache — enabled reads ALSO revalidate.
+            "policy": policy,
             "chunk_sha256": chunk.sha256,
             "source_offset": chunk.source_offset,
             "duration": chunk.duration,
@@ -470,10 +591,11 @@ class ChunkReceiptStore:
         model: str | None,
         language: str,
         chunk: AudioChunk,
+        policy: str = "loop1",
     ) -> list[dict] | None:
         if not self.enabled:
             return None
-        entry = self._data["entries"].get(self._key(adapter, model, language, chunk))
+        entry = self._data["entries"].get(self._key(adapter, model, language, chunk, policy))
         if not isinstance(entry, dict) or entry.get("chunk_sha256") != chunk.sha256:
             return None
         segments = entry.get("segments")
@@ -488,11 +610,12 @@ class ChunkReceiptStore:
         language: str,
         chunk: AudioChunk,
         segments: Iterable[Mapping[str, object]],
+        policy: str = "loop1",
     ) -> None:
         if not self.enabled:
             return
         entries = self._data["entries"]
-        entries[self._key(adapter, model, language, chunk)] = {
+        entries[self._key(adapter, model, language, chunk, policy)] = {
             "chunk_sha256": chunk.sha256,
             "segments": [dict(segment) for segment in segments],
         }

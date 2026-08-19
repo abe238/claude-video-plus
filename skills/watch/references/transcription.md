@@ -22,6 +22,29 @@ sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE
 requests extract only the requested range before inference, restore absolute timestamps, split
 near silence, and reuse successful owner-only chunk receipts after interruption.
 
+## Repetition-loop defense
+
+Whisper decoding can collapse into repeating one sentence (a documented
+real-world failure destroyed 83% of a transcript). When enabled (the
+default), every attempt's output and every cached receipt is screened; a
+looped attempt is retried and, failing that, the chunk is reported failed
+rather than shipping garbage. Representative short and varied repetition
+(choruses, varied chants, call-and-response, `[Music]` markers) is calibrated
+NOT to trip; a long PERFECTLY identical single-mantra chant is the documented
+edge that can. `WATCH_LOOP_DETECT=0` disables the screen for exactly that
+case — its runs cache under a separate receipt namespace that later enabled
+runs never reuse. `loop_detected_chunks` appears in diagnostics.
+
+## Caption track selection
+
+Requests always include the spoken-language `-orig` original track.
+`WATCH_LANGUAGE=auto` prefers the original over any machine translation. The
+manual-over-ASR rule (human-written exact track first — ASR garbles proper
+nouns — then same-language `-orig`, then the rest) applies to the default and
+explicit language settings; auto mode fetches originals and translations
+only. The report names the consumed track and whether it is manual,
+automatic, or auto-translated.
+
 ## Remote cost bound
 
 Authorized cloud transcription is budgeted per run: `WATCH_REMOTE_MAX_UPLOAD_MB`

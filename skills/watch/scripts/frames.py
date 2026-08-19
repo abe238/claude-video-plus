@@ -166,6 +166,54 @@ def format_time(seconds: float) -> str:
     return f"{minutes:02d}:{sec:02d}"
 
 
+_STAMPED_RE = re.compile(r"_t\d+[hm]")
+
+
+def stamp_frame_names(frames: list[dict]) -> list[dict]:
+    """Rename each SELECTED frame to carry its timestamp:
+    ``frame_0007.jpg`` → ``frame_0007_t04m12s.jpg`` (``t1h04m12s`` past an
+    hour). Idea from the bugsmithd fork audit: the model Reads one image per
+    tool call, and a timestamp in the filename is visible in the Read result
+    itself instead of hand-paired from the report.
+
+    THE single post-selection chokepoint — called at every engine's return,
+    after dedup and even-sampling (perceptual dedup requires the numeric
+    ffmpeg sequence; renaming earlier silently turns it into a no-op).
+    Nearest-second rule matches :func:`format_time`; names stay colon-free
+    for Windows. Fail-open and never overwriting: on a collision or any
+    rename ``OSError`` the frame keeps its original on-disk path, and the
+    returned dict is updated only AFTER its rename succeeded.
+    """
+    out: list[dict] = []
+    for frame in frames:
+        value = dict(frame)
+        try:
+            path = Path(str(frame["path"]))
+            if _STAMPED_RE.search(path.stem):  # already stamped: idempotent
+                out.append(value)
+                continue
+            total = int(round(float(frame.get("timestamp_seconds") or 0.0)))
+            hours, rem = divmod(total, 3600)
+            minutes, sec = divmod(rem, 60)
+            stamp = (
+                f"t{hours}h{minutes:02d}m{sec:02d}s" if hours else f"t{minutes:02d}m{sec:02d}s"
+            )
+            destination = path.with_name(f"{path.stem}_{stamp}{path.suffix}")
+            # Atomic no-replace: hard-link then unlink the source. A plain
+            # exists()+rename() is a TOCTOU overwrite race, and a dangling
+            # symlink at the destination passes exists()==False yet gets
+            # clobbered. os.link raises FileExistsError on ANY existing
+            # destination entry (dangling links included) — fail-open, the
+            # frame keeps its original path.
+            os.link(path, destination)
+            path.unlink()
+            value["path"] = str(destination)
+        except (OSError, TypeError, ValueError):
+            pass  # the unstamped frame is still a perfectly good frame
+        out.append(value)
+    return out
+
+
 def _metadata_via_ffmpeg(video_path: str) -> dict:
     """Fallback probe parsing the `ffmpeg -i` stream banner.
 
@@ -877,7 +925,7 @@ def extract_scene_or_uniform(
         else:
             deduped, n_dropped = scene_frames, 0
         cap = len(deduped) if max_frames is None else max_frames
-        selected = _even_sample(deduped, cap)
+        selected = stamp_frame_names(_even_sample(deduped, cap))
         return selected, {
             "engine": "scene",
             "frame_engine": frame_engine,
@@ -905,6 +953,7 @@ def extract_scene_or_uniform(
         n_dropped = before - len(frames)
     elif dedup:
         frames, n_dropped = dedupe_perceptual(frames)
+    frames = stamp_frame_names(frames)
     return frames, {
         "engine": "uniform",
         "frame_engine": frame_engine,
@@ -1001,6 +1050,7 @@ def extract_keyframes(
         n_dropped = 0
         if dedup:
             frames_out, n_dropped = dedupe_perceptual(frames_out)
+        frames_out = stamp_frame_names(frames_out)
         return frames_out, {
             "engine": "uniform",
             "candidate_count": len(candidates),
@@ -1014,7 +1064,7 @@ def extract_keyframes(
     candidate_count = len(candidates)
     deduped, n_dropped = dedupe_perceptual(candidates) if dedup else (candidates, 0)
     cap = len(deduped) if max_frames is None else max_frames
-    selected = _even_sample(deduped, cap)
+    selected = stamp_frame_names(_even_sample(deduped, cap))
     return selected, {
         "engine": "keyframe",
         "candidate_count": candidate_count,
@@ -1093,6 +1143,7 @@ if __name__ == "__main__":
     deduped_count = 0
     if dedup:
         frames, deduped_count = dedupe_perceptual(frames)
+    frames = stamp_frame_names(frames)
     print(json.dumps(
         {
             "meta": meta, "fps": fps, "target": target, "focused": focused,

@@ -30,7 +30,7 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from config import frame_cap, get_config, read_env_file  # noqa: E402
-from download import download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
+from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from frames import MAX_FPS, auto_fps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 
 
@@ -365,6 +365,7 @@ def main() -> int:
     transcript_segments: list[dict] = []
     transcript_text: str | None = None
     transcript_source: str | None = None
+    caption_track: dict | None = None
     video_path: str | None = None
 
     if url_source:
@@ -375,6 +376,10 @@ def main() -> int:
                 transcript_segments = parse_vtt(dl["subtitle_path"])
                 transcript_text = format_transcript(transcript_segments)
                 transcript_source = "captions"
+                # Provenance is captured AT PARSE TIME against this dl
+                # snapshot: the media download below overwrites `dl`, and its
+                # info may describe a different track than the one consumed.
+                caption_track = caption_provenance(dl["subtitle_path"], dl.get("info"))
             except Exception as exc:
                 print(f"[watch] subtitle parse failed: {exc}", file=sys.stderr)
                 transcript_segments = []
@@ -535,6 +540,7 @@ def main() -> int:
             transcript_segments = filter_range(all_segments, start_sec, end_sec) if focused else all_segments
             transcript_text = format_transcript(transcript_segments)
             transcript_source = "captions"
+            caption_track = caption_provenance(dl["subtitle_path"], dl.get("info"))
         except Exception as exc:
             print(f"[watch] subtitle parse failed: {exc}", file=sys.stderr)
 
@@ -617,6 +623,15 @@ def main() -> int:
             f"- **Transcript:** {len(transcript_segments)} segments{in_range} "
             f"(via {transcript_source or 'captions'})"
         )
+        if caption_track and transcript_source == "captions":
+            flavor = caption_track["kind"]
+            if caption_track["translated"] and caption_track["kind"] == "automatic":
+                flavor += ", auto-translated — wording is machine output, not the speaker's"
+            elif caption_track["translated"]:
+                flavor += ", translated from the spoken language"
+            elif caption_track["original"]:
+                flavor += ", original language"
+            print(f"- **Caption track:** {caption_track['code']} ({flavor})")
     elif transcript_result and transcript_status_label(transcript_result):
         # Silence is a finding, not a failure — the REPORT must say so, not
         # just stderr (L6 review: three independent angles caught the gap).

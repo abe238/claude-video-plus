@@ -72,8 +72,43 @@ def resolve_local(path: str) -> dict:
 
 def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) -> list[Path]:
     candidates = sorted(out_dir.glob("video*.vtt"))
-    if not candidates or languages == ("auto",):
+    if not candidates:
         return candidates
+    if languages == ("auto",):
+        # auto asks for the spoken-language original. NOTE the scope: the auto
+        # FETCH pattern never requests a native manual track, so in production
+        # this ranking normally sees only -orig + translations; the manual
+        # ranks are defensive (user-populated dirs). The manual-over-ASR
+        # guarantee itself belongs to default/explicit languages. Ordering
+        # (from the sibling info.json, fail-open to -orig-first):
+        #   0 manual in the video's language → 1 original ASR (-orig or the
+        #   video's language) → 2 manual translation → 3 everything else.
+        manual_codes: set[str] = set()
+        video_lang = ""
+        try:
+            raw = json.loads((out_dir / "video.info.json").read_text(encoding="utf-8"))
+            if isinstance(raw, dict):  # any other root: fail open to -orig-first
+                manual_codes = {str(c).lower() for c in (raw.get("subtitles") or {})}
+                video_lang = str(raw.get("language") or "").split("-", 1)[0].lower()
+        except (OSError, ValueError):
+            pass
+
+        def _auto_rank(candidate: Path) -> tuple[int, str]:
+            parts = candidate.name.split(".")
+            code = parts[-2].lower() if len(parts) >= 3 else ""
+            base = code.split("-", 1)[0]
+            # Native-manual rank ONLY with a known, matching video language:
+            # with the language unknown, a manual track may be a translation
+            # and must never outrank the requested -orig original.
+            if video_lang and code in manual_codes and base == video_lang:
+                return (0, candidate.name)
+            if code.endswith("-orig") or (video_lang and base == video_lang):
+                return (1, candidate.name)
+            if code in manual_codes:
+                return (2, candidate.name)
+            return (3, candidate.name)
+
+        return sorted(candidates, key=_auto_rank)
     ordered: list[Path] = []
     for language in languages:
         base = language.split("-", 1)[0].lower()
@@ -88,11 +123,53 @@ def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) ->
                 continue
             if f".{language.lower()}." in name or f".{base}." in name:
                 exact.append(candidate)
-            elif f".{base}-orig." in name:
+            elif f".{language.lower()}-orig." in name or f".{base}-orig." in name:
+                # Regional originals too (en-US-orig), or a requested en-US
+                # ranks its own original behind unrelated translations.
                 asr_orig.append(candidate)
         ordered.extend(exact + asr_orig)
     ordered.extend(candidate for candidate in candidates if candidate not in ordered)
     return ordered
+
+
+def caption_provenance(subtitle_path: str | Path, info: dict | None) -> dict:
+    """Best-effort provenance for the caption track actually CONSUMED.
+
+    Derived from info.json (never the filename alone): the track code is
+    looked up in `subtitles` (human-uploaded) vs `automatic_captions` (ASR /
+    machine translation), and `original` / `translated` compare its language
+    against the video's spoken language. The caller must pass the info dict
+    from the SAME acquisition that produced subtitle_path — a second
+    acquisition can select a different track (upstream #92/#123 audit).
+    """
+    name = Path(subtitle_path).name
+    parts = name.split(".")
+    code = parts[-2] if len(parts) >= 3 else "unknown"
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,20}", code):
+        # The code is rendered into the report: anything outside a plain
+        # language-tag shape is not trusted as one.
+        code = "unknown"
+    info = info or {}
+    codes = info.get("caption_codes") or {
+        "manual": list(info.get("subtitles") or {}),
+        "automatic": list(info.get("automatic_captions") or {}),
+    }
+    manual = code in (codes.get("manual") or ())
+    automatic = code in (codes.get("automatic") or ())
+    base = code.split("-", 1)[0].lower()
+    video_lang = str(info.get("language") or "").split("-", 1)[0].lower()
+    is_orig = code.lower().endswith("-orig")
+    kind = "manual" if manual else ("automatic" if automatic else "unknown")
+    # Info-derived, never filename-trusted: a track the info.json cannot
+    # vouch for gets no `original` claim, `-orig` suffix or not. A MANUAL
+    # translation is still a translation (human-written, different language).
+    known = kind != "unknown"
+    return {
+        "code": code,
+        "kind": kind,
+        "original": bool(known and (is_orig or (video_lang and base == video_lang))),
+        "translated": bool(known and video_lang and base != video_lang and not is_orig),
+    }
 
 
 def _pick_subtitle(out_dir: Path) -> Path | None:
@@ -149,6 +226,14 @@ def _read_info(info_path: Path, url: str) -> dict:
                 # exact spellings live: ASR renders "OmniRoute" as "Omniroot".
                 # format_description() sanitizes on the way out.
                 "description": raw.get("description"),
+                # Caption provenance inputs: track CODES only (never the URL
+                # dicts), so caption_provenance can tell manual from ASR from
+                # machine translation for the track actually consumed.
+                "language": raw.get("language"),
+                "caption_codes": {
+                    "manual": sorted((raw.get("subtitles") or {}).keys()),
+                    "automatic": sorted((raw.get("automatic_captions") or {}).keys()),
+                },
             }
         except Exception as exc:
             print(f"[watch] info.json parse failed: {exc}", file=sys.stderr)

@@ -179,6 +179,10 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         _config_value("WATCH_VAD", file_values, overrides, True),
         name="WATCH_VAD",
     )
+    loop_detect = _bool_value(
+        _config_value("WATCH_LOOP_DETECT", file_values, overrides, True),
+        name="WATCH_LOOP_DETECT",
+    )
     vad_model_path = str(
         _config_value("WATCH_VAD_MODEL_PATH", file_values, overrides, DEFAULT_VAD_MODEL_PATH)
     ).strip() or DEFAULT_VAD_MODEL_PATH
@@ -198,6 +202,7 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         "receipts": receipts,
         "no_speech_gate": no_speech_gate,
         "vad": vad,
+        "loop_detect": loop_detect,
         "vad_model_path": vad_model_path,
         "config_file": str(CONFIG_FILE),
     }

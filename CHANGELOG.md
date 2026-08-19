@@ -2,6 +2,45 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.4] — 2026-08-19
+
+### Added
+
+- **Whisper repetition-loop defense.** Greedy decode can collapse into
+  repeating one sentence for the rest of a chunk (the audited fork measured
+  one line 6,434x — 83% of a transcript destroyed). A calibrated detector
+  (consecutive-run, whole-chunk dominance, and intra-segment repetition
+  signals; representative short/varied chant, chorus, call-and-response and
+  non-speech-marker fixtures verified NOT to trip — a LONG perfectly
+  identical single-mantra chant is the documented edge that can) runs, when
+  enabled, on every transcription attempt AND on every cached receipt read.
+  Pre-detector receipts are key-invalidated wholesale; detector-off runs
+  write an isolated receipt namespace (`loop0`) later enabled runs cannot
+  see; a detected loop is never stored. A looped attempt fails that
+  attempt (bounded retry can recover); `WATCH_LOOP_DETECT=0` is the escape
+  hatch; `loop_detected_chunks` lands in diagnostics. Idea from
+  `bugsmithd/claude-video-forked`; windowing/bisection deliberately NOT
+  ported (our ~3.3-minute chunks already bound the damage — review finding).
+- **Original-language caption preference** (upstream PR #92 by yapaybaba +
+  PR #123 by Nicopatron, via the bugsmithd fork audit). Caption requests now
+  fetch the spoken-language `-orig` original track; `WATCH_LANGUAGE=auto`
+  prefers it over translations (verified live: a Korean video now yields the
+  Korean original instead of a silent English machine translation). English
+  drops the `en.*` wildcard (~30 auto-translated pulls, observed HTTP 429)
+  for the explicit set that ever wins selection. The frozen manual-over-ASR
+  ordering is untouched: an exact human-written track still beats `-orig`.
+  The report now names the consumed track with provenance derived from
+  info.json — `manual` / `automatic` / `auto-translated` — captured at parse
+  time so a second acquisition can never describe a different track.
+- **Timestamps in frame filenames.** Selected frames rename to
+  `frame_0007_t04m12s.jpg` (`t1h04m12s` past an hour) at one post-selection
+  chokepoint covering every engine and fallback, AFTER perceptual dedup (the
+  order matters: renaming first silently disables dedup — fork's own note).
+  Collision-safe and fail-open (never overwrites; dict path updates only
+  after a successful rename), colon-free for Windows. Control conformance
+  canonicalizes the stamp as a declared filename-only difference. Idea from
+  `bugsmithd/claude-video-forked`.
+
 ## [1.5.3] — 2026-08-19
 
 ### Added

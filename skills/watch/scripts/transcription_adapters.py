@@ -22,7 +22,7 @@ from transcription import (
     TranscriptSegment,
     TranscriptionRequest,
 )
-from transcription_chunks import AudioChunk, ChunkReceiptStore
+from transcription_chunks import AudioChunk, ChunkReceiptStore, detect_repetition_loop
 
 
 def _discover_sidecar(media_path: Path) -> Path | None:
@@ -95,6 +95,9 @@ def _run_chunked(
     started = time.monotonic()
 
     silent_chunks = 0
+    loop_chunk_indices: set[int] = set()
+    loop_detect = bool(request.config.get("loop_detect", True))
+    receipt_policy = "loop1" if loop_detect else "loop0"
     cost_exceeded = False
     ledger_attempts_before = request.remote_ledger.attempts
     # Flush in finally: the cost-limit escape (and any future early exit) must
@@ -106,7 +109,18 @@ def _run_chunked(
                 # A silent chunk must never suppress speech elsewhere in the file.
                 silent_chunks += 1
                 continue
-            cached = receipts.get(adapter, model, request.language, chunk)
+            cached = receipts.get(adapter, model, request.language, chunk, receipt_policy)
+            if cached is not None and loop_detect:
+                # Read-time validation keyed to the CURRENT policy: receipts
+                # written before the detector existed (or during a
+                # WATCH_LOOP_DETECT=0 run) must never resurface a loop.
+                loop_reason = detect_repetition_loop(cached)
+                if loop_reason:
+                    loop_chunk_indices.add(chunk.index)
+                    warnings.append(
+                        f"chunk {chunk.index + 1} cached transcript discarded (loop: {loop_reason})"
+                    )
+                    cached = None
             if cached is not None:
                 try:
                     restored = _local_segments(
@@ -124,9 +138,23 @@ def _run_chunked(
 
             chunk_values: list[dict] | None = None
             last_error: BaseException | None = None
+            chunk_looped = False
             for _attempt in range(request.max_attempts):
                 try:
                     chunk_values = transcribe_one(chunk)
+                    if chunk_values and loop_detect:
+                        # Inside EVERY attempt, before caching: a looped
+                        # attempt is a failed attempt (bounded retry may get a
+                        # clean decode), and a loop is never stored.
+                        loop_reason = detect_repetition_loop(chunk_values)
+                        if loop_reason:
+                            chunk_looped = True
+                            loop_chunk_indices.add(chunk.index)
+                            warnings.append(
+                                f"chunk {chunk.index + 1} attempt discarded (loop: {loop_reason})"
+                            )
+                            chunk_values = None
+                            continue
                     if chunk_values:
                         break
                 except whisper.RemoteCostExceeded:
@@ -148,7 +176,11 @@ def _run_chunked(
                 break
             if not chunk_values:
                 failed += 1
-                detail = type(last_error).__name__ if last_error else "no output"
+                detail = (
+                    "repetition loop"
+                    if chunk_looped
+                    else type(last_error).__name__ if last_error else "no output"
+                )
                 warnings.append(
                     f"chunk {chunk.index + 1} unavailable after bounded retries ({detail})"
                 )
@@ -172,7 +204,7 @@ def _run_chunked(
                 continue
             processed += 1
             try:
-                receipts.put(adapter, model, request.language, chunk, chunk_values)
+                receipts.put(adapter, model, request.language, chunk, chunk_values, receipt_policy)
             except OSError as exc:
                 # A receipt is a resume optimization, not the product. A full disk
                 # used to abort the adapter here and discard every chunk already
@@ -231,6 +263,8 @@ def _run_chunked(
             "remote_transmission": remote
             and (processed > 0 or request.remote_ledger.attempts > ledger_attempts_before),
             "silent_chunks": silent_chunks,
+            "loop_detected_chunks": len(loop_chunk_indices),
+            "loop_chunk_indices": sorted(loop_chunk_indices),
             "processed_chunks": processed,
             "reused_chunks": reused,
             "failed_chunks": failed,

@@ -296,14 +296,54 @@ def _compact_detail(stderr: str, secrets: tuple[str, ...]) -> str | None:
 
 
 def _caption_patterns(languages: tuple[str, ...]) -> str:
+    """yt-dlp --sub-langs pattern list (upstream PRs #92 yapaybaba + #123
+    Nicopatron, via the bugsmithd fork audit).
+
+    `.*-orig` / `{lang}-orig` request the spoken-language ORIGINAL track —
+    without it a non-English video silently yields only machine translations.
+    The old `en.*` wildcard is gone for English: it matched ~30 auto-translated
+    variants that were never selected and triggered HTTP 429 on the way down
+    (the explicit en/en-US/en-GB set keeps the tracks that ever win selection).
+    Selection ordering — manual before ASR before translation — stays in
+    download._subtitle_candidates; this only controls what gets FETCHED.
+    """
     if languages == ("auto",):
-        return "en.*,en"
+        return ".*-orig,en,en-US,en-GB"
     ordered: list[str] = []
-    for language in languages:
-        for candidate in ((f"{language}.*", language.split("-", 1)[0])
-                          if "-" in language else (f"{language}.*",)):
-            if candidate not in ordered:
-                ordered.append(candidate)
+
+    def _add(candidate: str) -> None:
+        if candidate not in ordered:
+            ordered.append(candidate)
+
+    def _canon(tag: str) -> str:
+        # validate_languages lowercases; yt-dlp track codes use BCP-47 casing
+        # (en-US, zh-Hant-TW), so restore it per subtag: base lowercase,
+        # four-letter script Title Case, two-letter region uppercase.
+        parts = tag.split("-")
+        out = [parts[0].lower()]
+        for sub in parts[1:]:
+            if len(sub) == 2:
+                out.append(sub.upper())
+            elif len(sub) == 4:
+                out.append(sub.title())
+            else:
+                out.append(sub)
+        return "-".join(out)
+
+    for language in map(_canon, languages):
+        base = language.split("-", 1)[0]
+        if "-" in language:
+            _add(f"{language}-orig")  # regional originals exist (en-US-orig)
+        _add(f"{base}-orig")
+        if base.lower() == "en":
+            for candidate in ("en", "en-US", "en-GB"):
+                _add(candidate)
+            if "-" in language:
+                _add(language)
+        else:
+            _add(f"{language}.*")
+            if "-" in language:
+                _add(base)
     return ",".join(ordered)
 
 

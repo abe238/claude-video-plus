@@ -177,7 +177,10 @@ def test_language_order_controls_yt_dlp_and_subtitle_selection(tmp_path: Path):
     assert [path.name for path in ordered] == [
         "video.fr-CA.vtt", "video.fr.vtt", "video.en.vtt"
     ]
-    assert cmd[cmd.index("--sub-langs") + 1] == "fr-ca.*,fr,en.*"
+    # v1.5.4 (#92/#123): each language gains its `-orig` original track
+    # (regional AND base forms), and English's wildcard becomes the explicit
+    # set that ever wins selection.
+    assert cmd[cmd.index("--sub-langs") + 1] == "fr-CA-orig,fr-orig,fr-CA.*,fr,en-orig,en,en-US,en-GB"
 
 
 def test_http429_caption_exhaustion_uses_json3_without_media_redownload(tmp_path: Path):

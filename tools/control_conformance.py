@@ -45,7 +45,7 @@ VISUAL_RE = re.compile(
     r"animation\s+(?:does|show|shows)|what\s+changed)\b", re.I)
 COVERAGE_RE = re.compile(r"\b(?:coverage|summary|summar(?:y|ize)|all topics|everything|chronology|timeline)\b", re.I)
 SAID_RE = re.compile(r"\b(?:said|say|explained|explain|spoken|tell me)\b", re.I)
-FRAME_LINE_RE = re.compile(r"^\s*-?\s*.*?/frames/(frame_[^\s`)]+).*?\(t=([^,)]+)(?:,\s*reason=([^)]*))?\)", re.M)
+FRAME_LINE_RE = re.compile(r"^\s*-?\s*.*?[\\/]frames[\\/](frame_[^\s`)]+).*?\(t=([^,)]+)(?:,\s*reason=([^)]*))?\)", re.M)
 TRANSCRIPT_LINE_RE = re.compile(r"^\[([^\]]+)\]\s*(.*)$", re.M)
 # A local absolute path starts with one slash. Exclude URL ``//`` prefixes as well as
 # scheme separators so public source URLs are not mistaken for filesystem leakage.
@@ -207,6 +207,27 @@ def _jpeg_dimensions(path: Path) -> tuple[int, int] | None:
     return None
 
 
+# v1.5.4: selected frames carry a timestamp stamp in the FILENAME
+# (frame_0007_t04m12s.jpg). The stamp is a declared, FILENAME-ONLY difference
+# from the frozen 83da59f control: canonicalization applies ONLY to frame
+# path/name fields — report frame lines, the frames summary, and manifest
+# paths — never to free text. A transcript or description that SPEAKS a
+# stamped name is content, and masking it would hide a real difference.
+_FRAME_STAMP_RE = re.compile(r"(frame_\d+)_t\d+(?:h\d{2}m|m)\d{2}s(\.[A-Za-z0-9]+)")
+
+
+def canonicalize_frame_names(text: str) -> str:
+    return _FRAME_STAMP_RE.sub(r"\1\2", text)
+
+
+def canonicalize_report_frame_lines(stdout: str) -> str:
+    """Canonicalize the stamp only on lines that ARE frame-path report lines."""
+    out = []
+    for line in stdout.splitlines(keepends=True):
+        out.append(canonicalize_frame_names(line) if FRAME_LINE_RE.match(line) else line)
+    return "".join(out)
+
+
 def normalize_text(text: str, roots: tuple[Path, ...]) -> str:
     """Replace only declared volatile roots; unknown absolute paths are refusals."""
     normalized = text
@@ -218,16 +239,21 @@ def normalize_text(text: str, roots: tuple[Path, ...]) -> str:
 
 def summarize_output(out_dir: Path, stdout: str, stderr: str, roots: tuple[Path, ...]) -> dict[str, Any]:
     raw_stdout = stdout
-    stdout = normalize_text(raw_stdout, roots)
+    stdout = canonicalize_report_frame_lines(normalize_text(raw_stdout, roots))
     stderr = normalize_text(stderr, roots)
     frames = []
     for name, timestamp, reason in FRAME_LINE_RE.findall(raw_stdout):
         path = next(iter(sorted(out_dir.glob(f"frames/{name}"))), None)
-        frames.append({"name": name, "timestamp": timestamp, "reason": reason or None,
+        frames.append({"name": canonicalize_frame_names(name), "timestamp": timestamp,
+                       "reason": reason or None,
                        "dimensions": _jpeg_dimensions(path) if path else None})
     transcript = [{"timestamp": stamp, "text": line} for stamp, line in TRANSCRIPT_LINE_RE.findall(stdout)]
+    manifest = [
+        {**entry, "path": canonicalize_frame_names(entry["path"])}
+        for entry in _manifest(out_dir)
+    ]
     return {"stdout": stdout, "stderr": stderr, "frames": frames, "transcript": transcript,
-            "raw_manifest": _manifest(out_dir)}
+            "raw_manifest": manifest}
 
 
 def classify(exit_code: int, timed_out: bool, summary: Mapping[str, Any]) -> str:

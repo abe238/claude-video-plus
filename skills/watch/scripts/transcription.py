@@ -292,7 +292,11 @@ def transcript_cost_limited(result: "TranscriptResult | None") -> bool:
     )
 
 
-def _aggregate_run_truth(result: TranscriptResult, request: TranscriptionRequest) -> TranscriptResult:
+def _aggregate_run_truth(
+    result: TranscriptResult,
+    request: TranscriptionRequest,
+    run_loop_indices: frozenset[int] | set[int] = frozenset(),
+) -> TranscriptResult:
     """Fold run-level facts into the result an adapter produced.
 
     A later local adapter knows nothing about the remote sends that came
@@ -305,6 +309,13 @@ def _aggregate_run_truth(result: TranscriptResult, request: TranscriptionRequest
     diagnostics = dict(result.diagnostics)
     if request.remote_ledger.attempts > 0:
         diagnostics["remote_transmission"] = True
+    union = set(run_loop_indices) | set(diagnostics.get("loop_chunk_indices") or ())
+    if union:
+        # Chunk IDENTITIES, not per-adapter counts: the same chunk looping
+        # under two fallback adapters is ONE affected chunk, and a later
+        # adapter's result must not erase earlier detections this run.
+        diagnostics["loop_detected_chunks"] = len(union)
+        diagnostics["loop_chunk_indices"] = sorted(union)
     cost_limited = any(
         attempt.failure_code == "remote_cost_limit_exceeded" for attempt in result.attempts
     )
@@ -356,6 +367,7 @@ class TranscriptionPipeline:
         attempts: list[TranscriptAttempt] = []
         partial: TranscriptResult | None = None
         prepared = request.prepared_audio
+        run_loop_indices: set[int] = set()
 
         for name in order:
             adapter = adapters[name]
@@ -453,6 +465,7 @@ class TranscriptionPipeline:
                     )
                 )
                 continue
+            run_loop_indices |= set(result.diagnostics.get("loop_chunk_indices") or ())
             result_attempts = list(result.attempts)
             if not result_attempts:
                 result_attempts.append(
@@ -475,24 +488,34 @@ class TranscriptionPipeline:
                 return _aggregate_run_truth(
                     replace(result, state=state, attempts=tuple(attempts), fallback_reason=fallback),
                     request,
+                    run_loop_indices,
                 )
             if result.state == "partial" and result.segments:
                 partial = replace(result, attempts=tuple(attempts))
                 if not request.require_complete:
-                    return _aggregate_run_truth(partial, request)
+                    return _aggregate_run_truth(partial, request, run_loop_indices)
             if result.state == "fatal":
-                return replace(result, attempts=tuple(attempts))
+                return _aggregate_run_truth(
+                    replace(result, attempts=tuple(attempts)), request, run_loop_indices
+                )
 
         if partial is not None:
             # Re-attach the FULL attempt list: locals run before cloud, so a
             # stored local partial predates the remote attempts (and any cost
             # trip) that happened after it.
             return _aggregate_run_truth(
-                replace(partial, attempts=tuple(attempts)), request
+                replace(partial, attempts=tuple(attempts)), request, run_loop_indices
             )
         cost_limited = any(
             attempt.failure_code == "remote_cost_limit_exceeded" for attempt in attempts
         )
+        unavailable_diagnostics: dict[str, object] = {
+            "remote_transmission": request.remote_ledger.attempts > 0,
+        }
+        if run_loop_indices:
+            # The all-unavailable path must not drop detections either.
+            unavailable_diagnostics["loop_detected_chunks"] = len(run_loop_indices)
+            unavailable_diagnostics["loop_chunk_indices"] = sorted(run_loop_indices)
         return TranscriptResult(
             state="unavailable",
             language=request.language,
@@ -506,7 +529,7 @@ class TranscriptionPipeline:
                 if cost_limited
                 else ("no transcript Adapter produced usable timestamped output",)
             ),
-            diagnostics={"remote_transmission": request.remote_ledger.attempts > 0},
+            diagnostics=unavailable_diagnostics,
         )
 
 
@@ -563,6 +586,7 @@ def transcription_diagnostics(**config_overrides: object) -> dict[str, object]:
         "state": "success",
         "order": list(config["order"]),
         "language": config["language"],
+        "loop_detect": bool(config.get("loop_detect", True)),
         "local_http": {
             "configured": bool(config["url"]),
             "loopback_required": True,
