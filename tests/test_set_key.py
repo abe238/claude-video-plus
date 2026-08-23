@@ -64,7 +64,10 @@ def test_shape_validation_and_0600_via_direct_call(tmp_path, monkeypatch):
     assert setup.cmd_set_key(["--set-key", "groq"]) == 0
     content = setup.CONFIG_FILE.read_text()
     assert "GROQ_API_KEY=gsk_" + "a" * 40 in content
-    assert (setup.CONFIG_FILE.stat().st_mode & 0o777) == 0o600
+    if os.name != "nt":
+        # chmod is a no-op on Windows (reports 0o666); the ACL boundary there
+        # is the user profile, handled the same way as setup._check_file_permissions.
+        assert (setup.CONFIG_FILE.stat().st_mode & 0o777) == 0o600
     assert "gsk_" not in buf.getvalue()  # value never echoed
 
 
