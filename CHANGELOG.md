@@ -2,6 +2,36 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.6] — 2026-08-22
+
+### Security
+
+Absorbed from `donlapidos/claude-video`, a Snyk-audit-driven security fork
+(W011 third-party-content containment, W007 credential handling). Cross-checked
+against our tree; most items were already ours — these four closed real gaps:
+
+- **Report sanitizer now defuses three more injection vectors** at the shared
+  `sanitize_for_report` chokepoint: C0/C1 control bytes and ANSI/OSC escape
+  sequences are stripped (our `strip_invisible` covered category Cf, not the
+  Cc controls); harness-style tags (`<system-reminder>`, `<invoke>`, any
+  tag-shaped token including whitespace variants) get a zero-width break after
+  `<` so they can no longer impersonate harness structure; line-leading
+  chat-turn markers (`Human:` / `Assistant:` / `System:` …, including after a
+  `[MM:SS]` stamp) are defused. Property-based, not enumerated lists; benign
+  `<b>` tags, `a < b` math, and quoted "Human:" dialogue stay readable. A
+  hostile-VTT end-to-end test drives every vector through the transcript path.
+- **`--no-exec`** on every yt-dlp invocation — the CLI-surface sibling of the
+  config-exec path already closed by `--ignore-config`.
+- **`setup.py --set-key groq|openai`**: the one sanctioned key entry — hidden
+  `getpass` prompt, REFUSES a key passed as an argument (argv is process-table
+  readable) and advises rotation, requires an interactive terminal, validates
+  shape (also blocking `.env` line-injection via embedded whitespace), never
+  echoes, re-asserts `0600`. Agents relay the command; they never handle the
+  secret. SKILL.md points users here instead of hand-editing `.env`.
+- **Doc fix**: SKILL.md no longer advertises a working-directory `.env`
+  fallback — that read was removed as a vulnerability in v1.2.4, but the docs
+  still described it.
+
 ## [1.5.5] — 2026-08-19
 
 ### Added
