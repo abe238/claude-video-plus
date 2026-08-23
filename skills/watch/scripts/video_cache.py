@@ -204,6 +204,11 @@ def _owner_only(path: Path, *, directory: bool) -> bool:
 
 
 _O_NOFOLLOW = getattr(os, "O_NOFOLLOW", 0)
+# Windows os.open() defaults to TEXT mode: without O_BINARY it CRLF-translates
+# every read/write (corrupting sha256 over media) and msvcrt.locking misbehaves
+# on text-mode descriptors. O_BINARY is 0 (no-op) on POSIX. This was the root
+# cause of the all-Windows cache failure two CI rounds chased.
+_O_BINARY = getattr(os, "O_BINARY", 0)
 
 
 _O_NONBLOCK = getattr(os, "O_NONBLOCK", 0)
@@ -216,7 +221,7 @@ def _open_read_nofollow(path: Path) -> int:
     lock (harmless on regular files); where O_NOFOLLOW is missing (Windows),
     lstat + fstat inode identity substitutes."""
     if _O_NOFOLLOW:
-        fd = os.open(path, os.O_RDONLY | _O_NOFOLLOW | _O_NONBLOCK)
+        fd = os.open(path, os.O_RDONLY | _O_NOFOLLOW | _O_NONBLOCK | _O_BINARY)
         if not stat.S_ISREG(os.fstat(fd).st_mode):
             os.close(fd)
             raise OSError("refusing non-regular file")
@@ -224,7 +229,7 @@ def _open_read_nofollow(path: Path) -> int:
     before = os.lstat(path)
     if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
         raise OSError("refusing non-regular file")
-    fd = os.open(path, os.O_RDONLY | _O_NONBLOCK)
+    fd = os.open(path, os.O_RDONLY | _O_NONBLOCK | _O_BINARY)
     try:
         after = os.fstat(fd)
         if (
@@ -336,14 +341,14 @@ class VideoCache:
             try:
                 fd = os.open(
                     lock_path,
-                    os.O_RDWR | os.O_CREAT | os.O_EXCL | _O_NONBLOCK,
+                    os.O_RDWR | os.O_CREAT | os.O_EXCL | _O_NONBLOCK | _O_BINARY,
                     0o600,
                 )
             except FileExistsError:
                 before = os.lstat(lock_path)
                 if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
                     raise CacheUnavailable("cache lock is not a regular file")
-                fd = os.open(lock_path, os.O_RDWR | _O_NONBLOCK)
+                fd = os.open(lock_path, os.O_RDWR | _O_NONBLOCK | _O_BINARY)
             try:
                 held = os.fstat(fd)
                 current = os.lstat(lock_path)
@@ -358,7 +363,7 @@ class VideoCache:
                 raise
         else:
             fd = os.open(
-                lock_path, os.O_RDWR | os.O_CREAT | _O_NOFOLLOW | _O_NONBLOCK, 0o600
+                lock_path, os.O_RDWR | os.O_CREAT | _O_NOFOLLOW | _O_NONBLOCK | _O_BINARY, 0o600
             )
             try:
                 held = os.fstat(fd)
@@ -463,7 +468,7 @@ class VideoCache:
         """0600, O_EXCL, O_NOFOLLOW, unpredictable name — a pre-planted
         symlink or squatter file can never be followed or reused."""
         path = directory / f"{prefix}{os.getpid()}.{uuid.uuid4().hex}.tmp"
-        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _O_NOFOLLOW, 0o600)
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _O_NOFOLLOW | _O_BINARY, 0o600)
         return fd, path
 
     def _write_index(self, data: dict) -> None:
