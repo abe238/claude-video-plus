@@ -2,6 +2,22 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.7] — 2026-08-22
+
+### Changed
+
+- **`--ignore-config` is now scoped to cache-participating runs** (owner
+  decision). It is applied whenever the video cache could store this download
+  (`WATCH_VIDEO_CACHE=1`), because the cache's cookie-exclusion trusts our own
+  `cookie_used` fact and an ambient `~/.config/yt-dlp/config` injecting
+  `--cookies` would silently falsify it. With the cache off there is no such
+  fact to protect, so a user's own yt-dlp config (proxies, auth for their own
+  private videos) is respected again. That ambient config is home-directory
+  local, not repo-plantable like the v1.2.4 cwd-`.env`, so this narrows a
+  self-inflicted/already-compromised-host case, not the hostile-repo threat.
+  `--no-exec` remains UNCONDITIONAL — nothing legitimate in a transcription
+  pipeline needs yt-dlp `--exec`.
+
 ## [1.5.6] — 2026-08-22
 
 ### Security

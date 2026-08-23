@@ -733,12 +733,20 @@ def test_missing_cookie_fact_fails_closed(tmp_path, monkeypatch):
     assert VideoCache(tmp_path / "vc").lookup(key, tmp_path / "w") is None
 
 
-def test_acquisition_commands_ignore_ambient_ytdlp_config(tmp_path):
-    from acquisition import build_yt_dlp_command
+def test_cache_participating_acquisition_ignores_ambient_ytdlp_config(monkeypatch, tmp_path):
+    # Load-bearing for the cache's cookie-exclusion: when the cache is on, the
+    # acquisition command MUST carry --ignore-config so an ambient
+    # ~/.config/yt-dlp/config cannot inject --cookies behind the cookie_used
+    # fact. (With the cache off it is scoped out — see test_acquisition.)
+    from acquisition import acquisition_config, build_yt_dlp_command
 
+    monkeypatch.setenv("WATCH_VIDEO_CACHE", "1")
+    cfg = acquisition_config({})
+    assert cfg["ignore_config"] is True
     cmd = build_yt_dlp_command(
         "https://youtu.be/ignorecfg001", str(tmp_path / "video.%(ext)s"),
         audio_only=False, captions_only=False, languages=("en",), cookie_spec=None,
+        ignore_config=cfg["ignore_config"],
     )
     assert "--ignore-config" in cmd
 

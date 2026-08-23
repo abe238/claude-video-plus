@@ -224,14 +224,27 @@ def test_download_local_returns_normalized_and_legacy_fields(tmp_path: Path):
     assert len(result["source_identity"]) == 64
 
 
-def test_no_exec_and_ignore_config_on_every_invocation(tmp_path):
+def test_no_exec_is_unconditional_ignore_config_is_scoped(tmp_path):
     from acquisition import build_yt_dlp_command
 
     for captions_only, audio_only in ((True, False), (False, False), (False, True)):
-        cmd = build_yt_dlp_command(
-            "https://youtu.be/x", str(tmp_path / "video.%(ext)s"),
-            audio_only=audio_only, captions_only=captions_only,
-            languages=("en",), cookie_spec=None,
-        )
-        assert "--ignore-config" in cmd
-        assert "--no-exec" in cmd  # v1.5.6 CLI-exec-surface belt (donlapidos)
+        # --no-exec: always on (nothing legit needs yt-dlp --exec here).
+        for ic in (True, False):
+            cmd = build_yt_dlp_command(
+                "https://youtu.be/x", str(tmp_path / "video.%(ext)s"),
+                audio_only=audio_only, captions_only=captions_only,
+                languages=("en",), cookie_spec=None, ignore_config=ic,
+            )
+            assert "--no-exec" in cmd
+            # --ignore-config: only when requested (cache-participating runs).
+            assert ("--ignore-config" in cmd) is ic
+
+
+def test_ignore_config_scope_follows_video_cache_flag(monkeypatch):
+    from acquisition import acquisition_config
+
+    monkeypatch.delenv("WATCH_VIDEO_CACHE", raising=False)
+    assert acquisition_config({})["ignore_config"] is False       # cache off: respect user config
+    assert acquisition_config({"WATCH_VIDEO_CACHE": "1"})["ignore_config"] is True
+    monkeypatch.setenv("WATCH_VIDEO_CACHE", "true")
+    assert acquisition_config({})["ignore_config"] is True         # cache on: suppress ambient config

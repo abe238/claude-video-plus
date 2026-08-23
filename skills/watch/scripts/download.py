@@ -201,7 +201,7 @@ def fetch_captions(url: str, out_dir: Path) -> dict:
         languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
         player_clients=cfg["player_clients"], runner=subprocess.run,
         pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
-        read_metadata=_read_info,
+        read_metadata=_read_info, ignore_config=cfg["ignore_config"],
     )
     # Caption absence is not fatal: watch.py may continue to media/ASR.
     payload = result.as_dict()
@@ -266,7 +266,7 @@ def download_url(
         max_filesize=cfg["max_filesize"],
         player_clients=cfg["player_clients"], runner=subprocess.run,
         pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
-        read_metadata=_read_info,
+        read_metadata=_read_info, ignore_config=cfg["ignore_config"],
     )
     if result.state == "fatal":
         raise AcquisitionError(result)

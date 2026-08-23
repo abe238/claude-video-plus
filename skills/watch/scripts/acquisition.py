@@ -187,8 +187,18 @@ def acquisition_config(file_values: dict[str, str]) -> dict[str, object]:
     )
     if not clients or len(clients) > 3 or any(not safe(part) for part in clients):
         raise ValueError("WATCH_YOUTUBE_CLIENTS must contain one to three safe client names")
+    # --ignore-config suppresses an ambient ~/.config/yt-dlp/config. It is
+    # ON whenever the video cache could participate (WATCH_VIDEO_CACHE=1),
+    # because the cache's cookie-exclusion trusts our own cookie_used fact and
+    # an ambient config injecting --cookies would silently falsify it. With the
+    # cache off there is no such fact to protect, so a user's own config
+    # (proxies, auth for their private videos) is respected — that ambient
+    # config is home-dir-local, not repo-plantable like the v1.2.4 cwd-.env.
+    ignore_config = str(configured("WATCH_VIDEO_CACHE") or "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }
     return {"cookie_spec": cookie_spec, "languages": languages, "player_clients": clients,
-            "max_filesize": max_filesize}
+            "max_filesize": max_filesize, "ignore_config": ignore_config}
 
 
 def source_identity(source: str) -> str:
@@ -399,19 +409,21 @@ def build_yt_dlp_command(
     final_format_fallback: bool = False,
     json3_captions: bool = False,
     max_filesize: str | None = None,
+    ignore_config: bool = True,
 ) -> list[str]:
     normal = "ba/bestaudio" if audio_only else "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
     if final_format_fallback and not audio_only:
         normal = f"{normal}/18"
     cmd = [*ytdlp_cmd()]
-    # Ambient ~/.config/yt-dlp config is an invisible injection surface: it
-    # can add --cookies (making the cache's non-authenticated fact false) or
-    # any other flag this privacy-sensitive pipeline never agreed to. The
-    # skill's ONLY configuration surface is WATCH_* (same class of fix as the
-    # v1.2.4 cwd-.env removal).
-    cmd.append("--ignore-config")
-    # Sibling belt (v1.5.6, donlapidos): config-driven exec died with
-    # --ignore-config; --no-exec closes the CLI-surface twin outright.
+    if ignore_config:
+        # Ambient ~/.config/yt-dlp config can add --cookies (falsifying the
+        # cache's non-authenticated fact) or any flag this pipeline never
+        # agreed to. Suppressed whenever the cache could participate; see
+        # acquisition_config for the scope rationale.
+        cmd.append("--ignore-config")
+    # --no-exec is UNCONDITIONAL (v1.5.6, donlapidos): nothing legitimate in a
+    # transcription pipeline needs yt-dlp --exec post-processing, so the
+    # CLI-exec surface stays closed on every run, cache or not.
     cmd.append("--no-exec")
     if captions_only:
         cmd.append("--skip-download")
@@ -448,6 +460,7 @@ def acquire_url(
     pick_media: Callable[[Path], Path | None],
     pick_subtitles: Callable[[Path, tuple[str, ...]], list[Path]],
     read_metadata: Callable[[Path, str], dict],
+    ignore_config: bool = True,
 ) -> AcquisitionResult:
     """Acquire a URL through a bounded default-first recovery ladder."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -472,7 +485,7 @@ def acquire_url(
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=captions_only,
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, player_client=client,
-            final_format_fallback=final_format,
+            final_format_fallback=final_format, ignore_config=ignore_config,
         )
         completed = runner(cmd, capture_output=True, text=True)
         stderr = (completed.stderr or "") + (completed.stdout or "")
@@ -502,6 +515,7 @@ def acquire_url(
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=True,
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
+            ignore_config=ignore_config,
         )
         completed = runner(cmd, capture_output=True, text=True)
         stderr = (completed.stderr or "") + (completed.stdout or "")
@@ -525,6 +539,7 @@ def acquire_url(
         cmd = build_yt_dlp_command(
             url, template, audio_only=audio_only, captions_only=True,
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
+            ignore_config=ignore_config,
         )
         completed = runner(cmd, capture_output=True, text=True)
         stderr = (completed.stderr or "") + (completed.stdout or "")
