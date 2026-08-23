@@ -37,5 +37,11 @@ full suite **830 passed in 46.56s**, cache-focused
 2.3 s (0 downloads, verified-serving
 banner), media + all 19 frame hashes identical (hash-manifest.json).
 
-Post-release finalization (appended after tagging): released asset URL,
-HTTP status, sha256.
+Post-release finalization (verified 2026-08-22): released at
+https://github.com/abe238/claude-video-plus/releases/download/v1.5.5/watch.skill
+— HTTP 200, asset sha256 c62936c5898650b99b531d16da90c5427aab7a41e147ce3faf250dfc9cf6eac0.
+All six CI legs (ubuntu 22.04/24.04, macos-14 x3 Python versions,
+windows-latest) green at the tagged commit. Windows required three follow-up
+fixes after the initial tag attempt (empty-lock-file byte, POSIX-scoped
+ancestor-symlink guard, and the root cause: O_BINARY on all os.open — Windows
+defaults os.open to text mode, corrupting sha256 and msvcrt locking).
