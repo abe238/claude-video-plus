@@ -1341,6 +1341,7 @@ def test_failed_replacement_of_unreferenced_squatter_leaves_no_orphan(tmp_path, 
     assert not squatter.exists()
 
 
+@pytest.mark.skipif(os.name == "nt", reason="ancestor-symlink walk is a POSIX guarantee; Windows uses the profile-root ACL boundary")
 def test_symlinked_cache_ancestor_is_refused(tmp_path):
     real = tmp_path / "real-parent"
     real.mkdir()
@@ -1355,6 +1356,7 @@ def test_symlinked_cache_ancestor_is_refused(tmp_path):
 # --- round-14 regressions ---------------------------------------------------
 
 
+@pytest.mark.skipif(os.name == "nt", reason="ancestor-symlink walk is a POSIX guarantee; Windows uses the profile-root ACL boundary")
 def test_inspect_and_purge_refuse_symlinked_ancestors(tmp_path):
     # Seed VALID cache data on the target side first: the refusal must hold
     # even when the link points at a perfectly healthy cache, and not one

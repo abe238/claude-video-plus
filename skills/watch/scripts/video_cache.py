@@ -287,12 +287,19 @@ class VideoCache:
         """Non-creating root/ancestor validation shared by every entry point
         (lookup/insert via _prepare, and inspect/purge directly): no
         symlinked ancestors (a link above the root redirects every write),
-        and the Windows profile-root boundary."""
-        probe = self.root
-        while probe != probe.parent:
-            if probe.is_symlink():
-                raise CacheUnavailable(f"cache path ancestor is a symlink: {probe.name}")
-            probe = probe.parent
+        and the Windows profile-root boundary.
+
+        The ancestor-symlink walk is a POSIX guarantee. On Windows the security
+        boundary is the profile-root ACL check below, not this walk:
+        `Path.is_symlink()` flags NTFS reparse points (junctions like
+        `AppData\\Local`) that legitimately sit above a normal temp/cache path,
+        which would refuse every cache under such a directory (CI proved it)."""
+        if _POSIX_MODE_BITS:
+            probe = self.root
+            while probe != probe.parent:
+                if probe.is_symlink():
+                    raise CacheUnavailable(f"cache path ancestor is a symlink: {probe.name}")
+                probe = probe.parent
         if _IS_WINDOWS:
             try:
                 self.root.resolve().relative_to(Path.home().resolve())
