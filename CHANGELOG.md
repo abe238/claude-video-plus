@@ -2,6 +2,39 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.5] — 2026-08-19
+
+### Added
+
+- **Opt-in content-addressed video cache** (`WATCH_VIDEO_CACHE=1`; idea from
+  `m1crodevil/hermes-video`, rebuilt per this repo's privacy posture). Repeat
+  analysis of the same URL skips the download: entries key on a canonical
+  source identity (YouTube URLs reduce to their video id) and store under
+  the content's sha256, re-verified ON EVERY HIT before a byte is served.
+  OFF by default and allowlisted-YouTube-hosts-only; cookie-authenticated, signed, private, or
+  credential-bearing sources are excluded outright with no override — a
+  cached copy must not outlive the authorization that fetched it. Owner-only
+  storage with the Windows profile-root guard, atomic no-replace writes,
+  single-writer lock, corrupt/unsafe entries evicted on sight; bounded by
+  `WATCH_VIDEO_CACHE_MAX_GB` (10) / `_MAX_ENTRY_GB` (2) / `_TTL_DAYS` (30)
+  plus a disk-headroom guard and an oversized bypass. Every cache failure is
+  a plain miss (fresh download); consent and `WATCH_MAX_FILESIZE` semantics
+  on misses are unchanged, and a verified hit needs no download consent
+  because nothing downloads. `EvidenceState`'s unconditional media refusal
+  is untouched — this is a separate, explicitly opted-in store with its own
+  `video_cache.py --inspect/--purge` tooling. Live acceptance on a real
+  YouTube run: the hit downloaded nothing and produced byte-identical media
+  and frames (timing varies with network; no controlled benchmark is
+  claimed). Scope: allowlisted YouTube hosts only — generic hosts cannot be
+  lexically proven public (DNS or hosts files can map any FQDN to private
+  space) and are refused; widening requires address-resolution validation.
+  **Breaking (deliberate):** every acquisition invocation now passes
+  `--ignore-config`, cache on or off. Ambient yt-dlp configuration was an
+  invisible injection surface (it could add cookies or flags this
+  privacy-sensitive pipeline never agreed to); the skill's only
+  configuration surface is `WATCH_*`. If you relied on a yt-dlp config for
+  proxies, use the corresponding `WATCH_*`/environment route instead.
+
 ## [1.5.4] — 2026-08-19
 
 ### Added

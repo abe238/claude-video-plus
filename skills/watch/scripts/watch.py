@@ -29,7 +29,9 @@ for _stream in (sys.stdout, sys.stderr):
 SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
+from acquisition import acquisition_config, public_source_url  # noqa: E402
 from config import frame_cap, get_config, read_env_file  # noqa: E402
+from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from frames import MAX_FPS, auto_fps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
 
@@ -90,8 +92,13 @@ def run_evidence(args) -> int:
     # subtitles and can transiently come back with None when YouTube's timedtext
     # endpoint flakes on the second fetch. Never let that overwrite a good path.
     caption_path = dl["subtitle_path"]
-    print("[watch] downloading video via yt-dlp…", file=sys.stderr)
-    dl = download(args.source, work / "download")
+    evidence_cache_key = _cache_key_for(args.source, audio_only=False)
+    cached = _cache_lookup_media(evidence_cache_key, work / "download", dl)
+    if cached is not None:
+        dl = _apply_cache_hit(dl, cached)
+    else:
+        print("[watch] downloading video via yt-dlp…", file=sys.stderr)
+        dl = _download_and_cache(args.source, work / "download", key=evidence_cache_key)
 
     from evidence import compile_evidence  # noqa: E402 — same-dir sibling
 
@@ -140,8 +147,116 @@ def run_evidence(args) -> int:
     print(UNTRUSTED_BEGIN)
     print((work / "evidence" / "report.txt").read_text(encoding="utf-8"))
     print(UNTRUSTED_END)
+    marker = _video_cache_marker(dl)
+    if marker:
+        # Rendered by THIS mode's own trusted output (evidence.py is frozen
+        # under the 83da59f benchmark gate and cannot render it).
+        print(marker)
     print(f"\n---\n_Work dir: `{work}` — delete when done._")
     return 0
+
+
+def _cache_key_for(source: str, *, audio_only: bool) -> str | None:
+    """One config snapshot → one cache key, or None when caching is off or
+    the source is excluded. Shared by ordinary and evidence modes."""
+    try:
+        file_values = read_env_file()
+        if not cache_enabled(file_values):
+            return None
+        return cache_identity(
+            source,
+            audio_only=audio_only,
+            cookie_spec=acquisition_config(file_values).get("cookie_spec"),
+        )
+    except Exception as exc:
+        print(f"[watch] video cache identity failed ({type(exc).__name__}); downloading", file=sys.stderr)
+        return None
+
+
+def _apply_cache_hit(dl: dict, cached: Path) -> dict:
+    """One enrichment for BOTH modes, so the experimental marker can't drift."""
+    merged = dict(dl)
+    merged["video_path"] = str(cached)
+    merged["downloaded"] = False
+    merged["media_source"] = "video-cache"
+    merged["video_cache"] = "hit"
+    return merged
+
+
+def _video_cache_marker(dl: dict) -> str | None:
+    """CONTRACTS.md incomplete-feature gate: the experimental result marker,
+    rendered whenever the cache PARTICIPATED — hit or cold — in either mode."""
+    status = dl.get("video_cache")
+    if not status:
+        return None
+    detail = {
+        "hit": "hit — served checksum-verified local copy",
+        "miss-stored": "miss — downloaded and stored",
+        "miss": "miss — downloaded, not stored",
+    }.get(status, status)
+    return f"- **Video cache (experimental):** {detail}"
+
+
+def _publicly_available(dl: dict) -> bool:
+    """Fail-closed visibility fact: only an EXPLICIT yt-dlp availability of
+    "public" permits a cache store or hit. Unlisted, private, needs-auth,
+    unknown, or absent all refuse — a capability-linked or restricted video
+    must never persist, and a formerly-public video whose fresh caption
+    probe no longer says public must not be served from the cache. Malformed
+    probe shapes REFUSE (fail closed), never raise (fail open for the run)."""
+    if not isinstance(dl, dict):
+        return False
+    info = dl.get("info")
+    return isinstance(info, dict) and info.get("availability") == "public"
+
+
+def _cache_lookup_media(key: str | None, out_dir: Path, dl: dict) -> Path | None:
+    """A hit needs an AUTHORITATIVE fresh probe: explicit public availability
+    AND an explicitly unauthenticated probe (cookie_used is False). A missing
+    probe, missing fact, or authenticated probe refuses — fail closed."""
+    if not key:
+        return None
+    if not isinstance(dl, dict) or not _publicly_available(dl) or dl.get("cookie_used") is not False:
+        return None
+    try:
+        hit = VideoCache().lookup(key, out_dir)
+    except Exception as exc:  # the helper is a fallback boundary too
+        print(f"[watch] video cache lookup failed ({type(exc).__name__}); downloading", file=sys.stderr)
+        return None
+    if hit is not None:
+        print(
+            "[watch] serving media from the local video cache (verified, experimental)…",
+            file=sys.stderr,
+        )
+    return hit
+
+
+def _download_and_cache(source: str, out_dir: Path, *, audio_only: bool = False, key: str | None = None) -> dict:
+    fresh = download(source, out_dir, audio_only=audio_only)
+    if key and fresh.get("video_path"):
+        # The experimental path PARTICIPATED (lookup already ran): the marker
+        # must survive even a store exception, so status is set before the
+        # attempt and only upgraded on success.
+        fresh = dict(fresh)
+        fresh["video_cache"] = "miss"
+        try:
+            # The acquisition's own non-secret fact is authoritative AND
+            # fail-closed: only an EXPLICIT False permits retention — absent
+            # or truthy means the acquisition could not vouch for an
+            # unauthenticated fetch (ABA race, older result shapes). The key
+            # recomputation stays as defense in depth.
+            if (
+                fresh.get("cookie_used") is False
+                and _publicly_available(fresh)
+                and _cache_key_for(source, audio_only=audio_only) == key
+            ):
+                if VideoCache().insert(
+                    key, Path(fresh["video_path"]), source_url=public_source_url(source)
+                ):
+                    fresh["video_cache"] = "miss-stored"
+        except Exception as exc:
+            print(f"[watch] video cache store failed ({type(exc).__name__}); continuing", file=sys.stderr)
+    return fresh
 
 
 def download_consent_blocked(*, url_source: bool, has_captions: bool,
@@ -390,9 +505,17 @@ def main() -> int:
     if detail == "transcript" and transcript_segments and not cue_timestamps:
         video_path = None
     else:
-        if download_consent_blocked(url_source=url_source,
-                                    has_captions=bool(transcript_segments),
-                                    allow_flag=args.allow_download):
+        # Opt-in video cache (WATCH_VIDEO_CACHE=1): a verified hit serves a
+        # local copy, so no download happens and the consent gate (which
+        # guards downloading) does not apply. Every cache failure is a plain
+        # miss — the normal download flow runs unmodified.
+        cache_key = _cache_key_for(args.source, audio_only=audio_only) if url_source else None
+        cached_media = _cache_lookup_media(cache_key, work / "download", dl)
+        if cached_media is not None:
+            dl = _apply_cache_hit(dl, cached_media)
+        elif download_consent_blocked(url_source=url_source,
+                                      has_captions=bool(transcript_segments),
+                                      allow_flag=args.allow_download):
             print(
                 "[watch] This URL has no captions, and WATCH_DOWNLOAD_CONSENT=required "
                 "is set: downloading media needs explicit confirmation.\n"
@@ -400,16 +523,14 @@ def main() -> int:
                 "with --allow-download.",
             )
             return 5
-        if url_source:
+        elif url_source:
             print(
                 "[watch] downloading audio via yt-dlp…" if audio_only
                 else "[watch] downloading video via yt-dlp…",
                 file=sys.stderr,
             )
-            dl = download(
-                args.source,
-                work / "download",
-                audio_only=audio_only,
+            dl = _download_and_cache(
+                args.source, work / "download", audio_only=audio_only, key=cache_key
             )
         else:
             print("[watch] using local file…", file=sys.stderr)
@@ -583,7 +704,16 @@ def main() -> int:
         print(f"- **Uploader:** {info['uploader']}")
     print(f"- **Duration:** {format_time(full_duration)} ({full_duration:.1f}s)")
     if dl.get("selected_strategy"):
-        print(f"- **Acquisition:** {dl['selected_strategy']} ({len(dl.get('attempts') or [])} attempt(s))")
+        if dl.get("media_source") == "video-cache":
+            print(
+                f"- **Acquisition:** media from local video cache; caption probe "
+                f"{dl['selected_strategy']} ({len(dl.get('attempts') or [])} attempt(s))"
+            )
+        else:
+            print(f"- **Acquisition:** {dl['selected_strategy']} ({len(dl.get('attempts') or [])} attempt(s))")
+    marker = _video_cache_marker(dl)
+    if marker:
+        print(marker)
     for warning in dl.get("warnings") or []:
         print(f"> **Acquisition warning:** {warning}")
     if focused:

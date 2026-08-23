@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.5.4"
+  version: "1.5.5"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -104,6 +104,8 @@ Optional flags:
 - `--timestamps T1,T2,…` — grab a frame at each of these absolute timestamps (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
 - `--max-frames N` — override the preset cap for tighter token budget (e.g. `--max-frames 40`)
 - `--no-whisper` — disable the Whisper fallback entirely (frames-only if no captions)
+
+**Video cache (experimental):** `WATCH_VIDEO_CACHE=1` persists media from allowlisted YouTube hosts only in `~/.cache/watch/video-cache/` (verified, bounded, 30-day TTL). Signed, private, cookie-authenticated, or credential-bearing sources are never cached — no override. Purge: `python3 "${SKILL_DIR}/scripts/video_cache.py" --purge`.
 
 **Any other flag** (`--timestamps`, `--resolution`, `--fps`, `--out-dir`, `--stt`, `--whisper`, `--allow-remote-transcription`, `--no-dedup`, `--request-json`, `--diagnostics-json`, `--export-bundle`/`--verify-bundle`/`--replay-bundle`, `--semantic`): **`Read ${SKILL_DIR}/references/flags.md` before using it.** Do not guess flag names or values.
 ### Focusing on a section (higher frame rate)

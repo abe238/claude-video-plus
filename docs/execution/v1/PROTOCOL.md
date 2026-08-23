@@ -105,3 +105,14 @@ owners/gates/failure behavior, duplicate packet ownership, and plan-hash drift.
 
 No packet may turn a development result into a general superiority claim. Only the final
 confirmatory loop may authorize a claim, and only when its preregistered gates pass.
+
+## Post-v1 release evidence (amendment, 2026-08-22, owner-approved)
+
+Releases after the v1 program (v1.1+) are not packetized and carry no
+registry entries. A post-v1 release that changes runtime behavior instead
+commits `docs/evidence/<version>-<slug>/` containing `verify.json`
+(commands, exit codes, environment, pre-release HEAD), any live-trace/hash
+artifacts the release claims, `SOL-REVIEW.md` (review rounds and
+dispositions), and `EXIT.md` (criteria→evidence mapping plus any formal
+scope records). The release tag is the finalizer; post-release asset
+verification is appended to `EXIT.md`.

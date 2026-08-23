@@ -204,7 +204,11 @@ def fetch_captions(url: str, out_dir: Path) -> dict:
         read_metadata=_read_info,
     )
     # Caption absence is not fatal: watch.py may continue to media/ASR.
-    return result.as_dict()
+    payload = result.as_dict()
+    # Non-secret FACT for retention decisions: whether this acquisition was
+    # configured to authenticate (the cache must never retain such media).
+    payload["cookie_used"] = bool(cfg["cookie_spec"])
+    return payload
 
 
 def _read_info(info_path: Path, url: str) -> dict:
@@ -230,6 +234,9 @@ def _read_info(info_path: Path, url: str) -> dict:
                 # dicts), so caption_provenance can tell manual from ASR from
                 # machine translation for the track actually consumed.
                 "language": raw.get("language"),
+                # Fail-closed visibility fact for the cache: only an explicit
+                # "public" ever permits store or hit.
+                "availability": raw.get("availability"),
                 "caption_codes": {
                     "manual": sorted((raw.get("subtitles") or {}).keys()),
                     "automatic": sorted((raw.get("automatic_captions") or {}).keys()),
@@ -263,7 +270,12 @@ def download_url(
     )
     if result.state == "fatal":
         raise AcquisitionError(result)
-    return result.as_dict()
+    payload = result.as_dict()
+    # Non-secret FACT for retention decisions: whether this acquisition was
+    # configured to authenticate. The cache forbids retaining such media even
+    # if the cookie setting changes again before the insert (ABA race).
+    payload["cookie_used"] = bool(cfg["cookie_spec"])
+    return payload
 
 
 def download(

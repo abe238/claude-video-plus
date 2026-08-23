@@ -51,3 +51,19 @@ Behavior:
 - `--export-bundle FILE` / `--verify-bundle FILE` / `--replay-bundle FILE --out-dir DIR` — portable checksummed evidence without source media by default
 - `--bundle-media` — include frame JPEGs and the transcript in `--export-bundle`
 - `--semantic off|local|remote` — uncertainty-triggered semantic reranking. Remote also requires `--semantic-endpoint https://… --allow-remote-semantic`.
+
+## Video cache (opt-in)
+
+`WATCH_VIDEO_CACHE=1` enables a local content-addressed media cache
+(experimental) so repeat analysis of the same URL skips the download. Scope:
+allowlisted YouTube hosts only — a generic host cannot be proven public, so
+it is refused. Privacy contract: OFF by default; local files are never
+copied in; cookie-authenticated, signed, private, or credential-bearing
+sources are never cached — no override exists, because a cached copy would
+outlive the authorization that fetched it. Entries are owner-only, verified by checksum on every hit, and
+bounded by `WATCH_VIDEO_CACHE_MAX_GB` (10), `WATCH_VIDEO_CACHE_MAX_ENTRY_GB`
+(2), and `WATCH_VIDEO_CACHE_TTL_DAYS` (30). A cache failure of any kind
+falls back to a fresh download. Inspect or clear:
+`python3 "${SKILL_DIR}/scripts/video_cache.py" --inspect` to list entries;
+`python3 "${SKILL_DIR}/scripts/video_cache.py" --purge` to delete the cache
+(or `lifecycle.py --purge-cache` for all watch caches).

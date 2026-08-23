@@ -404,6 +404,12 @@ def build_yt_dlp_command(
     if final_format_fallback and not audio_only:
         normal = f"{normal}/18"
     cmd = [*ytdlp_cmd()]
+    # Ambient ~/.config/yt-dlp config is an invisible injection surface: it
+    # can add --cookies (making the cache's non-authenticated fact false) or
+    # any other flag this privacy-sensitive pipeline never agreed to. The
+    # skill's ONLY configuration surface is WATCH_* (same class of fix as the
+    # v1.2.4 cwd-.env removal).
+    cmd.append("--ignore-config")
     if captions_only:
         cmd.append("--skip-download")
     else:
