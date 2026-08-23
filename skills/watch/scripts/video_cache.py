@@ -360,11 +360,22 @@ class VideoCache:
             except (OSError, CacheUnavailable):
                 os.close(fd)
                 raise
+        if _IS_WINDOWS:  # pragma: no cover - Windows CI leg
+            # msvcrt.locking locks a byte RANGE at the file pointer; on a
+            # freshly-created empty lock file locking [0,1) fails, so ensure
+            # one byte exists and lock it deterministically at offset 0.
+            try:
+                if os.fstat(fd).st_size == 0:
+                    os.write(fd, b"\0")
+            except OSError:
+                pass
+            os.lseek(fd, 0, os.SEEK_SET)
         deadline = time.monotonic() + LOCK_WAIT_SECONDS
         try:
             while True:
                 try:
                     if _IS_WINDOWS:  # pragma: no cover - Windows CI leg
+                        os.lseek(fd, 0, os.SEEK_SET)
                         msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
                     else:
                         fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -378,6 +389,7 @@ class VideoCache:
             finally:
                 try:
                     if _IS_WINDOWS:  # pragma: no cover
+                        os.lseek(fd, 0, os.SEEK_SET)
                         msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
                     else:
                         fcntl.flock(fd, fcntl.LOCK_UN)
