@@ -222,3 +222,16 @@ def test_download_local_returns_normalized_and_legacy_fields(tmp_path: Path):
         "exit_code": 0, "detail": None,
     }]
     assert len(result["source_identity"]) == 64
+
+
+def test_no_exec_and_ignore_config_on_every_invocation(tmp_path):
+    from acquisition import build_yt_dlp_command
+
+    for captions_only, audio_only in ((True, False), (False, False), (False, True)):
+        cmd = build_yt_dlp_command(
+            "https://youtu.be/x", str(tmp_path / "video.%(ext)s"),
+            audio_only=audio_only, captions_only=captions_only,
+            languages=("en",), cookie_spec=None,
+        )
+        assert "--ignore-config" in cmd
+        assert "--no-exec" in cmd  # v1.5.6 CLI-exec-surface belt (donlapidos)

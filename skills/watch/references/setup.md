@@ -67,3 +67,18 @@ Use the user's selected value. If they skip the question, keep the recommended d
 **Structured mode (optional):** `python3 "${SKILL_DIR}/scripts/setup.py" --json` emits `{status, can_proceed, first_run, setup_complete, missing_binaries, whisper_backend, has_api_key, local_stt, config_file, watch_detail, platform}` where `status` is one of `ready | needs_install | needs_key | needs_install_and_key`. `local_stt` lists the local Adapters detected right now (`local-http`, `yap`) — a non-empty list means transcription is already covered and `status` is `ready` with no key. `can_proceed` is the operational gate (binaries present AND some transcription backend exists OR setup was already completed). Branch on `can_proceed`/`first_run` to decide whether to run; use `status` and `local_stt` to decide what, if anything, to suggest.
 
 Within a single session, you can skip Step 0 on follow-up `/watch` calls — once `--check` returned 0, nothing about the environment changes between turns.
+
+
+## Storing an API key safely (`--set-key`)
+
+The one sanctioned way to store a cloud key:
+
+```bash
+python3 "${SKILL_DIR}/scripts/setup.py" --set-key groq   # or openai
+```
+
+Hidden prompt (getpass): the key never appears in chat, in argv, in shell
+history, or on screen. The command refuses a key passed as an argument
+(process tables are world-readable) and refuses to run without a real
+terminal. Agents RELAY this command for the user to run themselves — never
+run it, never ask for the value.

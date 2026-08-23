@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.5.5"
+  version: "1.5.6"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -49,7 +49,7 @@ This is a <100ms lookup. **Exit 0 means /watch can run** — including a user wh
 
 **On any non-zero exit (2, 3, 4, or 5), or if the user asks about setup, keys, or transcription backends: `Read ${SKILL_DIR}/references/setup.md` and follow it.** It carries the exit-code table, the `--json` fields, the installer, the backend-suggestion order, and the first-run preference question. Exit 5 means /watch can run but the one-time first-run wizard never completed — ask the preference and write `SETUP_COMPLETE=true`. Do not improvise setup steps from memory.
 
-**Never handle a key yourself:** never ask the user to paste, reveal, or transmit an API key in chat, and never accept, echo, interpolate into a command, or write a secret on their behalf. Point them at `~/.config/watch/.env` to set `GROQ_API_KEY` or `OPENAI_API_KEY` privately in their own editor. A cloud key is the last resort — local backends need no secret and no network, and cloud Adapters refuse without `--allow-remote-transcription` anyway.
+**Never handle a key yourself:** never ask the user to paste, reveal, or transmit an API key in chat, and never accept, echo, interpolate into a command, or write a secret on their behalf. Have the user run: `python3 "${SKILL_DIR}/scripts/setup.py" --set-key groq|openai` (hidden prompt, never an argument). A cloud key is the last resort — local backends need no secret and no network, and cloud Adapters refuse without `--allow-remote-transcription` anyway.
 
 Within a single session you can skip Step 0 on follow-up `/watch` calls — once `--check` returned 0, nothing about the environment changes between turns.
 
@@ -165,7 +165,7 @@ Frames dominate cost: ~80 frames at 512px is roughly 50-80k image tokens; the tr
 - Sends extracted audio to Groq/OpenAI only after `--allow-remote-transcription` or `WATCH_STT_ALLOW_REMOTE=true` explicitly authorizes it.
 - Sends the Question and selected transcript snippets to an explicitly configured HTTPS semantic endpoint only with both `--semantic remote` and `--allow-remote-semantic`.
 - Writes the downloaded video, frames, audio, and an intermediate transcript to a working directory under the system temp dir (or `--out-dir` if specified) so Claude can `Read` them
-- Reads / creates `~/.config/watch/.env` (mode `0600`) to store the Whisper API key(s) and a `SETUP_COMPLETE` marker. As a fallback, also reads `.env` in the current working directory
+- Reads / creates `~/.config/watch/.env` (mode `0600`) to store the Whisper API key(s) and a `SETUP_COMPLETE` marker. Never reads `.env` from the working directory (a hostile repo could plant a key; removed v1.2.4)
 
 **What this skill does NOT do:**
 - Does not ask users to paste API keys into chat and does not accept or write secret values on their behalf.

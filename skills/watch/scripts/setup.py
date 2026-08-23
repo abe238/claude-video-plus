@@ -645,6 +645,65 @@ def cmd_install() -> int:
     return 3
 
 
+def cmd_set_key(argv: list[str]) -> int:
+    """Guided secret entry (v1.5.6, idea from the donlapidos W007 patch set):
+    the ONE sanctioned way to store an API key. Safety properties, each
+    load-bearing: the key is never accepted as an argument (argv is readable
+    in the process table — an extra token here REFUSES and advises rotation);
+    a real TTY is required (a non-interactive caller can neither pipe a
+    secret in nor hang a session); entry is hidden via getpass and never
+    echoed; the shape is validated before writing; the file is rewritten
+    with 0600 re-asserted. Agents relay this command — they never run it."""
+    import getpass
+
+    providers = {"groq": "GROQ_API_KEY", "openai": "OPENAI_API_KEY"}
+    args = [a for a in argv if a != "--set-key"]
+    if len(args) != 1 or args[0] not in providers:
+        extra = [a for a in args if a not in providers]
+        if len(args) > 1 or (args and args[0] not in providers and len(args[0]) > 12):
+            print("refused: never pass a key on the command line (argv is visible "
+                  "to every process). If a real key was just exposed, rotate it now.",
+                  file=sys.stderr)
+            return 2
+        print("usage: setup.py --set-key groq|openai", file=sys.stderr)
+        return 2
+    if not sys.stdin.isatty():
+        print("refused: --set-key needs an interactive terminal (a piped secret "
+              "would be script-visible; a silent hang helps nobody).", file=sys.stderr)
+        return 2
+    name = providers[args[0]]
+    value = getpass.getpass(f"{name} (input hidden): ").strip()
+    if not value or len(value) < 20 or len(value) > 256 or any(c.isspace() for c in value):
+        print("refused: that does not look like an API key (20-256 chars, no "
+              "whitespace). Nothing was written.", file=sys.stderr)
+        return 2
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    lines = []
+    replaced = False
+    if CONFIG_FILE.exists():
+        for line in CONFIG_FILE.read_text(encoding="utf-8").splitlines():
+            if line.strip().startswith(f"{name}="):
+                lines.append(f"{name}={value}")
+                replaced = True
+            else:
+                lines.append(line)
+    else:
+        lines = ENV_TEMPLATE.splitlines()
+        for i, line in enumerate(lines):
+            if line.strip().startswith(f"{name}="):
+                lines[i] = f"{name}={value}"
+                replaced = True
+    if not replaced:
+        lines.append(f"{name}={value}")
+    CONFIG_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    try:
+        CONFIG_FILE.chmod(0o600)
+    except OSError:
+        pass
+    print(f"{name} stored in {CONFIG_FILE} (0600). The value was not echoed.")
+    return 0
+
+
 def main() -> int:
     if len(sys.argv) > 1:
         arg = sys.argv[1]
@@ -652,6 +711,8 @@ def main() -> int:
             return cmd_check()
         if arg == "--json":
             return cmd_json()
+        if arg == "--set-key" or "--set-key" in sys.argv[1:]:
+            return cmd_set_key(sys.argv[1:])
     return cmd_install()
 
 

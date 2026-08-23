@@ -410,6 +410,9 @@ def build_yt_dlp_command(
     # skill's ONLY configuration surface is WATCH_* (same class of fix as the
     # v1.2.4 cwd-.env removal).
     cmd.append("--ignore-config")
+    # Sibling belt (v1.5.6, donlapidos): config-driven exec died with
+    # --ignore-config; --no-exec closes the CLI-surface twin outright.
+    cmd.append("--no-exec")
     if captions_only:
         cmd.append("--skip-download")
     else:

@@ -298,6 +298,24 @@ ZWSP = "​"
 # boundary just as readily, so an exact-string replace is trivially bypassed.
 _MARKER_RE = re.compile(r"UNTRUSTED\s+VIDEO\s+EVIDENCE", re.IGNORECASE)
 
+# v1.5.6 (donlapidos audit, W011): three vectors our sanitizer missed.
+#
+# C0/C1 control bytes (category Cc, which the Cf-focused strip_invisible
+# deliberately leaves alone) except tab/newline — covers ANSI/OSC escapes via
+# ESC (0x1B). Stripped outright: a control byte has no spelling to preserve.
+_CONTROL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+# ANY tag-shaped token gets a ZWSP after "<" so it no longer parses as
+# markup: property-based (shape, not an enumerated tag-name list), and the
+# text stays readable — "<b>bold</b>" in a description survives legibly while
+# "<system-reminder>" can never impersonate harness structure.
+_TAG_SHAPE_RE = re.compile(r"<(?=\s*/?\s*[A-Za-z!?])")
+# Chat-turn impersonation: a line-leading role word + colon (optionally after
+# a [MM:SS]/[H:MM:SS] transcript stamp) reads as a forged conversation turn.
+# ZWSP inside the role word defuses it while keeping quoted dialogue legible.
+_TURN_RE = re.compile(
+    r"(?im)^(\s*(?:\[[0-9:.]+\]\s*)?)(human|assistant|system|user|developer|ai)(\s*:)"
+)
+
 # CommonMark and LLM readers treat all of these as line breaks; str.split("\n")
 # does not, so a fence hidden behind one would evade a naive line scanner.
 _LINE_BREAKS = ("\r\n", "\r", " ", " ", "\f", "\x85")
@@ -402,6 +420,13 @@ def sanitize_for_report(text: str) -> str:
 
     for terminator in _LINE_BREAKS:
         text = text.replace(terminator, "\n")
+
+    # v1.5.6: control bytes (incl. ANSI escapes) stripped AFTER terminator
+    # normalization so \r handling stays intact; tags and turn markers are
+    # ZWSP-defused in the same spirit as the marker/fence defenses below.
+    text = _CONTROL_RE.sub("", text)
+    text = _TAG_SHAPE_RE.sub("<" + ZWSP, text)
+    text = _TURN_RE.sub(lambda m: m.group(1) + m.group(2)[0] + ZWSP + m.group(2)[1:] + m.group(3), text)
 
     text = _MARKER_RE.sub(lambda m: ZWSP.join(m.group(0)), text)
 
