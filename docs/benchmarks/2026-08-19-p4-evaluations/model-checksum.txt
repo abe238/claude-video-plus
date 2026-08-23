@@ -1,0 +1,7 @@
+model: ggml-small.en.bin
+model_sha256: c6138d6d58ecc8322097e0f987c32f1be8bb0a18532a3f88f734d1bbf9c41e5d
+macos_product_version: 26.6.1
+macos_build: 25G76
+darwin_release: 25.6.0
+whisper_cpp: whisper-cpp 1.8.4
+tts: macOS 'say', default voice, default rate
