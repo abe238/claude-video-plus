@@ -1,0 +1,33 @@
+{
+  "release": "1.5.9",
+  "harness": "/Users/abediaz/Documents/Github/claude-video-plus/docs/evidence/v1.5.9-ytdlp-selfheal/run-verification.py",
+  "checks": {
+    "selfheal_tests": {
+      "cmd": "pytest -q tests/test_acquisition.py -k ytdlp or self_heal or selfheal or upgrade or optout",
+      "exit": 0,
+      "result": "8 passed, 19 deselected in 0.01s"
+    },
+    "windows_fallback_tests": {
+      "cmd": "pytest -q tests/test_windows_resilience.py",
+      "exit": 0,
+      "result": "12 passed in 0.22s"
+    },
+    "full_suite": {
+      "cmd": "pytest -q ",
+      "exit": 0,
+      "result": "895 passed in 46.35s"
+    },
+    "live_upgrade": {
+      "cmd": "upgrade_ytdlp() + forced -m yt_dlp --version",
+      "exit": 0,
+      "result": "True 0 2026.08.19 | -E -P -m yt_dlp"
+    }
+  },
+  "environment": {
+    "python": "3.14.4",
+    "platform": "darwin",
+    "ffmpeg": "ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "yt_dlp": "2026.08.19"
+  },
+  "pre_release_head": "aac043cfb3876511c0fb0056c3bac6e2cc71c0dc"
+}

@@ -14,6 +14,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -372,15 +373,135 @@ def _caption_patterns(languages: tuple[str, ...]) -> str:
     return ",".join(ordered)
 
 
-@functools.lru_cache(maxsize=1)
+# The staleness signature: a media download that 403s / SABRs / loses its format
+# after metadata already succeeded is almost always an outdated yt-dlp behind a
+# site player change (verified live 2026-08: 2026.07.04 403s on all YouTube
+# media, 2026.08.19 works). These are the classes the self-heal upgrade targets.
+STALE_YTDLP_FAILURES = frozenset({
+    FailureClass.HTTP_403.value,
+    FailureClass.SABR_CLIENT.value,
+    FailureClass.FORMAT_UNAVAILABLE.value,
+})
+
+# Self-heal state, lock-guarded and process-scoped. `_force_module` makes the
+# rest of the run use the freshly-upgraded pip module over a stale system/brew
+# binary; `_upgrade_attempted` latches so AT MOST ONE automatic install runs per
+# process, whether it succeeds or fails (evidence mode and repeated library calls
+# can otherwise reach the download path more than once).
+_ytdlp_state_lock = threading.Lock()
+_force_module = False
+_upgrade_attempted = False
+
+# A trusted working directory for the pip/module subprocesses: our own scripts
+# dir, never the caller's CWD (which under the untrusted-repo threat model could
+# hold a planted `pip/__main__.py` or `yt_dlp/`).
+_SAFE_CWD = str(Path(__file__).resolve().parent)
+
+
+def _hardened_python(*args: str) -> tuple[str, ...]:
+    """`python` invocation hardened against module-resolution hijacking: ``-E``
+    drops PYTHON* env (PYTHONPATH/PYTHONHOME) on every version; ``-P`` (3.11+)
+    drops the unsafe ``sys.path[0]`` prepend so a planted module in the CWD or
+    script dir cannot shadow ``pip``/``yt_dlp``. User site-packages stay on the
+    path, so a ``pip install --user`` upgrade remains importable."""
+    flags = ["-E"]
+    if sys.version_info >= (3, 11):
+        flags.append("-P")
+    return (sys.executable, *flags, *args)
+
+
+def _hardened_subprocess_env() -> dict:
+    """os.environ minus the variables that could redirect pip/module resolution:
+    PYTHON* (path/home) and every PIP_* (index URL, constraints, config file).
+    Then pin ``PIP_CONFIG_FILE=os.devnull`` — pip's documented switch to disable
+    ALL configuration files (global AND site AND user), which ``--isolated`` does
+    not fully cover — so a global/site pip.conf cannot inject an extra-index-url,
+    find-links, or a version constraint that changes what installs."""
+    env = {k: v for k, v in os.environ.items()
+           if k not in ("PYTHONPATH", "PYTHONHOME") and not k.startswith("PIP_")}
+    env["PIP_CONFIG_FILE"] = os.devnull
+    return env
+
+
+def ytdlp_autoupdate_enabled(env: dict | None = None) -> bool:
+    """Whether the self-heal may upgrade yt-dlp (default ON; opt out with
+    WATCH_YTDLP_AUTOUPDATE=0/false/no/off). Honors env-over-file: a real
+    environment variable wins; otherwise the passed ``.env`` mapping is used."""
+    raw = os.environ.get("WATCH_YTDLP_AUTOUPDATE")
+    if raw is None and env is not None:
+        raw = env.get("WATCH_YTDLP_AUTOUPDATE")
+    return str(raw or "").strip().lower() not in {"0", "false", "no", "off"}
+
+
+def upgrade_ytdlp(runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
+                  timeout: int = 180) -> bool:
+    """Best-effort, at-most-once-per-process yt-dlp upgrade for the self-heal.
+
+    Upgrades the pip ``--user`` copy — the one install path we can drive
+    portably (brew/pipx we cannot). Hardened: FIXED argv (no untrusted input);
+    ``pip --isolated`` + explicit official ``--index-url`` so PIP_* env/config
+    cannot redirect the source or version; run under ``_hardened_python`` in a
+    trusted CWD with a stripped env so no planted module hijacks resolution. Only
+    after the upgraded module PROVES runnable (``-m yt_dlp --version``) does it
+    force the module path. Returns False on any failure (offline, PEP 668, no
+    pip, unrunnable) so the caller keeps the actionable manual message.
+    """
+    global _force_module, _upgrade_attempted
+    # Hold the lock for the WHOLE upgrade so a concurrent caller BLOCKS until it
+    # finishes and then observes the final _force_module, rather than latching on
+    # a still-in-progress attempt and getting a premature False.
+    with _ytdlp_state_lock:
+        if _upgrade_attempted:
+            return _force_module  # already tried this process — never reinstall
+        _upgrade_attempted = True
+        safe_env = _hardened_subprocess_env()
+        install = _hardened_python(
+            "-m", "pip", "install", "--isolated",
+            "--index-url", "https://pypi.org/simple/",
+            "--user", "--upgrade", "yt-dlp",
+        )
+        try:
+            completed = runner(list(install), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                               timeout=timeout, env=safe_env, cwd=_SAFE_CWD)
+        except (OSError, subprocess.SubprocessError):
+            return False
+        if getattr(completed, "returncode", 1) != 0:
+            return False
+        # Verify the upgraded module actually runs before trusting it (a zero pip
+        # exit does not guarantee an importable/runnable yt_dlp under --user).
+        probe = list(_hardened_python("-m", "yt_dlp", "--version"))
+        try:
+            checked = runner(probe, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                             timeout=30, env=safe_env, cwd=_SAFE_CWD)
+        except (OSError, subprocess.SubprocessError):
+            return False
+        if getattr(checked, "returncode", 1) != 0:
+            return False
+        _force_module = True
+        return True
+
+
 def ytdlp_cmd() -> tuple[str, ...]:
-    """Working yt-dlp invocation, probed once per process.
+    """Working yt-dlp invocation. The ``_force_module`` check is UNCACHED so a
+    mid-run self-heal upgrade takes effect immediately without racing an
+    lru_cache repopulation; the (stable) executable/module probe below is
+    cached."""
+    with _ytdlp_state_lock:
+        forced = _force_module
+    if forced:
+        return _hardened_python("-m", "yt_dlp")
+    return _detect_ytdlp_cmd()
+
+
+@functools.lru_cache(maxsize=1)
+def _detect_ytdlp_cmd() -> tuple[str, ...]:
+    """Probe a working yt-dlp once per process.
 
     Windows Smart App Control / WDAC blocks the unsigned yt-dlp.exe shim at
     *execution* time (OSError) while ``shutil.which`` still finds it, so
     presence on PATH is not proof of usability. Prefer the executable; fall
-    back to ``python -m yt_dlp`` when the exe is blocked or absent but the
-    module is importable. Fails open to ``("yt-dlp",)`` so callers keep
+    back to ``python -m yt_dlp`` (hardened) when the exe is blocked or absent
+    but the module is importable. Fails open to ``("yt-dlp",)`` so callers keep
     today's error paths when nothing is usable.
     """
     exe = shutil.which("yt-dlp")
@@ -402,12 +523,14 @@ def ytdlp_cmd() -> tuple[str, ...]:
                 "trying `python -m yt_dlp`.",
                 file=sys.stderr,
             )
+    module = _hardened_python("-m", "yt_dlp")
     try:
         subprocess.run(
-            [sys.executable, "-m", "yt_dlp", "--version"],
+            [*module, "--version"],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
+            cwd=_SAFE_CWD,
         )
-        return (sys.executable, "-m", "yt_dlp")
+        return module
     except (OSError, subprocess.CalledProcessError):
         return ("yt-dlp",)
 

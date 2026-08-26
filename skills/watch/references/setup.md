@@ -45,6 +45,8 @@ python3 "${SKILL_DIR}/scripts/setup.py"
 
 On macOS with Homebrew, it auto-installs `ffmpeg` and `yt-dlp`. On Linux/Windows, it prints the exact install commands for the user to run. It scaffolds `~/.config/watch/.env` with commented placeholders and default watch settings at `0600` perms.
 
+**yt-dlp self-heal:** YouTube (and other sites) change their player often, and a yt-dlp more than a few weeks old commonly starts failing media downloads with a 403 while metadata still works. When a download fails with that signature (`http_403` / SABR / format-gone), `/watch` automatically runs `python -m pip install --user --upgrade yt-dlp` once and retries with the fresh copy — so it heals as part of the download instead of just reporting "outdated". It is best-effort: in an offline or externally-managed (PEP 668) environment the upgrade is skipped and the actionable manual message is shown. Opt out with `WATCH_YTDLP_AUTOUPDATE=0` in `~/.config/watch/.env` (or the environment) if you pin yt-dlp deliberately.
+
 **If no transcription backend exists after install:** suggest the local ones first, because they need no secret and no network. On macOS that is `brew install finnvoor/tools/yap`; on any platform it is a local OpenAI-compatible STT server on `127.0.0.1:8082`. Only if the user actively wants cloud Whisper, tell them a key alone is inert (the cloud Adapters refuse without `--allow-remote-transcription` / `WATCH_STT_ALLOW_REMOTE=true`) and that audio would leave their machine.
 
 

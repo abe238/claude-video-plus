@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.5.8"
+  version: "1.5.9"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -152,7 +152,7 @@ The transcript pipeline stops at the first usable source: native captions → `.
 
 ## Token efficiency
 
-Frames dominate cost: ~80 frames at 512px is roughly 50-80k image tokens; the transcript is a few thousand at most. If you already watched a video this session and the user asks a follow-up, do **not** re-run the script — you already have the frames and transcript in context; answer from what you have.
+Frames dominate cost: ~80 frames at 512px is roughly 50-80k image tokens. If you already watched a video this session, do **not** re-run the script; answer from the frames and transcript already in context.
 
 ## Security & Permissions
 
@@ -160,7 +160,8 @@ Frames dominate cost: ~80 frames at 512px is roughly 50-80k image tokens; the tr
 - Runs `yt-dlp` locally to download the video and pull native captions when the source supports them (public data; the request goes directly to whatever host the URL points at)
 - Runs `ffmpeg` / `ffprobe` locally to extract frames as JPEGs and, when Whisper is needed, a mono 16 kHz audio clip
 - Optionally passes a validated browser/profile identifier to yt-dlp with `WATCH_COOKIES_BROWSER`; yt-dlp then reads that browser's session cookies locally. This is never automatic.
-- `WATCH_MAX_FILESIZE` (e.g. `500M`, `1.5G`) caps media downloads via yt-dlp's `--max-filesize`; caption and metadata fetches stay unguarded. When a video exceeds the cap the run fails with `max_filesize_exceeded` and an actionable message (raise the cap, or use `--detail transcript`).
+- `WATCH_MAX_FILESIZE` (e.g. `500M`, `1.5G`) caps media downloads via yt-dlp's `--max-filesize`. Over the cap, the run fails with `max_filesize_exceeded` and an actionable message (raise the cap, or use `--detail transcript`).
+- Outdated-yt-dlp download failure (403/format-gone): auto-runs `pip install --user -U yt-dlp` once, then retries (default on; opt out `WATCH_YTDLP_AUTOUPDATE=0`).
 - `WATCH_DOWNLOAD_CONSENT=required` refuses to download media for an URL that has no captions until confirmed. The script exits with code 5 and a message; when you see it, ask the user whether to proceed, then re-run the exact same command with `--allow-download` added. Captioned videos and local files are never gated. Unset (the default) preserves the original behavior.
 - Sends extracted audio to Groq/OpenAI only after `--allow-remote-transcription` or `WATCH_STT_ALLOW_REMOTE=true` explicitly authorizes it.
 - Sends the Question and selected transcript snippets to an explicitly configured HTTPS semantic endpoint only with both `--semantic remote` and `--allow-remote-semantic`.

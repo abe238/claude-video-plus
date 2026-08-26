@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -84,6 +85,184 @@ def test_acquisition_error_403_message_points_at_yt_dlp_upgrade():
     msg = str(err)
     assert "http_403" in msg
     assert "pip install -U yt-dlp" in msg  # actionable remediation
+
+
+def _reset_selfheal():
+    with acquisition._ytdlp_state_lock:
+        acquisition._force_module = False
+        acquisition._upgrade_attempted = False
+    acquisition._detect_ytdlp_cmd.cache_clear()
+
+
+def _rc0(cmd, **_kw):
+    return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+
+def test_ytdlp_autoupdate_enabled_default_and_optout(monkeypatch):
+    monkeypatch.delenv("WATCH_YTDLP_AUTOUPDATE", raising=False)
+    assert acquisition.ytdlp_autoupdate_enabled({}) is True
+    for off in ("0", "false", "No", "off"):
+        assert acquisition.ytdlp_autoupdate_enabled({"WATCH_YTDLP_AUTOUPDATE": off}) is False
+    assert acquisition.ytdlp_autoupdate_enabled({"WATCH_YTDLP_AUTOUPDATE": "1"}) is True
+    # env-over-file: a real environment variable wins over the .env mapping.
+    monkeypatch.setenv("WATCH_YTDLP_AUTOUPDATE", "0")
+    assert acquisition.ytdlp_autoupdate_enabled({"WATCH_YTDLP_AUTOUPDATE": "1"}) is False
+
+
+def test_upgrade_ytdlp_success_is_hardened_and_forces_fresh_module(monkeypatch):
+    _reset_selfheal()
+    # Hostile ambient config that MUST NOT reach the subprocess.
+    monkeypatch.setenv("PIP_INDEX_URL", "https://evil.example/simple/")
+    monkeypatch.setenv("PIP_EXTRA_INDEX_URL", "https://evil.example/extra/")
+    monkeypatch.setenv("PYTHONPATH", "/hostile")
+    calls = []
+
+    def runner(cmd, **kw):
+        calls.append((cmd, kw))
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    try:
+        assert acquisition.upgrade_ytdlp(runner=runner) is True
+        install, kw = calls[0]
+        # hardened + isolated + fixed argv + official index (no injection surface)
+        assert install[0] == sys.executable
+        assert "-E" in install                         # PYTHON* env dropped
+        assert "--isolated" in install                 # PIP_* env/config ignored
+        assert "https://pypi.org/simple/" in install   # official PyPI, not PIP_INDEX_URL
+        assert install[-3:] == ["--user", "--upgrade", "yt-dlp"]
+        # env is scrubbed: no PIP_*/PYTHONPATH; pip config-file loading disabled.
+        env = kw["env"]
+        assert not any(k.startswith("PIP_") and k != "PIP_CONFIG_FILE" for k in env)
+        assert env["PIP_CONFIG_FILE"] == os.devnull    # global/site pip.conf ignored
+        assert "PYTHONPATH" not in env and "PYTHONHOME" not in env
+        assert kw["cwd"] == acquisition._SAFE_CWD       # not the caller's CWD
+        # it also probed the module before trusting it, then forces the module.
+        assert any("yt_dlp" in c and "--version" in c for c, _ in calls)
+        forced = acquisition.ytdlp_cmd()
+        assert forced[0] == sys.executable and forced[-2:] == ("-m", "yt_dlp")
+    finally:
+        _reset_selfheal()
+
+
+def test_upgrade_ytdlp_rc0_but_module_unrunnable_returns_false():
+    _reset_selfheal()
+
+    def runner(cmd, **_kw):
+        # pip succeeds, but the yt_dlp --version probe fails.
+        rc = 1 if ("yt_dlp" in cmd and "--version" in cmd) else 0
+        return subprocess.CompletedProcess(cmd, rc, stdout="", stderr="")
+
+    try:
+        assert acquisition.upgrade_ytdlp(runner=runner) is False
+        assert acquisition._force_module is False  # not trusted
+    finally:
+        _reset_selfheal()
+
+
+def test_upgrade_ytdlp_is_latched_once_per_process():
+    _reset_selfheal()
+    n = {"pip": 0}
+
+    def runner(cmd, **_kw):
+        if "pip" in cmd:
+            n["pip"] += 1
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    try:
+        assert acquisition.upgrade_ytdlp(runner=runner) is True
+        # second call must NOT reinstall; returns the latched outcome.
+        assert acquisition.upgrade_ytdlp(runner=runner) is True
+        assert n["pip"] == 1
+    finally:
+        _reset_selfheal()
+
+
+def test_upgrade_ytdlp_failure_returns_false_and_does_not_force_module():
+    _reset_selfheal()
+
+    def raises(cmd, **_kw):
+        raise OSError("no pip")
+
+    try:
+        assert acquisition.upgrade_ytdlp(runner=raises) is False
+        assert acquisition._force_module is False
+    finally:
+        _reset_selfheal()
+
+
+def _fatal_403():
+    return acquisition.AcquisitionResult(
+        state="fatal", media_path=None, subtitle_candidates=[], selected_subtitle=None,
+        metadata={}, source_identity="yt:x", failure_class=acquisition.FailureClass.HTTP_403.value,
+    )
+
+
+def test_download_url_self_heals_on_stale_403(tmp_path: Path, monkeypatch):
+    import download
+    ok = acquisition.AcquisitionResult(
+        state="success", media_path=str(tmp_path / "v.mp4"), subtitle_candidates=[],
+        selected_subtitle=None, metadata={"url": "https://y/x"}, source_identity="yt:x",
+        downloaded=True,
+    )
+    seq = [_fatal_403(), ok]
+    calls = {"acquire": 0, "upgrade": 0}
+    monkeypatch.setattr(download, "acquire_url", lambda *a, **k: (calls.__setitem__("acquire", calls["acquire"] + 1) or seq.pop(0)))
+    monkeypatch.setattr(download, "upgrade_ytdlp", lambda *a, **k: calls.__setitem__("upgrade", calls["upgrade"] + 1) or True)
+    monkeypatch.setattr(download, "read_env_file", lambda: {})
+    payload = download.download_url("https://www.youtube.com/watch?v=x", tmp_path)
+    assert calls["upgrade"] == 1 and calls["acquire"] == 2
+    assert payload["state"] == "success"
+
+
+def test_download_url_fatal_retry_preserves_original_actionable_error(tmp_path: Path, monkeypatch):
+    import download
+    # Retry ALSO fatal but with a vaguer class: the original http_403 must be the
+    # one raised (its message points at the yt-dlp upgrade).
+    retry_fatal = acquisition.AcquisitionResult(
+        state="fatal", media_path=None, subtitle_candidates=[], selected_subtitle=None,
+        metadata={}, source_identity="yt:x", failure_class=acquisition.FailureClass.UNKNOWN.value,
+    )
+    seq = [_fatal_403(), retry_fatal]
+    monkeypatch.setattr(download, "acquire_url", lambda *a, **k: seq.pop(0))
+    monkeypatch.setattr(download, "upgrade_ytdlp", lambda *a, **k: True)
+    monkeypatch.setattr(download, "read_env_file", lambda: {})
+    import pytest as _pytest
+    with _pytest.raises(acquisition.AcquisitionError) as exc:
+        download.download_url("https://www.youtube.com/watch?v=x", tmp_path)
+    assert exc.value.result.failure_class == acquisition.FailureClass.HTTP_403.value
+
+
+def test_download_url_retry_that_raises_preserves_original_403(tmp_path: Path, monkeypatch):
+    import download
+    seq = [_fatal_403()]
+
+    def acquire(*_a, **_k):
+        if seq:
+            return seq.pop(0)
+        raise SystemExit("yt-dlp is not usable")  # retry raises instead of returning
+
+    monkeypatch.setattr(download, "acquire_url", acquire)
+    monkeypatch.setattr(download, "upgrade_ytdlp", lambda *a, **k: True)
+    monkeypatch.setattr(download, "read_env_file", lambda: {})
+    import pytest as _pytest
+    with _pytest.raises(acquisition.AcquisitionError) as exc:
+        download.download_url("https://www.youtube.com/watch?v=x", tmp_path)
+    assert exc.value.result.failure_class == acquisition.FailureClass.HTTP_403.value
+
+
+def test_download_url_optout_via_env_file_skips_selfheal(tmp_path: Path, monkeypatch):
+    import download
+    calls = {"acquire": 0, "upgrade": 0}
+    monkeypatch.setattr(download, "acquire_url", lambda *a, **k: (calls.__setitem__("acquire", calls["acquire"] + 1) or _fatal_403()))
+    monkeypatch.setattr(download, "upgrade_ytdlp", lambda *a, **k: calls.__setitem__("upgrade", calls["upgrade"] + 1) or True)
+    # opt-out lives in ~/.config/watch/.env (NOT the process env) — the production
+    # wiring must read it. Codex blocker 2.
+    monkeypatch.delenv("WATCH_YTDLP_AUTOUPDATE", raising=False)
+    monkeypatch.setattr(download, "read_env_file", lambda: {"WATCH_YTDLP_AUTOUPDATE": "0"})
+    import pytest as _pytest
+    with _pytest.raises(acquisition.AcquisitionError):
+        download.download_url("https://www.youtube.com/watch?v=x", tmp_path)
+    assert calls["upgrade"] == 0 and calls["acquire"] == 1
 
 
 def test_stale_media_cannot_make_failed_attempt_succeed(tmp_path: Path):

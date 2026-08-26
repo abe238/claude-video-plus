@@ -19,9 +19,9 @@ import whisper
 
 @pytest.fixture(autouse=True)
 def _reset_ytdlp_probe():
-    acquisition.ytdlp_cmd.cache_clear()
+    acquisition._detect_ytdlp_cmd.cache_clear()
     yield
-    acquisition.ytdlp_cmd.cache_clear()
+    acquisition._detect_ytdlp_cmd.cache_clear()
 
 
 def _no_ffprobe(monkeypatch, module):
@@ -87,7 +87,7 @@ def test_ytdlp_cmd_blocked_exe_falls_back_to_module(monkeypatch):
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(acquisition.subprocess, "run", run)
-    assert acquisition.ytdlp_cmd() == (acquisition.sys.executable, "-m", "yt_dlp")
+    assert acquisition.ytdlp_cmd() == acquisition._hardened_python("-m", "yt_dlp")
 
 
 def test_ytdlp_cmd_fails_open_when_nothing_usable(monkeypatch):
@@ -125,7 +125,7 @@ def test_broken_shim_that_exits_nonzero_falls_back_to_module(monkeypatch):
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(acquisition.subprocess, "run", run)
-    assert acquisition.ytdlp_cmd() == (acquisition.sys.executable, "-m", "yt_dlp")
+    assert acquisition.ytdlp_cmd() == acquisition._hardened_python("-m", "yt_dlp")
 
 
 def test_preflight_accepts_ffmpeg_without_ffprobe(monkeypatch):

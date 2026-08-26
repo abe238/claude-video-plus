@@ -22,9 +22,12 @@ from acquisition import (
     AcquisitionError,
     AcquisitionResult,
     FailureClass,
+    STALE_YTDLP_FAILURES,
     acquisition_config,
     acquire_url,
     local_source_identity,
+    upgrade_ytdlp,
+    ytdlp_autoupdate_enabled,
 )
 from config import read_env_file
 
@@ -259,15 +262,42 @@ def download_url(
             "(or pip install yt-dlp so `python -m yt_dlp` works)"
         )
 
-    cfg = acquisition_config(read_env_file())
-    result = acquire_url(
-        url, out_dir, audio_only=audio_only,
-        languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
-        max_filesize=cfg["max_filesize"],
-        player_clients=cfg["player_clients"], runner=subprocess.run,
-        pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
-        read_metadata=_read_info, ignore_config=cfg["ignore_config"],
-    )
+    env_file = read_env_file()
+    cfg = acquisition_config(env_file)
+
+    def _acquire() -> "object":
+        return acquire_url(
+            url, out_dir, audio_only=audio_only,
+            languages=cfg["languages"], cookie_spec=cfg["cookie_spec"],
+            max_filesize=cfg["max_filesize"],
+            player_clients=cfg["player_clients"], runner=subprocess.run,
+            pick_media=_pick_video, pick_subtitles=_subtitle_candidates,
+            read_metadata=_read_info, ignore_config=cfg["ignore_config"],
+        )
+
+    result = _acquire()
+    # Self-heal: a stale yt-dlp is the usual cause of a 403/SABR/format-gone
+    # media failure (metadata still worked). Upgrade yt-dlp ONCE and retry ONCE,
+    # then use the fresh module. Default on; opt out with WATCH_YTDLP_AUTOUPDATE=0
+    # (honored from ~/.config/watch/.env OR the environment).
+    if (result.state == "fatal"
+            and result.failure_class in STALE_YTDLP_FAILURES
+            and ytdlp_autoupdate_enabled(env=env_file)):
+        print("[watch] yt-dlp download failed (looks outdated) — upgrading yt-dlp and retrying…",
+              file=sys.stderr)
+        if upgrade_ytdlp():
+            try:
+                retry = _acquire()
+            except SystemExit:
+                retry = None  # e.g. yt-dlp still unusable — keep the original 403
+            # Only adopt the retry if it actually recovered; a still-fatal (or
+            # raised) retry keeps the ORIGINAL stale-class result so
+            # AcquisitionError's actionable "upgrade yt-dlp" message survives.
+            if retry is not None and retry.state != "fatal":
+                result = retry
+        else:
+            print("[watch] yt-dlp auto-upgrade could not run (offline or managed env).",
+                  file=sys.stderr)
     if result.state == "fatal":
         raise AcquisitionError(result)
     payload = result.as_dict()

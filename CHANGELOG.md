@@ -2,6 +2,31 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.9] — 2026-08-25
+
+### Added
+
+- **yt-dlp self-heal: `/watch` now updates yt-dlp as part of the download.** A
+  yt-dlp more than a few weeks old commonly starts failing YouTube (and other
+  sites') media downloads with a 403 while metadata still works — the site
+  changed its player. v1.5.8 only *reported* this; v1.5.9 fixes it: on a
+  download failure with that signature (`http_403` / SABR / format-gone), the
+  script runs `pip install --user --upgrade yt-dlp` once and retries with the
+  fresh copy. Default on; opt out with `WATCH_YTDLP_AUTOUPDATE=0` (honored from
+  `~/.config/watch/.env` or the environment) if you pin yt-dlp deliberately.
+
+  Security-hardened per the Codex gpt-5.6-sol review (auto-install is a policy
+  shift, so it is scrutinized): the pip argv is fixed (no untrusted input) and
+  runs `--isolated` with an explicit official `--index-url`, under `python -E`
+  (+`-P` on 3.11+) in a trusted CWD with PYTHON*/PIP_* stripped from the env, so
+  a planted `pip`/`yt_dlp` module or an ambient `PIP_INDEX_URL`/`PIP_CONSTRAINT`
+  cannot redirect what installs. The upgrade is latched to at most once per
+  process, only trusts the new copy after it proves runnable (`-m yt_dlp
+  --version`), preserves the original actionable error if the retry still fails,
+  and degrades to the manual "upgrade yt-dlp" message in an offline or
+  externally-managed (PEP 668) environment. Disclosed in SKILL.md's always-loaded
+  Security section. Evidence: `docs/evidence/v1.5.9-ytdlp-selfheal/`.
+
 ## [1.5.8] — 2026-08-25
 
 ### Added
