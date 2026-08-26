@@ -23,4 +23,8 @@ cannot upgrade a brew/pipx binary, so on success it forces `python -m yt_dlp`
 `WATCH_YTDLP_AUTOUPDATE=0`.
 
 ## Post-release verification
-_Appended after tag:_ (pending)
+- Tag `v1.5.9` pushed; `release.yml` → completed/success.
+- Asset `watch.skill` live: `HTTP 200`, 157,956 bytes at
+  `https://github.com/abe238/claude-video-plus/releases/download/v1.5.9/watch.skill`.
+- Owner approved the release; 3 Codex gpt-5.6-sol rounds resolved (HIGH pip-config
+  isolation closed via `PIP_CONFIG_FILE=os.devnull` + hostile-config regression test).
