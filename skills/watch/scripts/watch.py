@@ -33,7 +33,7 @@ from acquisition import acquisition_config, public_source_url  # noqa: E402
 from config import frame_cap, get_config, read_env_file  # noqa: E402
 from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
-from frames import MAX_FPS, auto_fps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps  # noqa: E402
+from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit  # noqa: E402
 
 
 def _skill_version() -> str:
@@ -326,6 +326,54 @@ def _prune_stale_work_dirs(max_age_seconds: float = WORK_DIR_MAX_AGE_SECONDS,
     return removed
 
 
+def text_anchors_enabled(requested_detail: str, flag: bool) -> bool:
+    """--text-anchors is latched OFF whenever evidence mode was REQUESTED, so an
+    evidence→balanced fallback later in the run cannot silently re-enable a flag
+    the user was told is ignored (Codex gpt-5.6-sol blocker)."""
+    return bool(flag) and requested_detail != "evidence"
+
+
+def resolve_text_anchors(
+    *,
+    active: bool,
+    transcript_segments: list,
+    have_video: bool,
+    lo: float,
+    hi: float,
+    max_frames: int | None,
+    manual_timestamps: list,
+) -> tuple[list, str | None]:
+    """Fold bounded transcript-segment anchors into the manual --timestamps list.
+
+    Pure (no I/O) so the orchestration — budget, precedence, and fail-open — is
+    unit-testable without the whole download/extract pipeline. Anchors take only
+    ``text_anchor_limit`` of the budget left after the manual cues, so no anchor
+    ever displaces a manual timestamp, and manual+anchors never exceed the cap.
+    (Caveat: if the manual ``--timestamps`` list ALONE exceeds the cap, the
+    downstream extractor still even-samples THEM — a pre-existing behavior this
+    function neither changes nor can prevent.) Returns ``(cue_timestamps,
+    status)`` where status is a short code the caller maps to a message (or None
+    when the flag is off).
+    """
+    if not active:
+        return manual_timestamps, None
+    if not (transcript_segments and have_video):
+        return manual_timestamps, "no-captions"
+    limit = text_anchor_limit(max_frames, len(manual_timestamps))
+    if limit <= 0:
+        return manual_timestamps, "budget-spent"
+    try:
+        anchors = caption_anchor_timestamps(
+            transcript_segments, lo=lo, hi=hi, max_anchors=limit,
+        )
+    except Exception as exc:  # never let the anchor path brick a run
+        return manual_timestamps, f"error:{exc}"
+    if not anchors:
+        return manual_timestamps, "no-in-window"
+    merged = sorted(set(manual_timestamps) | set(anchors))
+    return merged, f"added:{len(anchors)}"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         prog="watch",
@@ -370,6 +418,15 @@ def main() -> int:
         help="Comma-separated absolute timestamps (SS, MM:SS, HH:MM:SS) to grab a frame at, "
              "e.g. transcript-flagged 'look here' moments. Added on top of the detail frames "
              "(reserved against the cap); with --detail transcript these become the only frames.",
+    )
+    ap.add_argument(
+        "--text-anchors",
+        action="store_true",
+        help="Force a frame at each transcript-segment start so caption/UI states that change "
+             "less than the dedup threshold are still sampled. Bounded: <=1 anchor/sec, capped at "
+             "30%% of the frame budget (100 when uncapped), explicit --timestamps keep precedence. "
+             "Needs a caption track available before frame extraction (URL captions); fails open "
+             "to normal extraction otherwise. Not applied in --detail evidence mode.",
     )
     ap.add_argument("--start", type=str, default=None, help="Range start (SS, MM:SS, or HH:MM:SS)")
     ap.add_argument("--end", type=str, default=None, help="Range end (SS, MM:SS, or HH:MM:SS)")
@@ -449,7 +506,16 @@ def main() -> int:
     config = get_config()
     detail = args.detail or str(config["detail"])
 
+    # Latch --text-anchors to the ORIGINALLY requested mode: if evidence was
+    # asked for, anchors stay off for the whole run, even after an evidence
+    # failure falls back to balanced below (else the fallback silently re-enables
+    # a flag the user was told is ignored). Codex gpt-5.6-sol blocker.
+    text_anchors_active = text_anchors_enabled(detail, getattr(args, "text_anchors", False))
+
     if detail == "evidence":
+        if getattr(args, "text_anchors", False):
+            print("[watch] --text-anchors is not applied in evidence mode "
+                  "(question-aware selection owns frame choice here) — ignored", file=sys.stderr)
         try:
             return run_evidence(args)
         except Exception as exc:
@@ -499,10 +565,13 @@ def main() -> int:
                 print(f"[watch] subtitle parse failed: {exc}", file=sys.stderr)
                 transcript_segments = []
 
-    # --timestamps needs the video for frame grabs, so it overrides the
-    # transcript-mode download skip (and forces a full, not audio-only, fetch).
-    audio_only = detail == "transcript" and not cue_timestamps
-    if detail == "transcript" and transcript_segments and not cue_timestamps:
+    # --timestamps and --text-anchors both need the video for frame grabs, so
+    # they override the transcript-mode download skip (and force a full, not
+    # audio-only, fetch). Anchors only apply when a caption track is already in
+    # hand here; without one the flag fails open and the skip still holds.
+    has_text_anchors = text_anchors_active and bool(transcript_segments)
+    audio_only = detail == "transcript" and not cue_timestamps and not has_text_anchors
+    if detail == "transcript" and transcript_segments and not cue_timestamps and not has_text_anchors:
         video_path = None
     else:
         # Opt-in video cache (WATCH_VIDEO_CACHE=1): a verified hit serves a
@@ -588,6 +657,37 @@ def main() -> int:
     frame_meta: dict = {"engine": "none", "candidate_count": 0, "selected_count": 0, "fallback": False}
     cue_frames: list[dict] = []
     cue_meta: dict = {}
+
+    # --text-anchors: derive bounded frame anchors from transcript-segment starts
+    # and fold them into the pinned-cue list. Anchors keep precedence BEHIND
+    # explicit --timestamps: they consume only the budget left after the manual
+    # cues, so no anchor can evict a manual timestamp (manual-vs-manual over the
+    # cap is still even-sampled downstream — pre-existing). The anchor count is
+    # hard-bounded before any ffmpeg runs (a hostile caption track can
+    # force neither unbounded extractions nor an unbounded anchor list — the list
+    # is intrinsically capped by video duration and then by max_anchors). Fails
+    # open (warns, normal extraction) when no caption track was available.
+    cue_timestamps, _ta_status = resolve_text_anchors(
+        active=text_anchors_active,
+        transcript_segments=transcript_segments,
+        have_video=bool(video_path),
+        lo=effective_start,
+        hi=effective_end,
+        max_frames=max_frames,
+        manual_timestamps=cue_timestamps,
+    )
+    if _ta_status:
+        if _ta_status.startswith("added:"):
+            _ta_msg = f"{_ta_status.split(':', 1)[1]} subtitle-cue anchor(s) added"
+        elif _ta_status.startswith("error:"):
+            _ta_msg = f"derivation failed ({_ta_status.split(':', 1)[1]}); normal extraction"
+        else:
+            _ta_msg = {
+                "no-captions": "no caption track available before frame extraction — normal extraction",
+                "budget-spent": "frame budget already spent on explicit --timestamps — no anchors added",
+                "no-in-window": "no in-window caption cues to anchor — normal extraction",
+            }.get(_ta_status, "normal extraction")
+        print(f"[watch] --text-anchors: {_ta_msg}", file=sys.stderr)
 
     # Transcript cues are pinned: extracted first and counted against the cap so
     # the detail engine never evicts the moments the user explicitly asked for.
@@ -742,7 +842,7 @@ def main() -> int:
         dropped = cue_meta.get("dropped_out_of_window", 0)
         drop_note = f", {dropped} dropped outside range" if dropped else ""
         print(
-            f"- **Cue frames:** {len(cue_frames)} at transcript-flagged timestamps "
+            f"- **Cue frames:** {len(cue_frames)} at transcript timestamps "
             f"(transcript-cue{drop_note})"
         )
     if frames:

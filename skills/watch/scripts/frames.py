@@ -11,6 +11,7 @@ from __future__ import annotations
 import bisect
 import functools
 import json
+import math
 import os
 import re
 import shutil
@@ -34,17 +35,26 @@ MAX_READ_DIMENSION = 1998
 # Frame-delta dedup: downscale each frame to a DEDUP_THUMB x DEDUP_THUMB
 # grayscale thumbnail and treat two frames as near-identical when their mean
 # per-pixel difference (0-255) is at or below DEDUP_THRESHOLD. Conservative on
-# purpose: only collapses frames that are visually the same shot, so a code diff
-# / scrolling terminal / slide-gaining-a-bullet survives. Unlike a within-frame
-# perceptual hash, this distinguishes flat frames (solid slides, fades) by luma.
+# purpose: collapses frames that are visually the same shot; a hard cut or a
+# large content change survives. KNOWN BLIND SPOT (measured, see the v0.7.4
+# benchmark absorbed from claude-real-video, docs/execution/v1/PROVENANCE.md):
+# a change confined to a few pixels once downscaled to 16x16 — a caption swap, a
+# single new bullet, thin ink strokes — can average at or below DEDUP_THRESHOLD
+# and be dropped. Unlike a within-frame perceptual hash, this distinguishes flat
+# frames (solid slides, fades) by luma. The v3 local-change work targets the
+# blind spot; do not weaken this comment back into a survival guarantee.
 DEDUP_THUMB = 16
 DEDUP_THRESHOLD = 2.0
 SHOWINFO_TS_RE = re.compile(r"pts_time:([0-9.]+)")
 
-# --- frame-engine v2 (WATCH_FRAME_ENGINE=v2; default v1) ----------------------
-# Prior art for the mechanisms: HUANGCHIHHUNGLeo/claude-real-video (MIT) —
-# reimplemented from the ideas, no code copied. Constants share units and are
-# tuned jointly (see tests/test_frame_engine_v2.py).
+# --- frame-engine v2 (runtime default; WATCH_FRAME_ENGINE=v1 opts out) --------
+# Default flipped to v2 after the L3 ablation gate (see resolve_engine below and
+# docs/evidence/L3-gate/). Prior art for the mechanisms:
+# HUANGCHIHHUNGLeo/claude-real-video (MIT) — reimplemented from the ideas, no
+# code copied; credited in docs/execution/v1/PROVENANCE.md. Constants share
+# units and are tuned jointly (see tests/test_frame_engine_v2.py). NOTE: v2
+# shares v1's small-signature blind spot — up to 5 changed cells of 256 (1.95%)
+# still reads as a duplicate at V2_CHANGED_PCT_THRESHOLD.
 V2_CELL_TOLERANCE = 25          # per-pixel max-channel delta that marks a cell changed
 V2_CHANGED_PCT_THRESHOLD = 2.0  # % of changed cells at/below which frames are duplicates
 V2_WINDOW_SIZE = 4              # kept-frame memory: catches A-B-A cutaways
@@ -500,6 +510,91 @@ def parse_timestamps(value: str | None) -> list[float]:
         if seconds is not None:
             out.append(float(seconds))
     return sorted(set(out))
+
+
+# Defense-in-depth scan bound: a real caption track has at most a few thousand
+# cues; a pathological file claiming millions is stopped here. The transcript is
+# already fully parsed and resident (that O(N) read predates --text-anchors and
+# serves the transcript itself); this bound and the single-pass thinning below
+# keep the anchor derivation's OWN auxiliary memory O(kept) (kept is the thinned
+# list; the cap is applied AFTER the scan), never a second full copy of the cue
+# list.
+_MAX_ANCHOR_SCAN = 200_000
+
+
+def text_anchor_limit(max_frames: int | None, manual_count: int) -> int:
+    """How many frames --text-anchors may claim, with explicit --timestamps
+    keeping precedence: the exact 30% floor of the frame cap (0 for caps 1-3),
+    never more than the budget left after the manual cues, so an automatic anchor
+    can never evict a moment the user pinned by hand. Uncapped modes get 100. A
+    return of 0 means 'no room — add no anchors'.
+
+    (Named 'limit', not 'budget', to avoid confusion with the domain's Evidence
+    budget in CONTEXT.md.)
+    """
+    if max_frames is None:
+        return 100
+    share = (3 * max_frames) // 10          # exact integer floor(0.30*cap); 0 for caps 1-3
+    return min(share, max(0, max_frames - manual_count))
+
+
+def caption_anchor_timestamps(
+    segments: list[dict],
+    *,
+    lo: float = 0.0,
+    hi: float | None = None,
+    min_spacing: float = 1.0,
+    max_anchors: int = 100,
+) -> list[float]:
+    """Bounded frame anchors from transcript-SEGMENT starts, for --text-anchors.
+
+    Segments are the post-normalization transcript units (rolling-duplicate
+    caption cues are already collapsed upstream by ``dedupe_rolling``), so each
+    start is a distinct on-screen moment — exactly what we want to anchor, and
+    strictly fewer than the raw cue count. Caption TEXT is DATA, never read here;
+    only the numeric ``start``.
+
+    Contract (security-reviewed, Codex gpt-5.6-sol):
+      * only finite starts inside ``[lo, hi]`` survive (``hi=None`` → +inf);
+      * thinned to at most one per ``min_spacing`` seconds, on the UNROUNDED time;
+      * then capped to ``max_anchors`` (computed by the caller: the exact 30%
+        floor of the frame budget, or 100 uncapped) with an over-count EVENLY
+        down-sampled (first + last kept), never head-truncated;
+      * returns a chronological list of absolute seconds (rounded 2dp), possibly
+        empty — an empty result means the caller fails open to normal extraction.
+
+    Segments are assumed chronological (parse_vtt/dedupe_rolling and the STT
+    Adapters emit them in order); a non-monotonic straggler is skipped by the
+    spacing gate rather than reordered, so no full re-sort is needed. Auxiliary
+    memory is O(kept) (the cap is applied AFTER the scan, so peak is the kept
+    list, not the final cut); ``kept <= min((hi-lo)/min_spacing, _MAX_ANCHOR_SCAN)``
+    is bounded by video duration and the scan limit. The cue list is never
+    copied or set-ified.
+    """
+    if max_anchors <= 0:
+        return []
+    hi_val = float("inf") if hi is None else float(hi)
+    kept: list[float] = []
+    last: float | None = None
+    for i, seg in enumerate(segments):
+        if i >= _MAX_ANCHOR_SCAN:
+            break
+        raw = seg.get("start")
+        if raw is None:
+            continue
+        try:
+            t = float(raw)
+        except (TypeError, ValueError):
+            continue
+        if not math.isfinite(t) or t < lo or t > hi_val:
+            continue
+        if last is not None and t < last + min_spacing:
+            continue  # within the spacing window (also rejects non-monotonic)
+        kept.append(round(t, 2))
+        last = t
+    if len(kept) > max_anchors:
+        kept = [kept[j] for j in _even_indices(len(kept), max_anchors)]
+    return kept
 
 
 def merge_frames(primary: list[dict], pinned: list[dict]) -> list[dict]:

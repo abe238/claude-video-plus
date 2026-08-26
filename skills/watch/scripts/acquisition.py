@@ -124,6 +124,21 @@ class AcquisitionError(SystemExit):
                 " in ~/.config/watch/.env, or use --detail transcript (no media"
                 " download) for this video."
             )
+        elif result.failure_class in (
+            FailureClass.HTTP_403.value,
+            FailureClass.SABR_CLIENT.value,
+            FailureClass.FORMAT_UNAVAILABLE.value,
+        ):
+            # A 403 / SABR / format-gone on media download (metadata usually still
+            # works) is the classic signature of an outdated yt-dlp after the
+            # SITE changed its player/format. Keep the text source-neutral —
+            # AcquisitionError is raised for every site, not just YouTube.
+            message += (
+                " -- the site likely changed its player or formats; an outdated"
+                " yt-dlp is the usual cause. Upgrade with `python -m pip install"
+                " -U yt-dlp` (or `pip install -U yt-dlp`) and retry. Installing a"
+                " JS runtime (deno) also helps with signature challenges."
+            )
         super().__init__(message)
 
 
@@ -575,7 +590,19 @@ def acquire_url(
             downloaded=not captions_only,
         )
 
-    failure = last_failure or FailureClass.UNKNOWN
+    # Prefer the most informative failure ACROSS attempts, not just the last: a
+    # later retry with a forced client/format can fail with a noisier,
+    # less-actionable error (UNKNOWN, FORMAT_UNAVAILABLE) that would otherwise
+    # MASK a real HTTP_403 / auth / rate-limit cause the first attempt already
+    # identified. Live-observed: a stale yt-dlp 403s on the default strategy,
+    # then the forced-format retry reports UNKNOWN, so users saw "failed:
+    # unknown" for what is really an upgrade-yt-dlp situation.
+    informative = next(
+        (attempt.failure_class for attempt in attempts
+         if attempt.failure_class and attempt.failure_class != FailureClass.UNKNOWN.value),
+        None,
+    )
+    failure_value = informative or (last_failure or FailureClass.UNKNOWN).value
     return AcquisitionResult(
         state="unavailable" if captions_only else "fatal",
         media_path=None,
@@ -584,6 +611,6 @@ def acquire_url(
         metadata=metadata or {"url": public_source_url(url)},
         source_identity=source_identity(url),
         attempts=attempts,
-        failure_class=failure.value,
+        failure_class=failure_value,
         downloaded=False,
     )

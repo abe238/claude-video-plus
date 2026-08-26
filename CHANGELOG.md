@@ -2,6 +2,53 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.8] — 2026-08-25
+
+### Added
+
+- **`--text-anchors`: bounded transcript-segment frame anchors.** Pins a frame at
+  each transcript-segment start, targeting the measured dedup blind spot (caption
+  swaps, screen-recording state changes, thin UI text) where a change is too
+  small for the frame-delta pass to keep. Hard-bounded so a pathological or
+  hostile caption track can force neither unbounded frame grabs nor an unbounded
+  anchor list: single-pass derivation with a 200k scan bound, anchors thinned to
+  ≤1/sec, then capped to the exact 30% floor of the frame budget (`floor(0.30 ×
+  cap)`, so a cap of 1–3 yields none; 100 when uncapped). Explicit `--timestamps`
+  keep precedence — anchors consume only the budget left after manual cues and
+  can never evict one. Only the numeric segment time is read; caption text stays
+  data. Reserved against the cap like `--timestamps`; honors `--start/--end`;
+  fails open to normal extraction when no caption track is available before frame
+  extraction; latched off in `--detail evidence` (including after an
+  evidence→balanced fallback). Absorbed from `HUANGCHIHHUNGLeo/claude-real-video`
+  (MIT), re-scoped to these bounds per the Codex gpt-5.6-sol review. Evidence:
+  `docs/evidence/v1.5.8-text-anchors/`.
+
+### Fixed
+
+- **YouTube download failures now name the real cause and the fix.** An outdated
+  yt-dlp (a stale build 403s on YouTube media downloads after a player change)
+  surfaced as an unactionable `acquisition failed: unknown`, because the
+  multi-strategy retry loop reported the last attempt's `unknown` and masked the
+  first attempt's `http_403`. Acquisition now surfaces the most informative
+  failure across attempts, and a 403 / SABR / format-gone failure carries an
+  actionable remediation (`pip install -U yt-dlp`, JS-runtime hint). Discovered
+  live by the fork-watch acquisition battery (installed 2026.07.04 broken;
+  2026.08.19 works).
+
+### Changed
+
+- Added the missing PROVENANCE.md row for the v2 frame engine (absorbed from the
+  same project at v1.1.0, credited in code + CHANGELOG but not the provenance
+  table), pinned to `@6f6c25f`. Corrected a stale `frames.py` comment (runtime
+  default is v2, not v1) and an overclaiming dedup comment that promised a
+  survival the small-signature comparator does not guarantee.
+
+### Credits
+
+Mechanism prior art: [claude-real-video](https://github.com/HUANGCHIHHUNGLeo/claude-real-video)
+(MIT) — `--text-anchors` concept (@48e1b7c) and the v2 frame-engine dedup design
+(@6f6c25f); both reimplemented, no code copied.
+
 ## [1.5.7] — 2026-08-22
 
 ### Changed

@@ -1,0 +1,14 @@
+# Live URL trace — text-anchors (JFK Rice, real yt-dlp 2026.08.19 acquisition)
+
+## Default (balanced, --max-frames 20)
+- **Frames:** 20 selected from 85 candidates (scene, 37 near-duplicates dropped, full range, budget 20, cap 20)
+## --text-anchors
+- **Frames:** 14 selected from 83 candidates (scene, 37 near-duplicates dropped, full range, budget 20, cap 14)
+- **Cue frames:** 6 at transcript timestamps (transcript-cue)
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a5d0488d-5e1d-4365-9acd-940bca550fe5/scratchpad/tanchor-live/anchored
+[watch] --text-anchors: 6 subtitle-cue anchor(s) added
+## --text-anchors + --timestamps 30,600,1000 (manual precedence)
+- **Frames:** 11 selected from 83 candidates (scene, 37 near-duplicates dropped, full range, budget 20, cap 11)
+- **Cue frames:** 9 at transcript timestamps (transcript-cue)
+[watch] working dir: /private/tmp/claude-501/-Users-abediaz/a5d0488d-5e1d-4365-9acd-940bca550fe5/scratchpad/tanchor-live/both
+[watch] --text-anchors: 6 subtitle-cue anchor(s) added

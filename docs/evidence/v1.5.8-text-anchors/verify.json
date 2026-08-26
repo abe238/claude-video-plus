@@ -1,0 +1,138 @@
+{
+  "release": "1.5.8",
+  "harness": "/Users/abediaz/Documents/Github/claude-video-plus/docs/evidence/v1.5.8-text-anchors/run-verification.py",
+  "arms": {
+    "A_default_vs_B_anchors_no_captions": {
+      "frames_default": [
+        [
+          "00:00",
+          "uniform"
+        ],
+        [
+          "00:01",
+          "uniform"
+        ],
+        [
+          "00:02",
+          "uniform"
+        ],
+        [
+          "00:03",
+          "uniform"
+        ],
+        [
+          "00:04",
+          "uniform"
+        ],
+        [
+          "00:05",
+          "uniform"
+        ],
+        [
+          "00:06",
+          "uniform"
+        ],
+        [
+          "00:07",
+          "uniform"
+        ],
+        [
+          "00:08",
+          "uniform"
+        ],
+        [
+          "00:09",
+          "uniform"
+        ],
+        [
+          "00:10",
+          "uniform"
+        ],
+        [
+          "00:11",
+          "uniform"
+        ]
+      ],
+      "frames_anchored_no_captions": [
+        [
+          "00:00",
+          "uniform"
+        ],
+        [
+          "00:01",
+          "uniform"
+        ],
+        [
+          "00:02",
+          "uniform"
+        ],
+        [
+          "00:03",
+          "uniform"
+        ],
+        [
+          "00:04",
+          "uniform"
+        ],
+        [
+          "00:05",
+          "uniform"
+        ],
+        [
+          "00:06",
+          "uniform"
+        ],
+        [
+          "00:07",
+          "uniform"
+        ],
+        [
+          "00:08",
+          "uniform"
+        ],
+        [
+          "00:09",
+          "uniform"
+        ],
+        [
+          "00:10",
+          "uniform"
+        ],
+        [
+          "00:11",
+          "uniform"
+        ]
+      ],
+      "identical": true,
+      "fail_open_note": true
+    },
+    "C_manual_timestamps": {
+      "cue_frames": 2,
+      "total_frames": 5,
+      "cap": 6,
+      "cap_respected": true
+    },
+    "text_anchor_tests": {
+      "cmd": "-m pytest -q tests/test_text_anchors.py",
+      "exit": 0,
+      "result": "24 passed in 0.13s"
+    },
+    "acquisition_tests": {
+      "cmd": "-m pytest -q tests/test_acquisition.py",
+      "exit": 0,
+      "result": "18 passed in 0.25s"
+    },
+    "full_suite": {
+      "cmd": "-m pytest -q",
+      "exit": 0,
+      "result": "886 passed in 44.21s"
+    }
+  },
+  "environment": {
+    "python": "3.14.4",
+    "platform": "darwin",
+    "ffmpeg": "ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "yt_dlp": "2026.07.04"
+  },
+  "pre_release_head": "df6432198b835dfc4305e64efec71fe84c199330"
+}

@@ -4,7 +4,7 @@ description: Watch, analyze, summarize, or answer questions about a video — a 
 allowed-tools: Bash, Read, AskUserQuestion
 license: MIT
 metadata:
-  version: "1.5.7"
+  version: "1.5.8"
   homepage: https://abe238.github.io/claude-video-plus/
   repository: https://github.com/abe238/claude-video-plus
   author: abe238
@@ -101,13 +101,13 @@ Optional flags:
 - `--detail transcript|efficient|balanced|token-burner|evidence` — fidelity/speed dial; see the mode table above. `evidence` requires `--question`.
 - `--question "…"` — the user's question, verbatim. Required by `--detail evidence`: the script selects whole topical chapters relevant to the question (plus numeric and visual guards) instead of sampling the full timeline. Benchmarked: quality parity at a 56% mean token reduction in the sealed confirmatory run; targeted questions save 65–88%. Summaries keep the full transcript; videos under 9 minutes (540s) automatically use the original pipeline (short videos are already cheap to read in full, and evidence mode measured worse there); any other failure falls back to `balanced`.
 - `--start T` / `--end T` — focus on a section. Accepts `SS`, `MM:SS`, or `HH:MM:SS`. When either is set, fps auto-scales denser (see "Focusing on a section" below).
-- `--timestamps T1,T2,…` — grab a frame at each of these absolute timestamps (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
+- `--timestamps T1,T2,…` — grab a frame at each absolute timestamp (`SS`, `MM:SS`, or `HH:MM:SS`). Use this after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. See "Transcript-cue frames" below.
 - `--max-frames N` — override the preset cap for tighter token budget (e.g. `--max-frames 40`)
 - `--no-whisper` — disable the Whisper fallback entirely (frames-only if no captions)
 
 **Video cache (experimental):** `WATCH_VIDEO_CACHE=1` persists media from allowlisted YouTube hosts only in `~/.cache/watch/video-cache/` (verified, bounded, 30-day TTL). Signed, private, cookie-authenticated, or credential-bearing sources are never cached — no override. Purge: `python3 "${SKILL_DIR}/scripts/video_cache.py" --purge`.
 
-**Any other flag** (`--timestamps`, `--resolution`, `--fps`, `--out-dir`, `--stt`, `--whisper`, `--allow-remote-transcription`, `--no-dedup`, `--request-json`, `--diagnostics-json`, `--export-bundle`/`--verify-bundle`/`--replay-bundle`, `--semantic`): **`Read ${SKILL_DIR}/references/flags.md` before using it.** Do not guess flag names or values.
+**Any other flag** (`--timestamps`, `--text-anchors`, `--resolution`, `--fps`, `--out-dir`, `--stt`, `--whisper`, `--allow-remote-transcription`, `--no-dedup`, `--request-json`, `--diagnostics-json`, `--export-bundle`/`--verify-bundle`/`--replay-bundle`, `--semantic`): **`Read ${SKILL_DIR}/references/flags.md` before using it.** Do not guess flag names or values.
 ### Focusing on a section (higher frame rate)
 
 When the user asks about a specific moment — "what happens at the 2 minute mark?", "zoom into 0:45 to 1:00", "the first 10 seconds" — pass `--start` and/or `--end` (`SS`, `MM:SS`, or `HH:MM:SS`). The script switches to denser focused-mode budgets, the transcript is auto-filtered to the same range, and frame timestamps stay absolute (real video timeline, not offset-from-start). Focused mode is also the right call for any video longer than ~10 minutes where the question is about a specific part, and for re-runs after a full scan lacked detail in some region.

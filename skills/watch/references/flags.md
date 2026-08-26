@@ -10,6 +10,16 @@ using any flag not listed inline there.
 - `--fps F` — override auto-fps (clamped to 2 fps max)
 - `--no-dedup` — keep near-duplicate frames. By default a frame-delta pass drops frames visually near-identical to the previous kept one (held slides, static screen recordings, paused video) so the frame budget goes to distinct content; the report's **Frames** line notes how many were dropped. Pass this only if the user needs every sampled frame (e.g. judging subtle frame-to-frame motion).
 - `--timestamps T1,T2,…` — grab a frame at each absolute timestamp (`SS`, `MM:SS`, or `HH:MM:SS`). Use after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. Full workflow below.
+- `--text-anchors` — automatically pin a frame at each transcript-segment start. Use for caption-driven or slide/screen-recording content where the meaning changes faster than the pixels: a new caption card, a single new bullet, or thin UI text can change too little for the dedup pass to keep a frame, so those states are lost. Anchoring at segment starts recovers them. Full behavior below.
+
+## Transcript-segment anchors (`--text-anchors`)
+
+Complements `--timestamps` (which you place by hand) by deriving anchors *automatically* from the caption track — one frame at each transcript-segment start. Segments are the post-normalization units (rolling-duplicate caption cues are already collapsed), so each start is a distinct on-screen moment. It targets the measured dedup blind spot (caption swaps, screen-recording state changes) where a change is too small to survive the frame-delta pass.
+
+Behavior:
+- **Needs captions available before frame extraction** — a URL caption track, parsed up front. On a source with no early caption track (e.g. a raw local screen recording with no sidecar), the flag **fails open**: it prints a note and runs normal extraction. It is **not applied** in `--detail evidence` (question-aware selection owns frame choice there), and stays off even if evidence mode falls back to balanced.
+- **Bounded by design.** Anchors are thinned to **at most one per second**, then capped to the **exact 30% floor of the frame budget** (`floor(0.30 × cap)`, so a cap of 1–3 yields none) — or **100** when uncapped — and evenly down-sampled if over. Explicit `--timestamps` keep **precedence**: anchors may consume only the budget left after your manual cues, and can never evict one. Derivation is single-pass and bounded in memory, so even a pathological or hostile caption track can force neither unbounded frame grabs nor an unbounded anchor list. Only the numeric segment time is read; caption text is data, never a command.
+- **Pinned like `--timestamps`.** Anchor frames (`reason=transcript-cue`) are reserved against the cap before the detail engine runs and merged chronologically; they honor `--start/--end` (out-of-window anchors dropped). Combine with `--timestamps` to add hand-picked moments on top.
 
 ## Transcript-cue frames (`--timestamps`)
 

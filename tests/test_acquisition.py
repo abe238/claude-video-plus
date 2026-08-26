@@ -57,6 +57,35 @@ def test_default_success_is_first_and_does_not_retry(tmp_path: Path):
     assert result.attempts[0].outcome == "success"
 
 
+def test_informative_403_is_not_masked_by_a_noisier_retry(tmp_path: Path):
+    # The default strategy 403s (stale yt-dlp); a later forced-format retry emits
+    # an unclassifiable error. The aggregate failure_class must stay http_403,
+    # not degrade to "unknown". Live-observed regression.
+    seen: list[int] = []
+
+    def runner(cmd, **_kwargs):
+        seen.append(1)
+        if len(seen) == 1:
+            return completed(cmd, code=1, stderr="ERROR: unable to download video data: HTTP Error 403: Forbidden")
+        return completed(cmd, code=1, stderr="ERROR: something weird happened with no known signature")
+
+    result = acquire(tmp_path, runner)
+    assert result.state == "fatal"
+    assert len(seen) > 1  # it did retry past the first 403
+    assert result.failure_class == acquisition.FailureClass.HTTP_403.value
+
+
+def test_acquisition_error_403_message_points_at_yt_dlp_upgrade():
+    result = acquisition.AcquisitionResult(
+        state="fatal", media_path=None, subtitle_candidates=[], selected_subtitle=None,
+        metadata={}, source_identity="yt:x", failure_class=acquisition.FailureClass.HTTP_403.value,
+    )
+    err = acquisition.AcquisitionError(result)
+    msg = str(err)
+    assert "http_403" in msg
+    assert "pip install -U yt-dlp" in msg  # actionable remediation
+
+
 def test_stale_media_cannot_make_failed_attempt_succeed(tmp_path: Path):
     (tmp_path / "video.mp4").write_bytes(b"stale partial")
 
