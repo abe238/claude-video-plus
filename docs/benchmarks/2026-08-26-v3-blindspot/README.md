@@ -79,6 +79,54 @@ crv's v0.7.3→v0.7.4 effort, tuned against this corpus AND real footage.
   over-keep on real grainy footage (a jfk-rice-style clip) — the same staged
   bar v2 cleared.
 
+## Result 5 — v3 detector is achievable, but with a real cost/risk profile
+
+A local **strip-rescue** detector (`v3_tune.py`: when the global comparator calls
+a frame duplicate, keep it if any horizontal strip differs by ≥ keep% of cells
+beyond a lower local tolerance) tuned against the corpus + a real screencast:
+
+| signature | corpus (cap / ui / pc) | real screencast: v3 vs v2 frames | pure-Python dedup time (15-min clip) |
+|---|---|---|---|
+| 64px, keep 6%, tol 12 | **4** / 6 / 6 | 298 vs 194 (**×1.5**) | 12.5 s |
+| **96px, keep 5%, tol 12** | **6 / 6 / 6** ✓ | 325 vs 211 (**×1.5**) | 21.7 s |
+| 128px, keep 5%, tol 12 | 6 / 6 / 6 | 334 vs 212 (×1.6) | 35.3 s |
+| 128px, keep 5%, tol 10 | 6 / 6 / 6 | 449 vs 212 (×2.1) | 29.3 s |
+
+**96px is the sweet spot**: recovers all corpus states, holds the positive
+control. But note the trade-offs it carries:
+- **~×1.5 more frames/tokens** on static caption/screencast content (the recovered
+  states are real, but this is more cost, not less — the opposite of a savings win).
+- **~20 s of pure-Python dedup on a 15-min video** (v2 is ~1–2 s); 128px (~30 s+)
+  is too slow, so 96px is the viability ceiling in stdlib (no Pillow at runtime).
+- **Grain risk UNVALIDATED**: tol 12 is a low local threshold; on grainy real
+  footage it may fire on noise and over-keep (crv's own jfk-rice went 53→116 when
+  under-guarded). No grainy clip was available locally to test this — a required
+  gate before any default-flip.
+
+## Result 6 — overlap with the already-shipped `--text-anchors`
+
+For **captioned** content, `--text-anchors` (v1.5.8) already recovers exactly
+these states by pinning frames at caption cue times — cheaper and more precise
+than a 96px pixel scan, and it does not touch the default path. v3's unique value
+is therefore narrower: **uncaptioned** screencasts/slide videos with no caption
+track, where pixel detection is the only signal.
+
+## Recommendation (revised after the feasibility spike)
+
+- **Build v3 as an opt-in engine (`WATCH_FRAME_ENGINE=v3`, default-off)** at
+  96px strip-rescue, documented as "denser recovery for caption/UI content that
+  has no caption track, at ~×1.5 frames and higher dedup cost". Never a silent
+  default-flip.
+- **Gate the default-flip** on real grainy-footage validation (no over-keep) AND
+  a downstream answer-quality win vs `83da59f`, the same bar v2 cleared.
+- **Prefer `--text-anchors` for captioned content** — v3 is the fallback for the
+  uncaptioned case only.
+
+Net: the blind spot is real and v3 is feasible, but its cost/grain-risk profile
+and the `--text-anchors` overlap make it an opt-in fallback, not a default. The
+value-per-effort is much lower than v1.5.8/v1.5.9 were — worth an owner decision
+before the full build.
+
 ## Reproduce
 
 ```
