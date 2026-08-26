@@ -23,4 +23,7 @@
 
 ## Post-release verification
 
-_Appended after tag:_ (pending)
+- Tag `v1.5.8` pushed; `release.yml` run `32929487610` → completed/success.
+- Release asset `watch.skill` live: `HTTP 200`, 154,886 bytes at
+  `https://github.com/abe238/claude-video-plus/releases/download/v1.5.8/watch.skill`.
+- Codex gpt-5.6-sol final verdict (round 4): APPROVE — "Ship v1.5.8."
