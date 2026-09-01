@@ -549,7 +549,18 @@ def build_yt_dlp_command(
     max_filesize: str | None = None,
     ignore_config: bool = True,
 ) -> list[str]:
-    normal = "ba/bestaudio" if audio_only else "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
+    # Format ladder (video): strict <=720 first, then <=?720 rungs that also keep
+    # formats carrying NO resolution metadata (HLS / generic-extractor manifests),
+    # then a BOUNDED worst-rendition tail (wv*+ba/w). The old unbounded `bv+ba/b`
+    # tail would fetch a 4K upload whenever no <=720 rendition was tagged — slow,
+    # bandwidth-heavy, and a needless WATCH_MAX_FILESIZE trip. (fork-watch:
+    # androsland/moviola.)
+    normal = (
+        "ba/bestaudio" if audio_only
+        else "bv*[height<=720]+ba/b[height<=720]"
+             "/bv*[height<=?720]+ba/b[height<=?720]"
+             "/wv*+ba/w"
+    )
     if final_format_fallback and not audio_only:
         normal = f"{normal}/18"
     cmd = [*ytdlp_cmd()]

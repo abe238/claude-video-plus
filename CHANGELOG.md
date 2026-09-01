@@ -2,6 +2,41 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.10] — 2026-08-31
+
+Three security-clean gaps absorbed from `androsland/claude-video` ("moviola", a
+fork descending from this repo's lineage), each closing a real reliability/speed
+hole verified present in our code.
+
+### Fixed
+
+- **Download format ladder is now resolution-bounded.** The video format tail was
+  an unbounded `bv+ba/b`, so a source with no `<=720` rendition tagged (e.g. a 4K
+  upload) would download in **4K** on a size-capped path — slow, bandwidth-heavy,
+  and a needless `WATCH_MAX_FILESIZE` trip. The ladder now adds `<=?720` rungs
+  (which also keep HLS / generic-extractor formats that carry no resolution
+  metadata) and a bounded `wv*+ba/w` worst-rendition tail. Live-verified: picks
+  720p on a 4K-available video where the old tail picked 2160p.
+- **Cloud STT retry is bounded against a hostile/misbehaving endpoint.**
+  `_retry_after` is clamped to ≤60s and rejects NaN/inf/negative (a
+  `Retry-After: 86400` could otherwise park a run for a day, and `"nan"` would
+  break `time.sleep`); `_read_error_body` now reads at most 8 KB (an unbounded
+  error body could MemoryError the handler). Gated cloud path only; the
+  loopback/local path was already safe.
+
+### Added
+
+- **Weekly yt-dlp drift canary** (`.github/workflows/drift.yml`). Installs the
+  LATEST yt-dlp on a Monday cron and runs the suite plus a REAL smoke download,
+  so a YouTube player break (the v1.5.9 incident: metadata works, media 403s —
+  which our network-free suite cannot catch) is detected proactively. Schedule /
+  manual-dispatch only, `contents: read`, never gates a PR.
+
+Credit: [androsland/claude-video](https://github.com/androsland/claude-video)
+(MIT) — all three independently reimplemented, no code copied. Their bidi
+`balance`/`stderr_block` work was NOT absorbed: we strip bidi controls (category
+Cf) wholesale, so there is nothing to balance.
+
 ## [1.5.9] — 2026-08-25
 
 ### Added

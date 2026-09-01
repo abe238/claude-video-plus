@@ -155,3 +155,33 @@ class TestTranscribeChunks:
 
         with pytest.raises(SystemExit):
             whisper.transcribe_chunks(chunks, always_fail)
+
+
+class _FakeHTTPError:
+    """Minimal stand-in for urllib.error.HTTPError for the retry/error-body helpers."""
+    def __init__(self, retry_after=None, body=b""):
+        self.headers = {"Retry-After": retry_after} if retry_after is not None else {}
+        self._body = body
+
+    def read(self, amt=-1):
+        return self._body if amt is None or amt < 0 else self._body[:amt]
+
+
+class TestCloudRetryHardening:
+    def test_retry_after_is_clamped(self):
+        # a hostile server must not park the run for a day
+        assert whisper._retry_after(_FakeHTTPError("86400")) == whisper.MAX_RETRY_DELAY
+        assert whisper._retry_after(_FakeHTTPError("30")) == 30.0
+
+    def test_retry_after_rejects_nonfinite_and_negative(self):
+        for bad in ("nan", "inf", "-inf", "-5"):
+            assert whisper._retry_after(_FakeHTTPError(bad)) is None  # -> exponential backoff
+        assert whisper._retry_after(_FakeHTTPError("not-a-number")) is None  # HTTP-date/garbage
+        assert whisper._retry_after(_FakeHTTPError()) is None            # header absent
+
+    def test_error_body_read_is_bounded(self):
+        huge = b"x" * (5_000_000)  # a server returning a giant error body
+        out = whisper._read_error_body(_FakeHTTPError(body=huge))
+        # read is capped at MAX_ERROR_BODY_BYTES, then the snippet is sliced to 400
+        assert len(out) <= 400 + 4  # " — " prefix + up to 400 chars
+        assert whisper._read_error_body(_FakeHTTPError(body=b"")) == ""

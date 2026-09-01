@@ -51,11 +51,37 @@ def test_default_success_is_first_and_does_not_retry(tmp_path: Path):
 
     assert len(calls) == 1
     assert "--extractor-args" not in calls[0]
-    assert calls[0][calls[0].index("-f") + 1] == "bv*[height<=720]+ba/b[height<=720]/bv+ba/b"
+    assert calls[0][calls[0].index("-f") + 1] == (
+        "bv*[height<=720]+ba/b[height<=720]"
+        "/bv*[height<=?720]+ba/b[height<=?720]"
+        "/wv*+ba/w"
+    )
     assert result.state == "success"
     assert result.selected_strategy == "default"
     assert result.metadata["url"] == "https://www.youtube.com/watch"
     assert result.attempts[0].outcome == "success"
+
+
+def test_video_format_ladder_is_resolution_bounded(tmp_path: Path):
+    # fork-watch (androsland/moviola): the ladder must never fall through to an
+    # unbounded best-video tail (which fetches a 4K upload on a size-capped path),
+    # and must keep formats that carry NO resolution metadata (<=?720 rungs).
+    calls: list[list[str]] = []
+
+    def runner(cmd, **_kw):
+        calls.append(list(cmd))
+        (tmp_path / "video.mp4").write_bytes(b"m")
+        (tmp_path / "video.info.json").write_text(json.dumps({"title": "d"}), encoding="utf-8")
+        return completed(cmd)
+
+    acquire(tmp_path, runner)
+    fmt = calls[0][calls[0].index("-f") + 1]
+    assert "[height<=?720]" in fmt          # unknown-resolution HLS formats kept
+    assert "/wv*+ba/w" in fmt               # bounded worst-rendition tail
+    assert "/bv+ba/b" not in fmt            # the old UNBOUNDED tail is gone
+    # every rung either caps height or is the explicit worst rendition
+    for rung in fmt.split("/"):
+        assert ("height<=" in rung) or rung.startswith("w"), rung
 
 
 def test_informative_403_is_not_masked_by_a_noisier_retry(tmp_path: Path):

@@ -1,0 +1,55 @@
+name: Drift canary
+
+# Weekly early-warning for yt-dlp / YouTube breakage. yt-dlp ships ~weekly and
+# YouTube changes its player often (a stale yt-dlp 403s on media downloads while
+# metadata still works — the v1.5.9 incident). This canary installs the LATEST
+# yt-dlp on a schedule and (a) runs the suite against it (code-level integration)
+# and (b) does a REAL smoke download (the network-free suite cannot catch a
+# player break). A red run emails the owner BEFORE a user hits it.
+#
+# Schedule/dispatch ONLY — never push/pull_request, so upstream PyPI movement can
+# never gate a PR merge (a canary, not a required check). fork-watch:
+# androsland/moviola.
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"   # Mondays 09:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Install media tools (LATEST yt-dlp, unpinned on purpose)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check pytest "yt-dlp[default]"
+          echo "yt-dlp $(yt-dlp --version)"
+      - name: Suite against latest yt-dlp (code-level integration)
+        run: python -m pytest -q
+      - name: Real download smoke (catches a YouTube player break)
+        run: |
+          set -x
+          URL="https://www.youtube.com/watch?v=WZyRbnpGyzQ"   # JFK Rice, public, long-lived
+          # metadata must resolve AND a tiny media section must actually download.
+          yt-dlp --no-warnings -J "$URL" >/dev/null
+          for attempt in 1 2; do
+            if yt-dlp --no-warnings -f "worstaudio/worst" \
+                 --download-sections "*0-3" -o "smoke.%(ext)s" "$URL"; then
+              exit 0
+            fi
+            echo "smoke download attempt $attempt failed; retrying" >&2
+            sleep 15
+          done
+          echo "::error::yt-dlp media download failed on latest yt-dlp — likely a YouTube player break; upgrade/patch the acquisition path." >&2
+          exit 1

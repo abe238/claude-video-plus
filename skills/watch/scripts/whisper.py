@@ -374,6 +374,11 @@ _build_multipart = build_multipart
 MAX_ATTEMPTS = 4       # initial + 3 retries
 MAX_429_RETRIES = 2
 RETRY_BASE_DELAY = 2.0
+# A misbehaving or hostile cloud endpoint must not be able to park a run for
+# hours via `Retry-After: 86400` (or NaN/negative), nor MemoryError the handler
+# with a gigabyte error body. Both are bounded on the gated cloud STT path.
+MAX_RETRY_DELAY = 60.0
+MAX_ERROR_BODY_BYTES = 8192
 
 
 def _post_whisper(
@@ -473,7 +478,7 @@ def _post_whisper(
 
 def _read_error_body(exc: urllib.error.HTTPError) -> str:
     try:
-        body = exc.read()
+        body = exc.read(MAX_ERROR_BODY_BYTES)  # bounded: a huge body can't MemoryError us
     except Exception:
         return ""
     if not body:
@@ -489,9 +494,12 @@ def _retry_after(exc: urllib.error.HTTPError) -> float | None:
     if not header:
         return None
     try:
-        return float(header)
+        value = float(header)
     except ValueError:
-        return None
+        return None  # HTTP-date form (or garbage): fall back to exponential backoff
+    if not math.isfinite(value) or value < 0:
+        return None  # NaN/inf/negative would break time.sleep or park the run
+    return min(value, MAX_RETRY_DELAY)  # clamp so a hostile server can't stall for hours
 
 
 def shift_segments(segments: list[dict], offset_seconds: float) -> list[dict]:
