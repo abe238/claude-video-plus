@@ -27,10 +27,12 @@ hole verified present in our code.
 ### Added
 
 - **Weekly yt-dlp drift canary** (`.github/workflows/drift.yml`). Installs the
-  LATEST yt-dlp on a Monday cron and runs the suite plus a REAL smoke download,
-  so a YouTube player break (the v1.5.9 incident: metadata works, media 403s —
-  which our network-free suite cannot catch) is detected proactively. Schedule /
-  manual-dispatch only, `contents: read`, never gates a PR.
+  LATEST yt-dlp on a Monday cron and runs the suite plus a YouTube
+  metadata-extraction smoke (`-J`), catching the common extractor/nsig break
+  before a user does. A datacenter-IP bot-wall is treated as a skip (not a
+  failure) so it never cries wolf; the media-download-only break is covered at
+  runtime by the yt-dlp self-heal. Schedule / manual-dispatch only,
+  `contents: read`, never gates a PR.
 
 Credit: [androsland/claude-video](https://github.com/androsland/claude-video)
 (MIT) — all three independently reimplemented, no code copied. Their bidi

@@ -1,11 +1,20 @@
 name: Drift canary
 
 # Weekly early-warning for yt-dlp / YouTube breakage. yt-dlp ships ~weekly and
-# YouTube changes its player often (a stale yt-dlp 403s on media downloads while
-# metadata still works — the v1.5.9 incident). This canary installs the LATEST
-# yt-dlp on a schedule and (a) runs the suite against it (code-level integration)
-# and (b) does a REAL smoke download (the network-free suite cannot catch a
-# player break). A red run emails the owner BEFORE a user hits it.
+# YouTube changes its player often. This canary installs the LATEST yt-dlp on a
+# schedule and (a) runs the suite against it (code-level integration) and (b)
+# does a YouTube METADATA-extraction smoke — which exercises the extractor + nsig
+# challenge (the most common break) without a media download.
+#
+# Why metadata, not a media download: YouTube bot-walls datacenter IPs ("Sign in
+# to confirm you're not a bot"), so a real media download from GitHub's runners
+# ALWAYS fails regardless of product health — it would cry-wolf every week. A
+# bot-wall is therefore treated as a SKIP, not a failure; only a genuine
+# extractor error fails the run. The pure media-403 break (v1.5.9: metadata
+# works, media 403s) is inherently untestable from a datacenter IP and is instead
+# covered at runtime by the yt-dlp self-heal on the user's own machine.
+#
+# A red run emails the owner BEFORE a user hits it.
 #
 # Schedule/dispatch ONLY — never push/pull_request, so upstream PyPI movement can
 # never gate a PR merge (a canary, not a required check). fork-watch:
@@ -37,19 +46,21 @@ jobs:
           echo "yt-dlp $(yt-dlp --version)"
       - name: Suite against latest yt-dlp (code-level integration)
         run: python -m pytest -q
-      - name: Real download smoke (catches a YouTube player break)
+      - name: YouTube extraction smoke (metadata — catches extractor/nsig breaks)
         run: |
-          set -x
           URL="https://www.youtube.com/watch?v=WZyRbnpGyzQ"   # JFK Rice, public, long-lived
-          # metadata must resolve AND a tiny media section must actually download.
-          yt-dlp --no-warnings -J "$URL" >/dev/null
           for attempt in 1 2; do
-            if yt-dlp --no-warnings -f "worstaudio/worst" \
-                 --download-sections "*0-3" -o "smoke.%(ext)s" "$URL"; then
+            if yt-dlp --no-warnings -J "$URL" >/dev/null 2>err.txt; then
+              echo "metadata extraction OK on yt-dlp $(yt-dlp --version)"
               exit 0
             fi
-            echo "smoke download attempt $attempt failed; retrying" >&2
+            if grep -qiE "confirm you.?re not a bot|sign in to confirm" err.txt; then
+              echo "::warning::YouTube bot-walled the CI datacenter IP — extraction not verifiable here; skipping (not a product break)."
+              exit 0
+            fi
+            echo "extraction attempt $attempt failed (not a bot-wall); retrying" >&2
             sleep 15
           done
-          echo "::error::yt-dlp media download failed on latest yt-dlp — likely a YouTube player break; upgrade/patch the acquisition path." >&2
+          cat err.txt >&2
+          echo "::error::yt-dlp YouTube metadata extraction failed on latest yt-dlp — likely an extractor/nsig break; patch the acquisition path." >&2
           exit 1
