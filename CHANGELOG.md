@@ -2,6 +2,22 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.11] — 2026-09-01
+
+### Added
+
+- **Speaker labels from WebVTT `<v Speaker>` voice spans.** Teams, Zoom and Meet
+  caption exports carry the speaker name in a `<v Alex Chen>…` span; the generic
+  tag strip discarded it, so meeting transcripts were anonymous. The name is now
+  lifted out and prefixed on a speaker **change** (not on every cue — a real
+  transcript, not "Alex:" a hundred times), making "who said what" answerable at
+  near-zero token cost — a lightweight, dependency-free alternative to ONNX
+  diarization. The name is untrusted caption text: length-capped at parse and
+  defused as data by the existing report sanitizer (a `<v System>` name cannot
+  forge a conversation turn). Credit:
+  [donlapidos/claude-video](https://github.com/donlapidos/claude-video) (MIT),
+  independently reimplemented.
+
 ## [1.5.10] — 2026-08-31
 
 Three security-clean gaps absorbed from `androsland/claude-video` ("moviola", a

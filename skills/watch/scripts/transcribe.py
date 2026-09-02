@@ -17,6 +17,20 @@ from download import strip_invisible
 TS_VALUE = r"(?:(\d{1,2}):)?(\d{2}):(\d{2})[.,](\d{3})"
 TS_RE = re.compile(rf"^\s*{TS_VALUE}\s+-->\s+{TS_VALUE}(?:\s+.*)?$")
 TAG_RE = re.compile(r"<[^>]+>")
+# WebVTT voice span: `<v Alex Chen>text</v>` (optionally `<v.loud Alex>`). Teams,
+# Zoom and Meet exports carry the speaker name here; the generic TAG_RE strip
+# below would discard it, so lift the name out first to keep "who said what".
+# (fork-watch: donlapidos.) The name is untrusted caption text — length-capped
+# here and defused again at the report chokepoint (sanitize_for_report).
+#
+# The class-token char class EXCLUDES `.` (`[^\s>.]`, not `[^\s>]`): a class is
+# dot-delimited (`.loud.fast`), and letting it swallow `.` made the `(?:…)*`
+# ambiguous → catastrophic backtracking (ReDoS) on a crafted `<v.a.a.a…` line
+# with no close. With no-dot class bodies the groups are fixed and matching is
+# linear; the search is also windowed to the line head where a real `<v>` sits.
+VOICE_RE = re.compile(r"<v(?:\.[^\s>.]+)*\s+([^>]+?)\s*>", re.IGNORECASE)
+_MAX_SPEAKER_CHARS = 80
+_VOICE_SEARCH_WINDOW = 256  # a real voice tag opens the cue line; bound the scan
 
 MIN_OVERLAP = 8
 
@@ -56,6 +70,7 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
     lines = text.splitlines()
 
     segments: list[dict] = []
+    prev_speaker: str | None = None
     i = 0
     while i < len(lines):
         match = TS_RE.match(lines[i])
@@ -73,13 +88,32 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
         i += 1
 
         cue_lines: list[str] = []
+        speaker: str | None = None
         while i < len(lines) and lines[i].strip():
-            cleaned = TAG_RE.sub("", lines[i]).strip()
+            raw = lines[i]
+            # ponytail: first voice tag in the cue wins. A legal multi-voice cue
+            # (`<v Alex>Hi</v> <v Beau>Bye</v>`) attributes all of it to Alex —
+            # rare in Teams/Zoom exports (one voice per cue). Upgrade to
+            # per-span attribution only if a real multi-voice track shows up.
+            if speaker is None:
+                voice = VOICE_RE.search(raw[:_VOICE_SEARCH_WINDOW])
+                if voice:
+                    name = _decode_entities(voice.group(1)).strip()[:_MAX_SPEAKER_CHARS]
+                    if name:
+                        speaker = name
+            cleaned = TAG_RE.sub("", raw).strip()
             if cleaned:
                 cue_lines.append(cleaned)
             i += 1
 
         cue_text = _decode_entities(" ".join(cue_lines)).strip()
+        # Label only on a speaker CHANGE (a real transcript, not "Alex:" on every
+        # line) so meeting recordings stay answerable for "who said what" at
+        # near-zero token cost. The prefix is defused as data at the report.
+        if speaker and cue_text:
+            if speaker != prev_speaker and not cue_text.startswith(f"{speaker}:"):
+                cue_text = f"{speaker}: {cue_text}"
+            prev_speaker = speaker
         if cue_text:
             segments.append({"start": round(start, 2), "end": round(end, 2), "text": cue_text})
         i += 1
