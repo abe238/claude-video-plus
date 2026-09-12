@@ -7,6 +7,7 @@ then Reads each frame path to see the video.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import shutil
@@ -29,10 +30,11 @@ for _stream in (sys.stdout, sys.stderr):
 SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from acquisition import acquisition_config, public_source_url  # noqa: E402
+from acquisition import AcquisitionError, FailureClass, acquisition_config, is_youtube_url, public_source_url  # noqa: E402
 from config import frame_cap, get_config, read_env_file  # noqa: E402
 from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
+from storyboard import extract_storyboard_frames  # noqa: E402
 from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit  # noqa: E402
 
 
@@ -542,6 +544,7 @@ def main() -> int:
     print(f"[watch] working dir: {work}", file=sys.stderr)
 
     url_source = is_url(args.source)
+    storyboard_fallback = False  # set if a YouTube media bot-gate degrades us to storyboard frames
     dl: dict = {"subtitle_path": None, "info": {}, "downloaded": False}
     transcript_segments: list[dict] = []
     transcript_text: str | None = None
@@ -598,13 +601,37 @@ def main() -> int:
                 else "[watch] downloading video via yt-dlp…",
                 file=sys.stderr,
             )
-            dl = _download_and_cache(
-                args.source, work / "download", audio_only=audio_only, key=cache_key
-            )
+            try:
+                dl = _download_and_cache(
+                    args.source, work / "download", audio_only=audio_only, key=cache_key
+                )
+            except AcquisitionError as exc:
+                # Partial YouTube bot-gate: metadata/captions worked (we may
+                # already hold a transcript) but the media download is 403/gated.
+                # Rather than crash and throw away the captions, degrade to the
+                # low-res storyboard mosaics, which serve from i.ytimg.com even
+                # from a datacenter IP. Only for YouTube + login/rate-limit
+                # classes; every other failure keeps its original fatal message.
+                botgate = (getattr(exc, "result", None) is not None
+                           and exc.result.failure_class in (
+                               FailureClass.LOGIN_REQUIRED.value,
+                               FailureClass.HTTP_429.value))
+                # transcript detail asked for no frames — degrading to
+                # storyboard thumbnails would hand back images it never wanted
+                # (and there is no transcript to preserve, or we would not be
+                # downloading), so keep the original fatal error there.
+                if not (botgate and is_youtube_url(args.source)) or detail == "transcript":
+                    raise
+                print(
+                    "[watch] media download was bot-gated; falling back to "
+                    "low-res YouTube storyboard frames (transcript is unaffected).",
+                    file=sys.stderr,
+                )
+                storyboard_fallback = True
         else:
             print("[watch] using local file…", file=sys.stderr)
             dl = download(args.source, work / "download")
-        video_path = dl["video_path"]
+        video_path = dl.get("video_path")
 
     meta = get_metadata(video_path) if video_path else {
         "duration_seconds": float((dl.get("info") or {}).get("duration") or 0),
@@ -752,6 +779,25 @@ def main() -> int:
                 dedup=not args.no_dedup,
             )
 
+    if storyboard_fallback and not frames:
+        # Media was bot-gated; the raw info.json (written by fetch_captions,
+        # still on disk) carries the storyboard geometry. Fail-open: an empty
+        # result just means no frames, transcript still reports.
+        raw_info: dict = {}
+        try:
+            raw_info = json.loads((work / "download" / "video.info.json").read_text(encoding="utf-8"))
+        except Exception as exc:
+            print(f"[watch] storyboard info.json unreadable: {type(exc).__name__}", file=sys.stderr)
+        frames, frame_meta = extract_storyboard_frames(
+            raw_info,
+            work / "frames",
+            max_frames=(60 if max_frames is None else max_frames),  # storyboard cap when uncapped
+            resolution=args.resolution,
+            dedup=not args.no_dedup,
+            start_seconds=start_sec,
+            end_seconds=end_sec,
+        )
+
     if cue_frames:
         frames = merge_frames(frames, cue_frames)
 
@@ -816,6 +862,20 @@ def main() -> int:
         print(marker)
     for warning in dl.get("warnings") or []:
         print(f"> **Acquisition warning:** {warning}")
+    if storyboard_fallback:
+        if frames:
+            print(
+                "> **Degraded:** the media download was bot-gated (YouTube sign-in "
+                "check), so the frames below are low-res storyboard thumbnails, not "
+                "the video itself. Fine on-screen text may be unreadable; the "
+                "transcript is unaffected."
+            )
+        else:
+            print(
+                "> **Degraded:** the media download was bot-gated (YouTube sign-in "
+                "check) and no storyboard frames were available. The transcript, if "
+                "any, is unaffected."
+            )
     if focused:
         print(
             f"- **Focus range:** {format_time(effective_start)} → {format_time(effective_end)} "
@@ -826,7 +886,12 @@ def main() -> int:
     range_mode = "focused" if focused else "full"
     print(f"- **Detail:** {detail}")
     detail_count = frame_meta.get("selected_count", 0)
-    if detail != "transcript":
+    if frame_meta.get("engine") == "storyboard":
+        print(
+            f"- **Frames:** {detail_count} storyboard thumbnails "
+            f"(low-res fallback — media was bot-gated; fine text may be unreadable)"
+        )
+    elif detail != "transcript":
         cap_label = "unlimited" if detail_budget is None else str(detail_budget)
         engine = frame_meta.get("engine", "scene")
         fallback = " with uniform fallback" if frame_meta.get("fallback") else ""

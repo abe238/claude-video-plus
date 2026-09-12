@@ -2,6 +2,26 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.13] — 2026-09-12
+
+### Added
+- **YouTube storyboard frame fallback for bot-gated media.** When a YouTube
+  media download is bot-gated (the "sign in to confirm you're not a bot" wall
+  that hits datacenter/CI/cloud IPs) but metadata and captions still work — the
+  common *partial* gate — the run no longer crashes and throws away the
+  transcript it already has. It degrades to the low-res storyboard mosaics,
+  which serve from `i.ytimg.com` even from a datacenter IP (premise verified
+  live before building: a datacenter IP fetched storyboard tiles and the
+  `hqdefault.jpg` control at HTTP 200, and the tile signature is not IP-bound).
+  Frames are labeled low-res degraded in the report ("fine text may be
+  unreadable"); the transcript is unaffected. Fail-open, YouTube-only, gated on
+  the login/rate-limit failure classes, and bounded against hostile input
+  (mosaic/tile/dimension/byte caps, even-sampled before any crop). Storyboard
+  geometry is read from the info.json we already fetch — no binary mhtml
+  parsing. Idea credit: `drsandeeprana00-bit/claude-video` (their `storyboard.py`
+  concept; their yt-dlp client-fallback wrapper was not absorbed — our
+  acquisition ladder already does that). See PROVENANCE.
+
 ## [1.5.12] — 2026-09-11
 
 Three confirmed gaps absorbed from a fork-watch sweep (all security-clean forks),

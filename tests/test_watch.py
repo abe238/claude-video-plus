@@ -159,3 +159,64 @@ def test_video_with_a_stream_still_extracts_frames(cut_clip: Path):
     assert result.returncode == 0, result.stderr[-800:]
     assert "no video stream" not in result.stderr
     assert "**Frames:** 0 selected" not in result.stdout
+
+
+def _drive_main(monkeypatch, tmp_path, *, url, youtube, failure_class, sb_frames):
+    """Run watch.main() with acquisition mocked to raise a classified
+    AcquisitionError on the media download, so the YouTube-bot-gate storyboard
+    fallback branch can be exercised without a network."""
+    import argparse
+    from types import SimpleNamespace
+    sys.path.insert(0, str(WATCH.parent))
+    import watch as watch_mod
+
+    monkeypatch.setattr(watch_mod, "is_url", lambda s: True)
+    monkeypatch.setattr(watch_mod, "is_youtube_url", lambda s: youtube)
+    # captions succeed (partial gate): a transcript is in hand, info has duration.
+    vtt = tmp_path / "v.vtt"
+    vtt.write_text("WEBVTT\n\n00:00:00.000 --> 00:00:02.000\nhello\n", encoding="utf-8")
+    monkeypatch.setattr(
+        watch_mod, "fetch_captions",
+        lambda src, out: {"subtitle_path": str(vtt), "info": {"duration": 300}, "downloaded": False},
+    )
+
+    def boom(*a, **k):
+        raise watch_mod.AcquisitionError(SimpleNamespace(failure_class=failure_class))
+    monkeypatch.setattr(watch_mod, "_download_and_cache", boom)
+
+    called = {"n": 0}
+    def fake_sb(info, out_dir, **k):
+        called["n"] += 1
+        return sb_frames, {"engine": "storyboard", "candidate_count": 9,
+                           "selected_count": len(sb_frames), "fallback": True, "note": ""}
+    monkeypatch.setattr(watch_mod, "extract_storyboard_frames", fake_sb)
+
+    monkeypatch.setattr(sys, "argv", ["watch.py", url, "--no-whisper", "--detail", "balanced"])
+    rc = watch_mod.main()
+    return rc, called["n"]
+
+
+def test_youtube_botgate_degrades_to_storyboard(tmp_path, monkeypatch, capsys):
+    frame = tmp_path / "sb_0000.jpg"; frame.write_bytes(b"x")
+    sb = [{"index": 0, "timestamp_seconds": 5.0, "path": str(frame), "reason": "storyboard"}]
+    rc, n = _drive_main(monkeypatch, tmp_path, url="https://youtube.com/watch?v=x",
+                        youtube=True, failure_class="login_required", sb_frames=sb)
+    out = capsys.readouterr().out
+    assert rc == 0                      # did NOT crash
+    assert n == 1                       # storyboard fallback fired
+    assert "storyboard thumbnails" in out
+    assert "Degraded" in out and "bot-gated" in out
+
+
+def test_non_youtube_botgate_still_crashes(tmp_path, monkeypatch):
+    import pytest
+    with pytest.raises(SystemExit):     # AcquisitionError preserved for non-YouTube
+        _drive_main(monkeypatch, tmp_path, url="https://vimeo.com/123",
+                    youtube=False, failure_class="login_required", sb_frames=[])
+
+
+def test_youtube_non_botgate_class_still_crashes(tmp_path, monkeypatch):
+    import pytest
+    with pytest.raises(SystemExit):     # 403 is not a login/rate-limit gate -> original fatal
+        _drive_main(monkeypatch, tmp_path, url="https://youtube.com/watch?v=x",
+                    youtube=True, failure_class="http_403", sb_frames=[])
