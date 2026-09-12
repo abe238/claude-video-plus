@@ -64,3 +64,22 @@ jobs:
           cat err.txt >&2
           echo "::error::yt-dlp YouTube metadata extraction failed on latest yt-dlp — likely an extractor/nsig break; patch the acquisition path." >&2
           exit 1
+      - name: Storyboard-survives-botgate probe (non-fatal — premise check for the storyboard fallback)
+        if: always()
+        run: |
+          # Storyboards serve from i.ytimg.com, not googlevideo.com. The whole value of the
+          # storyboard frame fallback is that they survive the bot-gate where media formats 403.
+          # This step NEVER fails the job (|| true, no exit 1) — it only reports the premise so we
+          # know whether the datacenter IP can fetch a storyboard mosaic that the media path can't.
+          URL="https://www.youtube.com/watch?v=WZyRbnpGyzQ"
+          rm -f sb-probe.* 2>/dev/null || true
+          yt-dlp --no-warnings -f "sb0/sb1/sb2" -o "sb-probe.%(ext)s" "$URL" >sbout.txt 2>&1 || true
+          if [ -f sb-probe.mhtml ]; then
+            SZ=$(wc -c < sb-probe.mhtml | tr -d ' ')
+            echo "::warning::STORYBOARD PREMISE CONFIRMED from CI datacenter IP — sb-probe.mhtml landed ($SZ bytes). Storyboard fallback is viable where media is bot-gated."
+          elif grep -qiE "confirm you.?re not a bot|sign in to confirm" sbout.txt; then
+            echo "::warning::STORYBOARD ALSO BOT-WALLED from CI datacenter IP — the storyboard fallback would be dead weight for its only use case. Do not build it."
+          else
+            echo "::warning::Storyboard probe produced no mhtml and no bot-wall message — inconclusive. Output follows:"
+            cat sbout.txt >&2 || true
+          fi
