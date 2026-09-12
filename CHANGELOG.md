@@ -2,6 +2,35 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.12] — 2026-09-11
+
+Three confirmed gaps absorbed from a fork-watch sweep (all security-clean forks),
+each verified present in our code before fixing.
+
+### Security
+
+- **Cross-provider Whisper key isolation.** `transcribe_video` looked up the key
+  unscoped, so forcing `--whisper openai` with only `GROQ_API_KEY` set would load
+  the Groq key and POST it to `api.openai.com` — violating SKILL.md's isolation
+  promise. Now scoped with `load_api_key(preferred=backend)`. (The live adapter
+  chain already scoped its lookups; this closed the latent legacy path.) Credit:
+  [nbkwabi/claude-video](https://github.com/nbkwabi/claude-video).
+
+### Fixed
+
+- **`.env` quoted values with a trailing comment.** `KEY="balanced"  # note`
+  parsed as `"balanced"` (quotes leaked in), failing validation and silently
+  falling back to the default. Quotes are now resolved before the comment strip,
+  and the two divergent `.env` parsers (`whisper._from_dotenv`,
+  `setup._read_env_key`) now delegate to the single `read_env_file`, so every
+  read path agrees. Credit:
+  [jvdurian-pixel/claude-video](https://github.com/jvdurian-pixel/claude-video)
+  (upstream PR #218).
+- **Report frame-count accuracy.** In the uniform fallback the report could print
+  "N selected from <N candidates" because `candidate_count` reported the rejected
+  scene candidates instead of the uniform pass's own population. Credit:
+  [asktonybrown/claude-video](https://github.com/asktonybrown/claude-video).
+
 ## [1.5.11] — 2026-09-01
 
 ### Added

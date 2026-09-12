@@ -90,3 +90,15 @@ def test_vfr_args_prefers_fps_mode_and_falls_back(monkeypatch):
     monkeypatch.setattr(sp, "run", fake_run(False))
     assert frames._vfr_args() == ("-vsync", "vfr")
     frames._vfr_args.cache_clear()
+
+
+def test_uniform_fallback_candidate_count_describes_the_pass(static_clip: Path, tmp_path: Path):
+    # fork-watch (asktonybrown): candidate_count must be this pass's population,
+    # not scene_count — else the report says "N selected from <N candidates".
+    import frames
+    out, meta = frames.extract_scene_or_uniform(
+        str(static_clip), tmp_path, fps=1.0, target_frames=10, resolution=256,
+    )
+    assert meta["engine"] == "uniform" and meta["fallback"] is True
+    assert meta["candidate_count"] == meta["selected_count"] + meta["deduped_count"]
+    assert meta["candidate_count"] >= meta["selected_count"]

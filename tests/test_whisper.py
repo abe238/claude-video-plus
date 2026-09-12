@@ -185,3 +185,23 @@ class TestCloudRetryHardening:
         # read is capped at MAX_ERROR_BODY_BYTES, then the snippet is sliced to 400
         assert len(out) <= 400 + 4  # " — " prefix + up to 400 chars
         assert whisper._read_error_body(_FakeHTTPError(body=b"")) == ""
+
+
+class TestBackendKeyIsolationScoping:
+    """A provider's key must never be sent to another provider's endpoint
+    (SKILL.md:175). load_api_key must scope to the requested backend."""
+
+    def test_preferred_openai_ignores_groq_only_env(self, monkeypatch):
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        monkeypatch.setenv("GROQ_API_KEY", "gsk_test")
+        # no home .env in scope
+        monkeypatch.setattr(whisper.Path, "home", staticmethod(lambda: Path("/nonexistent-xyz")))
+        b, k = whisper.load_api_key(preferred="openai")
+        assert b is None and k is None   # would leak the Groq key if unscoped
+
+    def test_preferred_none_still_prefers_groq(self, monkeypatch):
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        monkeypatch.setenv("GROQ_API_KEY", "gsk_test")
+        monkeypatch.setattr(whisper.Path, "home", staticmethod(lambda: Path("/nonexistent-xyz")))
+        b, k = whisper.load_api_key()
+        assert b == "groq" and k == "gsk_test"

@@ -28,6 +28,11 @@ from collections.abc import Mapping
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from config import read_env_file  # noqa: E402 — single .env parser (quotes+comments)
+
 
 GROQ_ENDPOINT = "https://api.groq.com/openai/v1/audio/transcriptions"
 GROQ_MODEL = "whisper-large-v3"
@@ -157,23 +162,9 @@ def load_api_key(preferred: str | None = None) -> tuple[str, str] | tuple[None, 
         return value.strip() if value else None
 
     def _from_dotenv(path: Path, name: str) -> str | None:
-        if not path.exists():
-            return None
-        try:
-            for line in path.read_text(encoding="utf-8").splitlines():
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                key, _, value = line.partition("=")
-                if key.strip() != name:
-                    continue
-                value = value.strip()
-                if len(value) >= 2 and value[0] in ('"', "'") and value[-1] == value[0]:
-                    value = value[1:-1]
-                return value or None
-        except OSError:
-            return None
-        return None
+        # Single .env parser (config.read_env_file) so quotes + inline comments
+        # are resolved identically everywhere, not by a divergent local copy.
+        return read_env_file(path).get(name) or None
 
     # Never read the working directory's .env: /watch often runs inside cloned
     # repos, and a hostile repo could plant an attacker-owned API key there,
@@ -681,7 +672,11 @@ def transcribe_video(
     Returns (segments, backend_used). Raises SystemExit on any failure.
     """
     if backend is None or api_key is None:
-        detected_backend, detected_key = load_api_key()
+        # Scope the key lookup to the requested backend. Unscoped, forcing
+        # `--whisper openai` with only GROQ_API_KEY set would load the Groq key
+        # and then POST it to api.openai.com — a cross-provider key leak that
+        # violates SKILL.md's isolation promise. (fork-watch: nbkwabi.)
+        detected_backend, detected_key = load_api_key(preferred=backend)
         backend = backend or detected_backend
         api_key = api_key or detected_key
 

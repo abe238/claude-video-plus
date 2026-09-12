@@ -1052,7 +1052,10 @@ def extract_scene_or_uniform(
     return frames, {
         "engine": "uniform",
         "frame_engine": frame_engine,
-        "candidate_count": scene_count,
+        # candidate_count describes THIS pass's population (uniform frames before
+        # dedup), not scene_count (the rejected scene candidates) — otherwise the
+        # report prints "N selected from <N candidates". (fork-watch: asktonybrown.)
+        "candidate_count": len(frames) + n_dropped,
         "deduped_count": n_dropped,
         "selected_count": len(frames),
         "fallback": True,

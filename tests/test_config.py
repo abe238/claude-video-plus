@@ -58,3 +58,31 @@ def test_frame_cap_mapping():
     assert config.frame_cap("token-burner") is None
     assert config.frame_cap("transcript") is None
     assert config.frame_cap("anything-else") == 100
+
+
+def test_read_env_file_quoted_value_with_trailing_comment(tmp_path):
+    # fork-watch (jvdurian): quotes must be unwrapped BEFORE the comment strip,
+    # else 'balanced' leaks as '"balanced"' and fails WATCH_DETAIL validation.
+    p = tmp_path / ".env"
+    p.write_text('WATCH_DETAIL="balanced"  # note\nWATCH_X=plain  # c\nK="sk-a#1"\n', encoding="utf-8")
+    r = config.read_env_file(p)
+    assert r["WATCH_DETAIL"] == "balanced"
+    assert r["WATCH_X"] == "plain"
+    assert r["K"] == "sk-a#1"           # '#' inside quotes preserved (API keys)
+
+
+def test_env_parsers_agree_across_config_whisper_setup(tmp_path, monkeypatch):
+    # All three .env readers must resolve a quoted+comment value identically now
+    # that whisper._from_dotenv and setup._read_env_key delegate to read_env_file.
+    import whisper, setup
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    # whisper reads ~/.config/watch/.env; point HOME at tmp so it reads ours.
+    home_env = tmp_path / ".config" / "watch" / ".env"
+    home_env.parent.mkdir(parents=True)
+    home_env.write_text('GROQ_API_KEY="gsk_x"  # my key\n', encoding="utf-8")
+    monkeypatch.setattr(whisper.Path, "home", staticmethod(lambda: tmp_path))
+    monkeypatch.setattr(setup, "CONFIG_FILE", home_env)
+    assert config.read_env_file(home_env)["GROQ_API_KEY"] == "gsk_x"   # config parser
+    assert setup._read_env_key("GROQ_API_KEY") == "gsk_x"              # setup delegates
+    assert whisper.load_api_key() == ("groq", "gsk_x")                 # whisper delegates

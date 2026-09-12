@@ -29,6 +29,35 @@ DEFAULT_LANGUAGE = "auto"
 DEFAULT_VAD_MODEL_PATH = str(CONFIG_DIR / "models" / "ggml-silero-v5.1.2.bin")
 
 
+def _parse_value(value: str) -> str:
+    """Resolve one .env value: unwrap a surrounding quote FIRST, then drop any
+    trailing inline comment.
+
+    A quoted value can still carry a comment after the closing quote
+    (`KEY="balanced"  # note`); resolving quotes first means the comment is
+    dropped without the quotes leaking into the value (the old order checked
+    `value[-1] == quote`, which fails when a comment follows, so the quotes
+    survived and the value failed validation). An unquoted value strips a `#`
+    that is preceded by whitespace, keeping a `#` that is part of the value
+    (e.g. inside an API key: `sk-abc#123`).
+    """
+    value = value.strip()
+    if len(value) >= 2 and value[0] in ('"', "'"):
+        quote = value[0]
+        close = value.find(quote, 1)
+        if close != -1:
+            # Inner text up to the FIRST matching close-quote; anything after it
+            # (whitespace, a `# comment`, stray junk) is dropped. Config values
+            # here are enums/paths/URLs/model-names/API-keys, none of which embed
+            # the same quote char, so first-match is safe for this domain.
+            return value[1:close]
+        # unterminated quote: fall through and treat as unquoted
+    for i, ch in enumerate(value):
+        if ch == "#" and i > 0 and value[i - 1] in " \t":
+            return value[:i].rstrip()
+    return value
+
+
 def read_env_file(path: Path | None = None) -> dict[str, str]:
     if path is None:
         path = CONFIG_FILE
@@ -44,19 +73,7 @@ def read_env_file(path: Path | None = None) -> dict[str, str]:
         if not raw or raw.startswith("#") or "=" not in raw:
             continue
         key, _, value = raw.partition("=")
-        value = value.strip()
-        if len(value) >= 2 and value[0] in ('"', "'") and value[-1] == value[0]:
-            value = value[1:-1]
-        else:
-            # Strip an inline comment (a '#' preceded by whitespace) from an
-            # unquoted value. Without this, `WATCH_DETAIL=balanced  # note`
-            # parses as "balanced  # note", fails validation, and silently
-            # falls back to the default. Keeps '#' inside quotes / API keys.
-            for i, ch in enumerate(value):
-                if ch == "#" and i > 0 and value[i - 1] in " \t":
-                    value = value[:i].rstrip()
-                    break
-        values[key.strip()] = value
+        values[key.strip()] = _parse_value(value)
     return values
 
 
