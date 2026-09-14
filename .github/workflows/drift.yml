@@ -71,15 +71,29 @@ jobs:
           # storyboard frame fallback is that they survive the bot-gate where media formats 403.
           # This step NEVER fails the job (|| true, no exit 1) — it only reports the premise so we
           # know whether the datacenter IP can fetch a storyboard mosaic that the media path can't.
+          # Two regimes matter. FULL gate = metadata itself is bot-walled: yt-dlp never obtains a
+          # storyboard URL, so the probe cannot say anything about i.ytimg.com (uninformative, NOT
+          # a negative). PARTIAL gate = metadata OK, media 403: this is the fallback's use case,
+          # and the atomic fact to test is "does a tile fetch from i.ytimg.com return 200".
           URL="https://www.youtube.com/watch?v=WZyRbnpGyzQ"
-          rm -f sb-probe.* 2>/dev/null || true
-          yt-dlp --no-warnings -f "sb0/sb1/sb2" -o "sb-probe.%(ext)s" "$URL" >sbout.txt 2>&1 || true
-          if [ -f sb-probe.mhtml ]; then
-            SZ=$(wc -c < sb-probe.mhtml | tr -d ' ')
-            echo "::warning::STORYBOARD PREMISE CONFIRMED from CI datacenter IP — sb-probe.mhtml landed ($SZ bytes). Storyboard fallback is viable where media is bot-gated."
-          elif grep -qiE "confirm you.?re not a bot|sign in to confirm" sbout.txt; then
-            echo "::warning::STORYBOARD ALSO BOT-WALLED from CI datacenter IP — the storyboard fallback would be dead weight for its only use case. Do not build it."
+          if ! yt-dlp --no-warnings -J "$URL" >sbinfo.json 2>sberr.txt; then
+            if grep -qiE "confirm you.?re not a bot|sign in to confirm" sberr.txt; then
+              echo "::warning::STORYBOARD PROBE INCONCLUSIVE — metadata is bot-walled (FULL gate), so no storyboard URL was obtainable. This says nothing about i.ytimg.com; the fallback targets the PARTIAL gate (metadata OK, media 403)."
+            else
+              echo "::warning::Storyboard probe: metadata extraction failed for a non-bot-wall reason — inconclusive. stderr follows:"
+              cat sberr.txt >&2 || true
+            fi
+            exit 0
+          fi
+          TILE=$(jq -r '[.formats[]? | select(.format_note=="storyboard" and ((.fragments // []) | length) > 0)][0].fragments[0].url // empty' sbinfo.json)
+          if [ -z "$TILE" ]; then
+            echo "::warning::Storyboard probe: metadata OK but info.json lists no storyboard formats — inconclusive (extractor or video change?)."
+            exit 0
+          fi
+          CODE=$(curl -s -o sb-tile.bin -w '%{http_code}' --max-time 20 "$TILE" || echo 000)
+          SZ=$(wc -c < sb-tile.bin 2>/dev/null | tr -d ' ')
+          if [ "$CODE" = "200" ] && [ "${SZ:-0}" -gt 1000 ]; then
+            echo "::warning::STORYBOARD PREMISE CONFIRMED from CI datacenter IP — metadata OK and i.ytimg.com tile HTTP 200 ($SZ bytes)."
           else
-            echo "::warning::Storyboard probe produced no mhtml and no bot-wall message — inconclusive. Output follows:"
-            cat sbout.txt >&2 || true
+            echo "::warning::STORYBOARD PREMISE BROKEN — metadata OK but i.ytimg.com tile returned HTTP $CODE ($SZ bytes). The v1.5.13 fallback would be dead weight in this regime; investigate."
           fi
