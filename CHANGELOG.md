@@ -2,6 +2,46 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.14] — 2026-09-13
+
+### Added
+- **TikTok photo slideshows (optional `gallery-dl`).** yt-dlp has no extractor
+  for `tiktok.com/@user/photo/<id>` ("Unsupported URL", verified on yt-dlp
+  2026.08.19) and returns only the soundtrack for the `/video/` spelling of the
+  same post, so a photo carousel used to crash frame extraction. When
+  `gallery-dl` is on PATH (detected, never installed) `/watch` now fetches the
+  slides and reports them as timeline-less `slide N` frames, scaled like every
+  other frame; the soundtrack is routed to the existing audio-only transcript
+  path (not exercised live: no Whisper key on the build machine). Live positive
+  control: a public news-outlet photo post ran end to end (fetch → scale →
+  report) before this shipped. Security shape: gallery-dl runs with
+  `--config-ignore` (mirrors our yt-dlp posture; its user config can declare
+  exec postprocessors), the URL follows `--`, output stays under the work dir,
+  the untrusted caption/uploader go through `sanitize_for_report`, slide count
+  and per-image bytes are bounded, and every step is fail-open (missing
+  binary, timeout, corrupt slide, hostile info.json). Gated to TikTok hosts
+  and the `unsupported_extractor` class only; every other failure keeps its
+  original message; `--detail transcript` never fetches slides;
+  `--timestamps` and `--text-anchors` are ignored on a slideshow (no timeline).
+  Three Codex gpt-5.6 adversarial rounds (11 + 6 + 3 findings) hardened the first cut: the
+  download itself is bounded via gallery-dl `--range`/`--filesize-max` (not
+  just what we keep), each attempt writes to a fresh directory (no stale
+  slides from a reused `--out-dir`), info.json is read only as a regular
+  non-symlink file under a byte cap, ffmpeg is forced onto the still-image
+  demuxer with patterns off (a "jpg" that is a concat playlist cannot open
+  other files) with the two-axis scale filter and `-max_alloc`, the
+  soundtrack is probed before it can become the media path (a corrupt one
+  is dropped, slides survive), URLs with control characters are rejected,
+  the full caption ships as `description`, the attempt directory is measured
+  after download and dropped whole over an aggregate cap (gallery-dl 1.32
+  does not stop a chunked body without Content-Length; the timeout bounds the
+  in-flight residual) and removed on every failure, child output is discarded
+  (never streamed or buffered), each slide is header-probed through the same
+  forced still-image demuxer and refused over a pixel ceiling before decode, and the report's `Source:` header is
+  now sanitized for every URL type. Idea credit:
+  `Rasmus257/claude-video` (`feat/tiktok-slideshows`). Reimplemented; see
+  PROVENANCE.
+
 ## [1.5.13] — 2026-09-12
 
 ### Added

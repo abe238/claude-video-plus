@@ -35,6 +35,7 @@ from config import frame_cap, get_config, read_env_file  # noqa: E402
 from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from storyboard import extract_storyboard_frames  # noqa: E402
+from slideshow import extract_slides, fetch_slideshow, is_tiktok_url  # noqa: E402
 from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit  # noqa: E402
 
 
@@ -545,6 +546,7 @@ def main() -> int:
 
     url_source = is_url(args.source)
     storyboard_fallback = False  # set if a YouTube media bot-gate degrades us to storyboard frames
+    slideshow: dict | None = None  # set if a TikTok photo post degrades us to gallery-dl slides
     dl: dict = {"subtitle_path": None, "info": {}, "downloaded": False}
     transcript_segments: list[dict] = []
     transcript_text: str | None = None
@@ -606,6 +608,16 @@ def main() -> int:
                     args.source, work / "download", audio_only=audio_only, key=cache_key
                 )
             except AcquisitionError as exc:
+                # TikTok photo slideshow: yt-dlp has no extractor for /photo/
+                # URLs ("Unsupported URL"). Optional gallery-dl fetches the
+                # slides; without it (or on any failure) the original error stands.
+                unsupported = (getattr(exc, "result", None) is not None
+                               and exc.result.failure_class == FailureClass.UNSUPPORTED_EXTRACTOR.value)
+                if unsupported and is_tiktok_url(args.source) and detail != "transcript":
+                    slideshow = fetch_slideshow(args.source, work / "download" / "slides")
+                    if slideshow is None:
+                        raise
+                    dl = slideshow
                 # Partial YouTube bot-gate: metadata/captions worked (we may
                 # already hold a transcript) but the media download is 403/gated.
                 # Rather than crash and throw away the captions, degrade to the
@@ -620,27 +632,57 @@ def main() -> int:
                 # storyboard thumbnails would hand back images it never wanted
                 # (and there is no transcript to preserve, or we would not be
                 # downloading), so keep the original fatal error there.
-                if not (botgate and is_youtube_url(args.source)) or detail == "transcript":
+                if slideshow is not None:
+                    pass
+                elif not (botgate and is_youtube_url(args.source)) or detail == "transcript":
                     raise
-                print(
-                    "[watch] media download was bot-gated; falling back to "
-                    "low-res YouTube storyboard frames (transcript is unaffected).",
-                    file=sys.stderr,
-                )
-                storyboard_fallback = True
+                else:
+                    print(
+                        "[watch] media download was bot-gated; falling back to "
+                        "low-res YouTube storyboard frames (transcript is unaffected).",
+                        file=sys.stderr,
+                    )
+                    storyboard_fallback = True
         else:
             print("[watch] using local file…", file=sys.stderr)
             dl = download(args.source, work / "download")
         video_path = dl.get("video_path")
 
-    meta = get_metadata(video_path) if video_path else {
-        "duration_seconds": float((dl.get("info") or {}).get("duration") or 0),
-        "width": None,
-        "height": None,
-        "codec": None,
-        "has_audio": False,
-    }
+    meta: dict | None = None
+    if slideshow is not None and video_path:
+        # The soundtrack is optional evidence: a probe failure drops IT, never the slides.
+        try:
+            meta = get_metadata(video_path)
+        except SystemExit:
+            print("[watch] slideshow soundtrack unreadable; continuing with slides only", file=sys.stderr)
+            video_path = None
+            dl["video_path"] = None
+    if meta is None:
+        meta = get_metadata(video_path) if video_path else {
+            "duration_seconds": float((dl.get("info") or {}).get("duration") or 0),
+            "width": None,
+            "height": None,
+            "codec": None,
+            "has_audio": False,
+        }
     full_duration = meta["duration_seconds"]
+
+    # The /video/ spelling of a TikTok photo post: yt-dlp "succeeds" with the
+    # soundtrack only (no video stream). Same slides, second trigger.
+    if (slideshow is None and url_source and video_path and not meta.get("width")
+            and is_tiktok_url(args.source) and detail != "transcript"):
+        slideshow = fetch_slideshow(args.source, work / "download" / "slides")
+        if slideshow is not None:
+            slideshow["subtitle_path"] = dl.get("subtitle_path")
+            # Keep yt-dlp's soundtrack: `meta` already describes it (no re-probe).
+            slideshow["video_path"] = video_path
+            slideshow["info"] = {**(dl.get("info") or {}),
+                                 **{k: v for k, v in (slideshow.get("info") or {}).items() if v}}
+            dl = {**dl, **slideshow}  # keep acquisition warnings/strategy in the report
+            video_path = dl.get("video_path")
+    if slideshow is not None and cue_timestamps:
+        print("[watch] image slideshow has no timeline; --timestamps ignored", file=sys.stderr)
+        cue_timestamps = []
 
     start_sec = parse_time(args.start)
     end_sec = parse_time(args.end)
@@ -697,7 +739,7 @@ def main() -> int:
     cue_timestamps, _ta_status = resolve_text_anchors(
         active=text_anchors_active,
         transcript_segments=transcript_segments,
-        have_video=bool(video_path),
+        have_video=bool(video_path) and slideshow is None,  # slides have no timeline
         lo=effective_start,
         hi=effective_end,
         max_frames=max_frames,
@@ -718,7 +760,7 @@ def main() -> int:
 
     # Transcript cues are pinned: extracted first and counted against the cap so
     # the detail engine never evicts the moments the user explicitly asked for.
-    if cue_timestamps and video_path:
+    if cue_timestamps and video_path and slideshow is None:
         cue_frames, cue_meta = extract_at_timestamps(
             video_path,
             work / "frames",
@@ -741,14 +783,20 @@ def main() -> int:
     # detail. ffmpeg then fails with a raw "Error opening output files" dump
     # instead of the transcript we can perfectly well produce. get_metadata
     # already tells us there is no video stream — degrade instead of crashing.
-    if detail != "transcript" and video_path and not meta.get("width"):
+    if detail != "transcript" and video_path and not meta.get("width") and slideshow is None:
         print(
             "[watch] no video stream in this source (audio-only) — "
             "skipping frames, reporting the transcript.",
             file=sys.stderr,
         )
         detail_budget = 0
-    if detail != "transcript" and video_path and detail_budget != 0:
+    if detail != "transcript" and slideshow is not None:
+        slides = slideshow.get("image_paths") or []
+        print(f"[watch] image slideshow: converting {len(slides)} slide(s)…", file=sys.stderr)
+        frames, frame_meta = extract_slides(
+            slides, work / "frames", resolution=args.resolution, max_frames=detail_budget,
+        )
+    elif detail != "transcript" and video_path and detail_budget != 0:
         cap_label = "unlimited" if detail_budget is None else str(detail_budget)
         engine_label = "keyframes" if detail == "efficient" else "scene-aware frames"
         print(
@@ -843,12 +891,15 @@ def main() -> int:
     print()
     print("# watch: video report")
     print()
-    print(f"- **Source:** {args.source}")
+    print(f"- **Source:** {sanitize_for_report(args.source)}")  # header sits outside the fence
     if info.get("title"):
         print(f"- **Title:** {info['title']}")
     if info.get("uploader"):
         print(f"- **Uploader:** {info['uploader']}")
-    print(f"- **Duration:** {format_time(full_duration)} ({full_duration:.1f}s)")
+    if slideshow is not None:
+        print(f"- **Duration:** n/a (image slideshow; soundtrack {full_duration:.1f}s)")
+    else:
+        print(f"- **Duration:** {format_time(full_duration)} ({full_duration:.1f}s)")
     if dl.get("selected_strategy"):
         if dl.get("media_source") == "video-cache":
             print(
@@ -890,6 +941,11 @@ def main() -> int:
         print(
             f"- **Frames:** {detail_count} storyboard thumbnails "
             f"(low-res fallback — media was bot-gated; fine text may be unreadable)"
+        )
+    elif frame_meta.get("engine") == "slides":
+        print(
+            f"- **Frames:** {detail_count} of {frame_meta.get('candidate_count', detail_count)} slides "
+            "(image slideshow: no timeline; the caption and on-slide text carry the content)"
         )
     elif detail != "transcript":
         cap_label = "unlimited" if detail_budget is None else str(detail_budget)
@@ -989,10 +1045,14 @@ def main() -> int:
         print()
         print(
             "**Read each frame path below with the Read tool to view the image.** "
-            "Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video."
+            + ("Slides are in post order; there is no timeline." if slideshow is not None else
+             "Frames are in chronological order; `t=MM:SS` is the absolute timestamp in the source video.")
         )
         print()
         for frame in frames:
+            if "slide" in frame:
+                print(f"- `{frame['path']}` (slide {frame['slide']})")
+                continue
             print(
                 f"- `{frame['path']}` "
                 f"(t={format_time(frame['timestamp_seconds'])}, reason={frame.get('reason', 'selected')})"
