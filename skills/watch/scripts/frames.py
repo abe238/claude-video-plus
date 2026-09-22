@@ -352,6 +352,24 @@ def auto_fps_focus(duration_seconds: float, max_frames: int = 100) -> tuple[floa
     return _clamp_fps(target / duration_seconds, duration_seconds, max_frames)
 
 
+def _extract_span_seconds(video_path: str, start_seconds: float | None,
+                          end_seconds: float | None) -> float:
+    """Length of the range extract() is about to sample. Fail-open: an
+    unreadable duration returns 0.0, which leaves the requested fps untouched
+    (never make housekeeping able to break extraction)."""
+    lo = start_seconds or 0.0
+    hi = end_seconds
+    if hi is None:
+        try:
+            hi = float(get_metadata(video_path)["duration_seconds"])
+        except (SystemExit, KeyError, TypeError, ValueError):
+            return 0.0
+    try:
+        return max(0.0, float(hi) - lo)
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def extract(
     video_path: str,
     out_dir: Path,
@@ -382,9 +400,35 @@ def extract(
     if end_seconds is not None:
         cmd += ["-to", f"{end_seconds:.3f}"]
 
+    # `fps` sets density, `max_frames` is a hard cap. The fps filter samples
+    # evenly across the WHOLE range, but `-frames:v` merely STOPS after N
+    # outputs — so when the two disagree (fps*duration > cap) sampling at the
+    # requested rate captures only the HEAD of the range while the report still
+    # calls it a full-range pass (exit-0 wrong answer). Lower the effective rate
+    # instead, so the capped frames spread across the range. `coverage_bounded_fps`
+    # already does this for an explicit --fps at the watch.py caller; doing it
+    # HERE closes the callers that bound by a smaller fallback cap. When the two
+    # agree (every auto-path call) effective_fps == fps and nothing changes.
+    # Idea: OpenClawLinda fork audit (upstream PR #226).
+    effective_fps = fps
+    if max_frames and fps > 0:
+        span = _extract_span_seconds(video_path, start_seconds, end_seconds)
+        # Compare the ROUNDED predicted count, not the raw product: a fractional
+        # duration makes the auto path overshoot by a hair (auto_fps_focus(5.6,
+        # 100) -> fps 2.0, target 11, and 2.0*5.6 = 11.2), and lowering the rate
+        # for 0.2 of a frame would shift every timestamp on a path that is
+        # supposed to be untouched (Codex review, 2026-09-21).
+        # Half-UP, not round(): Python rounds ties to even, so `round(10.5)` is
+        # 10 while ffmpeg emits 11 frames — at exactly cap + 0.5 the tail would
+        # be truncated by the very bug this guard exists to prevent (Codex
+        # review round 2).
+        if span > 0 and math.floor(fps * span + 0.5) > max_frames:
+            effective_fps = max(max_frames / span, 1e-6)
+
     cmd += [
         "-i", str(Path(video_path).resolve()),
-        "-vf", f"fps={fps},{_scale_filter(resolution)}",
+        "-vf", f"fps={effective_fps},{_scale_filter(resolution)}",
+        # Kept as a rounding backstop only: the rate above already bounds the count.
         "-frames:v", str(max_frames),
         "-q:v", "4",
         output_pattern,
@@ -396,6 +440,8 @@ def extract(
 
     offset = start_seconds or 0.0
     frames = sorted(out_dir.glob("frame_*.jpg"))
+    # Stamps come from the rate ACTUALLY used, never the requested one.
+    fps = effective_fps
     return [
         {
             "index": i,
@@ -1106,12 +1152,25 @@ def extract_keyframes(
         output_pattern,
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-    if result.returncode != 0:
+    files = sorted(out_dir.glob("frame_*.jpg"))
+    # A range holding no keyframes makes some ffmpeg builds fail at mjpeg
+    # encoder init ("No filtered frames for output stream") instead of exiting
+    # 0 empty — which put this raise BEFORE the `len(candidates) < KEYFRAME_MIN`
+    # uniform fallback below, making that fallback unreachable in exactly the
+    # case it exists for. Easy to hit: encoders space keyframes seconds apart,
+    # so any short --start/--end window can land between two. A non-zero exit
+    # that DID write frames still raises, so a genuine mid-run failure is not
+    # swallowed. Observed on ffmpeg 8.1.1/Windows; this ffmpeg exits 0 for the
+    # same input, so the guard is defensive here and load-bearing there.
+    # Idea: sainbayare-net (upstream PR #97).
+    if result.returncode != 0 and files:
         raise SystemExit(f"ffmpeg keyframe extraction failed: {result.stderr.strip()}")
+    if result.returncode != 0:
+        print("[watch] no keyframes decoded in this range — falling back to uniform sampling",
+              file=sys.stderr)
 
     offset = start_seconds or 0.0
     timestamps = [round(offset + float(m.group(1)), 2) for m in SHOWINFO_TS_RE.finditer(result.stderr)]
-    files = sorted(out_dir.glob("frame_*.jpg"))
     candidates: list[dict] = []
     for i, path in enumerate(files):
         ts = timestamps[i] if i < len(timestamps) else offset
@@ -1151,7 +1210,13 @@ def extract_keyframes(
         frames_out = stamp_frame_names(frames_out)
         return frames_out, {
             "engine": "uniform",
-            "candidate_count": len(candidates),
+            # THIS pass's population, not the discarded keyframes: the
+            # candidates above were unlinked, so reporting their count printed
+            # nonsense like "12 selected from 1 candidates". Same fix v1.5.12
+            # made for the SCENE fallback; this keyframe path was missed.
+            # Found by running the real command, not by a unit test.
+            # (Independently reported upstream as dsp407 PR #224.)
+            "candidate_count": len(frames_out) + n_dropped,
             "deduped_count": n_dropped,
             "selected_count": len(frames_out),
             "fallback": True,

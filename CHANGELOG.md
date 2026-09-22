@@ -2,6 +2,70 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.15] — 2026-09-21
+
+Four defects found by sweeping all 154 open upstream PRs (the first full sweep;
+the daily fork-watch digest only ever showed NEW-since-last-run items, so
+everything opened before July had never been read). Each was reproduced on this
+tree before it was fixed, and each fix ships with the failing case as a test.
+
+### Fixed
+- **A caption line could vanish from the transcript.** The WebVTT cue loop
+  ended a cue at any whitespace-only line, but YouTube emits a lone-space
+  placeholder — so a cue whose first line was that placeholder was dropped
+  silently, taking its text with it. A two-cue fixture parsed to one segment
+  and the opening line disappeared with no error: exit-0 data loss. The cue now
+  ends only at a truly empty line. Idea: `OpenClawLinda/claude-video`
+  (upstream PR #225); their rolling-overlap half is parallel to our
+  `dedupe_rolling`.
+- **Uniform frame extraction sampled only the head of the range.** `-vf fps=N`
+  spreads samples across the whole range but `-frames:v CAP` merely stops after
+  CAP outputs, so whenever `fps * duration > cap` the run captured the opening
+  seconds and still reported a full-range pass. Measured here: a 120s clip with
+  the budget shrunk by pinned cue frames returned 20 frames spanning 0–38s and
+  called it full range; it now spans 0–114s. `coverage_bounded_fps` already
+  bounded an explicit `--fps` at the caller — the fix moves the guarantee into
+  `extract()` itself so callers that bound by a *smaller* fallback cap are
+  covered too. Timestamps are derived from the rate actually used. Strict no-op
+  when fps and cap agree, which is every auto-path call. Idea: `OpenClawLinda`
+  (upstream PR #226).
+- **`--detail efficient` could abort on a keyframe-less range.** A short
+  `--start/--end` window can land between two keyframes; on some ffmpeg builds
+  the encoder then fails at init instead of exiting cleanly empty, and the
+  raise sat *above* the `KEYFRAME_MIN` uniform fallback written for exactly
+  that case. The fallback is now reachable: a non-zero exit that produced no
+  frames degrades to uniform, while one that *did* produce frames still raises,
+  so a genuine mid-run failure is not swallowed. This ffmpeg (8.1, macOS) exits
+  0 for that input so the guard is defensive here and load-bearing on the
+  reported build (8.1.1, Windows 11) — see the CI note below. Idea:
+  `sainbayare-net` (upstream PR #97).
+- **The keyframe fallback reported a nonsensical frame count.** It printed the
+  count of the keyframes it had just discarded, e.g. "12 selected from 1
+  candidates". v1.5.12 fixed this on the *scene* fallback and missed the
+  keyframe path. Found by running the real command end to end rather than by a
+  unit test. Independently reported upstream as `dsp407` PR #224.
+
+### Notes
+- **Three Codex gpt-5.6 adversarial rounds (3 + 2 + 0 findings) before shipping.**
+  Round 1 caught a regression this change set introduced: reading through every
+  whitespace-only line fixed the YouTube placeholder but made a whitespace-
+  polluted **SubRip separator** swallow the next cue's index, timestamp and
+  speaker. The corrected rule breaks on a truly empty line, breaks on a
+  whitespace-only line only once payload exists, and always breaks on a
+  timestamp. Writing that test exposed a second self-inflicted bug — breaking
+  on a timestamp still stepped over it, losing the next cue — now guarded by
+  `at_next_cue`. Round 2 then found an empty SubRip cue emitting the following
+  numeric index as a phantom segment, and `round()`'s ties-to-even truncating
+  the tail at exactly cap + 0.5 (`round(10.5) == 10` while ffmpeg emits 11);
+  both fixed, both mutation-checked. Round 3: no new regressions, SHIP.
+- Scene-cut *clustering* (upstream PR #210, `Jordan-Zhu`) was assessed and needs
+  no change: our floor-interval injection plus `_gap_fill` spread candidates by
+  construction, so the reported 3m25s hole cannot occur on our path. Added a
+  test that pins that property against future selection edits.
+- Real Windows verification remains deferred and is now the single largest
+  blind spot: two independent findings this week (the keyframe abort above, and
+  `frinsen` PR #237's CI matrix) both land on it. Tracked, not yet built.
+
 ## [1.5.14] — 2026-09-13
 
 ### Added

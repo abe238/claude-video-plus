@@ -89,8 +89,38 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
 
         cue_lines: list[str] = []
         speaker: str | None = None
-        while i < len(lines) and lines[i].strip():
+        at_next_cue = False   # broke on a timestamp: do NOT step past it below
+        # Cue-body scan. A blank line ends the cue, but "blank" is subtler than
+        # `.strip()`: YouTube emits a LONE-SPACE placeholder as a cue's first
+        # line, and treating that as the terminator silently dropped the cue and
+        # its text with no error (exit-0 data loss — OpenClawLinda, upstream
+        # PR #225). Reading through every whitespace-only line instead is also
+        # wrong: in SRT a whitespace-polluted SEPARATOR would swallow the next
+        # cue's index, timestamp and speaker (Codex review, 2026-09-21). So a
+        # whitespace-only line terminates only once payload has been collected —
+        # before payload it is the placeholder — and a timestamp line always
+        # terminates, which stops a whitespace-bodied cue running into the next.
+        while i < len(lines):
             raw = lines[i]
+            if raw == "":
+                break
+            if not raw.strip():
+                if cue_lines:
+                    break            # separator after payload
+                i += 1
+                continue             # leading placeholder
+            if TS_RE.match(raw):
+                at_next_cue = True   # next cue began without a blank line
+                break
+            # An SRT cue is `index / timestamp / text`. With no payload yet, a
+            # bare integer whose NEXT line is a timestamp is the following cue's
+            # index, not this cue's text — without this guard an empty-bodied
+            # SRT cue emitted a phantom segment reading "2" (Codex review
+            # round 2). Leaving `at_next_cue` False lets the trailing `i += 1`
+            # step over the index so the outer loop lands on the timestamp.
+            if (not cue_lines and raw.strip().isdigit()
+                    and i + 1 < len(lines) and TS_RE.match(lines[i + 1])):
+                break
             # ponytail: first voice tag in the cue wins. A legal multi-voice cue
             # (`<v Alex>Hi</v> <v Beau>Bye</v>`) attributes all of it to Alex —
             # rare in Teams/Zoom exports (one voice per cue). Upgrade to
@@ -116,7 +146,10 @@ def parse_subtitle(path: str | Path, *, strict: bool = False) -> list[dict]:
             prev_speaker = speaker
         if cue_text:
             segments.append({"start": round(start, 2), "end": round(end, 2), "text": cue_text})
-        i += 1
+        # Step over the blank separator — but never over a timestamp we stopped
+        # ON, or the next cue would be consumed instead of parsed.
+        if not at_next_cue:
+            i += 1
 
     result = dedupe_rolling(_dedupe(segments))
     if strict and text.strip() and not result:
