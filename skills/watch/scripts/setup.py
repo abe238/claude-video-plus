@@ -182,7 +182,8 @@ def _ytdlp_age_days() -> int | None:
     for cmd in (["yt-dlp", "--version"],
                 [sys.executable, "-m", "yt_dlp", "--version"]):
         try:
-            out = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            out = subprocess.run(cmd, capture_output=True, text=True,
+                                 encoding="utf-8", errors="replace", timeout=30)
             if out.returncode != 0:
                 continue
             m = re.search(r"(\d{4})\.(\d{2})\.(\d{2})", out.stdout)

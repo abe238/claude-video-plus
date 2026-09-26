@@ -420,7 +420,18 @@ def _post_whisper(
         request = Request(endpoint, data=body, headers=headers, method="POST")
         try:
             with urlopen(request, timeout=300, context=context) as response:
-                payload = response.read().decode("utf-8", errors="replace")
+                # CONTENT: the transcript itself. Strict, for the same reason as
+                # the loopback adapter — a replaced byte becomes an invented
+                # character inside a quote we hand back as evidence. Reported
+                # like the non-JSON case below rather than escaping as a raw
+                # UnicodeDecodeError (a ValueError, which the retry arms below
+                # do not catch).
+                try:
+                    payload = response.read().decode("utf-8")
+                except UnicodeDecodeError as exc:
+                    raise SystemExit(
+                        f"Whisper returned a response that is not valid UTF-8: {exc}"
+                    ) from exc
         except urllib.error.HTTPError as exc:
             detail = _read_error_body(exc)
             last_exc, last_detail = exc, detail

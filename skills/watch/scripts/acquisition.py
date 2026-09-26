@@ -636,7 +636,8 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, player_client=client,
             final_format_fallback=final_format, ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True)
+        completed = runner(cmd, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
         stderr = (completed.stderr or "") + (completed.stdout or "")
         media = None if captions_only else pick_media(out_dir)
         subtitles = pick_subtitles(out_dir, languages)
@@ -666,7 +667,8 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
             ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True)
+        completed = runner(cmd, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
         stderr = (completed.stderr or "") + (completed.stdout or "")
         subtitles = pick_subtitles(out_dir, languages)
         failure = None if subtitles else classify_failure(stderr, completed.returncode)
@@ -690,7 +692,8 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
             ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True)
+        completed = runner(cmd, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
         stderr = (completed.stderr or "") + (completed.stdout or "")
         subtitles = pick_subtitles(out_dir, languages)
         failure = None if subtitles else classify_failure(stderr, completed.returncode)

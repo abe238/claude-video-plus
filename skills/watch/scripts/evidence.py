@@ -229,7 +229,10 @@ def extract_frame(video_path: str, ts: float, path: Path) -> bool:
         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
          "-ss", f"{ts:.2f}", "-i", str(video_path),
          "-frames:v", "1", "-vf", "scale=512:-2", "-q:v", "4", str(path)],
-        capture_output=True, text=True,
+        # ffmpeg echoes the input path in its output, so a non-ASCII filename
+        # under a cp949/eucJP locale would crash this decode even though we
+        # only read the return code. Diagnostic: replace, never raise.
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
     )
     return result.returncode == 0 and path.exists()
 

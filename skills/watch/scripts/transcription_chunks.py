@@ -201,7 +201,10 @@ FFPROBE_TIMEOUT_SECONDS = 30
 def _run_ffmpeg(command: list[str], *, failure: str) -> None:
     try:
         result = subprocess.run(
-            command, capture_output=True, text=True, timeout=FFMPEG_TIMEOUT_SECONDS
+            # Same ffmpeg-echoes-the-path exposure as evidence.extract_frame;
+            # only the return code is read, so decode defensively.
+            command, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=FFMPEG_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired as exc:
         raise RuntimeError(
@@ -222,6 +225,11 @@ def audio_duration(path: Path) -> float:
             ],
             capture_output=True,
             text=True,
+            # ffprobe prints UTF-8 JSON whose format.tags carry the media's own
+            # title/artist — non-ASCII on any non-English file. Only a duration
+            # number is read out of it, so replace rather than raise.
+            encoding="utf-8",
+            errors="replace",
             timeout=FFPROBE_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired as exc:
@@ -306,7 +314,10 @@ def silence_intervals(
                 "ffmpeg", "-hide_banner", "-nostats", "-i", str(audio_path.resolve()),
                 "-af", f"silencedetect=noise={noise}:d={min_duration}", "-f", "null", "-",
             ],
-            capture_output=True, text=True, timeout=FFMPEG_TIMEOUT_SECONDS,
+            # silencedetect output is parsed for timings only; the surrounding
+            # ffmpeg banner echoes the (possibly non-ASCII) input path.
+            capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=FFMPEG_TIMEOUT_SECONDS,
         )
     except (subprocess.TimeoutExpired, OSError):
         return None

@@ -2,6 +2,53 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.16] — 2026-09-26
+
+A crash on non-UTF-8 consoles, and a quieter bug inside it: two transcription
+paths were silently writing garbled characters into transcripts.
+
+### Fixed
+- **`/watch` crashed on a Korean, Japanese or Chinese console.** Twelve places
+  ran ffmpeg, ffprobe, yt-dlp, yap or the whisper CLI with `text=True` and no
+  `encoding=`, so Python decoded their output using the system locale. Those
+  tools write UTF-8 regardless, so under cp949/eucKR, eucJP or GB18030 the first
+  non-ASCII byte (a Korean filename, a Japanese video title, a transcript line)
+  raised `UnicodeDecodeError`. Reproduced before fixing under
+  `LC_ALL=ko_KR.eucKR`. Every call site now decodes UTF-8 explicitly. The plain
+  C locale does not reproduce this, because CPython switches it to UTF-8 mode
+  (PEP 540), which is why a green run on a default machine proved nothing.
+- **Two transcription backends could return garbled text as if it were real.**
+  The local HTTP adapter and the cloud Whisper path decoded the transcript
+  response with `errors="replace"`, so an invalid byte became U+FFFD inside a
+  quoted line and flowed out as an accepted segment ("hello \ufffd"). A
+  transcript is evidence someone may quote, so these now decode strictly. A bad
+  response fails that backend and the chain moves to the next one, instead of
+  handing back invented characters.
+
+### Design
+- **Content decodes strictly; diagnostics tolerate bad bytes.** The three paths
+  whose output *is* the transcript (yap's stdout, the loopback body, the cloud
+  body) raise on an undecodable byte. The nine whose output is only logs or a
+  version string use `errors="replace"`, because crashing a run over chatter
+  nobody reads helps no one. The idea came from `wooay123-cloud/claude-video`
+  (upstream PR #239), whose patch applied `errors="replace"` everywhere; on the
+  content paths that would have converted a loud crash into silent mojibake, so
+  it was not ported as written. Two more forks and upstream itself (de8b5b5)
+  fixed this theme in tests and console output only.
+
+### Notes
+- **Three Codex adversarial rounds (3 + 2 + 0 findings) before shipping.**
+  Round 1 showed the first audit's "no remaining sites" was false: a regex
+  could not see calls with nested parentheses, nor three yt-dlp calls routed
+  through an injected `runner`. It also surfaced the two pre-existing
+  `errors="replace"` transcript decodes. Round 2 found the rewritten `ast`
+  audit still passed `encoding=None`, `**{...}` splats, `errors=` alone (which
+  turns on text mode), `from subprocess import run` and module aliases, and
+  that the locale helper's codec whitelist skipped SJIS, GB2312 and Big5HKSCS.
+  The audit now fails closed on anything it cannot read, each bypass was planted
+  and confirmed to trip it, and the helper has no whitelist: it verifies a
+  candidate locale's decoder really rejects UTF-8. Round 3: SHIP.
+
 ## [1.5.15] — 2026-09-21
 
 Four defects found by sweeping all 154 open upstream PRs (the first full sweep;

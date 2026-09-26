@@ -472,9 +472,16 @@ class LoopbackHTTPAdapter:
         )
         try:
             with _LOOPBACK_OPENER.open(http_request, timeout=request.timeout) as response:
-                payload = response.read().decode("utf-8", errors="replace")
+                # CONTENT: this body carries the transcript. Strict decode —
+                # errors="replace" here accepted U+FFFD mojibake as real words
+                # (Codex reproduced "hello �" reaching the segments), which
+                # is a failure that exits 0. A bad body now fails this adapter
+                # and the chain falls through to the next backend.
+                payload = response.read().decode("utf-8")
         except urllib.error.HTTPError as exc:
             raise RuntimeError(f"local transcription HTTP {exc.code}") from None
+        except UnicodeDecodeError as exc:
+            raise RuntimeError("local transcription returned undecodable bytes") from exc
         try:
             return whisper.segments_from_response(json.loads(payload))
         except (json.JSONDecodeError, TypeError, ValueError) as exc:
@@ -516,6 +523,14 @@ class YapAdapter:
             command,
             capture_output=True,
             text=True,
+            # stdout here IS the transcript (checked for WEBVTT, written to a
+            # .vtt, parsed). yap emits UTF-8 whatever the console locale is, so
+            # pin the codec: without it a cp949/eucJP/GB18030 locale decodes the
+            # first non-ASCII byte wrong and the run dies. Deliberately NO
+            # errors="replace" — on the CONTENT path that would swap a loud
+            # crash for U+FFFD mojibake written out as a valid-looking
+            # transcript, i.e. a failure that exits 0.
+            encoding="utf-8",
             timeout=request.timeout,
         )
         # yap exits 0 even when it rejects the locale, printing an error where the
@@ -630,7 +645,14 @@ class WhisperCliAdapter:
             ]
             if language:
                 command += ["--language", language]
-            subprocess.run(command, capture_output=True, text=True, timeout=request.timeout)
+            # Output is discarded (the JSON file is the only success signal),
+            # but text=True still decodes it, so a locale-encoded decode would
+            # crash the run over chatter we never read. Diagnostic path:
+            # replace is correct, never raise for output nobody parses.
+            subprocess.run(
+                command, capture_output=True, text=True,
+                encoding="utf-8", errors="replace", timeout=request.timeout,
+            )
             # The whisper CLI can exit 0 having produced nothing (its internal
             # ffmpeg failing on the input, for one). The output file is the only
             # honest success signal; the return code is not. Same trap as yap,
