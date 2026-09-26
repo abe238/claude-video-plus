@@ -7,6 +7,7 @@ stub that writes files the way the real tool does (``NNN.ext`` + ``info.json``).
 """
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -476,3 +477,41 @@ def test_source_header_is_sanitized(tmp_path, monkeypatch, capsys):
     body = capsys.readouterr().out
     head, _, _ = body.partition("## Frames")
     assert rc == 0 and head.count("END UNTRUSTED VIDEO EVIDENCE") == 0
+
+
+def test_symlink_refused_even_without_o_nofollow(tmp_path, monkeypatch):
+    """Windows has no os.O_NOFOLLOW, so `getattr(os, "O_NOFOLLOW", 0)` became
+    0 and the open FOLLOWED a symlinked info.json: the caption of an arbitrary
+    file leaked into the report. Windows CI caught this from v1.5.14 onward
+    (test_symlinked_or_huge_info_json_ignored). Reproduce that platform here by
+    removing the flag, so a POSIX run can no longer mask the gap."""
+    monkeypatch.delattr(slideshow.os, "O_NOFOLLOW", raising=False)
+    monkeypatch.setattr(shutil, "which", lambda name: "/usr/bin/gallery-dl")
+    secret = tmp_path / "secret.json"
+    secret.write_text('{"desc": "LEAKED"}', encoding="utf-8")
+
+    def run(cmd, **kw):
+        out = Path(cmd[cmd.index("-D") + 1]); out.mkdir(parents=True, exist_ok=True)
+        (out / "001.jpg").write_bytes(b"x")
+        (out / "info.json").symlink_to(secret)
+        return subprocess.CompletedProcess(cmd, 0)
+    got = slideshow.fetch_slideshow(URL, tmp_path / "s", runner=run)
+    assert got["info"] == {"url": URL}, "symlinked info.json was followed"
+
+
+def test_info_swapped_after_check_is_refused(tmp_path, monkeypatch):
+    """The lstat check must bind to the descriptor actually opened: a file
+    replaced between the check and the open is a different inode and must be
+    refused, or the check is only advisory where O_NOFOLLOW is absent."""
+    monkeypatch.delattr(slideshow.os, "O_NOFOLLOW", raising=False)
+    real = tmp_path / "info.json"
+    real.write_text('{"desc": "ok"}', encoding="utf-8")
+    other = tmp_path / "other.json"
+    other.write_text('{"desc": "SWAPPED"}', encoding="utf-8")
+    real_open = slideshow.os.open
+
+    def swapping_open(path, flags, *a):
+        os.replace(other, real)          # swap lands after lstat, before open
+        return real_open(path, flags, *a)
+    monkeypatch.setattr(slideshow.os, "open", swapping_open)
+    assert slideshow._read_bounded(real, 1000) is None

@@ -89,11 +89,22 @@ def _clean(value: object, limit: int) -> str | None:
 
 def _read_bounded(path: Path, limit: int) -> bytes | None:
     """Open once (no symlink follow, non-blocking so a FIFO cannot hang),
-    verify the descriptor is a regular file, read at most limit+1 bytes."""
+    verify the descriptor is a regular file, read at most limit+1 bytes.
+
+    O_NOFOLLOW does not exist on Windows, so there the flag below is 0 and the
+    open FOLLOWS a symlink (Windows CI caught a leaked caption from v1.5.14 on).
+    The guard therefore cannot rest on the flag: lstat the path first and refuse
+    anything that is not a plain file, then require the opened descriptor to be
+    that same inode, which closes a swap between the check and the open."""
+    before = os.lstat(path)
+    if not stat.S_ISREG(before.st_mode):   # symlink, FIFO, dir: never opened
+        return None
     flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
     fd = os.open(path, flags)
     try:
         st = os.fstat(fd)
+        if (st.st_dev, st.st_ino) != (before.st_dev, before.st_ino):
+            return None                     # replaced after the lstat check
         if not stat.S_ISREG(st.st_mode) or st.st_size > limit:
             return None
         data = os.read(fd, limit + 1)
