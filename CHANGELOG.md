@@ -2,6 +2,27 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.17] — 2026-09-26
+
+### Fixed
+- **On Windows, a symlinked slideshow `info.json` was followed.** The v1.5.14
+  TikTok slideshow fallback opened gallery-dl's `info.json` with
+  `O_NOFOLLOW`, but that flag does not exist on Windows, so
+  `getattr(os, "O_NOFOLLOW", 0)` became 0 and the open followed a planted
+  symlink: the target file's text was read as the post's caption and reached
+  the report. The guard now `lstat`s the path and refuses anything that is not
+  a regular file, then requires the opened descriptor to be that same inode,
+  which also closes a swap between the check and the open. Two tests reproduce
+  the Windows condition on POSIX by removing `O_NOFOLLOW`.
+
+### Notes
+- **Windows CI had been red since v1.5.14 and three releases shipped past it.**
+  The failing test (`test_symlinked_or_huge_info_json_ignored`) was catching
+  exactly this gap. Each release was checked by its build workflow and a
+  downloaded asset, never by the test matrix, which runs in parallel and does
+  not gate the release. Releases are now verified against every test job on the
+  tagged commit. Codex review: SHIP.
+
 ## [1.5.16] — 2026-09-26
 
 A crash on non-UTF-8 consoles, and a quieter bug inside it: two transcription
