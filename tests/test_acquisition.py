@@ -52,7 +52,9 @@ def test_default_success_is_first_and_does_not_retry(tmp_path: Path):
     assert len(calls) == 1
     assert "--extractor-args" not in calls[0]
     assert calls[0][calls[0].index("-f") + 1] == (
-        "bv*[height<=720]+ba/b[height<=720]"
+        "bv*[vcodec^=avc1][height<=720]+ba/b[vcodec^=avc1][height<=720]"
+        "/bv*[vcodec^=avc1][height<=?720]+ba/b[vcodec^=avc1][height<=?720]"
+        "/bv*[height<=720]+ba/b[height<=720]"
         "/bv*[height<=?720]+ba/b[height<=?720]"
         "/wv*+ba/w"
     )
@@ -79,6 +81,12 @@ def test_video_format_ladder_is_resolution_bounded(tmp_path: Path):
     assert "[height<=?720]" in fmt          # unknown-resolution HLS formats kept
     assert "/wv*+ba/w" in fmt               # bounded worst-rendition tail
     assert "/bv+ba/b" not in fmt            # the old UNBOUNDED tail is gone
+    # H.264 preferred first, but every pre-existing rung survives, in order
+    rungs = fmt.split("/")
+    assert "[vcodec^=avc1]" in rungs[0] and "[vcodec^=avc1]" in rungs[1]
+    legacy = ["bv*[height<=720]+ba", "b[height<=720]", "bv*[height<=?720]+ba",
+              "b[height<=?720]", "wv*+ba", "w"]
+    assert [r for r in rungs if "avc1" not in r] == legacy
     # every rung either caps height or is the explicit worst rendition
     for rung in fmt.split("/"):
         assert ("height<=" in rung) or rung.startswith("w"), rung

@@ -554,10 +554,15 @@ def build_yt_dlp_command(
     # then a BOUNDED worst-rendition tail (wv*+ba/w). The old unbounded `bv+ba/b`
     # tail would fetch a 4K upload whenever no <=720 rendition was tagged — slow,
     # bandwidth-heavy, and a needless WATCH_MAX_FILESIZE trip. (fork-watch:
-    # androsland/moviola.)
+    # androsland/moviola.) H.264 (avc1) variants of the two bounded rungs go FIRST:
+    # measured ~3x faster ffmpeg decode than AV1/VP9 at the same height, at the
+    # cost of a larger file (see docs/benchmarks/2026-10-11-h264-preference/).
+    # Idea from thomasdupkavich/claude-video. Existing rungs follow unchanged.
     normal = (
         "ba/bestaudio" if audio_only
-        else "bv*[height<=720]+ba/b[height<=720]"
+        else "bv*[vcodec^=avc1][height<=720]+ba/b[vcodec^=avc1][height<=720]"
+             "/bv*[vcodec^=avc1][height<=?720]+ba/b[vcodec^=avc1][height<=?720]"
+             "/bv*[height<=720]+ba/b[height<=720]"
              "/bv*[height<=?720]+ba/b[height<=?720]"
              "/wv*+ba/w"
     )
