@@ -96,7 +96,7 @@ def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) ->
         except (OSError, ValueError):
             pass
 
-        def _auto_rank(candidate: Path) -> tuple[int, str]:
+        def _auto_rank(candidate: Path) -> tuple[int, int, str]:
             parts = candidate.name.split(".")
             code = parts[-2].lower() if len(parts) >= 3 else ""
             base = code.split("-", 1)[0]
@@ -104,12 +104,15 @@ def _subtitle_candidates(out_dir: Path, languages: tuple[str, ...] = ("en",)) ->
             # with the language unknown, a manual track may be a translation
             # and must never outrank the requested -orig original.
             if video_lang and code in manual_codes and base == video_lang:
-                return (0, candidate.name)
+                return (0, 0, candidate.name)
             if code.endswith("-orig") or (video_lang and base == video_lang):
-                return (1, candidate.name)
+                # Dubbed videos carry one -orig per audio language: prefer the
+                # video's own language, else English-first when it is unknown.
+                want = video_lang or "en"
+                return (1, 0 if base == want else 1, candidate.name)
             if code in manual_codes:
-                return (2, candidate.name)
-            return (3, candidate.name)
+                return (2, 0, candidate.name)
+            return (3, 0, candidate.name)
 
         return sorted(candidates, key=_auto_rank)
     ordered: list[Path] = []
@@ -170,8 +173,10 @@ def caption_provenance(subtitle_path: str | Path, info: dict | None) -> dict:
     return {
         "code": code,
         "kind": kind,
-        "original": bool(known and (is_orig or (video_lang and base == video_lang))),
-        "translated": bool(known and video_lang and base != video_lang and not is_orig),
+        # A -orig of another language than a KNOWN video language (dubbed
+        # video, one -orig per audio track) is not the original.
+        "original": bool(known and (base == video_lang if video_lang else is_orig)),
+        "translated": bool(known and video_lang and base != video_lang),
     }
 
 
