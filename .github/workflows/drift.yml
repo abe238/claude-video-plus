@@ -97,3 +97,74 @@ jobs:
           else
             echo "::warning::STORYBOARD PREMISE BROKEN — metadata OK but i.ytimg.com tile returned HTTP $CODE ($SZ bytes). The v1.5.13 fallback would be dead weight in this regime; investigate."
           fi
+
+  # End-to-end on a source that IS reachable from a datacenter IP. The canary job
+  # above can only skip when YouTube bot-walls the runner, so nothing there runs
+  # download -> frames -> transcript for real. This job does, against one pinned
+  # public-domain Prelinger Archives clip on archive.org, using the real skill.
+  # Idea credit: frinsen/claude-video (smoke.yml), who moved off Wikimedia (403s
+  # yt-dlp's user agent) to the Internet Archive. No code was copied or run.
+  # Actions are pinned by commit SHA, the same SHAs as the canary job above.
+  #
+  # Failure semantics: archive.org itself being down/502 (it happens) is a
+  # ::warning:: + skip, decided by re-probing the pinned URL AFTER our pipeline
+  # failed. URL healthy + pipeline failed = our regression = red.
+  archive-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      VIDEO_URL: https://archive.org/download/kelloggs_variety_pak/kelloggs_variety_pak.mp4
+      MIN_FRAMES: "3"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Install media tools (LATEST yt-dlp, unpinned on purpose)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check "yt-dlp[default]"
+          echo "yt-dlp $(yt-dlp --version)"
+      - name: watch.py end to end on the archive.org clip
+        run: |
+          set -u
+          OUT="${RUNNER_TEMP:-/tmp}/archive-e2e"
+          probe() {  # 0 = archive.org serves the pinned file right now
+            for a in 1 2 3; do
+              # ranged GET, not HEAD: archive.org answers HEAD 200 while GET 5xx's
+              case "$(curl -sSL -r 0-1023 -o /dev/null -w '%{http_code}' --max-time 30 "$VIDEO_URL")" in 200|206) return 0;; esac
+              sleep $((a * 10))
+            done
+            return 1
+          }
+          if ! probe; then
+            echo "::warning::archive.org did not serve $VIDEO_URL (not HTTP 200 after 3 tries) - e2e not verifiable now; skipping (not a product break)."
+            exit 0
+          fi
+          rc=1
+          for attempt in 1 2 3; do
+            rm -rf "$OUT"
+            timeout 600 python3 skills/watch/scripts/watch.py "$VIDEO_URL" --out-dir "$OUT" >report.md 2>err.txt
+            rc=$?
+            [ "$rc" -eq 0 ] && break
+            echo "attempt $attempt failed (exit $rc); retrying" >&2
+            sleep 30
+          done
+          if [ "$rc" -ne 0 ]; then
+            cat err.txt >&2
+            if probe; then
+              echo "::error::watch.py exited $rc on a healthy archive.org source - our pipeline (or latest yt-dlp/ffmpeg) regressed."
+              exit 1
+            fi
+            echo "::warning::watch.py failed AND archive.org stopped serving the file - treating as archive.org downtime, skipping."
+            exit 0
+          fi
+          cat report.md
+          FRAMES=$(find "$OUT" -type f \( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' \) | wc -l | tr -d ' ')
+          echo "frames on disk: $FRAMES (min $MIN_FRAMES)"
+          fail=0
+          [ "$FRAMES" -ge "$MIN_FRAMES" ] || { echo "::error::only $FRAMES frame files written, expected >= $MIN_FRAMES"; fail=1; }
+          grep -Eq '\*\*Frames:\*\* [1-9][0-9]* ' report.md || { echo "::error::report has no non-empty '**Frames:**' line"; fail=1; }
+          grep -q '\*\*Transcript:\*\*' report.md || { echo "::error::report has no '**Transcript:**' line (neither a transcript nor a no-transcript note)"; fail=1; }
+          exit $fail
