@@ -669,6 +669,7 @@ def extract_at_timestamps(
     max_frames: int | None = None,
     start_seconds: float | None = None,
     end_seconds: float | None = None,
+    reason="transcript-cue",  # str, or a callable timestamp -> str
 ) -> tuple[list[dict], dict]:
     """Grab exactly one frame at each requested timestamp (transcript cues).
 
@@ -718,7 +719,7 @@ def extract_at_timestamps(
                 "index": len(out),
                 "timestamp_seconds": t,
                 "path": str(path),
-                "reason": "transcript-cue",
+                "reason": reason(t) if callable(reason) else reason,
             })
 
     meta = {

@@ -36,8 +36,8 @@ from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from storyboard import extract_storyboard_frames  # noqa: E402
 from slideshow import extract_slides, fetch_slideshow, is_tiktok_url  # noqa: E402
-from boundaries import detect_boundaries  # noqa: E402
-from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit, _even_indices  # noqa: E402
+from boundaries import cap_by_priority, detect_boundaries  # noqa: E402
+from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit  # noqa: E402
 
 
 def _skill_version() -> str:
@@ -354,6 +354,7 @@ def resolve_boundary_anchors(
     current_timestamps: list,
     has_audio: bool = True,
     detect=detect_boundaries,
+    has_video_stream: bool = True,
 ) -> tuple[list, str | None]:
     """Fold fade/held-card/silence boundary anchors into the cue list.
 
@@ -367,6 +368,8 @@ def resolve_boundary_anchors(
         return current_timestamps, None
     if not (have_video and video_path):
         return current_timestamps, "no-video"
+    if not has_video_stream:  # audio-only: -vf is ignored and silence cues would all fail
+        return current_timestamps, "audio-only"
     used = len(set(current_timestamps) - set(manual_timestamps))
     room = text_anchor_limit(max_frames, len(manual_timestamps)) - used
     if room <= 0:
@@ -374,9 +377,9 @@ def resolve_boundary_anchors(
     try:
         found, note = detect(str(video_path), lo, hi, hi, has_audio)
         # skip boundaries within 0.5s of a frame we are already going to take
-        found = [t for t in found if all(abs(t - c) >= 0.5 for c in current_timestamps)]
-        if len(found) > room:
-            found = [found[j] for j in _even_indices(len(found), room)]
+        found = [m for m in found if all(abs(m[0] - c) >= 0.5 for c in current_timestamps)]
+        # cap by priority (fades > held cards > silences), not evenly across kinds
+        found = [t for t, _ in cap_by_priority(found, room)]
     except Exception as exc:
         return current_timestamps, f"error:{exc}"
     if note:
@@ -823,6 +826,7 @@ def main() -> int:
         print(f"[watch] --text-anchors: {_ta_msg}", file=sys.stderr)
 
     # --boundary-anchors: same budget as --text-anchors (shared, not doubled).
+    _pre_ba_cues = list(cue_timestamps)
     cue_timestamps, _ba_status = resolve_boundary_anchors(
         active=boundary_anchors_active,
         video_path=video_path,
@@ -833,12 +837,15 @@ def main() -> int:
         manual_timestamps=_manual_cues,
         current_timestamps=cue_timestamps,
         has_audio=bool(meta.get("has_audio")),
+        has_video_stream=bool(meta.get("width")),
     )
+    _boundary_ts = set(cue_timestamps) - set(_pre_ba_cues)
     if _ba_status:
         print(f"[watch] --boundary-anchors: " + (
             f"{_ba_status.split(':', 1)[1]} boundary anchor(s) added" if _ba_status.startswith("added:")
             else f"boundary pass failed ({_ba_status.split(':', 1)[1]}); normal extraction" if _ba_status.startswith("error:")
             else {"no-video": "no video to scan — normal extraction",
+                  "audio-only": "source has no video stream — no boundary anchors added",
                   "budget-spent": "anchor budget already spent — no boundary anchors added",
                   "none-found": "no fades, held frames or silences found — normal extraction"}.get(_ba_status, "normal extraction")),
               file=sys.stderr)
@@ -854,6 +861,7 @@ def main() -> int:
             max_frames=max_frames,
             start_seconds=start_sec,
             end_seconds=end_sec,
+            reason=lambda t: "boundary" if t in _boundary_ts else "transcript-cue",
         )
         if cue_meta.get("dropped_out_of_window"):
             print(
@@ -1048,8 +1056,8 @@ def main() -> int:
         dropped = cue_meta.get("dropped_out_of_window", 0)
         drop_note = f", {dropped} dropped outside range" if dropped else ""
         print(
-            f"- **Cue frames:** {len(cue_frames)} at transcript timestamps "
-            f"(transcript-cue{drop_note})"
+            f"- **Cue frames:** {len(cue_frames)} at cue timestamps "
+            f"({', '.join(sorted({f['reason'] for f in cue_frames}))}{drop_note})"
         )
     if frames:
         print(f"- **Frame size:** max {args.resolution}px wide, max 1998px tall")
