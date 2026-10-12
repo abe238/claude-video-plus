@@ -39,6 +39,7 @@ if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
 
 from frames import _even_indices, _scale_filter, dedupe_perceptual  # noqa: E402
+from config import FRAME_TIMEOUT, run_bounded  # noqa: E402
 
 # Bounds on untrusted values from info.json (a hostile/oversized storyboard
 # description must never explode fetches, ffmpeg calls, or disk).
@@ -215,7 +216,8 @@ def _extract(info, out_dir, max_frames, resolution, dedup, fetch, lo, hi, meta):
                 "-vf", f"crop={tw}:{th}:{x}:{y},{_scale_filter(resolution)}",
                 "-frames:v", "1", "-q:v", "4", str(path),
             ]
-            result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                 timeout=FRAME_TIMEOUT)
             if result.returncode == 0 and path.exists():
                 frames.append({
                     "index": len(frames),

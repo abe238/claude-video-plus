@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import Callable
 from urllib.parse import urlsplit, urlunsplit
 
+from config import PROBE_TIMEOUT, YTDLP_DOWNLOAD_TIMEOUT, YTDLP_META_TIMEOUT, run_bounded
+
 
 class FailureClass(str, Enum):
     SABR_CLIENT = "sabr_client"
@@ -493,6 +495,12 @@ def ytdlp_cmd() -> tuple[str, ...]:
     return _detect_ytdlp_cmd()
 
 
+def _check_ytdlp(cmd: list[str], cwd: str | None = None) -> None:
+    """Bounded `--version` probe; raises on non-zero exit (CalledProcessError) or hang (TimeoutExpired)."""
+    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
+                   timeout=PROBE_TIMEOUT, cwd=cwd)
+
+
 @functools.lru_cache(maxsize=1)
 def _detect_ytdlp_cmd() -> tuple[str, ...]:
     """Probe a working yt-dlp once per process.
@@ -507,12 +515,9 @@ def _detect_ytdlp_cmd() -> tuple[str, ...]:
     exe = shutil.which("yt-dlp")
     if exe is not None:
         try:
-            subprocess.run(
-                [exe, "--version"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
-            )
+            _check_ytdlp([exe, "--version"])
             return ("yt-dlp",)
-        except (OSError, subprocess.CalledProcessError) as exc:
+        except (OSError, subprocess.SubprocessError) as exc:
             # Either it cannot start (policy block) or it starts and fails its
             # own --version (broken/intercepted shim). Both mean "do not trust
             # this executable" — fall through and try the module, which may
@@ -525,13 +530,9 @@ def _detect_ytdlp_cmd() -> tuple[str, ...]:
             )
     module = _hardened_python("-m", "yt_dlp")
     try:
-        subprocess.run(
-            [*module, "--version"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
-            cwd=_SAFE_CWD,
-        )
+        _check_ytdlp([*module, "--version"], cwd=_SAFE_CWD)
         return module
-    except (OSError, subprocess.CalledProcessError):
+    except (OSError, subprocess.SubprocessError):
         return ("yt-dlp",)
 
 
@@ -636,8 +637,9 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, player_client=client,
             final_format_fallback=final_format, ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True,
-                           encoding="utf-8", errors="replace")
+        completed = run_bounded(cmd, runner=runner, capture_output=True, text=True,
+                                encoding="utf-8", errors="replace",
+                                timeout=YTDLP_META_TIMEOUT if captions_only else YTDLP_DOWNLOAD_TIMEOUT)
         stderr = (completed.stderr or "") + (completed.stdout or "")
         media = None if captions_only else pick_media(out_dir)
         subtitles = pick_subtitles(out_dir, languages)
@@ -667,8 +669,8 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
             ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True,
-                           encoding="utf-8", errors="replace")
+        completed = run_bounded(cmd, runner=runner, capture_output=True, text=True,
+                                encoding="utf-8", errors="replace", timeout=YTDLP_META_TIMEOUT)
         stderr = (completed.stderr or "") + (completed.stdout or "")
         subtitles = pick_subtitles(out_dir, languages)
         failure = None if subtitles else classify_failure(stderr, completed.returncode)
@@ -692,8 +694,8 @@ def acquire_url(
             languages=languages, cookie_spec=cookie_spec, max_filesize=max_filesize, json3_captions=True,
             ignore_config=ignore_config,
         )
-        completed = runner(cmd, capture_output=True, text=True,
-                           encoding="utf-8", errors="replace")
+        completed = run_bounded(cmd, runner=runner, capture_output=True, text=True,
+                                encoding="utf-8", errors="replace", timeout=YTDLP_META_TIMEOUT)
         stderr = (completed.stderr or "") + (completed.stdout or "")
         subtitles = pick_subtitles(out_dir, languages)
         failure = None if subtitles else classify_failure(stderr, completed.returncode)

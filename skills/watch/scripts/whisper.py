@@ -32,6 +32,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 from config import read_env_file  # noqa: E402 — single .env parser (quotes+comments)
+from config import PROBE_TIMEOUT, ffmpeg_timeout, run_bounded  # noqa: E402
 
 
 GROQ_ENDPOINT = "https://api.groq.com/openai/v1/audio/transcriptions"
@@ -229,7 +230,8 @@ def extract_audio(
         "-b:a", "64k",
         str(out_path.resolve()),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                         timeout=ffmpeg_timeout())
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg audio extraction failed: {result.stderr.strip()}")
     if not out_path.exists() or out_path.stat().st_size == 0:
@@ -247,9 +249,10 @@ def _duration_via_ffmpeg(audio_path: Path) -> float:
     if shutil.which("ffmpeg") is None:
         raise SystemExit("Neither ffprobe nor ffmpeg is usable. Install ffmpeg.")
 
-    result = subprocess.run(
+    result = run_bounded(
         ["ffmpeg", "-hide_banner", "-i", str(audio_path.resolve())],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
+        timeout=PROBE_TIMEOUT,
     )
     banner = (result.stderr or "") + (result.stdout or "")
     m = re.search(r"Duration:\s*(\d+):(\d{2}):(\d{2}(?:\.\d+)?)", banner)
@@ -264,7 +267,7 @@ def audio_duration(audio_path: Path) -> float:
         return _duration_via_ffmpeg(audio_path)
 
     try:
-        result = subprocess.run(
+        result = run_bounded(
             [
                 "ffprobe",
                 "-v", "quiet",
@@ -276,6 +279,7 @@ def audio_duration(audio_path: Path) -> float:
             text=True,
             encoding="utf-8",
             errors="replace",
+            timeout=PROBE_TIMEOUT,
         )
     except OSError:
         # On PATH but not executable (e.g. blocked by an App Control policy).
@@ -314,7 +318,8 @@ def split_audio(
             "-c", "copy",
             str(out_path.resolve()),
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                             timeout=ffmpeg_timeout())
         if result.returncode != 0 or not out_path.exists() or out_path.stat().st_size == 0:
             raise SystemExit(
                 f"ffmpeg failed to split audio chunk {index + 1}: {result.stderr.strip()}"

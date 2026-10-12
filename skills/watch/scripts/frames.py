@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from config import FRAME_TIMEOUT, PROBE_TIMEOUT, ffmpeg_timeout, run_bounded  # noqa: E402
 
 
 MAX_FPS = 2.0
@@ -72,9 +73,10 @@ def _vfr_args() -> tuple[str, str]:
     Probe the binary's help once per process: prefer ``-fps_mode``, fall back to
     ``-vsync`` for ffmpeg <5.1 (Ubuntu 22.04 still ships 4.4).
     """
-    result = subprocess.run(
+    result = run_bounded(
         ["ffmpeg", "-hide_banner", "-h", "full"],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
+        timeout=PROBE_TIMEOUT,
     )
     if "fps_mode" in (result.stdout or ""):
         return ("-fps_mode", "vfr")
@@ -236,9 +238,10 @@ def _metadata_via_ffmpeg(video_path: str) -> dict:
         raise SystemExit("Neither ffprobe nor ffmpeg is usable. Install ffmpeg.")
 
     path = Path(video_path).resolve()
-    result = subprocess.run(
+    result = run_bounded(
         ["ffmpeg", "-hide_banner", "-i", str(path)],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
+        timeout=PROBE_TIMEOUT,
     )
     banner = (result.stderr or "") + (result.stdout or "")
 
@@ -275,7 +278,7 @@ def get_metadata(video_path: str) -> dict:
         return _metadata_via_ffmpeg(video_path)
 
     try:
-        result = subprocess.run(
+        result = run_bounded(
             [
                 "ffprobe",
                 "-v", "quiet",
@@ -288,6 +291,7 @@ def get_metadata(video_path: str) -> dict:
             text=True,
             encoding="utf-8",
             errors="replace",
+            timeout=PROBE_TIMEOUT,
         )
     except OSError:
         # On PATH but not executable (e.g. blocked by an App Control policy).
@@ -434,7 +438,8 @@ def extract(
         output_pattern,
     ]
 
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg frame extraction failed: {result.stderr.strip()}")
 
@@ -510,7 +515,8 @@ def extract_scene_candidates(
         "-q:v", "4",
         output_pattern,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg scene extraction failed: {result.stderr.strip()}")
 
@@ -705,7 +711,8 @@ def extract_at_timestamps(
             "-q:v", "4",
             str(path),
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                             timeout=FRAME_TIMEOUT)
         if result.returncode == 0 and path.exists():
             out.append({
                 "index": len(out),
@@ -783,7 +790,7 @@ def _thumb_frames(paths: list[Path], pixel_format: str = "gray") -> list[bytes]:
         "-f", "rawvideo",
         "-",
     ]
-    result = subprocess.run(cmd, capture_output=True)
+    result = run_bounded(cmd, capture_output=True, timeout=ffmpeg_timeout())
     if result.returncode != 0:
         return []
 
@@ -1151,7 +1158,8 @@ def extract_keyframes(
         "-q:v", "4",
         output_pattern,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
     files = sorted(out_dir.glob("frame_*.jpg"))
     # A range holding no keyframes makes some ffmpeg builds fail at mjpeg
     # encoder init ("No filtered frames for output stream") instead of exiting

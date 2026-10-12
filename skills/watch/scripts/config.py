@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 from pathlib import Path
 
 
@@ -27,6 +28,36 @@ DEFAULT_LANGUAGE = "auto"
 # never downloaded automatically — a future release may add a pinned-SHA
 # download. WATCH_VAD=off disables even when the file exists.
 DEFAULT_VAD_MODEL_PATH = str(CONFIG_DIR / "models" / "ggml-silero-v5.1.2.bin")
+
+
+# Child-process ceilings (seconds). A hung yt-dlp/ffmpeg/ffprobe/whisper child must
+# become a failure the caller already handles, never a /watch that hangs forever.
+# ponytail: fixed ceilings, generous on purpose; scale per call site if a legit job ever hits one.
+PROBE_TIMEOUT = 60             # --version / -h / ffprobe / ffmpeg -i banner
+FRAME_TIMEOUT = 120            # one-frame ffmpeg grabs and thumbnail passes
+YTDLP_META_TIMEOUT = 300       # yt-dlp captions-only fetch
+YTDLP_DOWNLOAD_TIMEOUT = 3600  # yt-dlp media download
+WHISPER_CLI_TIMEOUT = 1800     # whisper CLI per chunk
+INSTALL_TIMEOUT = 1800         # brew install
+
+
+def ffmpeg_timeout(duration_seconds: float | None = None) -> float:
+    """Whole-video ffmpeg pass ceiling: max(600, 3 x duration), else 3600."""
+    if duration_seconds and duration_seconds > 0:
+        return max(600.0, 3.0 * float(duration_seconds))
+    return 3600.0
+
+
+def run_bounded(cmd, *, timeout: float, runner=None, **kwargs) -> subprocess.CompletedProcess:
+    """subprocess.run with a hard timeout. A timeout (child is killed) comes back as
+    returncode 124 with a "timed out" stderr, so every caller's existing non-zero-exit
+    path handles it and TimeoutExpired never escapes as a traceback."""
+    try:
+        return (runner or subprocess.run)(cmd, timeout=timeout, **kwargs)
+    except subprocess.TimeoutExpired:
+        text = kwargs.get("text") or kwargs.get("encoding") or kwargs.get("universal_newlines")
+        msg = f"child process timed out after {timeout:g}s"
+        return subprocess.CompletedProcess(cmd, 124, "" if text else b"", msg if text else msg.encode())
 
 
 def _parse_value(value: str) -> str:
