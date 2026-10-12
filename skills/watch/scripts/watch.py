@@ -36,7 +36,8 @@ from video_cache import VideoCache, cache_enabled, cache_identity  # noqa: E402
 from download import caption_provenance, download, fetch_captions, format_description, is_url, sanitize_for_report  # noqa: E402
 from storyboard import extract_storyboard_frames  # noqa: E402
 from slideshow import extract_slides, fetch_slideshow, is_tiktok_url  # noqa: E402
-from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit  # noqa: E402
+from boundaries import detect_boundaries  # noqa: E402
+from frames import MAX_FPS, auto_fps, caption_anchor_timestamps, coverage_bounded_fps, resolve_user_fps, auto_fps_focus, extract_at_timestamps, extract_keyframes, extract_scene_or_uniform, format_time, get_metadata, merge_frames, parse_time, parse_timestamps, text_anchor_limit, _even_indices  # noqa: E402
 
 
 def _skill_version() -> str:
@@ -336,6 +337,55 @@ def text_anchors_enabled(requested_detail: str, flag: bool) -> bool:
     return bool(flag) and requested_detail != "evidence"
 
 
+def boundary_anchors_enabled(requested_detail: str, flag: bool) -> bool:
+    """--boundary-anchors latches OFF in evidence mode exactly like --text-anchors."""
+    return bool(flag) and requested_detail != "evidence"
+
+
+def resolve_boundary_anchors(
+    *,
+    active: bool,
+    video_path,
+    have_video: bool,
+    lo: float,
+    hi: float,
+    max_frames: int | None,
+    manual_timestamps: list,
+    current_timestamps: list,
+    has_audio: bool = True,
+    detect=detect_boundaries,
+) -> tuple[list, str | None]:
+    """Fold fade/held-card/silence boundary anchors into the cue list.
+
+    Mirrors ``resolve_text_anchors``. ``current_timestamps`` is the cue list after
+    any text anchors; boundary anchors share the SAME ``text_anchor_limit`` budget
+    (what text anchors already used is subtracted), never a second allowance, and
+    never displace a manual ``--timestamps`` entry. Fails open to the input list.
+    Returns ``(cue_timestamps, status)``; status None when the flag is off.
+    """
+    if not active:
+        return current_timestamps, None
+    if not (have_video and video_path):
+        return current_timestamps, "no-video"
+    used = len(set(current_timestamps) - set(manual_timestamps))
+    room = text_anchor_limit(max_frames, len(manual_timestamps)) - used
+    if room <= 0:
+        return current_timestamps, "budget-spent"
+    try:
+        found, note = detect(str(video_path), lo, hi, hi, has_audio)
+        # skip boundaries within 0.5s of a frame we are already going to take
+        found = [t for t in found if all(abs(t - c) >= 0.5 for c in current_timestamps)]
+        if len(found) > room:
+            found = [found[j] for j in _even_indices(len(found), room)]
+    except Exception as exc:
+        return current_timestamps, f"error:{exc}"
+    if note:
+        return current_timestamps, f"error:{note}"
+    if not found:
+        return current_timestamps, "none-found"
+    return sorted({*current_timestamps, *found}), f"added:{len(found)}"
+
+
 def resolve_text_anchors(
     *,
     active: bool,
@@ -431,6 +481,15 @@ def main() -> int:
              "Needs a caption track available before frame extraction (URL captions); fails open "
              "to normal extraction otherwise. Not applied in --detail evidence mode.",
     )
+    ap.add_argument(
+        "--boundary-anchors",
+        action="store_true",
+        help="Force a frame after each fade-to-black, at the start of each held (frozen) picture, "
+             "and at the end of each silence, found by one cheap low-res ffmpeg pass. Catches "
+             "slow fades and title/slide cards that scene detection misses. Shares the "
+             "--text-anchors budget (30%% of the frame cap, 100 when uncapped); explicit "
+             "--timestamps keep precedence. Fails open. Not applied in --detail evidence mode.",
+    )
     ap.add_argument("--start", type=str, default=None, help="Range start (SS, MM:SS, or HH:MM:SS)")
     ap.add_argument("--end", type=str, default=None, help="Range end (SS, MM:SS, or HH:MM:SS)")
     ap.add_argument("--out-dir", type=str, default=None, help="Working directory (default: tmp)")
@@ -515,7 +574,11 @@ def main() -> int:
     # a flag the user was told is ignored). Codex gpt-5.6-sol blocker.
     text_anchors_active = text_anchors_enabled(detail, getattr(args, "text_anchors", False))
 
+    boundary_anchors_active = boundary_anchors_enabled(detail, getattr(args, "boundary_anchors", False))
+
     if detail == "evidence":
+        if getattr(args, "boundary_anchors", False):
+            print("[watch] --boundary-anchors is not applied in evidence mode — ignored", file=sys.stderr)
         if getattr(args, "text_anchors", False):
             print("[watch] --text-anchors is not applied in evidence mode "
                   "(question-aware selection owns frame choice here) — ignored", file=sys.stderr)
@@ -574,7 +637,7 @@ def main() -> int:
     # they override the transcript-mode download skip (and force a full, not
     # audio-only, fetch). Anchors only apply when a caption track is already in
     # hand here; without one the flag fails open and the skip still holds.
-    has_text_anchors = text_anchors_active and bool(transcript_segments)
+    has_text_anchors = (text_anchors_active and bool(transcript_segments)) or boundary_anchors_active
     audio_only = detail == "transcript" and not cue_timestamps and not has_text_anchors
     if detail == "transcript" and transcript_segments and not cue_timestamps and not has_text_anchors:
         video_path = None
@@ -736,6 +799,7 @@ def main() -> int:
     # force neither unbounded extractions nor an unbounded anchor list — the list
     # is intrinsically capped by video duration and then by max_anchors). Fails
     # open (warns, normal extraction) when no caption track was available.
+    _manual_cues = list(cue_timestamps)
     cue_timestamps, _ta_status = resolve_text_anchors(
         active=text_anchors_active,
         transcript_segments=transcript_segments,
@@ -757,6 +821,27 @@ def main() -> int:
                 "no-in-window": "no in-window caption cues to anchor — normal extraction",
             }.get(_ta_status, "normal extraction")
         print(f"[watch] --text-anchors: {_ta_msg}", file=sys.stderr)
+
+    # --boundary-anchors: same budget as --text-anchors (shared, not doubled).
+    cue_timestamps, _ba_status = resolve_boundary_anchors(
+        active=boundary_anchors_active,
+        video_path=video_path,
+        have_video=bool(video_path) and slideshow is None,
+        lo=effective_start,
+        hi=effective_end,
+        max_frames=max_frames,
+        manual_timestamps=_manual_cues,
+        current_timestamps=cue_timestamps,
+        has_audio=bool(meta.get("has_audio")),
+    )
+    if _ba_status:
+        print(f"[watch] --boundary-anchors: " + (
+            f"{_ba_status.split(':', 1)[1]} boundary anchor(s) added" if _ba_status.startswith("added:")
+            else f"boundary pass failed ({_ba_status.split(':', 1)[1]}); normal extraction" if _ba_status.startswith("error:")
+            else {"no-video": "no video to scan — normal extraction",
+                  "budget-spent": "anchor budget already spent — no boundary anchors added",
+                  "none-found": "no fades, held frames or silences found — normal extraction"}.get(_ba_status, "normal extraction")),
+              file=sys.stderr)
 
     # Transcript cues are pinned: extracted first and counted against the cap so
     # the detail engine never evicts the moments the user explicitly asked for.

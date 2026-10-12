@@ -11,6 +11,7 @@ using any flag not listed inline there.
 - `--no-dedup` — keep near-duplicate frames. By default a frame-delta pass drops frames visually near-identical to the previous kept one (held slides, static screen recordings, paused video) so the frame budget goes to distinct content; the report's **Frames** line notes how many were dropped. Pass this only if the user needs every sampled frame (e.g. judging subtle frame-to-frame motion).
 - `--timestamps T1,T2,…` — grab a frame at each absolute timestamp (`SS`, `MM:SS`, or `HH:MM:SS`). Use after reading the transcript to capture deictic moments the presenter flags ("look here", "as you can see", "notice this") that visual selection alone may miss. Full workflow below.
 - `--text-anchors` — automatically pin a frame at each transcript-segment start. Use for caption-driven or slide/screen-recording content where the meaning changes faster than the pixels: a new caption card, a single new bullet, or thin UI text can change too little for the dedup pass to keep a frame, so those states are lost. Anchoring at segment starts recovers them. Full behavior below.
+- `--boundary-anchors` — opt-in. Pin a frame after each fade-to-black, at the start of each held (frozen) picture, and at the end of each silence. Use for montages, slide decks and title-card-heavy videos where scene detection misses slow fades and static cards. Full behavior below.
 
 ## Transcript-segment anchors (`--text-anchors`)
 
@@ -20,6 +21,16 @@ Behavior:
 - **Needs captions available before frame extraction** — a URL caption track, parsed up front. On a source with no early caption track (e.g. a raw local screen recording with no sidecar), the flag **fails open**: it prints a note and runs normal extraction. It is **not applied** in `--detail evidence` (question-aware selection owns frame choice there), and stays off even if evidence mode falls back to balanced.
 - **Bounded by design.** Anchors are thinned to **at most one per second**, then capped to the **exact 30% floor of the frame budget** (`floor(0.30 × cap)`, so a cap of 1–3 yields none) — or **100** when uncapped — and evenly down-sampled if over. Explicit `--timestamps` keep **precedence**: anchors may consume only the budget left after your manual cues, and can never evict one. Derivation is single-pass and bounded in memory, so even a pathological or hostile caption track can force neither unbounded frame grabs nor an unbounded anchor list. Only the numeric segment time is read; caption text is data, never a command.
 - **Pinned like `--timestamps`.** Anchor frames (`reason=transcript-cue`) are reserved against the cap before the detail engine runs and merged chronologically; they honor `--start/--end` (out-of-window anchors dropped). Combine with `--timestamps` to add hand-picked moments on top.
+
+## Structural boundary anchors (`--boundary-anchors`)
+
+Scene detection scores the rate of pixel change, so it misses a slow fade (change spread over many frames) and a held title or slide card (no change at all). `--boundary-anchors` runs one extra low-resolution ffmpeg pass (`blackdetect`, `freezedetect`, `silencedetect`, nothing written to disk) and pins a frame at: 0.25 s after each fade-up out of black, 0.1 s into each held picture, and at the end of each silence.
+
+Behavior:
+- **Off by default**; the default path is unchanged. Not applied in `--detail evidence` and stays off if evidence falls back to balanced.
+- **Shares the `--text-anchors` budget**, it does not add to it: together they take at most the exact 30% floor of the frame cap (100 when uncapped). Explicit `--timestamps` keep precedence. A boundary within 0.5 s of an existing cue is skipped.
+- **Bounded**: at most 200 marks per pass, deduped within 1 s (fade > held card > silence when they collide), pass timeout scaled to video length.
+- **Fails open**: any ffmpeg problem prints a note and runs normal extraction. Honors `--start/--end`. Pinned frames carry `reason=transcript-cue`, same as the other anchors. Works on local files and downloads; at `--detail transcript` it forces a video fetch.
 
 ## Transcript-cue frames (`--timestamps`)
 
