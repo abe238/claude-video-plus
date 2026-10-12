@@ -35,6 +35,11 @@ class _Request:
         self.work_dir = tmp_path
 
 
+@pytest.fixture(autouse=True)
+def _isolated_config_dir(tmp_path_factory, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_DIR", tmp_path_factory.mktemp("cfg") / "watch")
+
+
 def _fake_parakeet(tmp_path, *, write_output=True):
     """Executable that records argv and writes canned parakeet-mlx JSON."""
     exe = tmp_path / "parakeet-mlx"
@@ -114,3 +119,51 @@ def test_missing_output_is_adapter_failure(tmp_path):
     adapter = ta.WhisperCliAdapter(executable=str(exe), profile="parakeet")
     with pytest.raises(RuntimeError, match="did not produce an output file"):
         adapter._transcribe_one(_Request(tmp_path), _Chunk(tmp_path))
+
+
+@pytest.mark.parametrize("model", ["medium", "turbo", "large-v3"])
+def test_whisper_model_names_are_not_passed_to_parakeet(tmp_path, model):
+    """An old .env with WATCH_WHISPER_CLI_MODEL=medium must not break parakeet."""
+    exe = _fake_parakeet(tmp_path)
+    adapter = ta.WhisperCliAdapter(executable=str(exe), model=model, profile="parakeet")
+    adapter._transcribe_one(_Request(tmp_path), _Chunk(tmp_path))
+    argv = json.loads((tmp_path / "argv.json").read_text(encoding="utf-8"))
+    assert "--model" not in argv
+
+
+def test_gpu_lock_blocks_second_holder(tmp_path):
+    import fcntl
+    with ta._mlx_gpu_lock(1.0):
+        path = ta._mlx_gpu_lock_path()
+        assert oct(path.stat().st_mode & 0o777) == "0o600"
+        with open(path, "a") as other:  # separate open file description
+            with pytest.raises(BlockingIOError):
+                fcntl.flock(other, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    with open(path, "a") as other:  # released on exit
+        fcntl.flock(other, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+
+def test_gpu_lock_busy_fails_adapter_cleanly(tmp_path, monkeypatch):
+    exe = _fake_parakeet(tmp_path)
+    monkeypatch.setattr(ta, "GPU_LOCK_WAIT", 0.3)
+    adapter = ta.WhisperCliAdapter(executable=str(exe), profile="parakeet")
+    with ta._mlx_gpu_lock(1.0):
+        with pytest.raises(RuntimeError, match="GPU lock busy"):
+            adapter._transcribe_one(_Request(tmp_path), _Chunk(tmp_path))
+    assert not (tmp_path / "argv.json").exists()  # parakeet never launched
+
+
+def test_timeout_uses_config_value(tmp_path, monkeypatch):
+    exe = _fake_parakeet(tmp_path)
+    seen = {}
+    real = ta.subprocess.run
+
+    def spy(*a, **kw):
+        seen["timeout"] = kw.get("timeout")
+        return real(*a, **kw)
+
+    monkeypatch.setattr(ta.subprocess, "run", spy)
+    monkeypatch.setattr(config, "WHISPER_CLI_TIMEOUT", 4321)
+    ta.WhisperCliAdapter(executable=str(exe), profile="parakeet")._transcribe_one(
+        _Request(tmp_path), _Chunk(tmp_path))
+    assert seen["timeout"] == 4321
