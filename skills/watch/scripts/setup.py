@@ -43,7 +43,7 @@ for _stream in (sys.stdout, sys.stderr):
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
-from config import DEFAULT_STT_URL, get_config, read_env_file  # noqa: E402
+from config import DEFAULT_STT_URL, INSTALL_TIMEOUT, get_config, read_env_file, run_bounded  # noqa: E402
 
 
 REQUIRED_BINARIES = ["ffmpeg", "ffprobe", "yt-dlp"]
@@ -416,7 +416,7 @@ def _install_macos(missing: list[str]) -> tuple[bool, str]:
         return True, "nothing to install"
     cmd = ["brew", "install", *pkgs]
     print(f"[setup] running: {' '.join(cmd)}", file=sys.stderr)
-    result = subprocess.run(cmd)
+    result = run_bounded(cmd, timeout=INSTALL_TIMEOUT)
     if result.returncode != 0:
         return False, f"brew install failed with exit code {result.returncode}"
     return True, f"installed via brew: {', '.join(pkgs)}"

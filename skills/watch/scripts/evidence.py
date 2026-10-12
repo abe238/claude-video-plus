@@ -26,6 +26,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from download import format_description, sanitize_for_report  # noqa: E402
+from config import FRAME_TIMEOUT, run_bounded  # noqa: E402
 from transcribe import MIN_OVERLAP, dedupe_rolling, parse_vtt, strip_overlap  # noqa: E402,F401
 from retrieval import conflicts, lexical_rank, obligations, progressive_expand, scout_identity  # noqa: E402
 from semantic import hashed_local_rank, remote_rank, uncertainty  # noqa: E402
@@ -225,7 +226,7 @@ def fit_frame_budget(transcript_chars: int, max_frames: int) -> int:
 
 
 def extract_frame(video_path: str, ts: float, path: Path) -> bool:
-    result = subprocess.run(
+    result = run_bounded(
         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
          "-ss", f"{ts:.2f}", "-i", str(video_path),
          "-frames:v", "1", "-vf", "scale=512:-2", "-q:v", "4", str(path)],
@@ -233,6 +234,7 @@ def extract_frame(video_path: str, ts: float, path: Path) -> bool:
         # under a cp949/eucJP locale would crash this decode even though we
         # only read the return code. Diagnostic: replace, never raise.
         capture_output=True, text=True, encoding="utf-8", errors="replace",
+        timeout=FRAME_TIMEOUT,
     )
     return result.returncode == 0 and path.exists()
 
