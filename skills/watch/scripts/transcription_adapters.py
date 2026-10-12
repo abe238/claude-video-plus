@@ -2,7 +2,9 @@
 """Concrete local, sidecar, YAP, and cloud transcript Adapters."""
 from __future__ import annotations
 
+import contextlib
 import ipaddress
+import os
 import json
 import platform
 import shutil
@@ -13,6 +15,7 @@ from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+import config
 import whisper
 from transcribe import filter_range, parse_subtitle
 from transcription import (
@@ -562,6 +565,48 @@ class YapAdapter:
         )
 
 
+try:
+    import fcntl
+except ImportError:  # Windows: parakeet is Apple-only, so no lock needed
+    fcntl = None
+
+# Test seam: max seconds to wait for the MLX GPU lock (None = WHISPER_CLI_TIMEOUT).
+GPU_LOCK_WAIT: float | None = None
+
+
+def _mlx_gpu_lock_path() -> Path:
+    return Path(config.CONFIG_DIR) / "mlx-gpu.lock"
+
+
+@contextlib.contextmanager
+def _mlx_gpu_lock(wait: float):
+    """Cross-process exclusive lock so two /watch runs never drive MLX at once
+    (two concurrent MLX GPU jobs kernel-panicked this Mac). Polls non-blocking
+    up to `wait` seconds, then raises so the STT chain falls through."""
+    if fcntl is None:
+        yield
+        return
+    path = _mlx_gpu_lock_path()
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    fd = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
+    try:
+        deadline = time.monotonic() + wait
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic() >= deadline:
+                    raise RuntimeError("GPU lock busy: another MLX job is running") from None
+                time.sleep(0.25)
+        try:
+            yield
+        finally:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+    finally:
+        os.close(fd)
+
+
 class WhisperCliAdapter:
     """A real speech model running on this machine, via the `openai-whisper` CLI.
 
@@ -657,9 +702,9 @@ class WhisperCliAdapter:
                     "--output-format", "json",
                     "--chunk-duration", "120",
                 ]
-                # Only an explicit WATCH_WHISPER_CLI_MODEL (a Hugging Face
-                # repo id) is passed; the "small" default is a whisper name.
-                if self.model not in ("", "small"):
+                # Only a Hugging Face repo id ("org/name") is passed; whisper
+                # names (small, medium, turbo) mean nothing to parakeet.
+                if "/" in self.model:
                     command += ["--model", self.model]
             else:
                 command = [
@@ -676,13 +721,21 @@ class WhisperCliAdapter:
             # but text=True still decodes it, so a locale-encoded decode would
             # crash the run over chatter we never read. Diagnostic path:
             # replace is correct, never raise for output nobody parses.
-            subprocess.run(
-                command, capture_output=True, text=True,
-                encoding="utf-8", errors="replace",
-                # parakeet may download its model on first use: generous
-                # per-chunk ceiling (still bounded).
-                timeout=max(request.timeout, 1800.0) if self.profile == "parakeet" else request.timeout,
-            )
+            timeout = config.WHISPER_CLI_TIMEOUT if self.profile == "parakeet" else request.timeout
+
+            def spawn() -> None:
+                subprocess.run(
+                    command, capture_output=True, text=True,
+                    encoding="utf-8", errors="replace",
+                    timeout=timeout,
+                )
+
+            if self.profile == "parakeet":
+                wait = GPU_LOCK_WAIT if GPU_LOCK_WAIT is not None else config.WHISPER_CLI_TIMEOUT
+                with _mlx_gpu_lock(wait):
+                    spawn()
+            else:
+                spawn()
             # The whisper CLI can exit 0 having produced nothing (its internal
             # ffmpeg failing on the input, for one). The output file is the only
             # honest success signal; the return code is not. Same trap as yap,
