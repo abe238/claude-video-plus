@@ -35,6 +35,12 @@ class _Request:
         self.work_dir = tmp_path
 
 
+# ponytail: whole module skipped on Windows. parakeet-mlx is Apple-Silicon only, the
+# fake executable is a shebang script Windows cannot run, and the GPU lock is
+# fcntl-based (a no-op there by design). Codex gate, v1.5.18.
+pytestmark = pytest.mark.skipif(sys.platform == "win32", reason="parakeet-mlx profile is Apple-Silicon only")
+
+
 @pytest.fixture(autouse=True)
 def _isolated_config_dir(tmp_path_factory, monkeypatch):
     monkeypatch.setattr(config, "CONFIG_DIR", tmp_path_factory.mktemp("cfg") / "watch")
