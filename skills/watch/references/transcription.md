@@ -22,6 +22,21 @@ sent without `--allow-remote-transcription` (or explicit `WATCH_STT_ALLOW_REMOTE
 requests extract only the requested range before inference, restore absolute timestamps, split
 near silence, and reuse successful owner-only chunk receipts after interruption.
 
+## Opt-in: parakeet-mlx (Apple Silicon)
+
+The `whisper-cli` adapter can drive an installed `parakeet-mlx` instead of
+openai-whisper. It is **opt-in only** and never auto-detected: set
+`WATCH_WHISPER_CLI_PROFILE=parakeet` (the binary then defaults to
+`parakeet-mlx`; override with `WATCH_WHISPER_CLI_PATH`). It runs on the MLX
+GPU, so keep it to one MLX job at a time (concurrent MLX runs have
+kernel-panicked this class of Mac). Per chunk it runs
+`parakeet-mlx <audio> --output-dir D --output-format json --chunk-duration 120`
+and reads the `sentences` array. `WATCH_WHISPER_CLI_MODEL` is passed as
+`--model` (a Hugging Face repo id) only when set to something other than the
+whisper default. `WATCH_LANGUAGE` is not passed: parakeet v3 is multilingual
+and has no language flag. The model downloads from Hugging Face on first use;
+detected, never installed.
+
 ## Repetition-loop defense
 
 Whisper decoding can collapse into repeating one sentence (a documented

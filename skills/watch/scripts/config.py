@@ -155,9 +155,16 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         _config_value("WATCH_STT_MODEL", file_values, overrides, DEFAULT_STT_MODEL)
     ).strip() or DEFAULT_STT_MODEL
     yap_path = str(_config_value("WATCH_YAP_PATH", file_values, overrides, "yap")).strip() or "yap"
+    # Opt-in only ("parakeet" drives parakeet-mlx on the MLX GPU); never auto-detected.
+    whisper_cli_profile = str(
+        _config_value("WATCH_WHISPER_CLI_PROFILE", file_values, overrides, "whisper")
+    ).strip().lower() or "whisper"
+    if whisper_cli_profile not in ("whisper", "parakeet"):
+        raise ValueError("WATCH_WHISPER_CLI_PROFILE must be whisper or parakeet")
+    _cli_default = "parakeet-mlx" if whisper_cli_profile == "parakeet" else "whisper"
     whisper_cli_path = str(
-        _config_value("WATCH_WHISPER_CLI_PATH", file_values, overrides, "whisper")
-    ).strip() or "whisper"
+        _config_value("WATCH_WHISPER_CLI_PATH", file_values, overrides, _cli_default)
+    ).strip() or _cli_default
     whisper_cli_model = str(
         _config_value("WATCH_WHISPER_CLI_MODEL", file_values, overrides, DEFAULT_WHISPER_CLI_MODEL)
     ).strip() or DEFAULT_WHISPER_CLI_MODEL
@@ -211,6 +218,7 @@ def get_transcription_config(**overrides: object) -> dict[str, object]:
         "language": language,
         "yap_path": yap_path,
         "whisper_cli_path": whisper_cli_path,
+        "whisper_cli_profile": whisper_cli_profile,
         "whisper_cli_model": whisper_cli_model,
         "allow_remote": allow_remote,
         "timeout": timeout,
