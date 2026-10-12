@@ -111,7 +111,7 @@ jobs:
   # failed. URL healthy + pipeline failed = our regression = red.
   archive-e2e:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 40  # 3 attempts x 600 s + sleeps + probes
     env:
       VIDEO_URL: https://archive.org/download/kelloggs_variety_pak/kelloggs_variety_pak.mp4
       MIN_FRAMES: "3"
@@ -145,8 +145,9 @@ jobs:
           rc=1
           for attempt in 1 2 3; do
             rm -rf "$OUT"
-            timeout 600 python3 skills/watch/scripts/watch.py "$VIDEO_URL" --out-dir "$OUT" >report.md 2>err.txt
-            rc=$?
+            # GitHub runs `bash -e`: capture the exit code without letting -e end the step
+            rc=0
+            timeout 600 python3 skills/watch/scripts/watch.py "$VIDEO_URL" --out-dir "$OUT" >report.md 2>err.txt || rc=$?
             [ "$rc" -eq 0 ] && break
             echo "attempt $attempt failed (exit $rc); retrying" >&2
             sleep 30
