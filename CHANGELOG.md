@@ -19,9 +19,10 @@ code before it was built.
   Default installs (no `WATCH_LANGUAGE`) were not affected. Credit: upstream
   issue #247, PRs #248 (tonyisup) and #255 (gbarcia).
 - **A hung child process hung `/watch` forever.** 18 of 28 subprocess calls had
-  no timeout, including the yt-dlp probes and every ffmpeg frame pass. All now
-  run through one bounded runner, so a hang becomes an ordinary classified
-  failure. Whole-video ffmpeg passes scale their limit with the video length
+  no timeout, including the yt-dlp probes and every ffmpeg frame pass. Every
+  child process now has a timeout (most through one bounded runner), so a hang
+  becomes an ordinary classified failure, and an AST test fails the build on any
+  unbounded call. Whole-video ffmpeg passes scale their limit with the video length
   (at least 3x duration). A timed-out download is a new non-retryable
   `child_timeout` failure, so it is not retried by five strategies in a row,
   and the child's last 4 KB of stderr is kept for diagnosis. Credit:
@@ -39,9 +40,10 @@ code before it was built.
   (`boundaries.py` idea, MIT; independently reimplemented).
 - **Local Apple Silicon transcription with parakeet-mlx (opt-in).** Set
   `WATCH_WHISPER_CLI_PROFILE=parakeet` and the existing local CLI adapter drives
-  `parakeet-mlx` instead of the whisper CLI. Never auto-selected, and every run
-  takes a cross-process GPU lock, because two concurrent MLX jobs have crashed
-  macOS. Credit: upstream PR #249 (tonyisup), dhruv-bansal (mlx-whisper).
+  `parakeet-mlx` instead of the whisper CLI. Never auto-selected, because two
+  concurrent MLX jobs have crashed macOS. Parakeet runs from `/watch` also take a
+  cross-process lock so two `/watch` runs never drive the GPU at once; the lock
+  does not see MLX jobs started by other tools. Credit: upstream PR #249 (tonyisup), dhruv-bansal (mlx-whisper).
 - **Weekly end-to-end CI on a non-YouTube source.** `drift.yml` now runs the real
   skill on a public-domain archive.org clip, because YouTube bot-gates GitHub's
   runners and the YouTube leg skips when that happens. An archive.org outage
@@ -62,6 +64,14 @@ code before it was built.
   could never run under GitHub's `bash -e`) and seven should-fixes, including a
   regression the timeouts introduced (a long unfocused video would have been
   killed at one hour). All were fixed before release.
+- Codex gpt-6.1-sol gate found three more: parakeet and whisper chunk receipts
+  could share a cache namespace after a profile switch, legacy audio extraction
+  kept a flat one-hour limit on long sources, and the flags reference mislabeled
+  boundary frames. All fixed with regression tests that fail on the old code.
+- Known limitation: on Windows, Python's timeout kills only the direct child. If
+  that child left a grandchild holding the output pipes, `/watch` can still
+  block after the timeout fires. Before 1.5.18 those calls had no timeout at
+  all; POSIX is not affected.
 - Known, not changed here: a local file with no sidecar captions reports its
   transcript as "degraded" because the sidecar lookup counts as a failed
   attempt. This predates 1.5.18.

@@ -149,8 +149,8 @@ jobs:
             rc=0
             timeout 600 python3 skills/watch/scripts/watch.py "$VIDEO_URL" --out-dir "$OUT" >report.md 2>err.txt || rc=$?
             [ "$rc" -eq 0 ] && break
-            echo "attempt $attempt failed (exit $rc); retrying" >&2
-            sleep 30
+            echo "attempt $attempt failed (exit $rc)" >&2
+            [ "$attempt" -lt 3 ] && sleep 30
           done
           if [ "$rc" -ne 0 ]; then
             cat err.txt >&2

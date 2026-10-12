@@ -230,8 +230,15 @@ def extract_audio(
         "-b:a", "64k",
         str(out_path.resolve()),
     ]
+    if end_seconds is not None:
+        span: float | None = float(end_seconds) - start
+    else:
+        try:  # scale the ceiling with the source, like the frame passes (fail-open to the flat default)
+            span = max(0.0, audio_duration(Path(video_path)) - start)
+        except (SystemExit, Exception):
+            span = None
     result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                         timeout=ffmpeg_timeout())
+                         timeout=ffmpeg_timeout(span))
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg audio extraction failed: {result.stderr.strip()}")
     if not out_path.exists() or out_path.stat().st_size == 0:

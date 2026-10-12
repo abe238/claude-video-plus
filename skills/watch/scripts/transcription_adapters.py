@@ -9,6 +9,7 @@ import json
 import platform
 import shutil
 import subprocess
+import sys
 import time
 import urllib.error
 from pathlib import Path
@@ -582,7 +583,8 @@ def _mlx_gpu_lock_path() -> Path:
 def _mlx_gpu_lock(wait: float):
     """Cross-process exclusive lock so two /watch runs never drive MLX at once
     (two concurrent MLX GPU jobs kernel-panicked this Mac). Polls non-blocking
-    up to `wait` seconds, then raises so the STT chain falls through."""
+    up to `wait` seconds, then raises RuntimeError (that chunk fails; the
+    adapter then skips its remaining chunks without waiting again)."""
     if fcntl is None:
         yield
         return
@@ -591,11 +593,16 @@ def _mlx_gpu_lock(wait: float):
     fd = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
     try:
         deadline = time.monotonic() + wait
+        announced = False
         while True:
             try:
                 fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 break
             except BlockingIOError:
+                if not announced:
+                    print("[watch] parakeet: waiting for another MLX job to finish (GPU lock)",
+                          file=sys.stderr)
+                    announced = True
                 if time.monotonic() >= deadline:
                     raise RuntimeError("GPU lock busy: another MLX job is running") from None
                 time.sleep(0.25)
@@ -647,6 +654,8 @@ class WhisperCliAdapter:
         # Set after a --vad invocation fails: VAD is best-effort, so one
         # failure disables it for the rest of this adapter's lifetime.
         self._vad_withdrawn = False
+        # Set once a GPU-lock wait has run its full ceiling: later chunks fail fast.
+        self._gpu_lock_timed_out = False
 
     def probe(self, request: TranscriptionRequest) -> AdapterAvailability:
         del request
@@ -721,7 +730,8 @@ class WhisperCliAdapter:
             # but text=True still decodes it, so a locale-encoded decode would
             # crash the run over chatter we never read. Diagnostic path:
             # replace is correct, never raise for output nobody parses.
-            timeout = config.WHISPER_CLI_TIMEOUT if self.profile == "parakeet" else request.timeout
+            timeout = (max(request.timeout, config.WHISPER_CLI_TIMEOUT)
+                       if self.profile == "parakeet" else request.timeout)
 
             def spawn() -> None:
                 subprocess.run(
@@ -731,9 +741,16 @@ class WhisperCliAdapter:
                 )
 
             if self.profile == "parakeet":
+                if self._gpu_lock_timed_out:  # already waited the full ceiling once this run
+                    raise RuntimeError("GPU lock busy: another MLX job is running")
                 wait = GPU_LOCK_WAIT if GPU_LOCK_WAIT is not None else config.WHISPER_CLI_TIMEOUT
-                with _mlx_gpu_lock(wait):
-                    spawn()
+                try:
+                    with _mlx_gpu_lock(wait):
+                        spawn()
+                except RuntimeError as exc:
+                    if "GPU lock busy" in str(exc):
+                        self._gpu_lock_timed_out = True
+                    raise
             else:
                 spawn()
             # The whisper CLI can exit 0 having produced nothing (its internal
@@ -759,7 +776,10 @@ class WhisperCliAdapter:
             request,
             receipts,
             adapter=self.name,
-            model="parakeet-mlx" if self.profile == "parakeet" and self.model in ("", "small") else self.model,
+            # Receipt namespace = the model that actually RAN: parakeet ignores a whisper name
+            # (medium/turbo), so keying on it would let a profile switch reuse whisper receipts.
+            model=(f"parakeet-mlx:{self.model}" if "/" in self.model else "parakeet-mlx")
+            if self.profile == "parakeet" else self.model,
             transcribe_one=lambda chunk: self._transcribe_one(request, chunk),
             remote=False,
         )

@@ -30,7 +30,7 @@ Behavior:
 - **Off by default**; the default path is unchanged. Not applied in `--detail evidence` and stays off if evidence falls back to balanced.
 - **Shares the `--text-anchors` budget**, it does not add to it: together they take at most the exact 30% floor of the frame cap (100 when uncapped). Explicit `--timestamps` keep precedence. A boundary within 0.5 s of an existing cue is skipped.
 - **Bounded**: at most 200 marks per pass, deduped within 1 s (fade > held card > silence when they collide), pass timeout scaled to video length.
-- **Fails open**: any ffmpeg problem prints a note and runs normal extraction. Honors `--start/--end`. Pinned frames carry `reason=transcript-cue`, same as the other anchors. Works on local files and downloads; at `--detail transcript` it forces a video fetch.
+- **Fails open**: any ffmpeg problem prints a note and runs normal extraction. Honors `--start/--end`. Pinned frames carry `reason=boundary`, so they are distinguishable from transcript-cue anchors. Works on local files and downloads; at `--detail transcript` it forces a video fetch.
 
 ## Transcript-cue frames (`--timestamps`)
 

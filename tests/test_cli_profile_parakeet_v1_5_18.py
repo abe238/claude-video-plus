@@ -167,3 +167,46 @@ def test_timeout_uses_config_value(tmp_path, monkeypatch):
     ta.WhisperCliAdapter(executable=str(exe), profile="parakeet")._transcribe_one(
         _Request(tmp_path), _Chunk(tmp_path))
     assert seen["timeout"] == 4321
+
+
+@pytest.mark.parametrize("model,expected", [
+    ("medium", "parakeet-mlx"),
+    ("small", "parakeet-mlx"),
+    ("mlx-community/parakeet-tdt-0.6b-v3", "parakeet-mlx:mlx-community/parakeet-tdt-0.6b-v3"),
+])
+def test_parakeet_receipts_never_share_a_whisper_namespace(monkeypatch, model, expected):
+    """Codex gate (v1.5.18): parakeet ignores a whisper model name, so keying its
+    chunk receipts on that name let a profile switch in the same --out-dir reuse
+    whisper receipts. The namespace must be the model that actually ran."""
+    seen = {}
+    monkeypatch.setattr(ta, "_run_chunked", lambda request, receipts, **kw: seen.update(kw))
+    ta.WhisperCliAdapter(executable="x", model=model, profile="parakeet").transcribe(None, None)
+    assert seen["model"] == expected
+    ta.WhisperCliAdapter(executable="x", model=model).transcribe(None, None)
+    assert seen["model"] == model  # whisper profile unchanged
+
+
+def test_gpu_lock_timeout_announces_and_later_chunks_fail_fast(tmp_path, monkeypatch, capsys):
+    """Opus re-review (v1.5.18): the lock wait was silent and every chunk waited
+    the full ceiling again. Announce once; after one timeout, fail fast."""
+    import fcntl
+    import os
+    exe = _fake_parakeet(tmp_path)
+    monkeypatch.setattr(ta, "GPU_LOCK_WAIT", 0.3)
+    path = ta._mlx_gpu_lock_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    holder = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
+    fcntl.flock(holder, fcntl.LOCK_EX)
+    try:
+        adapter = ta.WhisperCliAdapter(executable=str(exe), profile="parakeet")
+        with pytest.raises(RuntimeError, match="GPU lock busy"):
+            adapter._transcribe_one(_Request(tmp_path), _Chunk(tmp_path))
+        assert "waiting for another MLX job" in capsys.readouterr().err
+        import time as _t
+        started = _t.monotonic()
+        with pytest.raises(RuntimeError, match="GPU lock busy"):
+            adapter._transcribe_one(_Request(tmp_path), _Chunk(tmp_path))
+        assert _t.monotonic() - started < 0.2  # no second full wait
+    finally:
+        fcntl.flock(holder, fcntl.LOCK_UN)
+        os.close(holder)

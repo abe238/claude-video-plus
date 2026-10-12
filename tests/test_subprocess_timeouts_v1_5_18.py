@@ -144,3 +144,24 @@ def test_avc1_rungs_respect_max_filesize():
     assert len(avc1) == 4 and all("[filesize<?50M][filesize_approx<?50M]" in r for r in avc1)
     assert all("filesize" not in r for r in capped if "avc1" not in r)
     assert "filesize" not in fmt()
+
+
+def test_unfocused_audio_extraction_scales_timeout_with_duration(monkeypatch, tmp_path):
+    """Codex gate (v1.5.18): whisper.extract_audio used a flat 3600 s when no end
+    was given, so a long source could be killed mid-extraction."""
+    import whisper
+    seen = {}
+
+    def fake_run(cmd, **kw):
+        seen["timeout"] = kw["timeout"]
+        (tmp_path / "a.mp3").write_bytes(b"x")
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+
+    monkeypatch.setattr(whisper, "run_bounded", fake_run)
+    monkeypatch.setattr(whisper, "audio_duration", lambda p: 3 * 3600.0)
+    monkeypatch.setattr(whisper.shutil, "which", lambda name: "/usr/bin/ffmpeg")
+    whisper.extract_audio("v.mp4", tmp_path / "a.mp3")
+    assert seen["timeout"] >= 3 * 3 * 3600
+    monkeypatch.setattr(whisper, "audio_duration", lambda p: (_ for _ in ()).throw(SystemExit("probe failed")))
+    whisper.extract_audio("v.mp4", tmp_path / "a.mp3")
+    assert seen["timeout"] == 3600  # probe failure falls back to the flat default
