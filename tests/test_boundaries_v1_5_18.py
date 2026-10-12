@@ -44,12 +44,30 @@ def test_parse_applies_offset_and_ignores_garbage():
 def test_select_dedupes_keeps_priority_and_chronological():
     marks = [(8.5, "silence-end"), (9.1, "freeze-start"), (30.0, "silence-end")]
     # 8.5 and 9.1 are within 1 s: the higher-priority freeze-start wins.
-    assert select_boundaries(marks) == [9.1, 30.0]
+    assert select_boundaries(marks) == [(9.1, "freeze-start"), (30.0, "silence-end")]
+
+
+def test_select_dedupe_does_not_drift_past_window():
+    # Chain 10.0 silence, 10.8 fade, 11.6 silence: the 11.6 mark is 1.6 s from the
+    # cluster's first mark, so it must start a NEW cluster (old code drifted).
+    marks = [(10.0, "silence-end"), (10.8, "black-end"), (11.6, "silence-end")]
+    assert select_boundaries(marks) == [(10.8, "black-end"), (11.6, "silence-end")]
+
+
+def test_cap_by_priority_fades_then_cards_then_silences():
+    marks = ([(float(t), "silence-end") for t in range(100, 200, 2)]
+             + [(5.0, "black-end"), (50.0, "black-end"), (70.0, "freeze-start"), (80.0, "freeze-start")])
+    out = boundaries.cap_by_priority(marks, 4)
+    assert [k for _, k in out] == ["black-end", "black-end", "freeze-start", "freeze-start"]
+    out = boundaries.cap_by_priority(marks, 6)  # 2 fades + 2 cards + 2 silences spread over the span
+    silences = [t for t, k in out if k == "silence-end"]
+    assert len(out) == 6 and silences == [100.0, 198.0]
+    assert boundaries.cap_by_priority(marks, 1) == [(5.0, "black-end")]
 
 
 def test_select_window_and_cap():
     marks = [(float(t * 10), "black-end") for t in range(1, 8)]
-    assert select_boundaries(marks, lo=25, hi=55) == [30.0, 40.0, 50.0]
+    assert [t for t, _ in select_boundaries(marks, lo=25, hi=55)] == [30.0, 40.0, 50.0]
     assert len(select_boundaries(marks, limit=3)) == 3
     assert select_boundaries(marks, limit=0) == []
 
@@ -77,9 +95,19 @@ def test_fail_open_ffmpeg_error_and_timeout(tmp_path):
 def test_fail_open_subprocess_raises(monkeypatch):
     def boom(*a, **k):
         raise subprocess.TimeoutExpired("ffmpeg", 1)
-    monkeypatch.setattr(boundaries.subprocess, "run", boom)
+    monkeypatch.setattr(boundaries, "run_bounded", boom)
     out, note = detect_boundaries("x.mp4")
     assert out == [] and "TimeoutExpired" in note
+
+
+def test_fail_open_on_timeout_rc124(monkeypatch):
+    import config
+    def hang(cmd, **kw):
+        raise subprocess.TimeoutExpired(cmd, kw["timeout"])
+    monkeypatch.setattr(boundaries, "run_bounded", lambda cmd, **kw: config.run_bounded(cmd, runner=hang, **kw))
+    monkeypatch.setattr(boundaries.shutil, "which", lambda _n: "/usr/bin/ffmpeg")
+    out, note = detect_boundaries("x.mp4", duration=10.0)
+    assert out == [] and "124" in note
 
 
 # --- real ffmpeg -------------------------------------------------------------
@@ -111,20 +139,20 @@ def test_real_clip_finds_fade_end_and_held_card(clip):
     out, note = detect_boundaries(str(clip), duration=12.0)
     assert note is None
     # fade-up out of black ends ~6.27 (+0.25), held blue card starts at 9.0 (+0.1)
-    assert any(abs(t - 6.5) <= 0.5 for t in out), out
-    assert any(abs(t - 9.1) <= 0.5 for t in out), out
+    assert any(abs(t - 6.5) <= 0.5 for t, _ in out), out
+    assert any(abs(t - 9.1) <= 0.5 for t, _ in out), out
 
 
 def test_real_clip_silence_end_found_when_not_deduped(clip):
     # Focus on 7..12 so the silence end (8.52) is the first mark in range.
     out, _ = detect_boundaries(str(clip), start_seconds=7.0, end_seconds=8.9, duration=12.0)
-    assert any(abs(t - 8.52) <= 0.5 for t in out), out
+    assert any(abs(t - 8.52) <= 0.5 for t, _ in out), out
 
 
 def test_real_clip_focus_offset_is_absolute(clip):
     out, _ = detect_boundaries(str(clip), start_seconds=8.0, end_seconds=12.0, duration=12.0)
-    assert any(abs(t - 9.1) <= 0.5 for t in out), out
-    assert all(t >= 8.0 for t in out)
+    assert any(abs(t - 9.1) <= 0.5 for t, _ in out), out
+    assert all(t >= 8.0 for t, _ in out)
 
 
 def test_video_without_audio_does_not_error(tmp_path):
@@ -142,6 +170,7 @@ def test_video_without_audio_does_not_error(tmp_path):
 
 def _resolve(found, **kw):
     import watch
+    found = [m if isinstance(m, tuple) else (m, "black-end") for m in found]
     base = dict(
         active=True, video_path="v.mp4", have_video=True, lo=0.0, hi=100.0,
         max_frames=20, manual_timestamps=[], current_timestamps=[],
@@ -199,6 +228,20 @@ def test_skips_boundary_already_covered_by_a_cue():
     assert status == "none-found" and ts == [10.0]
 
 
+def test_budget_cap_is_priority_not_even_sample():
+    # 20 silences + 1 fade + 1 card, limit 3: both structural marks must survive.
+    found = [(float(t), "silence-end") for t in range(100, 120)] + [(5.0, "black-end"), (60.0, "freeze-start")]
+    ts, status = _resolve(found, max_frames=10, hi=1000.0)  # limit floor(0.3*10)=3
+    assert 5.0 in ts and 60.0 in ts and status == "added:3"
+    ts, _ = _resolve(found, max_frames=7)  # limit 2: fade + card only
+    assert sorted(ts) == [5.0, 60.0]
+
+
+def test_audio_only_source_skips_boundary_anchors():
+    ts, status = _resolve([(5.0, "silence-end")], has_video_stream=False, current_timestamps=[3.0])
+    assert ts == [3.0] and status == "audio-only"
+
+
 def test_detector_note_or_exception_fails_open():
     ts, status = _resolve([], current_timestamps=[3.0], detect=lambda *a, **k: ([], "ffmpeg exited 1"))
     assert ts == [3.0] and status.startswith("error:")
@@ -225,6 +268,18 @@ def test_end_to_end_flag_adds_cue_frames(clip, tmp_path):
     on = subprocess.run(base + ["--boundary-anchors", "--out-dir", str(tmp_path / "on")],
                         capture_output=True, text=True, timeout=120)
     assert off.returncode == 0 and on.returncode == 0
-    assert "transcript-cue" not in off.stdout
-    assert "transcript-cue" in on.stdout
+    assert "Cue frames" not in off.stdout
+    assert "Cue frames" in on.stdout and "(boundary" in on.stdout
+    assert "at transcript timestamps" not in on.stdout
     assert "boundary anchor(s) added" in on.stderr
+
+
+def test_extract_at_timestamps_reason_param(clip, tmp_path):
+    import frames
+    out, _ = frames.extract_at_timestamps(str(clip), tmp_path / "a", [1.0, 2.0])
+    assert {f["reason"] for f in out} == {"transcript-cue"}
+    out, _ = frames.extract_at_timestamps(str(clip), tmp_path / "b", [1.0, 2.0], reason="boundary")
+    assert {f["reason"] for f in out} == {"boundary"}
+    out, _ = frames.extract_at_timestamps(str(clip), tmp_path / "c", [1.0, 2.0],
+                                          reason=lambda t: "boundary" if t == 2.0 else "transcript-cue")
+    assert [f["reason"] for f in out] == ["transcript-cue", "boundary"]
