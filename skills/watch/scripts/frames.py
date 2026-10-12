@@ -439,7 +439,7 @@ def extract(
     ]
 
     result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
+                         timeout=ffmpeg_timeout(_extract_span_seconds(video_path, start_seconds, end_seconds)))
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg frame extraction failed: {result.stderr.strip()}")
 
@@ -516,7 +516,7 @@ def extract_scene_candidates(
         output_pattern,
     ]
     result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
+                         timeout=ffmpeg_timeout(_extract_span_seconds(video_path, start_seconds, end_seconds)))
     if result.returncode != 0:
         raise SystemExit(f"ffmpeg scene extraction failed: {result.stderr.strip()}")
 
@@ -1159,7 +1159,7 @@ def extract_keyframes(
         output_pattern,
     ]
     result = run_bounded(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                         timeout=ffmpeg_timeout(None if end_seconds is None else end_seconds - (start_seconds or 0.0)))
+                         timeout=ffmpeg_timeout(_extract_span_seconds(video_path, start_seconds, end_seconds)))
     files = sorted(out_dir.glob("frame_*.jpg"))
     # A range holding no keyframes makes some ffmpeg builds fail at mjpeg
     # encoder init ("No filtered frames for output stream") instead of exiting

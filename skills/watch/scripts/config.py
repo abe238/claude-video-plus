@@ -39,6 +39,7 @@ YTDLP_META_TIMEOUT = 300       # yt-dlp captions-only fetch
 YTDLP_DOWNLOAD_TIMEOUT = 3600  # yt-dlp media download
 WHISPER_CLI_TIMEOUT = 1800     # whisper CLI per chunk
 INSTALL_TIMEOUT = 1800         # brew install
+CHILD_TIMEOUT_MSG = "child process timed out after"  # run_bounded stderr marker
 
 
 def ffmpeg_timeout(duration_seconds: float | None = None) -> float:
@@ -54,9 +55,13 @@ def run_bounded(cmd, *, timeout: float, runner=None, **kwargs) -> subprocess.Com
     path handles it and TimeoutExpired never escapes as a traceback."""
     try:
         return (runner or subprocess.run)(cmd, timeout=timeout, **kwargs)
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
         text = kwargs.get("text") or kwargs.get("encoding") or kwargs.get("universal_newlines")
-        msg = f"child process timed out after {timeout:g}s"
+        partial = exc.stderr or b""  # what the child printed before it was killed
+        if isinstance(partial, bytes):
+            partial = partial.decode("utf-8", errors="replace")
+        partial = partial[-4096:]
+        msg = f"{partial}\n{CHILD_TIMEOUT_MSG} {timeout:g}s" if partial else f"{CHILD_TIMEOUT_MSG} {timeout:g}s"
         return subprocess.CompletedProcess(cmd, 124, "" if text else b"", msg if text else msg.encode())
 
 

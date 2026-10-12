@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Callable
 from urllib.parse import urlsplit, urlunsplit
 
-from config import PROBE_TIMEOUT, YTDLP_DOWNLOAD_TIMEOUT, YTDLP_META_TIMEOUT, run_bounded
+from config import CHILD_TIMEOUT_MSG, PROBE_TIMEOUT, YTDLP_DOWNLOAD_TIMEOUT, YTDLP_META_TIMEOUT, run_bounded
 
 
 class FailureClass(str, Enum):
@@ -29,6 +29,7 @@ class FailureClass(str, Enum):
     HTTP_403 = "http_403"
     HTTP_429 = "http_429"
     NETWORK_TIMEOUT = "network_timeout"
+    CHILD_TIMEOUT = "child_timeout"  # our own run_bounded kill; NOT retryable (re-running repeats the wait)
     FORMAT_UNAVAILABLE = "format_unavailable"
     INVALID_SOURCE = "invalid_source"
     LOGIN_REQUIRED = "login_required"
@@ -253,6 +254,7 @@ def is_youtube_url(url: str) -> bool:
 def classify_failure(stderr: str, exit_code: int) -> FailureClass | None:
     text = stderr.lower()
     patterns: tuple[tuple[FailureClass, tuple[str, ...]], ...] = (
+        (FailureClass.CHILD_TIMEOUT, (CHILD_TIMEOUT_MSG,)),
         (FailureClass.MAX_FILESIZE_EXCEEDED, ("larger than max-filesize",)),
         (FailureClass.LOGIN_REQUIRED, ("sign in to confirm", "login required", "authentication required")),
         (FailureClass.REGION_LOCKED, ("not available in your country", "geo-restricted", "region")),
@@ -559,10 +561,14 @@ def build_yt_dlp_command(
     # measured ~3x faster ffmpeg decode than AV1/VP9 at the same height, at the
     # cost of a larger file (see docs/benchmarks/2026-10-11-h264-preference/).
     # Idea from thomasdupkavich/claude-video. Existing rungs follow unchanged.
+    # --max-filesize is enforced AFTER format selection, so a larger avc1 rendition
+    # would fail the whole download though a smaller AV1 one fits: bound the avc1
+    # rungs by the same size (`<?` keeps formats with unknown size).
+    fs = f"[filesize<?{max_filesize}][filesize_approx<?{max_filesize}]" if max_filesize else ""
     normal = (
         "ba/bestaudio" if audio_only
-        else "bv*[vcodec^=avc1][height<=720]+ba/b[vcodec^=avc1][height<=720]"
-             "/bv*[vcodec^=avc1][height<=?720]+ba/b[vcodec^=avc1][height<=?720]"
+        else f"bv*[vcodec^=avc1][height<=720]{fs}+ba/b[vcodec^=avc1][height<=720]{fs}"
+             f"/bv*[vcodec^=avc1][height<=?720]{fs}+ba/b[vcodec^=avc1][height<=?720]{fs}"
              "/bv*[height<=720]+ba/b[height<=720]"
              "/bv*[height<=?720]+ba/b[height<=?720]"
              "/wv*+ba/w"
