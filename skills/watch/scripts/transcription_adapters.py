@@ -586,8 +586,16 @@ class WhisperCliAdapter:
         model: str = "small",
         vad: bool = True,
         vad_model_path: str = "",
+        profile: str = "whisper",
     ):
         self.executable = executable
+        # "whisper" (default) or "parakeet". The parakeet profile is OPT-IN
+        # ONLY (WATCH_WHISPER_CLI_PROFILE=parakeet): never auto-detected or
+        # auto-selected, because MLX runs on the GPU and two concurrent MLX
+        # GPU jobs have kernel-panicked Apple Silicon Macs. Detected, never
+        # installed. parakeet-mlx has no language flag (v3 is multilingual),
+        # so WATCH_LANGUAGE is deliberately NOT passed to it.
+        self.profile = profile
         self.model = model
         self.vad = vad
         self.vad_model_path = vad_model_path
@@ -613,6 +621,13 @@ class WhisperCliAdapter:
 
     def _parse_json_output(self, output: Path) -> list[dict]:
         data = json.loads(output.read_text(encoding="utf-8"))
+        if self.profile == "parakeet":
+            # parakeet-mlx JSON: {"text": ..., "sentences": [{"text","start","end",...}]}
+            rows = [
+                {"start": r.get("start"), "end": r.get("end"), "text": r.get("text")}
+                for r in data.get("sentences") or [] if isinstance(r, dict)
+            ]
+            return whisper.segments_from_response({"segments": rows})
         # Delegate to the shared normalizer so cloud and CLI reject malformed
         # cues identically (v1.2.1 validity drop: end < start / start < 0 cues
         # are dropped inside the per-chunk retry boundary — not later in
@@ -635,23 +650,38 @@ class WhisperCliAdapter:
             # the file's presence is a signal about THIS invocation, not a fossil.
             if output.exists():
                 output.unlink()
-            command = [
-                self.executable, str(chunk.path),
-                "--model", self.model,
-                "--output_format", "json",
-                "--output_dir", str(out_dir),
-                "--word_timestamps", "True",
-                *extra_args,
-            ]
-            if language:
-                command += ["--language", language]
+            if self.profile == "parakeet":
+                command = [
+                    self.executable, str(chunk.path),
+                    "--output-dir", str(out_dir),
+                    "--output-format", "json",
+                    "--chunk-duration", "120",
+                ]
+                # Only an explicit WATCH_WHISPER_CLI_MODEL (a Hugging Face
+                # repo id) is passed; the "small" default is a whisper name.
+                if self.model not in ("", "small"):
+                    command += ["--model", self.model]
+            else:
+                command = [
+                    self.executable, str(chunk.path),
+                    "--model", self.model,
+                    "--output_format", "json",
+                    "--output_dir", str(out_dir),
+                    "--word_timestamps", "True",
+                    *extra_args,
+                ]
+                if language:
+                    command += ["--language", language]
             # Output is discarded (the JSON file is the only success signal),
             # but text=True still decodes it, so a locale-encoded decode would
             # crash the run over chatter we never read. Diagnostic path:
             # replace is correct, never raise for output nobody parses.
             subprocess.run(
                 command, capture_output=True, text=True,
-                encoding="utf-8", errors="replace", timeout=request.timeout,
+                encoding="utf-8", errors="replace",
+                # parakeet may download its model on first use: generous
+                # per-chunk ceiling (still bounded).
+                timeout=max(request.timeout, 1800.0) if self.profile == "parakeet" else request.timeout,
             )
             # The whisper CLI can exit 0 having produced nothing (its internal
             # ffmpeg failing on the input, for one). The output file is the only
@@ -676,7 +706,7 @@ class WhisperCliAdapter:
             request,
             receipts,
             adapter=self.name,
-            model=self.model,
+            model="parakeet-mlx" if self.profile == "parakeet" and self.model in ("", "small") else self.model,
             transcribe_one=lambda chunk: self._transcribe_one(request, chunk),
             remote=False,
         )

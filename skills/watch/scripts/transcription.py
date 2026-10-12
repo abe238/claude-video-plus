@@ -272,6 +272,7 @@ def build_default_adapters(config: Mapping[str, object]) -> dict[str, Transcript
         "yap": YapAdapter(executable=str(config.get("yap_path") or "yap")),
         "whisper-cli": WhisperCliAdapter(
             executable=str(config.get("whisper_cli_path") or "whisper"),
+            profile=str(config.get("whisper_cli_profile") or "whisper"),
             model=str(config.get("whisper_cli_model") or "small"),
             vad=bool(config.get("vad", True)),
             vad_model_path=str(config.get("vad_model_path") or ""),
