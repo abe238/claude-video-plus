@@ -2,6 +2,70 @@
 
 All notable changes to `/watch` are documented here.
 
+## [1.5.18] — 2026-10-11
+
+Two silent failures fixed, and four improvements absorbed from forks of
+`bradautomates/claude-video`. Every item was reproduced or measured on our own
+code before it was built.
+
+### Fixed
+- **Dubbed YouTube videos returned another language's transcript.** YouTube now
+  lists one `-orig` caption track per dubbed audio language (13 on
+  `IiZ5HRaeX4s`). With `WATCH_LANGUAGE=auto`, every `-orig` track ranked equal
+  and the alphabetical tiebreak won, so an English video came back as a Bengali
+  transcript labeled "original language", exit 0. Auto mode now prefers the
+  `-orig` track matching the video's declared language (English first when it is
+  unknown), and a mismatched `-orig` track is no longer labeled original.
+  Default installs (no `WATCH_LANGUAGE`) were not affected. Credit: upstream
+  issue #247, PRs #248 (tonyisup) and #255 (gbarcia).
+- **A hung child process hung `/watch` forever.** 18 of 28 subprocess calls had
+  no timeout, including the yt-dlp probes and every ffmpeg frame pass. All now
+  run through one bounded runner, so a hang becomes an ordinary classified
+  failure. Whole-video ffmpeg passes scale their limit with the video length
+  (at least 3x duration). A timed-out download is a new non-retryable
+  `child_timeout` failure, so it is not retried by five strategies in a row,
+  and the child's last 4 KB of stderr is kept for diagnosis. Credit:
+  thomasdupkavich (timeout runner idea).
+
+### Added
+- **`--boundary-anchors` (opt-in).** One low-resolution ffmpeg pass finds fades
+  to black, held title or slide cards, and silences that scene detection
+  misses, and pins a frame at each, sharing the `--text-anchors` budget
+  (fades, then cards, then silences when the budget is short). Measured on a
+  10.5-minute video: about 12 s of extra work (3 to 5 percent). On a synthetic
+  clip it catches a held card the default sampling skips entirely. Off by
+  default until it is benchmarked against the control. Receipt:
+  `docs/benchmarks/2026-10-11-boundary-anchors/`. Credit: frinsen
+  (`boundaries.py` idea, MIT; independently reimplemented).
+- **Local Apple Silicon transcription with parakeet-mlx (opt-in).** Set
+  `WATCH_WHISPER_CLI_PROFILE=parakeet` and the existing local CLI adapter drives
+  `parakeet-mlx` instead of the whisper CLI. Never auto-selected, and every run
+  takes a cross-process GPU lock, because two concurrent MLX jobs have crashed
+  macOS. Credit: upstream PR #249 (tonyisup), dhruv-bansal (mlx-whisper).
+- **Weekly end-to-end CI on a non-YouTube source.** `drift.yml` now runs the real
+  skill on a public-domain archive.org clip, because YouTube bot-gates GitHub's
+  runners and the YouTube leg skips when that happens. An archive.org outage
+  skips with a warning; a failure on a healthy source fails the job. Credit:
+  frinsen (smoke-test idea).
+
+### Changed
+- **The download ladder prefers H.264 (avc1) at the same 720p bound.** Measured
+  on two videos, H.264 files are 18 to 42 percent LARGER than the AV1 the old
+  ladder picked, but they decode about 3x faster, so download plus decode is
+  about 20 percent faster. Every previous rung still follows as a fallback, and
+  with `WATCH_MAX_FILESIZE` set the H.264 rungs only match files under the cap.
+  Receipt: `docs/benchmarks/2026-10-11-h264-preference/`. Credit:
+  thomasdupkavich (whose original size claim did not hold up; the speed did).
+
+### Notes
+- An Opus review of the first integration found one CI blocker (the retry loop
+  could never run under GitHub's `bash -e`) and seven should-fixes, including a
+  regression the timeouts introduced (a long unfocused video would have been
+  killed at one hour). All were fixed before release.
+- Known, not changed here: a local file with no sidecar captions reports its
+  transcript as "degraded" because the sidecar lookup counts as a failed
+  attempt. This predates 1.5.18.
+
 ## [1.5.17] — 2026-09-26
 
 ### Fixed
