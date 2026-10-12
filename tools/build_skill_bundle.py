@@ -13,7 +13,7 @@ from pathlib import Path
 MAX_BYTES = 250 * 1024
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 RUNTIME_SCRIPTS = (
-    "acquisition.py", "config.py", "download.py", "evidence.py", "frames.py",
+    "acquisition.py", "boundaries.py", "config.py", "download.py", "evidence.py", "frames.py",
     "lifecycle.py", "portable.py", "question.py", "retrieval.py", "semantic.py",
     "setup.py", "slideshow.py", "state.py", "storyboard.py", "transcribe.py", "transcription.py",
     "transcription_adapters.py", "transcription_chunks.py", "video_cache.py",
