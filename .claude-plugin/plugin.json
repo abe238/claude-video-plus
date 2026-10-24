@@ -8,5 +8,6 @@
   "homepage": "https://abe238.github.io/claude-video-plus/",
   "repository": "https://github.com/abe238/claude-video-plus",
   "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
   "keywords": ["video", "watch", "youtube", "vimeo", "tiktok", "transcription", "whisper", "yt-dlp", "ffmpeg", "multimodal", "frames", "evidence", "retrieval"]
 }
