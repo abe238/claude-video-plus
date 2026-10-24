@@ -1,7 +1,7 @@
 ---
 name: watch
 description: Watch, analyze, summarize, or answer questions about a video — a pasted link (YouTube, TikTok, Vimeo, Loom, X, Twitch, most sites) or a local video file (.mp4, .mov, .mkv, .webm, .avi). Use this whenever the user shares a video link or file and asks anything about its contents — what's in it, what happens, what's said, what's on screen, a summary, a transcript, or a specific moment — and whenever they say "watch this", "watch the video", "what's in this video", or similar, even if they never type /watch. Downloads with yt-dlp, extracts auto-scaled frames with ffmpeg, pulls the transcript from captions (or Whisper API fallback), and hands the result to Claude so it can answer questions about what's in the video. With a question, evidence mode retrieves only the relevant chapters, numeric facts, and on-screen moments instead of sampling the whole timeline.
-allowed-tools: Bash, Read, AskUserQuestion
+allowed-tools: Bash(python3 *), Bash(python *), Read, AskUserQuestion
 license: MIT
 metadata:
   version: "1.5.18"
@@ -37,7 +37,7 @@ fi
 
 ## Step 0 — Setup preflight (runs every `/watch` invocation, silent on success)
 
-**Python interpreter:** every `python3 ...` command in this skill is for macOS/Linux. On **Windows**, substitute `python` — the `python3` command on Windows is the Microsoft Store stub and will not run the script.
+**Python interpreter:** every `python3 ...` command in this skill is for macOS/Linux. On **Windows**, substitute `python` (there `python3` is the Microsoft Store stub, which runs nothing).
 
 On the first `/watch` invocation in a session, run the silent check:
 

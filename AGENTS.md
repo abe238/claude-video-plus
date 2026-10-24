@@ -13,7 +13,7 @@ Agent Skills package that gives an agent a video input. Installable across Claud
 - `.claude-plugin/` — `plugin.json` + `marketplace.json` (Claude Code plugin + local marketplace).
 - `.codex-plugin/plugin.json` — Codex/agents manifest; `"skills": "./skills/"` points the Agent Skills CLI at the self-contained skill folder.
 - `.agents/plugins/marketplace.json` — agents marketplace listing pointing at the repo-root plugin.
-- `CLAUDE.md` → `@AGENTS.md` — generic-agent entry point.
+- `.claude/CLAUDE.md` → `@../AGENTS.md` — Claude Code entry point (kept out of the repo root, where the plugin directory flags a CLAUDE.md that never loads for installers).
 - `tests/` — pytest suite (ffmpeg-synthesized clips; no network).
 
 ## Orientation

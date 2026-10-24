@@ -15,7 +15,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_KEY="watch@claude-video-plus"
+PLUGIN_ID="watch@claude-video-plus"
 INSTALLED_JSON="${HOME}/.claude/plugins/installed_plugins.json"
 
 DRY_RUN=()
@@ -37,10 +37,10 @@ if [[ -z "$DEST" ]]; then
     echo "error: $INSTALLED_JSON not found; pass an install path explicitly" >&2
     exit 1
   fi
-  DEST="$(PLUGIN_KEY="$PLUGIN_KEY" python3 - "$INSTALLED_JSON" <<'PY'
+  DEST="$(PLUGIN_ID="$PLUGIN_ID" python3 - "$INSTALLED_JSON" <<'PY'
 import json, os, sys
 data = json.load(open(sys.argv[1]))
-key = os.environ["PLUGIN_KEY"]
+key = os.environ["PLUGIN_ID"]
 records = data.get("plugins", {}).get(key, [])
 # Prefer a record whose installPath actually exists on disk.
 paths = [r.get("installPath") for r in records if r.get("installPath")]
@@ -54,7 +54,7 @@ PY
 fi
 
 if [[ -z "$DEST" ]]; then
-  echo "error: could not resolve an install path for '$PLUGIN_KEY'" >&2
+  echo "error: could not resolve an install path for '$PLUGIN_ID'" >&2
   echo "       install the plugin first, or pass a path: scripts/dev-sync.sh /path/to/install" >&2
   exit 1
 fi
